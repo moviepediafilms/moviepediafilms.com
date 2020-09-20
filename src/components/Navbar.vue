@@ -29,7 +29,7 @@
             <q-item clickable>
               <q-item-section>Contest Leaderboard</q-item-section>
             </q-item>
-            <q-item clickable>
+            <q-item clickable :to="{name: 'partner-judges'}">
               <q-item-section>Partner Judges</q-item-section>
             </q-item>
             <q-item clickable>

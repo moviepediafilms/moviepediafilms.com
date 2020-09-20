@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
 import Home from '../views/Home.vue'
 import DetailCategory from '../views/DetailCategory.vue'
+import PartnerJudges from '../views/PartnerJudges.vue'
+
 
 Vue.use(VueRouter)
 Vue.use(VueMeta)
@@ -41,6 +43,12 @@ const routes = [
     name: 'detail-category',
     component: DetailCategory
   },
+  {
+    path: '/partner-judges',
+    name: 'partner-judges',
+    component: PartnerJudges
+  },
+
 ]
 
 const router = new VueRouter({
