@@ -2,8 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
 import Home from '../views/Home.vue'
-import DetailCategory from '../views/DetailCategory.vue'
+import MovieDetails from '../views/MovieDetails.vue'
 import PartnerJudges from '../views/PartnerJudges.vue'
+import JudgeRecommendations from '../views/JudgeRecommendations.vue'
+import Profile from '../views/Profile.vue'
 
 
 Vue.use(VueRouter)
@@ -39,16 +41,26 @@ const routes = [
     component: Home
   },
   {
-    path: '/detail-category',
-    name: 'detail-category',
-    component: DetailCategory
+    path: '/movie/:id',
+    name: 'movie-detail',
+    component: MovieDetails
   },
   {
     path: '/partner-judges',
     name: 'partner-judges',
     component: PartnerJudges
   },
+  {
+    path: '/judge-recommendation/:id',
+    name: 'judge-recommendation',
+    component: JudgeRecommendations
+  },
+  {
 
+    path: '/profile',
+    name: 'profile',
+    component: Profile
+  },
 ]
 
 const router = new VueRouter({

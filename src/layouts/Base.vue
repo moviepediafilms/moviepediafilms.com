@@ -2,7 +2,7 @@
   <div class="bg-dark">
     <q-layout view="hHh lPr fFf">
       <navbar-component></navbar-component>
-      <q-page-container class>
+      <q-page-container>
         <slot />
         <footer-component></footer-component>
       </q-page-container>
