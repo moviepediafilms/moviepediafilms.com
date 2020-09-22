@@ -21,7 +21,7 @@
               <q-item-section>Submit a Film</q-item-section>
             </q-item>
             <q-item clickable>
-              <q-item-section>Film maker of the month</q-item-section>
+              <q-item-section>Filmmaker of the Month</q-item-section>
             </q-item>
             <q-item clickable>
               <q-item-section>MDFF Top 10</q-item-section>
@@ -30,7 +30,7 @@
               <q-item-section>Contest Leaderboard</q-item-section>
             </q-item>
             <q-item clickable :to="{name: 'partner-judges'}">
-              <q-item-section>Partner Judges</q-item-section>
+              <q-item-section>Partner Celebs</q-item-section>
             </q-item>
             <q-item clickable>
               <q-item-section>Login/Logout</q-item-section>

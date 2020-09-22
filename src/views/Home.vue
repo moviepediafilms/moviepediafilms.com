@@ -85,12 +85,12 @@ export default {
           ],
         },
         {
-          name: "Star Pick",
+          name: "Celeb Recommends",
           items: [
             {
               id: 1,
               image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784098/judges_thumbs/20200922_182634_0000_xd8vfn.png",
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600785908/judges_thumbs/20200922_201207_0000_t2rtbd.png",
             },
             {
               id: 2,
@@ -112,27 +112,61 @@ export default {
         {
           name: "Trending This Week",
           items: [
-            { id: 1, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 2, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 3, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 4, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 5, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 6, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 7, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 8, image: "https://cdn.quasar.dev/img/mountains.jpg" },
+            {
+              id: 1,
+              image:
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_12_vfcqeg.jpg",
+            },
+            {
+              id: 2,
+              image:
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_8_q9rj5y.jpg",
+            },
+            {
+              id: 3,
+              image:
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_9_prks71.jpg",
+            },
+            {
+              id: 4,
+              image:
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_7_f6pq48.jpg",
+            },
+            {
+              id: 5,
+              image:
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_4_ifasom.jpg",
+            },
           ],
         },
         {
           name: "Award Winning Shorts",
           items: [
-            { id: 1, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 2, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 3, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 4, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 5, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 6, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 7, image: "https://cdn.quasar.dev/img/mountains.jpg" },
-            { id: 8, image: "https://cdn.quasar.dev/img/mountains.jpg" },
+            {
+              id: 6,
+              image:
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_6_c3msbn.jpg",
+            },
+            {
+              id: 7,
+              image:
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_3_gvj11y.jpg",
+            },
+            {
+              id: 8,
+              image:
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784049/movie_thumbs/movie_1_yylabx.jpg",
+            },
+            {
+              id: 1,
+              image:
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784049/movie_thumbs/movie_5_flas1c.jpg",
+            },
+            {
+              id: 2,
+              image:
+                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784049/movie_thumbs/movie_2_vw6fbq.jpg",
+            },
           ],
         },
       ],
