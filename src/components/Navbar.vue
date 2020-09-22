@@ -1,8 +1,8 @@
 <template>
   <q-header reveal elevated class="bg-primary text-dark">
-    <div class="row justify-center q-ma-md">
+    <!-- <div class="row justify-center q-ma-md">
       <div class="text-center text-uppercase text-h6">Website is under construction</div>
-    </div>
+    </div>-->
     <q-toolbar>
       <q-toolbar-title>
         <q-avatar class="q-mr-md">
