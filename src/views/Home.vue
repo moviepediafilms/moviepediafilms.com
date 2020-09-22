@@ -3,7 +3,7 @@
     <div class="q-ma-sm">
       <div v-for="cat in categories" :key="cat.name">
         <div class="q-pa-md row">
-          <div class="text-h6">{{cat.name}}</div>
+          <h6>{{cat.name}}</h6>
         </div>
         <q-scroll-area
           :thumb-style="thumbStyle"

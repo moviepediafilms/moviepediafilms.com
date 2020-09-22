@@ -9,20 +9,25 @@
           <div class>Runtime: {{movie.runtime}}</div>
         </div>
         <div class="col-12 q-mt-lg">
-          <div class="video">
+          <q-responsive :ratio="16/9" class="col">
             <iframe
               src="https://www.youtube.com/embed/Wfd3cO2gVHE"
               frameborder="0"
               allowfullscreen
             />
-          </div>
+          </q-responsive>
         </div>
         <div class="col-12">
-          <div class="row items-center">
+          <div class="row justify-around q-mt-sm">
+            <q-btn flat size="sm" color="primary" icon="mdi-share-variant-outline" label="share" />
+            <q-btn flat size="sm" color="primary" icon="mdi-plus" label="watchlist" />
+            <q-btn flat size="sm" color="primary" icon="mdi-bookmark" label="Bookmark" />
+          </div>
+          <div class="row items-center q-mt-md">
             <div clss="col">
-              <q-icon name="fas fa-thumbs-down" />
+              <q-icon size="48px" color="primary" name="mdi-emoticon-sad-outline" />
             </div>
-            <div class="col q-mx-md">
+            <div class="col q-mx-sm">
               <q-slider
                 v-model="rating"
                 :min="0"
@@ -35,16 +40,10 @@
               />
             </div>
             <div clss="col">
-              <q-icon name="fas fa-thumbs-up" />
+              <q-icon size="48px" color="primary" name="mdi-emoticon-excited-outline" />
             </div>
           </div>
-          <div class="row justify-around">
-            <q-btn round color="primary" text-color="dark" icon="fa fa-share" />
 
-            <q-btn round color="primary" text-color="dark" icon="fa fa-plus" />
-
-            <q-btn round color="primary" text-color="dark" icon="fa fa-bookmark" />
-          </div>
           <div class="row q-mt-lg">{{movie.synopsis}}</div>
           <div class="row q-mt-lg">
             <div class="col">
@@ -56,9 +55,9 @@
                 :line-cap="'round'"
                 :percent="movie.jury_rating * 10"
               >
-                <span class="rating-text">{{movie.jury_rating}}/10</span>
+                <span class="text-h6 rating-text">{{movie.jury_rating}}/10</span>
               </vue-easy-pie-chart>
-              <div class="q-mt-md text-center text-weight-bold">Jury Rating</div>
+              <div class="q-mt-md text-center">Jury Rating</div>
             </div>
             <div class="col">
               <vue-easy-pie-chart
@@ -69,9 +68,9 @@
                 :line-cap="'round'"
                 :percent="movie.audience_rating * 10"
               >
-                <span class="rating-text">{{movie.audience_rating}}/10</span>
+                <span class="text-h6 rating-text">{{movie.audience_rating}}/10</span>
               </vue-easy-pie-chart>
-              <div class="q-mt-md text-center text-weight-bold">Audience Rating</div>
+              <div class="q-mt-md text-center">Audience Rating</div>
             </div>
           </div>
           <div class="row q-mt-lg">
@@ -183,21 +182,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.video {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
-  padding-top: 25px;
-  height: 0;
-}
-.video iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
 .rating-text {
   color: #7f7f7f;
-  font-weight: 900;
 }
 </style>

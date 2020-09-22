@@ -5,16 +5,20 @@
     </div>-->
     <q-toolbar>
       <q-toolbar-title>
-        <q-avatar class="q-mr-md">
-          <img src="@/assets/logo.png" />
-        </q-avatar>
-        <router-link :to="{name: 'home'}" style="text-decoration: none;" class="text-dark">
-          <b>Moviepedia Films</b>
+        <router-link :to="{name: 'home'}">
+          <q-avatar class="q-mr-md">
+            <img src="@/assets/logo.png" />
+          </q-avatar>
         </router-link>
+        <router-link
+          :to="{name: 'home'}"
+          style="text-decoration: none;"
+          class="text-dark text-weight-light"
+        >Moviepedia Films</router-link>
       </q-toolbar-title>
-      <q-btn flat round size="sm" color="secondary" class="q-mr-sm" icon="fa fa-filter" />
-      <q-btn flat round size="sm" color="secondary" class="q-mr-sm" icon="fa fa-bell" />
-      <q-btn flat round size="sm" color="secondary" class="q-mr-sm" icon="fa fa-bars">
+      <q-btn flat round color="secondary" class="q-mr-sm" icon="mdi-filter-outline" />
+      <q-btn flat round color="secondary" class="q-mr-sm" icon="mdi-bell-outline" />
+      <q-btn flat round color="secondary" class="q-mr-sm" icon="mdi-menu">
         <q-menu auto-close content-class="negative">
           <q-list style="min-width: 100px">
             <q-item clickable>

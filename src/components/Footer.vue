@@ -2,10 +2,9 @@
   <footer class="bg-grey-10 q-py-xl q-px-md q-mt-lg">
     <div class="row">
       <div class="col-12 col-md-4 q-mt-md text-center align-middle">
-        <a href="/">
+        <router-link :to="{name: 'home'}">
           <img height="100px" src="@/assets/icon_white.png" />
-          <br />
-        </a>
+        </router-link>
         <br />
         <span class="text-uppercase text-weight-bold text-primary">
           Moviepedia
@@ -29,22 +28,21 @@
         <p class="text-uppercase text-weight-bold text-primary">Contact Us</p>
         <div class="text-center social-links text-muted">
           <a target="_blank" href="https://facebook.com/MoviepediaOfficial" class="social-link">
-            <i class="fab fa-facebook-f fa-fw"></i>
-            MoviepediaOfficial
+            <q-icon name="mdi-facebook" class="q-mr-sm" size="sm"></q-icon>MoviepediaOfficial
           </a>
           <a
             target="_blank"
             href="https://instagram.com/movie.pedia"
             class="text-decoration-none text-reset social-link"
           >
-            <i class="fab fa-instagram fa-fw"></i> movie.pedia
+            <q-icon name="mdi-instagram" class="q-mr-sm" size="sm"></q-icon>movie.pedia
           </a>
           <a
             target="_blank"
             href="https://www.youtube.com/channel/UCBuP4H9TLLM13quoXQvJ3Ag"
             class="text-decoration-none text-reset social-link"
           >
-            <i class="fab fa-youtube fa-fw"></i> Moviepedia
+            <q-icon name="mdi-youtube" class="q-mr-sm" size="sm"></q-icon>Moviepedia
             Official
           </a>
 
@@ -53,15 +51,14 @@
             href="tel:8400334876"
             class="text-decoration-none text-reset social-link"
           >
-            <i class="fas fa-phone fa-fw"></i> +91 8400334876
+            <q-icon name="mdi-phone" class="q-mr-sm" size="sm"></q-icon>+91 8400334876
           </a>
           <a
             data-rel="external"
             href="mailto:contactus@moviepediafilms.com"
             class="text-decoration-none social-link"
           >
-            <i class="far fa-envelope fa-fw"></i>
-            contactus@moviepediafilms.com
+            <q-icon name="mdi-email" class="q-mr-sm" size="sm"></q-icon>contactus@moviepediafilms.com
           </a>
         </div>
         <p class="text-uppercase text-weight-bold text-primary q-mt-md">Other Links</p>

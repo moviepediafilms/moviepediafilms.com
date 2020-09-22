@@ -1,9 +1,9 @@
 import Vue from 'vue'
 
 import '../styles/quasar.scss'
-import iconSet from 'quasar/icon-set/fontawesome-v5.js'
+import iconSet from 'quasar/icon-set/mdi-v5.js'
 import '@quasar/extras/roboto-font/roboto-font.css'
-import '@quasar/extras/fontawesome-v5/fontawesome-v5.css'
+import '@quasar/extras/mdi-v5/mdi-v5.css'
 import { Quasar } from 'quasar'
 
 Vue.use(Quasar, {

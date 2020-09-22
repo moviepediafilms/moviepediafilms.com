@@ -4,15 +4,24 @@
       <div class="row q-mt-lg">
         <div class="col">
           <q-avatar size="100px">
-            <img src="@/assets/icon_white.png" />
+            <img :src="profile.image" />
           </q-avatar>
         </div>
         <div class="col">
-          <div>{{profile.name}}</div>
-          <div>{{profile.rank}}</div>
-          <div>{{profile.level}}</div>
+          <div class="text-h5 text-weight-bold text-primary">{{profile.name}}</div>
+          <div class="q-mt-sm">
+            <q-icon name="mdi-star"></q-icon>
+            {{profile.rank}} Rank
+          </div>
+          <div>
+            <q-icon name="mdi-decagram"></q-icon>
+            {{profile.badges}} Badges
+          </div>
+          <div>
+            <q-icon name="mdi-stairs"></q-icon>
+            {{profile.level}} Level
+          </div>
         </div>
-        <q-toggle v-model="profile.is_filmmaker" label="On Right" />
       </div>
       <div class="q-mt-lg">
         <q-card flat>
@@ -26,33 +35,22 @@
             outside-arrows
             mobile-arrows
           >
-            <q-tab name="reviews" label="Reviews" />
-            <q-tab name="film_makers" label="Film Makers" />
-            <q-tab name="badges" label="Badges" />
-            <q-tab name="earnings" label="Earnings" />
             <q-tab name="watchlist" label="Watchlist" />
-            <q-tab name="movies" label="Badges" />
+            <q-tab name="earnings" label="Earnings" />
+            <q-tab name="reviews" label="Reviews" />
           </q-tabs>
 
           <q-separator />
 
           <q-tab-panels v-model="tab" animated>
-            <q-tab-panel name="reviews">
-              <div class="text-h6">Mails</div>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </q-tab-panel>
-
-            <q-tab-panel name="film_makers">
-              <div class="text-h6">Alarms</div>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </q-tab-panel>
-
-            <q-tab-panel name="badges">
-              <div class="text-h6">Movies</div>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            <q-tab-panel name="watchlist">
+              <div class="text-h6">Watchlist</div>This is a watch list.
             </q-tab-panel>
             <q-tab-panel name="earnings">
-              <div class="text-h6">Movies</div>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              <div class="text-h6">Earnings</div>
             </q-tab-panel>
-            <q-tab-panel name="watchlist">
-              <div class="text-h6">Movies</div>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            <q-tab-panel name="reviews">
+              <div class="text-h3">Reviews</div>
             </q-tab-panel>
           </q-tab-panels>
         </q-card>
@@ -82,10 +80,13 @@ export default {
   methods: {
     fetch_profile() {
       this.profile = {
+        image:
+          "https://res.cloudinary.com/moviepedia/image/upload/v1600785909/judges_thumbs/20200922_193347_0000_r2wgnw.png",
         is_filmmaker: false,
         name: "Rahul Sharma",
         level: 2,
         rank: 12,
+        badges: 18,
       };
     },
   },
