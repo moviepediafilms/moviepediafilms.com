@@ -1,20 +1,77 @@
 <template>
   <base-layout>
     <div class="q-ma-sm">
+      <q-dialog v-model="show_filter">
+        <q-card>
+          <q-card-section>
+            <div class="text-h5 text-center">Filters</div>
+          </q-card-section>
+          <q-card-section>
+            <div class="row">
+              <div class="col">
+                <div class="text-center text-primary">Genre</div>
+                <div class="q-mt-sm">
+                  <q-checkbox
+                    :val="genre.val"
+                    v-model="selected_filters.genre"
+                    :label="genre.label"
+                    v-for="genre in filters.genre"
+                    :key="genre.val"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="text-center text-primary">Langugage</div>
+                <div class="q-mt-sm">
+                  <q-checkbox
+                    :val="lang.val"
+                    v-model="selected_filters.lang"
+                    :label="lang.label"
+                    v-for="lang in filters.lang"
+                    :key="lang.val"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="text-center text-primary">Time</div>
+                <div class="q-mt-sm">
+                  <q-checkbox
+                    :val="time.val"
+                    v-model="selected_filters.time"
+                    :label="time.label"
+                    v-for="time in filters.time"
+                    :key="time.val"
+                  />
+                </div>
+              </div>
+            </div>
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="Apply" color="primary" v-close-popup />
+            <q-btn
+              flat
+              label="Clear"
+              color="primary"
+              @click.prevent="clear_filters"
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
       <div v-for="cat in categories" :key="cat.name">
         <div class="q-pa-md row">
-          <h6>{{cat.name}}</h6>
+          <h6>{{ cat.name }}</h6>
         </div>
         <q-scroll-area
           :thumb-style="thumbStyle"
           :bar-style="barStyle"
           horizontal
-          style="height: 205px;"
+          style="height: 205px"
         >
           <div class="q-pr-md row no-wrap">
             <q-card
               class="my-card q-ma-md"
-              style="width: 230px;"
+              style="width: 230px"
               v-for="item in cat.items"
               :key="item.id"
               @click.prevent="detail_page(item)"
@@ -28,6 +85,7 @@
   </base-layout>
 </template>
 <script>
+import setting from "@/setting";
 import BaseLayout from "@/layouts/Base";
 export default {
   name: "home-page",
@@ -39,6 +97,30 @@ export default {
   },
   data() {
     return {
+      selected_filters: { time: [], genre: [], lang: [] },
+      filters: {
+        lang: [
+          { label: "English", val: "eng" },
+          { label: "Hindi", val: "hin" },
+          { label: "Tamil", val: "tamil" },
+          { label: "Bengali", val: "ban" },
+        ],
+        time: [
+          { label: "Live", val: "live" },
+          { label: "Last Week", val: "week" },
+          { label: "Last Month", val: "month" },
+        ],
+        genre: [
+          { label: "Crime", val: "crime" },
+          { label: "Drama", val: "drama" },
+          { label: "Romance", val: "romance" },
+          { label: "Comedy", val: "comedy" },
+        ],
+      },
+      show_filter: false,
+      action_btns: [
+        { icon: "mdi-filter-outline", to: this.show_filters, type: "dialog" },
+      ],
       slide: "",
       thumbStyle: {
         right: "4px",
@@ -172,9 +254,27 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.action_btns.forEach((btn) => {
+      setting.addActionBtn(btn);
+    });
+  },
+  beforeDestroy() {
+    this.action_btns.forEach((btn) => {
+      setting.removeActionBtn(btn);
+    });
+  },
   methods: {
     detail_page(movie) {
       this.$router.push({ name: "movie-detail", params: { id: movie.id } });
+    },
+    show_filters() {
+      this.show_filter = !this.show_filter;
+    },
+    clear_filters() {
+      this.selected_filters.time.splice(0, this.selected_filters.time.length);
+      this.selected_filters.genre.splice(0, this.selected_filters.genre.length);
+      this.selected_filters.lang.splice(0, this.selected_filters.lang.length);
     },
   },
 };

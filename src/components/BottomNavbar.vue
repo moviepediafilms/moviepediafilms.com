@@ -1,10 +1,25 @@
 <template>
   <q-footer reveal elevated outside-arrows mobile-arrows class="text-white">
     <q-tabs v-model="tab" class="bg-primary text-dark shadow-2">
-      <q-tab name="submit" icon="mdi-plus" label="Submit" />
-
-      <q-tab name="top" icon="mdi-trophy-variant-outline" label="Top Creator" />
-      <q-route-tab name="profile" icon="mdi-account-outline" label="Profile" to="/profile" exact />
+      <q-route-tab
+        name="submit"
+        icon="mdi-plus"
+        label="Submit"
+        :to="{ name: 'submit' }"
+      />
+      <q-route-tab
+        name="top"
+        icon="mdi-trophy-variant-outline"
+        label="Top Creator"
+        :to="{ name: 'top-creator' }"
+      />
+      <q-route-tab
+        name="profile"
+        icon="mdi-account-outline"
+        label="Profile"
+        :to="{ name: 'profile' }"
+        exact
+      />
     </q-tabs>
   </q-footer>
 </template>

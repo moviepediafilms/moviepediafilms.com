@@ -2,13 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
 import Home from '../views/Home.vue'
-import MovieDetails from '../views/MovieDetails.vue'
-import PartnerJudges from '../views/PartnerJudges.vue'
-import JudgeRecommendations from '../views/JudgeRecommendations.vue'
-import Profile from '../views/Profile.vue'
-import Refunds from '../views/Refunds.vue'
-
-
 
 Vue.use(VueRouter)
 Vue.use(VueMeta)
@@ -28,43 +21,71 @@ const routes = [
     component: Home
   },
   {
-    path: '/tos',
-    name: 'tos',
-    component: () => import(/* webpackChunkName: "home" */ '../views/Tos.vue')
-  },
-  {
-    path: '/refund-policy',
-    name: 'refund-policy',
-    component: Refunds
-  },
-  {
-    path: '/privacy-policy',
-    name: 'privacy-policy',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "home" */ '../views/PrivacyPolicy.vue')
-  },
-  {
     path: '/movie/:id',
     name: 'movie-detail',
-    component: MovieDetails
+    component: () => import('../views/MovieDetails.vue')
   },
   {
     path: '/partner-judges',
     name: 'partner-judges',
-    component: PartnerJudges
+    component: () => import('../views/PartnerJudges.vue')
   },
   {
     path: '/judge-recommendation/:id',
     name: 'judge-recommendation',
-    component: JudgeRecommendations
+    component: () => import('../views/JudgeRecommendations.vue')
   },
   {
-
     path: '/profile',
     name: 'profile',
-    component: Profile
+    component: () => import('../views/Profile.vue')
+  },
+  {
+    path: '/top-creator',
+    name: 'top-creator',
+    component: () => import('../views/TopCreator.vue')
+  },
+  {
+    path: '/submit',
+    name: 'submit',
+    component: () => import('../views/Submit.vue')
+  },
+  {
+    path: '/notification',
+    name: 'notification',
+    component: () => import('../views/Notification.vue')
+  },
+  {
+    path: '/filmmaker-of-the-month',
+    name: 'filmmaker-of-the-month',
+    component: () => import('../views/FilmmakerOfTheMonth.vue')
+  },
+  {
+    path: '/mdff-top',
+    name: 'mdff-top',
+    component: () => import('../views/MDFFTop.vue')
+  },
+  {
+    path: '/leaderboard',
+    name: 'leaderboard',
+    component: () => import('../views/Leaderboard.vue')
+  },
+
+  // static pages below
+  {
+    path: '/tos',
+    name: 'tos',
+    component: () => import('../views/Tos.vue')
+  },
+  {
+    path: '/refund-policy',
+    name: 'refund-policy',
+    component: () => import('../views/Refunds.vue')
+  },
+  {
+    path: '/privacy-policy',
+    name: 'privacy-policy',
+    component: () => import('../views/PrivacyPolicy.vue')
   },
 ]
 

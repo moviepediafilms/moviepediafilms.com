@@ -8,18 +8,20 @@
           </q-avatar>
         </div>
         <div class="col">
-          <div class="text-h5 text-weight-bold text-primary">{{profile.name}}</div>
+          <div class="text-h5 text-weight-bold text-primary">
+            {{ profile.name }}
+          </div>
           <div class="q-mt-sm">
             <q-icon name="mdi-star"></q-icon>
-            {{profile.rank}} Rank
+            {{ profile.rank }} Rank
           </div>
           <div>
             <q-icon name="mdi-decagram"></q-icon>
-            {{profile.badges}} Badges
+            {{ profile.badges }} Badges
           </div>
           <div>
             <q-icon name="mdi-stairs"></q-icon>
-            {{profile.level}} Level
+            {{ profile.level }} Level
           </div>
         </div>
       </div>
@@ -44,13 +46,13 @@
 
           <q-tab-panels v-model="tab" animated>
             <q-tab-panel name="watchlist">
-              <div class="text-h6">Watchlist</div>This is a watch list.
+              <div class="text-h6">Watchlist</div>
             </q-tab-panel>
             <q-tab-panel name="earnings">
               <div class="text-h6">Earnings</div>
             </q-tab-panel>
             <q-tab-panel name="reviews">
-              <div class="text-h3">Reviews</div>
+              <div class="text-h6">Reviews</div>
             </q-tab-panel>
           </q-tab-panels>
         </q-card>
