@@ -83,7 +83,7 @@ export default {
     fetch_profile() {
       this.profile = {
         image:
-          "https://res.cloudinary.com/moviepedia/image/upload/v1600785909/judges_thumbs/20200922_193347_0000_r2wgnw.png",
+          "https://res.cloudinary.com/moviepedia/image/upload/v1600972826/avatars/male1_nicpgf.png",
         is_filmmaker: false,
         name: "Rahul Sharma",
         level: 2,
