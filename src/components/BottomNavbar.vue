@@ -10,14 +10,14 @@
       <q-route-tab
         name="top"
         icon="mdi-trophy-variant-outline"
-        label="Top Creator"
+        label="Top Creators"
         :to="{ name: 'top-creator' }"
       />
       <q-route-tab
         name="profile"
         icon="mdi-account-outline"
         label="Profile"
-        :to="{ name: 'profile' }"
+        :to="{ name: 'profile', params: { id: 'me' } }"
         exact
       />
     </q-tabs>

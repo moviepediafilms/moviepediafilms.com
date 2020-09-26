@@ -36,7 +36,7 @@ const routes = [
     component: () => import('../views/JudgeRecommendations.vue')
   },
   {
-    path: '/profile',
+    path: '/profile/:id',
     name: 'profile',
     component: () => import('../views/Profile.vue')
   },

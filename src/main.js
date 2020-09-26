@@ -4,6 +4,8 @@ import router from './router'
 import store from "./store";
 import '@/scss/style.scss';
 import './plugins/quasar'
+import './plugins/animate'
+
 
 Vue.config.productionTip = false
 

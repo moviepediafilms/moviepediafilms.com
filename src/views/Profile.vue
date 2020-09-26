@@ -3,7 +3,7 @@
     <div class="q-ma-md">
       <div class="row q-mt-lg">
         <div class="col">
-          <q-avatar size="100px">
+          <q-avatar size="100px" color="primary">
             <img :src="profile.image" />
           </q-avatar>
         </div>

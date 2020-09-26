@@ -64,14 +64,15 @@
         </div>
         <q-scroll-area
           :thumb-style="thumbStyle"
-          :bar-style="barStyle"
           horizontal
-          style="height: 205px"
+          visible
+          :style="`height: ${cat.height + 10}px`"
+          class="q-mb-md"
         >
           <div class="q-pr-md row no-wrap">
             <q-card
-              class="my-card q-ma-md"
-              style="width: 230px"
+              class="my-card q-mr-sm"
+              :style="`width: ${cat.width}px`"
               v-for="item in cat.items"
               :key="item.id"
               @click.prevent="detail_page(item)"
@@ -123,141 +124,20 @@ export default {
       ],
       slide: "",
       thumbStyle: {
-        right: "4px",
-        borderRadius: "5px",
-        backgroundColor: "#f7cd23",
-        width: "10px",
-        opacity: 0.75,
-      },
-      barStyle: {
         right: "2px",
-        borderRadius: "9px",
+        borderRadius: "1px",
         backgroundColor: "#f7cd23",
-        opacity: 0.2,
+        opacity: 0.75,
+        height: "2px",
       },
-      categories: [
-        {
-          name: "Today's Releases",
-          items: [
-            {
-              id: 1,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784051/movie_thumbs/movie_15_e6i6th.jpg",
-            },
-            {
-              id: 2,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784051/movie_thumbs/movie_14_um32ao.jpg",
-            },
-            {
-              id: 3,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784051/movie_thumbs/movie_13_ripwxl.jpg",
-            },
-            {
-              id: 4,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784051/movie_thumbs/movie_10_kpupgd.jpg",
-            },
-            {
-              id: 5,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_11_gzerr3.jpg",
-            },
-          ],
-        },
-        {
-          name: "Celeb Recommends",
-          items: [
-            {
-              id: 1,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600785908/judges_thumbs/20200922_201207_0000_t2rtbd.png",
-            },
-            {
-              id: 2,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784097/judges_thumbs/20200922_182607_0000_dwlpn2.png",
-            },
-            {
-              id: 3,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784095/judges_thumbs/20200922_182642_0000_ispwzr.png",
-            },
-            {
-              id: 4,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784095/judges_thumbs/20200922_182626_0000_osijza.png",
-            },
-          ],
-        },
-        {
-          name: "Trending This Week",
-          items: [
-            {
-              id: 1,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_12_vfcqeg.jpg",
-            },
-            {
-              id: 2,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_8_q9rj5y.jpg",
-            },
-            {
-              id: 3,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_9_prks71.jpg",
-            },
-            {
-              id: 4,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_7_f6pq48.jpg",
-            },
-            {
-              id: 5,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_4_ifasom.jpg",
-            },
-          ],
-        },
-        {
-          name: "Award Winning Shorts",
-          items: [
-            {
-              id: 6,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_6_c3msbn.jpg",
-            },
-            {
-              id: 7,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784050/movie_thumbs/movie_3_gvj11y.jpg",
-            },
-            {
-              id: 8,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784049/movie_thumbs/movie_1_yylabx.jpg",
-            },
-            {
-              id: 1,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784049/movie_thumbs/movie_5_flas1c.jpg",
-            },
-            {
-              id: 2,
-              image:
-                "https://res.cloudinary.com/moviepedia/image/upload/w_380,h_270/v1600784049/movie_thumbs/movie_2_vw6fbq.jpg",
-            },
-          ],
-        },
-      ],
+      categories: [],
     };
   },
   mounted() {
     this.action_btns.forEach((btn) => {
       setting.addActionBtn(btn);
     });
+    this.fetch_categories();
   },
   beforeDestroy() {
     this.action_btns.forEach((btn) => {
@@ -276,6 +156,116 @@ export default {
       this.selected_filters.genre.splice(0, this.selected_filters.genre.length);
       this.selected_filters.lang.splice(0, this.selected_filters.lang.length);
     },
+    fetch_categories() {
+      var cel_thumb_dimen = "w_250,h_200";
+      var thumb_dimen = "w_200,h_300";
+      this.categories = [
+        {
+          name: "Today's Releases",
+          height: 300,
+          width: 200,
+          items: [
+            {
+              id: 1,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784051/movie_thumbs/movie_15_e6i6th.jpg`,
+            },
+            {
+              id: 2,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784051/movie_thumbs/movie_14_um32ao.jpg`,
+            },
+            {
+              id: 3,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784051/movie_thumbs/movie_13_ripwxl.jpg`,
+            },
+            {
+              id: 4,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784051/movie_thumbs/movie_10_kpupgd.jpg`,
+            },
+            {
+              id: 5,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_11_gzerr3.jpg`,
+            },
+          ],
+        },
+        {
+          name: "Celeb Recommends",
+          height: 200,
+          width: 250,
+          items: [
+            {
+              id: 1,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${cel_thumb_dimen}/v1600785908/judges_thumbs/20200922_201207_0000_t2rtbd.png`,
+            },
+            {
+              id: 2,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${cel_thumb_dimen}/v1600784097/judges_thumbs/20200922_182607_0000_dwlpn2.png`,
+            },
+            {
+              id: 3,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${cel_thumb_dimen}/v1600784095/judges_thumbs/20200922_182642_0000_ispwzr.png`,
+            },
+            {
+              id: 4,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${cel_thumb_dimen}/v1600784095/judges_thumbs/20200922_182626_0000_osijza.png`,
+            },
+          ],
+        },
+        {
+          name: "Trending This Week",
+          height: 300,
+          width: 200,
+          items: [
+            {
+              id: 1,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_12_vfcqeg.jpg`,
+            },
+            {
+              id: 2,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_8_q9rj5y.jpg`,
+            },
+            {
+              id: 3,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_9_prks71.jpg`,
+            },
+            {
+              id: 4,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_7_f6pq48.jpg`,
+            },
+            {
+              id: 5,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_4_ifasom.jpg`,
+            },
+          ],
+        },
+        {
+          name: "Award Winning Shorts",
+          height: 300,
+          width: 200,
+          items: [
+            {
+              id: 6,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_6_c3msbn.jpg`,
+            },
+            {
+              id: 7,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_3_gvj11y.jpg`,
+            },
+            {
+              id: 8,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784049/movie_thumbs/movie_1_yylabx.jpg`,
+            },
+            {
+              id: 1,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784049/movie_thumbs/movie_5_flas1c.jpg`,
+            },
+            {
+              id: 2,
+              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784049/movie_thumbs/movie_2_vw6fbq.jpg`,
+            },
+          ],
+        },
+      ];
+    },
   },
 };
 </script>
@@ -283,5 +273,8 @@ export default {
 .my-card {
   width: 100%;
   max-width: 300px;
+  :hover {
+    background-color: blue;
+  }
 }
 </style>
