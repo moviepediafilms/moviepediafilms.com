@@ -1,7 +1,7 @@
 <template>
   <base-layout>
     <div class="q-ma-md text-center q-pt-lg">
-      <h4 class="text-primary">Sign Up</h4>
+      <h3 class="text-primary">Sign Up</h3>
       <p class="q-mt-sm">Join us to get enaged with likes of you!</p>
       <div class="row justify-center q-mt-lg">
         <div class="col-12 col-sm-6 col-sm-offset-3 q-col-gutter-md">
@@ -144,15 +144,20 @@
                 >terms and conditions</router-link
               >
             </div>
-            <div>
-              <q-btn
-                label="Register"
-                type="submit"
-                color="primary"
-                text-color="dark"
-              />
-            </div>
+
+            <q-btn
+              label="Register"
+              type="submit"
+              color="primary"
+              text-color="dark"
+            />
           </q-form>
+        </div>
+        <div class="q-mt-lg">
+          Already have an account?
+          <router-link :to="{ name: 'login' }" class="text-primary"
+            >Sign In</router-link
+          >
         </div>
       </div>
     </div>
