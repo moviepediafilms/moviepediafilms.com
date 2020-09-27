@@ -196,14 +196,14 @@ export default {
       this.categories = [
         {
           name: "Today's Releases",
-          height: 300,
-          width: 200,
+          height: 150,
+          width: 100,
           items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
         },
         {
           name: "Celeb Recommends",
-          height: 180,
-          width: 260,
+          height: 100,
+          width: 150,
           items: [
             {
               id: 1,
@@ -225,14 +225,14 @@ export default {
         },
         {
           name: "Trending This Week",
-          height: 300,
-          width: 200,
+          height: 150,
+          width: 100,
           items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
         },
         {
           name: "Award Winning Shorts",
-          height: 300,
-          width: 200,
+          height: 150,
+          width: 100,
           items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
         },
       ];

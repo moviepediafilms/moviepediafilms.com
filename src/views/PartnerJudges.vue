@@ -1,21 +1,29 @@
 <template>
   <base-layout>
     <div class="q-pa-md row q-gutter-lg justify-center">
-      <q-card class="judge-card text-center" v-for="judge in judges" :key="judge.id">
+      <q-card
+        class="judge-card text-center bg-grey-10"
+        v-for="judge in judges"
+        :key="judge.id"
+      >
         <img :src="judge.image" />
-        <q-card-section>
-          <div class="text-h6 text-primary">{{judge.name}}</div>
-          <div class="q-mt-sm text-subtitle2">{{judge.title}}</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">{{judge.about}}</q-card-section>
-        <q-separator inset />
 
-        <q-card-actions align="right">
+        <q-card-section>
+          <div class="text-h6 text-primary">{{ judge.name }}</div>
+          <div class="q-mt-sm text-subtitle2">{{ judge.title }}</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none judge-about">{{
+          judge.about
+        }}</q-card-section>
+
+        <q-separator inset />
+        <q-card-actions class="self-end" align="right">
           <q-btn
             color="primary"
             flat
-            :to="{name: 'judge-recommendation', params: { id: judge.id }}"
-          >Recommended Movies</q-btn>
+            :to="{ name: 'judge-recommendation', params: { id: judge.id } }"
+            >Recommended Movies</q-btn
+          >
           <q-btn color="primary" flat>Follow</q-btn>
         </q-card-actions>
       </q-card>
@@ -119,6 +127,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .judge-card {
-  max-width: 350px;
+  max-width: 300px;
+}
+.judge-about {
 }
 </style>

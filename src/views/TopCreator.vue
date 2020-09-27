@@ -2,34 +2,31 @@
   <base-layout>
     <div class="q-ma-md text-center">
       <h3 class="text-primary text-weight-light q-mb-xs">Top Creators</h3>
-      <div class="row justify-around">
-        <transition-group appear name="slide">
-          <div
-            v-for="(creator, pos) in creators"
-            :key="creator.id"
-            style="display: inline-block"
-            class="q-mt-lg q-mx-lg"
-          >
+
+      <div class="row q-mt-sm q-col-gutter-md justify-center">
+        <div
+          v-for="creator in creators"
+          :key="creator.id"
+          class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2"
+          style="display: inline-block"
+        >
+          <div class="">
             <q-avatar
-              size="120px"
-              :color="get_level_color(creator.level)"
+              color="white"
+              size="100px"
               @click.prevent="open_profile(creator)"
             >
               <img :src="creator.image" />
             </q-avatar>
-            <div class="text-h3 q-mt-sm">#{{ pos + 1 }}</div>
-            <div class="q-mt-sm">
-              <div class="text-weight-bold text-subtitle1">
-                <q-badge
-                  :color="get_level_color(creator.level)"
-                  align="middle"
-                  >{{ creator.level }}</q-badge
-                >
-                {{ creator.name }}
-              </div>
+            <div class="text-h6 q-mt-md text-primary">
+              {{ creator.pop_score }}
             </div>
+            <div class="text-weight-bold text-subtitle1 ellipsis">
+              {{ creator.name }}
+            </div>
+            <!-- <div class="text-caption text-primary">{{ creator.pop_score }}</div> -->
           </div>
-        </transition-group>
+        </div>
       </div>
     </div>
   </base-layout>
@@ -47,6 +44,7 @@ export default {
   data() {
     return {
       creators: [],
+      sorted_creators: [],
     };
   },
   mounted() {
@@ -57,107 +55,70 @@ export default {
       if (!height) height = 400;
       if (!width) width = 400;
       var size = `h_${height},w_${width}`;
-
       var avatars = [
         `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/male4_mnxpb7.png`,
         `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/male1_nicpgf.png`,
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/neutral_uik7av.png`,
+        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/neutral_uik7av.png`,
         `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/male2_ioz3nb.png`,
         `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/male3_r8xkgb.png`,
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female2_k1ste4.png`,
+        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female2_k1ste4.png`,
         `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/male_nam8xo.png`,
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female1_tvzgya.png`,
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female4_hg2nvm.png`,
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female_w7jycr.png`,
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female3_aiuwgu.png`,
+        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female1_tvzgya.png`,
+        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female4_hg2nvm.png`,
+        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female_w7jycr.png`,
+        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female3_aiuwgu.png`,
       ];
       var rand_idx = Math.floor(Math.random() * avatars.length);
       return avatars[rand_idx];
     },
-    get_random_level() {
-      return Math.floor(Math.random() * 4 + 1);
+    get_random_pop_score() {
+      var MAX_SCORE = 10000;
+      return Math.floor(Math.random() * MAX_SCORE + 1);
     },
-    get_level_color(level) {
-      return { 1: "red", 2: "orange", 3: "primary", 4: "green" }[level];
+    get_random_name() {
+      var first_names = [
+        "Rahul",
+        "Shivam",
+        "Durbar",
+        "Pankaj",
+        "Rohit",
+        "Vyom",
+        "Ravi",
+        "Parmesh",
+        "Roshan",
+        "Monomay",
+      ];
+      var last_names = [
+        "Kumar",
+        "Sharma",
+        "Sengupta",
+        "Srivastava",
+        "Kapoor",
+        "Mishra",
+        "Pandey",
+        "Karmakar",
+      ];
+      var first_idx = Math.floor(Math.random() * first_names.length);
+      var last_idx = Math.floor(Math.random() * last_names.length);
+      return `${first_names[first_idx]} ${last_names[last_idx]}`;
     },
     open_profile(creator) {
       this.$router.push({ name: "profile", params: { id: creator.id } });
     },
     fetch_creators() {
-      this.creators = [
-        {
-          id: 1,
+      this.creators = [];
+      for (var i = 0; i < 10; i++) {
+        this.creators.push({
+          id: i,
           image: this.get_rand_avatar(),
-          name: "Rahul Sharma",
-          level: this.get_random_level(),
-        },
-        {
-          id: 2,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-        {
-          id: 3,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-        {
-          id: 4,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-        {
-          id: 5,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-        {
-          id: 6,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-        {
-          id: 7,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-        {
-          id: 8,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-        {
-          id: 9,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-        {
-          id: 10,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-        {
-          id: 11,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-        {
-          id: 12,
-          image: this.get_rand_avatar(),
-          name: "Pankaj Yadav",
-          level: this.get_random_level(),
-        },
-      ];
+          name: this.get_random_name(),
+          pop_score: this.get_random_pop_score(),
+        });
+      }
+      // reverse sort by popularity score
+      this.creators.sort((f, s) => {
+        return s.pop_score - f.pop_score;
+      });
     },
   },
 };
