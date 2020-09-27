@@ -137,7 +137,7 @@ export default {
     this.action_btns.forEach((btn) => {
       setting.addActionBtn(btn);
     });
-    this.fetch_categories();
+    this.initial_fetch_categories();
   },
   beforeDestroy() {
     this.action_btns.forEach((btn) => {
@@ -156,41 +156,54 @@ export default {
       this.selected_filters.genre.splice(0, this.selected_filters.genre.length);
       this.selected_filters.lang.splice(0, this.selected_filters.lang.length);
     },
-    fetch_categories() {
-      var cel_thumb_dimen = "w_250,h_200";
-      var thumb_dimen = "w_200,h_300";
+    get_rand_poster(num, orientation, trans_query) {
+      // num => int: 5, 10
+      // orientation => string: 'port' or 'land'
+      // trans_query => string: cloudinary resize query "w_250,h_200"
+      const MAX_MOVIE_ID = 51;
+      var urls = [];
+      var rand_id = 0;
+      var generated_ids = [];
+      while (generated_ids.length < num) {
+        rand_id = Math.floor(Math.random() * MAX_MOVIE_ID + 1);
+        if (generated_ids.indexOf(rand_id) == -1) {
+          generated_ids.push(rand_id);
+          urls.push(
+            `https://res.cloudinary.com/moviepedia/image/upload/${trans_query}/v1601209839/movie_thumbs/${orientation}/movie${rand_id}.jpg`
+          );
+        }
+      }
+      return urls;
+    },
+    get_rand_movie_items(num, orientation, trans_query) {
+      // num => int: 5, 10
+      // orientation => string: 'port' or 'land'
+      // trans_query => string: cloudinary resize query "w_250,h_200"
+      var items = [];
+      var urls = this.get_rand_poster(num, orientation, trans_query);
+      urls.forEach((url, i) => {
+        items.push({
+          id: i,
+          image: url,
+        });
+      });
+      return items;
+    },
+    initial_fetch_categories() {
+      var cel_thumb_dimen = "w_260,h_180";
+      // var thumb_dimen = "w_200,h_300";
+
       this.categories = [
         {
           name: "Today's Releases",
           height: 300,
           width: 200,
-          items: [
-            {
-              id: 1,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784051/movie_thumbs/movie_15_e6i6th.jpg`,
-            },
-            {
-              id: 2,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784051/movie_thumbs/movie_14_um32ao.jpg`,
-            },
-            {
-              id: 3,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784051/movie_thumbs/movie_13_ripwxl.jpg`,
-            },
-            {
-              id: 4,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784051/movie_thumbs/movie_10_kpupgd.jpg`,
-            },
-            {
-              id: 5,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_11_gzerr3.jpg`,
-            },
-          ],
+          items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
         },
         {
           name: "Celeb Recommends",
-          height: 200,
-          width: 250,
+          height: 180,
+          width: 260,
           items: [
             {
               id: 1,
@@ -214,55 +227,13 @@ export default {
           name: "Trending This Week",
           height: 300,
           width: 200,
-          items: [
-            {
-              id: 1,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_12_vfcqeg.jpg`,
-            },
-            {
-              id: 2,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_8_q9rj5y.jpg`,
-            },
-            {
-              id: 3,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_9_prks71.jpg`,
-            },
-            {
-              id: 4,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_7_f6pq48.jpg`,
-            },
-            {
-              id: 5,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_4_ifasom.jpg`,
-            },
-          ],
+          items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
         },
         {
           name: "Award Winning Shorts",
           height: 300,
           width: 200,
-          items: [
-            {
-              id: 6,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_6_c3msbn.jpg`,
-            },
-            {
-              id: 7,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784050/movie_thumbs/movie_3_gvj11y.jpg`,
-            },
-            {
-              id: 8,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784049/movie_thumbs/movie_1_yylabx.jpg`,
-            },
-            {
-              id: 1,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784049/movie_thumbs/movie_5_flas1c.jpg`,
-            },
-            {
-              id: 2,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${thumb_dimen}/v1600784049/movie_thumbs/movie_2_vw6fbq.jpg`,
-            },
-          ],
+          items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
         },
       ];
     },
