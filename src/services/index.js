@@ -6,18 +6,22 @@ if (token) {
     headers['Authorization'] = `Token ${token}`
 }
 
+console.log(process.env.VUE_APP_BASE_API_ENDPOINT, "found")
+
 export const backend = axios.create({
-    baseURL: process.env.BASE_API_ENDPOINT,
+    baseURL: process.env.VUE_APP_BASE_API_ENDPOINT,
     headers: headers
 })
 
 class BaseService {
     url = undefined
-    constructor(url) {
+    constructor(url, params) {
         this.url = url;
+        this.params = params || {}
     }
     get(params) {
-        return backend.get(this.url, { params: params }).then(response => {
+        var all_params = { ...params, ...this.params }
+        return backend.get(this.url, { params: all_params }).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
             return Promise.reject(error)
@@ -46,5 +50,9 @@ class BaseService {
     }
 }
 
-export const token_service = new BaseService("/api/auth/")
-export const profile_service = new BaseService("/api/profile/")
+// third party
+export const location_service = new BaseService("https://revgeocode.search.hereapi.com/v1/revgeocode",
+    { apiKey: 'pZa6ldSpU0FJnLGoiOxvPockZxZRQRbiLoKvc0Bl5xw' })
+// backend
+export const token_service = new BaseService("api/auth/")
+export const profile_service = new BaseService("api/profile/")

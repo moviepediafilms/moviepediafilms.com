@@ -63,8 +63,8 @@
                 <q-item clickable :to="{ name: 'partner-judges' }">
                   <q-item-section>Partner Celebs</q-item-section>
                 </q-item>
-                <q-item clickable :to="{ name: 'login' }">
-                  <q-item-section>Login/Register</q-item-section>
+                <q-item clickable @click="auth_action">
+                  <q-item-section>{{ auth_action_str }}</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -76,14 +76,27 @@
 </template>
 <script>
 import setting from "@/setting";
+import { AUTH_LOGOUT } from "@/store/actions/auth";
 export default {
   data() {
     return {
       action_btns: setting.data.action_btns,
     };
   },
-  mounted() {
-    console.log(this.action_btns);
+  methods: {
+    auth_action() {
+      if (this.logged_in) {
+        this.$store.dispatch(AUTH_LOGOUT);
+      } else {
+        if (this.$route.name !== "login") this.$router.push({ name: "login" });
+      }
+    },
+  },
+  computed: {
+    auth_action_str() {
+      if (this.logged_in) return "Logout";
+      else return "Login/Register";
+    },
   },
 };
 </script>

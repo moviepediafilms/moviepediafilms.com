@@ -4,32 +4,37 @@
       <h3 class="text-primary">Forgot Password</h3>
 
       <p class="q-mt-md">Enter your email address to reset your password</p>
-      <q-form>
+      <div class="col">
         <div class="row justify-center q-mt-sm">
-          <div class="q-gutter-md" style="width: 350px">
-            <q-input
-              type="email"
-              label="Your Email"
-              v-model="reset_data.email"
-              :rules="[
-                (val) => (val && val.length > 0) || 'Please fill your email',
-              ]"
-            />
-            <vue-recaptcha
-              sitekey="6Le8yqMZAAAAAP29DeBG_lUiFMJSsliCzUvEPJTk"
-              @verify="verify_recapcha"
-              :loadRecaptchaScript="true"
-              theme="dark"
-            ></vue-recaptcha>
-            <q-btn
-              label="Reset Password"
-              type="submit"
-              color="primary"
-              text-color="dark"
-            />
-          </div>
+          <q-form>
+            <div class="q-gutter-md" style="width: 350px">
+              <q-input
+                type="email"
+                label="Your Email"
+                v-model="reset_data.email"
+                :rules="[
+                  (val) => (val && val.length > 0) || 'Please fill your email',
+                ]"
+              />
+              <div>
+                <vue-recaptcha
+                  sitekey="6Le8yqMZAAAAAP29DeBG_lUiFMJSsliCzUvEPJTk"
+                  @verify="verify_recapcha"
+                  :loadRecaptchaScript="true"
+                  theme="dark"
+                  class="captcha"
+                ></vue-recaptcha>
+              </div>
+              <q-btn
+                label="Reset Password"
+                type="submit"
+                color="primary"
+                text-color="dark"
+              />
+            </div>
+          </q-form>
         </div>
-      </q-form>
+      </div>
     </div>
   </base-layout>
 </template>
@@ -64,4 +69,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.captcha {
+  display: inline-flex;
+}
 </style>

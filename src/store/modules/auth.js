@@ -3,9 +3,9 @@ import {
     AUTH_ERROR,
     AUTH_SUCCESS,
     AUTH_LOGOUT
-} from "../actions/auth";
-import { USER_REQUEST } from "../actions/user";
-import { backend, token_service } from "../../services";
+} from "@/store/actions/auth";
+import { PROFILE_REQUEST } from "@/store/actions/profile";
+import { backend, token_service } from "@/services";
 const state = {
     token: localStorage.getItem("token") || "",
     status: "",
@@ -18,16 +18,16 @@ const getters = {
 };
 
 const actions = {
-    [AUTH_REQUEST]: ({ commit, dispatch }, data) => {
+    [AUTH_REQUEST]: ({ commit, dispatch }, payload) => {
         return new Promise((resolve, reject) => {
             commit(AUTH_REQUEST);
-            token_service.get_token(data.email, data.password)
-                .then(resp => {
-                    localStorage.setItem("token", resp.data.token);
-                    backend.defaults.headers.common['Authorization'] = `Token ${resp.data.token}`
-                    commit(AUTH_SUCCESS, resp.data.token);
-                    dispatch(USER_REQUEST, resp.data.user_id);
-                    resolve(resp);
+            token_service.post(payload)
+                .then(data => {
+                    localStorage.setItem("token", data.token);
+                    backend.defaults.headers.common['Authorization'] = `Token ${data.token}`
+                    commit(AUTH_SUCCESS, data.token);
+                    dispatch(PROFILE_REQUEST, data.user_id);
+                    resolve(data);
                 })
                 .catch(err => {
                     commit(AUTH_ERROR, err);

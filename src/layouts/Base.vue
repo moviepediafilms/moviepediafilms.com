@@ -1,18 +1,20 @@
 <template>
-  <div class="bg-dark">
-    <q-layout view="hHh lPr fFf">
-      <navbar-component></navbar-component>
-      <q-page-container>
-        <div class="row">
-          <div class="col-12 col-md-6 offset-md-3">
-            <slot></slot>
+  <transition name="fade">
+    <div class="bg-dark">
+      <q-layout view="hHh lPr fFf">
+        <navbar-component></navbar-component>
+        <q-page-container>
+          <div class="row">
+            <div class="col-12 col-md-6 offset-md-3">
+              <slot></slot>
+            </div>
           </div>
-        </div>
-        <footer-component></footer-component>
-      </q-page-container>
-      <bottom-navbar-component></bottom-navbar-component>
-    </q-layout>
-  </div>
+          <footer-component></footer-component>
+        </q-page-container>
+        <bottom-navbar-component></bottom-navbar-component>
+      </q-layout>
+    </div>
+  </transition>
 </template>
 
 <script>
