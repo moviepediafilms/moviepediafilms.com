@@ -10,5 +10,5 @@ sudo -u $USER -H sh -c "cd $WORKSPACE &&
 $git pull &&
 $npm install &&
 $npm run build" &&\
-sudo rm -rf $DEST_DIR/* &&\
-sudo cp -r $WORKSPACE/dist/* $DEST_DIR/
+sudo -u root -H sh -c "rm -rf $DEST_DIR/* &&
+cp -r $WORKSPACE/dist/* $DEST_DIR/ &&"
