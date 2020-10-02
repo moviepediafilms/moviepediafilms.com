@@ -2,4 +2,4 @@
 
 git pull
 npm clean-install
-npm run buid
+npm run build
