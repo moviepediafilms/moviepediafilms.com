@@ -1,7 +1,7 @@
 <template>
   <base-layout>
     <div class="q-ma-md text-center q-pt-lg">
-      <h3 class="text-primary">Submit Movie</h3>
+      <h3 class="text-primary">Submission</h3>
       <q-stepper v-model="step" color="primary" vertical animated flat>
         <q-step
           :name="1"
@@ -41,19 +41,20 @@
 
         <q-step
           :name="2"
-          title="Tell us about your movie"
+          title="Tell us about your film"
           icon="mdi-numeric-2"
           :done="step > 2"
           :header-nav="step > 2"
         >
-          <div class="q-gutter-y-md">
+          <q-form class="q-gutter-y-md">
             <div>
               <q-input
                 type="text"
-                v-model="submit_data.name"
-                label="Movie Name"
+                v-model="submit_data.title"
+                label="Movie Title"
                 :rules="[
-                  (val) => (val && val.length > 0) || 'Please enter movie name',
+                  (val) =>
+                    (val && val.length > 0) || 'Please enter movie title',
                 ]"
                 filled
               ></q-input>
@@ -64,7 +65,7 @@
                 v-model="submit_data.link"
                 :rules="[
                   (val) =>
-                    (val && val.length > 0) || 'Please enter movie video link',
+                    (val && val.length > 0) || 'Please provide movie link',
                 ]"
                 hint="should be publicly accessible, YouTube, Google Drive are few examples where you can host them"
                 label="Link"
@@ -77,9 +78,13 @@
                 :rules="[
                   (val) =>
                     (val && val.length > 0) || 'Please enter movie runtime',
+                  (val) =>
+                    parseInt(val) > 0 || 'Please enter valid movie runtime',
+                  (val) =>
+                    parseInt(val) < 30 || 'That\'s too long for a short film',
                 ]"
                 v-model="submit_data.runtime"
-                label="Runtime"
+                label="Runtime (in minutes)"
                 filled
               ></q-input>
             </div>
@@ -87,9 +92,9 @@
             <q-input
               type="url"
               v-model="submit_data.award"
-              label="Award"
+              label="Awards (if any)"
               autogrow
-              hint="One award link per line, should be publicly accessible"
+              hint="One award link per line, link should be publicly accessible"
               filled
             ></q-input>
             <div>
@@ -109,7 +114,7 @@
               />
             </div>
             <p v-if="show_director_fields" class="text-caption">
-              Tell us about the director of the movie!
+              Tell us about the director of the film!
             </p>
             <div v-if="show_director_fields">
               <q-input
@@ -140,7 +145,7 @@
                 filled
               ></q-input>
             </div>
-          </div>
+          </q-form>
 
           <q-stepper-navigation>
             <q-btn
@@ -171,7 +176,12 @@
           :header-nav="step > 3"
         >
           <q-stepper-navigation>
-            <q-btn color="primary" @click="done3 = true" label="Finish" />
+            <q-btn
+              color="primary"
+              text-color="dark"
+              @click="done3 = true"
+              label="Finish"
+            />
             <q-btn
               flat
               @click="step = 2"
@@ -210,6 +220,7 @@ export default {
       ],
       step: 2,
       submit_data: {
+        title: "",
         email: "",
         is_director: undefined,
         director: {
