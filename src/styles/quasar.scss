@@ -1,3 +1,6 @@
 @import "./quasar.variables.scss";
 @import "~quasar-styl";
 // @import '~quasar-addon-styl';
+.q-checkbox__svg {
+    color: black;
+}

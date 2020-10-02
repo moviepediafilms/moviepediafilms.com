@@ -46,7 +46,7 @@
           :done="step > 2"
           :header-nav="step > 2"
         >
-          <q-form class="q-gutter-y-md">
+          <q-form class="q-gutter-y-md" @submit="attempt_submit">
             <div>
               <q-input
                 type="text"
@@ -72,6 +72,24 @@
                 filled
               ></q-input>
             </div>
+            <div>
+              <q-select
+                filled
+                transition-show="scale"
+                transition-hide="scale"
+                v-model="submit_data.lang"
+                :options="languages"
+                label="Language"
+                :rules="[
+                  (val) =>
+                    (val && val.length > 0) ||
+                    'Please select language used in movie',
+                ]"
+                :error-message="submit_error.lang"
+                :error="!!submit_error.lang"
+              />
+            </div>
+
             <div>
               <q-input
                 type="number"
@@ -107,6 +125,29 @@
                 filled
               ></q-file>
             </div>
+            <q-field
+              borderless
+              label="Select Genre"
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please select language used in movie',
+              ]"
+              color="white"
+              stack-label
+              :error-message="submit_error.genre"
+              :error="!!submit_error.genre"
+            >
+              <div class="q-gutter-sm text-center q-my-none">
+                <q-checkbox
+                  v-model="submit_data.genre"
+                  :val="genre"
+                  :label="genre"
+                  v-for="genre in genres"
+                  :key="genre"
+                />
+              </div>
+            </q-field>
             <div class="text-left">
               <q-toggle
                 v-model="submit_data.is_director"
@@ -145,28 +186,24 @@
                 filled
               ></q-input>
             </div>
+            <q-stepper-navigation>
+              <q-btn
+                type="submit"
+                color="primary"
+                :loading="loading"
+                text-color="dark"
+                :disable="loading"
+                label="Submit"
+              />
+              <q-btn
+                flat
+                @click="step = 1"
+                color="primary"
+                label="back"
+                class="q-ml-sm"
+              />
+            </q-stepper-navigation>
           </q-form>
-
-          <q-stepper-navigation>
-            <q-btn
-              @click="
-                () => {
-                  done2 = true;
-                  step = 3;
-                }
-              "
-              color="primary"
-              text-color="dark"
-              label="Next"
-            />
-            <q-btn
-              flat
-              @click="step = 1"
-              color="primary"
-              label="Back"
-              class="q-ml-sm"
-            />
-          </q-stepper-navigation>
         </q-step>
 
         <q-step
@@ -218,11 +255,31 @@ export default {
         "Your reputation as a film maker enhances and you can raise funds for your upcoming projects from our audience",
         "Interact with your audience directly",
       ],
-      step: 2,
+      languages: ["English", "Hindi", "Tamil", "Bengoli"],
+      genres: [
+        "Action",
+        "Crime",
+        "Comedy",
+        "Romance",
+        "Drama",
+        "Horror",
+        "Mystery",
+        "Thriller",
+        "Others",
+      ],
+      a: [
+        { value: "crime", label: "Crime" },
+        { value: "comedy", label: "Comedy" },
+        { value: "r", label: "Romance" },
+      ],
+      step: 1,
+      loading: false,
+      submit_error: {},
       submit_data: {
         title: "",
         email: "",
         is_director: undefined,
+        genre: [],
         director: {
           name: "",
           email: "",
@@ -237,7 +294,15 @@ export default {
       return !this.submit_data.is_director;
     },
   },
-  mounted() {},
+  methods: {
+    attempt_submit() {
+      this.loading = true;
+      setTimeout(() => {
+        this.step = 3;
+        this.loading = false;
+      }, 500);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
