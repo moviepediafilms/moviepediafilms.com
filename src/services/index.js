@@ -55,5 +55,7 @@ export const location_service = new BaseService("https://revgeocode.search.herea
     { apiKey: 'pZa6ldSpU0FJnLGoiOxvPockZxZRQRbiLoKvc0Bl5xw' })
 
 // App backend
-export const token_service = new BaseService("auth/")
+export const token_service = new BaseService("v1/auth/")
 export const profile_service = new BaseService("v1/profile/")
+export const movie_service = new BaseService("v1/movie/")
+export const submission_service = new BaseService("v1/submit/")

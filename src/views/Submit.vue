@@ -5,21 +5,28 @@
       <q-stepper v-model="step" color="primary" vertical animated flat>
         <q-step
           :name="1"
-          title="What you gain ?"
+          title="What’s in it for you?"
           icon="mdi-numeric-1"
           :done="step > 1"
           :header-nav="step > 1"
         >
           <q-list padding>
             <template v-for="(value_prop, idx) in value_props">
-              <q-item :key="`${idx}_item`">
+              <q-item :key="`${idx}_item`" class="q-px-none">
+                <q-item-section side top>
+                  <q-icon
+                    :name="value_prop.icon"
+                    size="28px"
+                    :color="value_prop.color || 'primary'"
+                  />
+                </q-item-section>
                 <q-item-section>
-                  <q-item-label caption class="text-left">
-                    {{ value_prop }}
+                  <q-item-label class="text-left text-grey-5">
+                    {{ value_prop.text }}
                   </q-item-label>
                 </q-item-section>
               </q-item>
-              <q-separator spaced inset :key="`${idx}_sep`" />
+              <!-- <q-separator spaced inset :key="`${idx}_sep`" /> -->
             </template>
           </q-list>
 
@@ -46,7 +53,7 @@
           :done="step > 2"
           :header-nav="step > 2"
         >
-          <q-form class="q-gutter-y-md" @submit="attempt_submit">
+          <q-form ref="submit" class="q-gutter-y-md" @submit="attempt_submit">
             <div>
               <q-input
                 type="text"
@@ -67,7 +74,7 @@
                   (val) =>
                     (val && val.length > 0) || 'Please provide movie link',
                 ]"
-                hint="should be publicly accessible, YouTube, Google Drive are few examples where you can host them"
+                hint="should be publicly accessible"
                 label="Link"
                 filled
               ></q-input>
@@ -75,15 +82,24 @@
             <div>
               <q-select
                 filled
-                transition-show="scale"
-                transition-hide="scale"
+                use-input
+                use-chips
                 v-model="submit_data.lang"
-                :options="languages"
+                hide-dropdown-icon
+                :options="filtered_lang"
+                @filter="lang_filter_fn"
+                @new-value="add_lang"
+                option-label="name"
+                :hint="
+                  submit_data.lang
+                    ? submit_data.lang.name === 'English'
+                      ? ''
+                      : 'Subtitles required for film'
+                    : ''
+                "
                 label="Language"
                 :rules="[
-                  (val) =>
-                    (val && val.length > 0) ||
-                    'Please select language used in movie',
+                  (val) => val || 'Please select language used in movie',
                 ]"
                 :error-message="submit_error.lang"
                 :error="!!submit_error.lang"
@@ -106,56 +122,59 @@
                 filled
               ></q-input>
             </div>
-            <!-- multi-select  -->
-            <q-input
-              type="url"
-              v-model="submit_data.award"
-              label="Awards (if any)"
-              autogrow
-              hint="One award link per line, link should be publicly accessible"
-              filled
-            ></q-input>
             <div>
               <q-file
-                v-model="submit_data.poster"
+                v-model="poster"
                 label="Poster"
                 accept=".jpg, image/*"
                 max-file-size="2000000"
-                hint="Landscape poster of the movie"
+                hint="Landscape poster of the movie, less than 2MB"
                 filled
+                clearable
+                @rejected="poster_rejected"
+                :error-message="submit_error.poster"
+                :error="!!submit_error.poster"
               ></q-file>
             </div>
             <q-field
               borderless
               label="Select Genre"
-              :rules="[
-                (val) =>
-                  (val && val.length > 0) ||
-                  'Please select language used in movie',
-              ]"
               color="white"
               stack-label
+              v-model="submit_data.genres"
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) || 'Please select at-least one genre',
+              ]"
               :error-message="submit_error.genre"
               :error="!!submit_error.genre"
             >
-              <div class="q-gutter-sm text-center q-my-none">
+              <div class="q-gutter-col-xs text-left q-ma-none">
                 <q-checkbox
-                  v-model="submit_data.genre"
+                  v-model="submit_data.genres"
                   :val="genre"
-                  :label="genre"
+                  :label="genre.name"
                   v-for="genre in genres"
-                  :key="genre"
+                  :key="genre.name"
                 />
               </div>
             </q-field>
             <div class="text-left">
-              <q-toggle
+              <q-field
+                borderless
                 v-model="submit_data.is_director"
-                label="I'm the director"
-              />
+                :rules="[
+                  (val) => val == true || val == false || 'Please specify this',
+                ]"
+              >
+                <q-toggle
+                  v-model="submit_data.is_director"
+                  label="I'm the director"
+                />
+              </q-field>
             </div>
-            <p v-if="show_director_fields" class="text-caption">
-              Tell us about the director of the film!
+            <p class="q-mt-xs" v-if="show_director_fields">
+              Tell us about the Director of the film!
             </p>
             <div v-if="show_director_fields">
               <q-input
@@ -168,7 +187,7 @@
             </div>
             <div v-if="show_director_fields">
               <q-input
-                type="text"
+                type="email"
                 v-model="submit_data.director.email"
                 :rules="[(val) => !!val || 'Please enter director\'s email']"
                 label="Email"
@@ -177,33 +196,34 @@
             </div>
             <div v-if="show_director_fields">
               <q-input
-                type="text"
+                type="tel"
                 v-model="submit_data.director.contact"
+                mask="+## ##########"
                 :rules="[
                   (val) => !!val || 'Please enter director\'s contact number',
                 ]"
-                label="Contact Number"
+                label="Mobile"
                 filled
               ></q-input>
             </div>
-            <q-stepper-navigation>
-              <q-btn
-                type="submit"
-                color="primary"
-                :loading="loading"
-                text-color="dark"
-                :disable="loading"
-                label="Submit"
-              />
-              <q-btn
-                flat
-                @click="step = 1"
-                color="primary"
-                label="back"
-                class="q-ml-sm"
-              />
-            </q-stepper-navigation>
           </q-form>
+          <q-stepper-navigation>
+            <q-btn
+              @click="attempt_submit"
+              color="primary"
+              :loading="loading"
+              text-color="dark"
+              :disable="loading"
+              label="Submit"
+            />
+            <q-btn
+              flat
+              @click="step = 1"
+              color="primary"
+              label="back"
+              class="q-ml-sm"
+            />
+          </q-stepper-navigation>
         </q-step>
 
         <q-step
@@ -234,7 +254,7 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-
+import { submission_service } from "@/services";
 export default {
   name: "submit-page",
   components: {
@@ -245,41 +265,92 @@ export default {
   },
   data() {
     return {
-      value_props: [
-        "Your film stands a chance to get recommended by industry veterans",
-        "You can win the the Film Maker of the Month Title",
-        "You can direct all views to your YouTube channel and boost revenue",
-        "No exclusive rights required",
-        "No commission charged on revenue",
-        "You get hands on analytics support on your content performance",
-        "Your reputation as a film maker enhances and you can raise funds for your upcoming projects from our audience",
-        "Interact with your audience directly",
-      ],
-      languages: ["English", "Hindi", "Tamil", "Bengoli"],
-      genres: [
-        "Action",
-        "Crime",
-        "Comedy",
-        "Romance",
-        "Drama",
-        "Horror",
-        "Mystery",
-        "Thriller",
-        "Others",
-      ],
-      a: [
-        { value: "crime", label: "Crime" },
-        { value: "comedy", label: "Comedy" },
-        { value: "r", label: "Romance" },
-      ],
       step: 1,
+      value_props: [
+        {
+          icon: "mdi-account-group",
+          color: "light-green",
+          text:
+            "We provide you the platform to set up your own OTT profile, supporting fundraising to screening of your films.",
+        },
+        {
+          icon: "mdi-youtube",
+          color: "red-8",
+          text:
+            "Build a consistent audience for your YouTube releases. We drive a traffic of over 160,000 cinephiles to your content.",
+        },
+        {
+          icon: "mdi-account-star",
+          color: "blue",
+          text:
+            "Your film reaches the network of our ‘Partner Celebs’ and stands a chance to get recommended across our network.",
+        },
+        {
+          icon: "mdi-trophy",
+          color: "amber",
+          text:
+            "You stand a chance to win the ‘Filmmaker of the Month’ title, cash prize of over Rs. 5000 and an extended feature period on the platform.",
+        },
+        {
+          icon: "mdi-bullseye-arrow",
+          color: "deep-purple",
+          text:
+            "We curate your profile as a filmmaker and connect you with the audience. We strive to manage your reputation as a filmmaker.",
+        },
+        {
+          icon: "mdi-check-decagram",
+          color: "light-blue",
+          text:
+            "We simplify the fundraising for your projects. We connect you with film enthusiasts to get your projects funded.",
+        },
+        {
+          icon: "mdi-chart-timeline-variant",
+          color: "white",
+          text:
+            "We provide deep analytics support on your content performance and trends.",
+        },
+        {
+          icon: "mdi-currency-usd",
+          color: "green",
+          text:
+            "You stand a chance to get your content noticed by top OTT buyers. We ensure the best price for your content rights.",
+        },
+      ],
+      languages: [
+        { name: "English" },
+        { name: "Hindi" },
+        { name: "Tamil" },
+        { name: "Telugu" },
+        { name: "Malayalam" },
+        { name: "Bengali" },
+        { name: "Others please typing in", disable: true },
+      ],
+      filtered_lang: [],
+      genres: [
+        { name: "Action" },
+        { name: "Crime" },
+        { name: "Comedy" },
+        { name: "Romance" },
+        { name: "Drama" },
+        { name: "Horror" },
+        { name: "Mystery" },
+        { name: "Thriller" },
+        { name: "Others" },
+      ],
+
       loading: false,
-      submit_error: {},
+      submit_error: {
+        poster: "",
+      },
+      poster: undefined,
       submit_data: {
-        title: "",
-        email: "",
-        is_director: undefined,
-        genre: [],
+        title: "Dhundh",
+        link: "http://google.com",
+        lang: undefined,
+        runtime: "12",
+        poster: "",
+        is_director: true,
+        genres: [],
         director: {
           name: "",
           email: "",
@@ -288,19 +359,76 @@ export default {
       },
     };
   },
+  created() {
+    this.filtered_lang = this.languages;
+  },
   computed: {
     show_director_fields() {
       if (this.submit_data.is_director == undefined) return false;
       return !this.submit_data.is_director;
     },
+    language_names() {
+      var names = [];
+      for (var lang in this.languages) {
+        names.push(lang.name);
+      }
+      return names;
+    },
+  },
+  watch: {
+    poster(poster_file) {
+      this.submit_error.poster = "";
+      this.submit_data.poster = poster_file;
+    },
   },
   methods: {
     attempt_submit() {
-      this.loading = true;
-      setTimeout(() => {
-        this.step = 3;
-        this.loading = false;
-      }, 500);
+      this.$refs.submit.validate().then((valid) => {
+        if (!valid) {
+          console.log("form invalid");
+          return;
+        }
+        console.log("attempt_submit");
+        this.loading = true;
+
+        const data = new FormData();
+        data.append("poster", this.submit_data.poster);
+        data.append("payload", JSON.stringify(this.submit_data));
+        submission_service
+          .post(data)
+          .then((res) => {
+            console.log(res);
+            this.loading = false;
+          })
+          .catch((err) => {
+            console.log(err);
+            this.loading = false;
+          });
+      });
+    },
+    poster_rejected() {
+      this.submit_error.poster = "size too big!! keep it under 2MB";
+    },
+    add_lang(val, done) {
+      if (val.length > 0) {
+        var new_lang = { name: val };
+        if (!this.filtered_lang.includes(new_lang)) {
+          this.filtered_lang.push(new_lang);
+        }
+        done(new_lang, "toggle");
+      }
+    },
+    lang_filter_fn(val, update) {
+      update(() => {
+        if (val === "") {
+          this.filtered_lang = this.languages;
+        } else {
+          const needle = val.toLowerCase();
+          this.filtered_lang = this.languages.filter(
+            (v) => v.name.toLowerCase().indexOf(needle) > -1
+          );
+        }
+      });
     },
   },
 };
