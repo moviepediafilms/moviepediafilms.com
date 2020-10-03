@@ -50,9 +50,10 @@ class BaseService {
     }
 }
 
-// third party
+// Third party services
 export const location_service = new BaseService("https://revgeocode.search.hereapi.com/v1/revgeocode",
     { apiKey: 'pZa6ldSpU0FJnLGoiOxvPockZxZRQRbiLoKvc0Bl5xw' })
-// backend
-export const token_service = new BaseService("api/auth/")
-export const profile_service = new BaseService("api/profile/")
+
+// App backend
+export const token_service = new BaseService("auth/")
+export const profile_service = new BaseService("v1/profile/")
