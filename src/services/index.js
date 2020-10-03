@@ -6,8 +6,6 @@ if (token) {
     headers['Authorization'] = `Token ${token}`
 }
 
-console.log(process.env.VUE_APP_BASE_API_ENDPOINT, "found")
-
 export const backend = axios.create({
     baseURL: process.env.VUE_APP_BASE_API_ENDPOINT,
     headers: headers
@@ -19,9 +17,10 @@ class BaseService {
         this.url = url;
         this.params = params || {}
     }
-    get(params) {
+    get(params, url_suffix) {
         var all_params = { ...params, ...this.params }
-        return backend.get(this.url, { params: all_params }).then(response => {
+        url_suffix = url_suffix ? `${url_suffix}/` : ''
+        return backend.get(this.url + url_suffix, { params: all_params }).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
             return Promise.reject(error)

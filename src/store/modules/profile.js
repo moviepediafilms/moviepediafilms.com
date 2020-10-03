@@ -13,7 +13,7 @@ const getters = {
 const actions = {
     [PROFILE_REQUEST]: ({ commit, dispatch }, id) => {
         commit(PROFILE_REQUEST);
-        profile_service.get({ id: id })
+        profile_service.get({}, id)
             .then(profile => {
                 commit(PROFILE_SUCCESS, profile);
             })
