@@ -14,11 +14,7 @@
             <template v-for="(value_prop, idx) in value_props">
               <q-item :key="`${idx}_item`" class="q-px-none">
                 <q-item-section side top>
-                  <q-icon
-                    :name="value_prop.icon"
-                    size="28px"
-                    :color="value_prop.color || 'primary'"
-                  />
+                  <q-icon :name="value_prop.icon" size="28px" color="white" />
                 </q-item-section>
                 <q-item-section>
                   <q-item-label class="text-left text-grey-5">
@@ -32,16 +28,10 @@
 
           <q-stepper-navigation>
             <q-btn
-              @click="
-                () => {
-                  done1 = true;
-                  step = 2;
-                }
-              "
+              @click="step = 2"
               color="primary"
               text-color="dark"
-              no-caps
-              label="Ok! Let's roll"
+              label="get started"
             />
           </q-stepper-navigation>
         </q-step>
@@ -128,7 +118,7 @@
                 label="Poster"
                 accept=".jpg, image/*"
                 max-file-size="2000000"
-                hint="Landscape poster of the movie, less than 2MB"
+                hint="Portrait poster of the movie, less than 2MB"
                 filled
                 clearable
                 @rejected="poster_rejected"
@@ -149,7 +139,7 @@
               :error-message="submit_error.genre"
               :error="!!submit_error.genre"
             >
-              <div class="q-gutter-col-xs text-left q-ma-none">
+              <div class="q-gutter-xs text-left q-ma-none">
                 <q-checkbox
                   v-model="submit_data.genres"
                   :val="genre"
@@ -214,7 +204,7 @@
               :loading="loading"
               text-color="dark"
               :disable="loading"
-              label="Submit"
+              label="Next"
             />
             <q-btn
               flat
@@ -232,12 +222,15 @@
           icon="mdi-numeric-3"
           :header-nav="step > 3"
         >
+          <div>Make Payment</div>
           <q-stepper-navigation>
             <q-btn
               color="primary"
               text-color="dark"
-              @click="done3 = true"
-              label="Finish"
+              :loading="loading"
+              :disable="loading"
+              @click="attempt_payment"
+              label="Submit"
             />
             <q-btn
               flat
@@ -252,9 +245,11 @@
     </div>
   </base-layout>
 </template>
+
 <script>
 import BaseLayout from "@/layouts/Base";
 import { submission_service } from "@/services";
+import Razorpay from "razorpay";
 export default {
   name: "submit-page",
   components: {
@@ -266,6 +261,7 @@ export default {
   data() {
     return {
       step: 1,
+      movie_submitted: false,
       value_props: [
         {
           icon: "mdi-account-group",
@@ -357,10 +353,15 @@ export default {
           contact: "",
         },
       },
+      order: {},
     };
   },
-  created() {
+  mounted() {
     this.filtered_lang = this.languages;
+
+    let script = document.createElement("script");
+    script.setAttribute("src", "https://checkout.razorpay.com/v1/checkout.js");
+    document.head.appendChild(script);
   },
   computed: {
     show_director_fields() {
@@ -383,6 +384,10 @@ export default {
   },
   methods: {
     attempt_submit() {
+      if (this.movie_submitted) {
+        this.step = 3;
+        return;
+      }
       this.$refs.submit.validate().then((valid) => {
         if (!valid) {
           console.log("form invalid");
@@ -391,14 +396,17 @@ export default {
         console.log("attempt_submit");
         this.loading = true;
 
-        const data = new FormData();
-        data.append("poster", this.submit_data.poster);
-        data.append("payload", JSON.stringify(this.submit_data));
+        const form_data = new FormData();
+        form_data.append("poster", this.submit_data.poster);
+        form_data.append("payload", JSON.stringify(this.submit_data));
         submission_service
-          .post(data)
-          .then((res) => {
-            console.log(res);
+          .post(form_data)
+          .then((res_data) => {
+            console.log(res_data);
+            this.order = res_data.order;
+            this.movie_submitted = true;
             this.loading = false;
+            this.step = 3;
           })
           .catch((err) => {
             console.log(err);
@@ -429,6 +437,25 @@ export default {
           );
         }
       });
+    },
+    rzp_response_handler(rzp_response) {
+      console.log(rzp_response);
+    },
+    attempt_payment() {
+      let options = {
+        key: process.env.VUE_APP_RZP_API_KEY,
+        currency: "INR",
+        name: this.website_title,
+        order_id: this.order.order_id,
+        amount: this.order.amount,
+        handler: this.rzp_response_handler,
+        prefill: {
+          name: this.user_profile.name,
+          email: this.user_profile.email,
+        },
+      };
+      console.log(options);
+      new Razorpay(options).open();
     },
   },
 };
