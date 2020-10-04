@@ -218,11 +218,54 @@
 
         <q-step
           :name="3"
-          title="Make Payment"
+          title="Select Package"
           icon="mdi-numeric-3"
           :header-nav="step > 3"
         >
-          <div>Make Payment</div>
+          <div>
+            <q-item
+              v-for="(pack, index) in packs"
+              :key="pack.id"
+              clickable
+              v-ripple
+              @click="active_pack_id = pack.id"
+              :class="index > 0 ? 'q-mt-lg' : 'q-mt-md'"
+              class="q-pa-md"
+              active-class="bg-primary"
+              :active="active_pack_id == pack.id"
+            >
+              <q-item-section>
+                <q-item-label>
+                  <h5
+                    :class="
+                      active_pack_id == pack.id
+                        ? 'text-dark text-weight-bold'
+                        : 'text-primary'
+                    "
+                  >
+                    {{ pack.title }}
+                  </h5>
+                </q-item-label>
+                <q-item-label
+                  :class="
+                    active_pack_id == pack.id ? 'text-dark' : 'text-grey-5'
+                  "
+                >
+                  {{ pack.content }}
+                  <q-badge
+                    transparent
+                    color="green"
+                    floating
+                    size="sm"
+                    align="bottom"
+                    v-if="active_pack_id == pack.id"
+                  >
+                    <q-icon color="white" size="24px" name="mdi-check"></q-icon>
+                  </q-badge>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </div>
           <q-stepper-navigation>
             <q-btn
               color="primary"
@@ -230,7 +273,7 @@
               :loading="loading"
               :disable="loading"
               @click="attempt_payment"
-              label="Submit"
+              label="Pay"
             />
             <q-btn
               flat
@@ -249,7 +292,6 @@
 <script>
 import BaseLayout from "@/layouts/Base";
 import { submission_service } from "@/services";
-import Razorpay from "razorpay";
 export default {
   name: "submit-page",
   components: {
@@ -260,7 +302,24 @@ export default {
   },
   data() {
     return {
-      step: 1,
+      step: 3,
+      active_pack_id: 1,
+      packs: [
+        {
+          id: 1,
+          title: "Standard Pack | INR 375",
+          content:
+            "Includes film already review by our team and promotional activities across our social-media network, tailor-made for each audience segment",
+          active: false,
+        },
+        {
+          id: 2,
+          title: "Premium Pack | INR 375 + INR 99",
+          content:
+            "Apart from the Standard Pack benefits, includes film review by our team and promotional activities across our social-media network, tailor-made for each audience segment",
+          active: false,
+        },
+      ],
       movie_submitted: false,
       value_props: [
         {
@@ -353,7 +412,10 @@ export default {
           contact: "",
         },
       },
-      order: {},
+      order: {
+        order_id: "order_FkkOwEvNcU2Une",
+        amount: 29900,
+      },
     };
   },
   mounted() {
@@ -452,9 +514,12 @@ export default {
         prefill: {
           name: this.user_profile.name,
           email: this.user_profile.email,
+          contact: this.user_profile.mobile,
         },
+        offers: ["offer_Fkl0Kfpdx70wq8", "offer_Fkkx6hkOZTDRER"],
       };
       console.log(options);
+      //eslint-disable-next-line
       new Razorpay(options).open();
     },
   },
