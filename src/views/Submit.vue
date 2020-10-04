@@ -2,7 +2,15 @@
   <base-layout>
     <div class="q-ma-md text-center q-pt-lg">
       <h3 class="text-primary">Submission</h3>
-      <q-stepper v-model="step" color="primary" vertical animated flat>
+      <q-stepper
+        v-model="step"
+        color="primary"
+        vertical
+        dense
+        animated
+        flat
+        class="q-pa-none q-ma-none"
+      >
         <q-step
           :name="1"
           title="What’s in it for you?"
@@ -196,6 +204,9 @@
                 filled
               ></q-input>
             </div>
+            <div>
+              {{ error_msg }}
+            </div>
           </q-form>
           <q-stepper-navigation>
             <q-btn
@@ -222,7 +233,7 @@
           icon="mdi-numeric-3"
           :header-nav="step > 3"
         >
-          <div>
+          <div class="last-step">
             <q-item
               v-for="(pack, index) in packs"
               :key="pack.id"
@@ -230,38 +241,36 @@
               v-ripple
               @click="active_pack_id = pack.id"
               :class="index > 0 ? 'q-mt-lg' : 'q-mt-md'"
-              class="q-pa-md"
-              active-class="bg-primary"
+              class="q-pa-md pack-border"
+              active-class="selected-pack-border"
               :active="active_pack_id == pack.id"
             >
               <q-item-section>
                 <q-item-label>
-                  <h5
-                    :class="
-                      active_pack_id == pack.id
-                        ? 'text-dark text-weight-bold'
-                        : 'text-primary'
-                    "
-                  >
+                  <h5 class="text-primary">
                     {{ pack.title }}
                   </h5>
                 </q-item-label>
-                <q-item-label
-                  :class="
-                    active_pack_id == pack.id ? 'text-dark' : 'text-grey-5'
-                  "
-                >
-                  {{ pack.content }}
-                  <q-badge
-                    transparent
-                    color="green"
-                    floating
-                    size="sm"
-                    align="bottom"
-                    v-if="active_pack_id == pack.id"
+                <q-item-label class="q-pt-sm">
+                  <q-item
+                    dense
+                    v-for="(item, idx) in pack.content"
+                    :key="idx"
+                    class="text-left q-pa-xs text-grey-5"
                   >
-                    <q-icon color="white" size="24px" name="mdi-check"></q-icon>
-                  </q-badge>
+                    <q-item-section side top class="q-pr-sm">
+                      <q-icon
+                        :color="item.included ? 'green' : 'red'"
+                        class="q-mr-xs"
+                        :name="item.included ? 'mdi-check' : 'mdi-close'"
+                      ></q-icon>
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>
+                        {{ item.text }}
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
                 </q-item-label>
               </q-item-section>
             </q-item>
@@ -308,15 +317,32 @@ export default {
         {
           id: 1,
           title: "Standard Pack | INR 375",
-          content:
-            "Includes film already review by our team and promotional activities across our social-media network, tailor-made for each audience segment",
+          content: [
+            { text: "Interactive Film Screening", included: true },
+            { text: "Filmmaker of the Month Competition", included: true },
+            { text: "Celebrity Recommendation", included: true },
+            { text: "Content Analytics", included: true },
+            { text: "Instagram Promotion", included: false },
+            { text: "Facebook Marketing", included: false },
+            { text: "E-mail Film Campaigns", included: false },
+            { text: "Moviepedia’s Expert Film Review", included: false },
+          ],
           active: false,
         },
         {
           id: 2,
           title: "Premium Pack | INR 375 + INR 99",
-          content:
-            "Apart from the Standard Pack benefits, includes film review by our team and promotional activities across our social-media network, tailor-made for each audience segment",
+
+          content: [
+            { text: "Interactive Film Screening", included: true },
+            { text: "Filmmaker of the Month Competition", included: true },
+            { text: "Celebrity Recommendation", included: true },
+            { text: "Content Analytics", included: true },
+            { text: "Instagram Promotion", included: true },
+            { text: "Facebook Marketing", included: true },
+            { text: "E-mail Film Campaigns", included: true },
+            { text: "Moviepedia’s Expert Film Review", included: true },
+          ],
           active: false,
         },
       ],
@@ -398,6 +424,7 @@ export default {
         poster: "",
       },
       poster: undefined,
+      error_msg: "",
       submit_data: {
         title: "Dhundh",
         link: "http://google.com",
@@ -473,6 +500,7 @@ export default {
           .catch((err) => {
             console.log(err);
             this.loading = false;
+            if (!this.error_msg) this.error_msg = err.toJSON().message;
           });
       });
     },
@@ -525,5 +553,16 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+.q-stepper__step-inner {
+  padding-left: 50px !important;
+}
+.pack-border {
+  border: 1px solid #232323;
+  border-radius: 5px;
+}
+.pack-border.selected-pack-border {
+  border: 1px solid #f7cd23;
+  border-radius: 5px;
+}
 </style>
