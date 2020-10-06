@@ -410,7 +410,7 @@ export default {
         { name: "Telugu" },
         { name: "Malayalam" },
         { name: "Bengali" },
-        { name: "Others please typing in", disable: true },
+        { name: "Others (Please Specify)", disable: true },
       ],
       filtered_lang: [],
       genres: [
