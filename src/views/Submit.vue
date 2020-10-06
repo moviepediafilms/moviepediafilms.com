@@ -15,6 +15,7 @@
           :name="1"
           title="What’s in it for you?"
           icon="mdi-numeric-1"
+          ref="step1"
           :done="step > 1"
           :header-nav="step > 1"
         >
@@ -36,7 +37,7 @@
 
           <q-stepper-navigation>
             <q-btn
-              @click="step = 2"
+              @click="navigate_forward"
               color="primary"
               text-color="dark"
               label="get started"
@@ -49,6 +50,7 @@
           title="Tell us about your film"
           icon="mdi-numeric-2"
           :done="step > 2"
+          ref="step2"
           :header-nav="step > 2"
         >
           <q-form ref="submit" class="q-gutter-y-md" @submit="attempt_submit">
@@ -204,7 +206,7 @@
                 filled
               ></q-input>
             </div>
-            <div>
+            <div class="text-negative">
               {{ error_msg }}
             </div>
           </q-form>
@@ -219,7 +221,7 @@
             />
             <q-btn
               flat
-              @click="step = 1"
+              @click="navigate_back"
               color="primary"
               label="back"
               class="q-ml-sm"
@@ -232,6 +234,7 @@
           title="Select Package"
           icon="mdi-numeric-3"
           :header-nav="step > 3"
+          ref="step3"
         >
           <div class="last-step">
             <q-item
@@ -249,6 +252,8 @@
                 <q-item-label>
                   <h5 class="text-primary">
                     {{ pack.title }}
+                    <br />
+                    <small class="text-caption">{{ pack.price }}</small>
                   </h5>
                 </q-item-label>
                 <q-item-label class="q-pt-sm">
@@ -286,7 +291,7 @@
             />
             <q-btn
               flat
-              @click="step = 2"
+              @click="navigate_back"
               color="primary"
               label="Back"
               class="q-ml-sm"
@@ -316,32 +321,33 @@ export default {
       packs: [
         {
           id: 1,
-          title: "Standard Pack | INR 375",
+          title: "Standard Pack",
+          price: "INR 375",
           content: [
             { text: "Interactive Film Screening", included: true },
-            { text: "Filmmaker of the Month Competition", included: true },
+            { text: "Filmmaker of the Month", included: true },
             { text: "Celebrity Recommendation", included: true },
             { text: "Content Analytics", included: true },
             { text: "Instagram Promotion", included: false },
             { text: "Facebook Marketing", included: false },
-            { text: "E-mail Film Campaigns", included: false },
-            { text: "Moviepedia’s Expert Film Review", included: false },
+            { text: "E-mail Campaigns", included: false },
+            { text: "Moviepedia Feature Review", included: false },
           ],
           active: false,
         },
         {
           id: 2,
-          title: "Premium Pack | INR 375 + INR 99",
-
+          title: "Premium Pack",
+          price: "INR 375 + INR 99",
           content: [
             { text: "Interactive Film Screening", included: true },
-            { text: "Filmmaker of the Month Competition", included: true },
+            { text: "Filmmaker of the Month", included: true },
             { text: "Celebrity Recommendation", included: true },
             { text: "Content Analytics", included: true },
             { text: "Instagram Promotion", included: true },
             { text: "Facebook Marketing", included: true },
-            { text: "E-mail Film Campaigns", included: true },
-            { text: "Moviepedia’s Expert Film Review", included: true },
+            { text: "E-mail Campaigns", included: true },
+            { text: "Moviepedia Feature Review", included: true },
           ],
           active: false,
         },
@@ -470,11 +476,54 @@ export default {
       this.submit_error.poster = "";
       this.submit_data.poster = poster_file;
     },
+    step() {
+      var element = this.$refs[`step${this.step}`];
+      var top = element.offsetTop;
+      window.scrollTo(0, top);
+    },
   },
   methods: {
+    navigate_forward() {
+      this.step = this.step + 1;
+    },
+    navigate_back() {
+      this.step = this.step - 1;
+    },
+    map_error_fields(error) {
+      if (!error || !error.response || !error.response.body) return false;
+      var has_field_errors = false;
+      var check_fields = function (source, dest, fields) {
+        if (!fields) return;
+        fields.forEach((field) => {
+          if (error.response.body[field]) {
+            has_field_errors = true;
+            dest[field] = source[field][0];
+          }
+        });
+      };
+
+      check_fields(error.response.body, this.submit_error, [
+        "poster",
+        "title",
+        "link",
+        "runtime",
+        "is_director",
+        "genres",
+      ]);
+
+      if (error.response.body.director) {
+        this.submit_error.director = {};
+        check_fields(error.response.body.director, this.submit_error.director, [
+          "name",
+          "email",
+          "contact",
+        ]);
+      }
+      return has_field_errors;
+    },
     attempt_submit() {
       if (this.movie_submitted) {
-        this.step = 3;
+        this.navigate_forward();
         return;
       }
       this.$refs.submit.validate().then((valid) => {
@@ -495,12 +544,13 @@ export default {
             this.order = res_data.order;
             this.movie_submitted = true;
             this.loading = false;
-            this.step = 3;
+            this.navigate_forward();
           })
           .catch((err) => {
-            console.log(err);
             this.loading = false;
-            if (!this.error_msg) this.error_msg = err.toJSON().message;
+            if (!this.map_error_fields(err)) {
+              this.error_msg = this.decode_error_message(err);
+            }
           });
       });
     },
