@@ -38,6 +38,17 @@ Vue.mixin({
             if (message === "Request failed with status code 500")
                 message = "We failed to process that request!"
             return message
+        },
+        check_fields_for_error(source, dest, fields) {
+            var has_errors = true;
+            if (!fields) return;
+            fields.forEach((field) => {
+                if (source[field]) {
+                    has_errors = true;
+                    dest[field] = source[field][0];
+                }
+            });
+            return has_errors
         }
     }
 })

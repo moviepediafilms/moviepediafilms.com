@@ -33,15 +33,25 @@ class BaseService {
             return Promise.reject(error)
         })
     }
-    put(payload) {
-        return backend.post(this.url, payload).then(response => {
+    put(payload, url_suffix) {
+        url_suffix = url_suffix ? `${url_suffix}/` : ''
+        return backend.put(this.url + url_suffix, payload).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
             return Promise.reject(error)
         })
     }
-    delete() {
-        return backend.delete(this.url).then(response => {
+    patch(payload, url_suffix) {
+        url_suffix = url_suffix ? `${url_suffix}/` : ''
+        return backend.patch(this.url + url_suffix, payload).then(response => {
+            return Promise.resolve(response.data)
+        }).catch(error => {
+            return Promise.reject(error)
+        })
+    }
+    delete(url_suffix) {
+        url_suffix = url_suffix ? `${url_suffix}/` : ''
+        return backend.delete(this.url + url_suffix).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
             return Promise.reject(error)
@@ -58,3 +68,4 @@ export const token_service = new BaseService("v1/auth/")
 export const profile_service = new BaseService("v1/profile/")
 export const movie_service = new BaseService("v1/movie/")
 export const submission_service = new BaseService("v1/submit/")
+export const payment_service = new BaseService("v1/payment/verify/")
