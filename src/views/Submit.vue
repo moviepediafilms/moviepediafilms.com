@@ -159,19 +159,21 @@
                 />
               </div>
             </q-field>
-            <div class="text-left">
-              <q-field
-                borderless
-                v-model="submit_data.is_director"
+            <div>
+              <q-select
+                filled
+                multiple
+                use-chips
+                v-model="submit_data.roles"
+                :options="roles"
+                option-label="name"
+                label="Your role(s) in film"
                 :rules="[
-                  (val) => val == true || val == false || 'Please specify this',
+                  (val) => val.length > 0 || 'Please select at least one',
                 ]"
-              >
-                <q-toggle
-                  v-model="submit_data.is_director"
-                  label="I'm the director"
-                />
-              </q-field>
+                :error-message="submit_error.roles"
+                :error="!!submit_error.roles"
+              />
             </div>
             <p class="q-mt-xs" v-if="show_director_fields">
               Tell us about the Director of the film!
@@ -279,6 +281,12 @@
                 </q-item-label>
               </q-item-section>
             </q-item>
+            <div class="text-negative">
+              {{ error_msg }}
+            </div>
+            <div class="text-positive">
+              {{ success_msg }}
+            </div>
           </div>
           <q-stepper-navigation>
             <q-btn
@@ -286,7 +294,7 @@
               text-color="dark"
               :loading="loading"
               :disable="loading"
-              @click="attempt_payment"
+              @click="update_package"
               label="Pay"
             />
             <q-btn
@@ -299,13 +307,31 @@
           </q-stepper-navigation>
         </q-step>
       </q-stepper>
+      <q-dialog :value="!is_authenticated" persistent>
+        <q-card>
+          <q-card-section class="row items-center">
+            <q-avatar size="56px" icon="mdi-account-circle-outline"></q-avatar>
+            <span class="">Please Sign in to submit a movie</span>
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn
+              flat
+              label="to login"
+              :to="{ name: 'login' }"
+              color="primary"
+              v-close-popup
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </div>
   </base-layout>
 </template>
 
 <script>
 import BaseLayout from "@/layouts/Base";
-import { submission_service } from "@/services";
+import { submission_service, payment_service } from "@/services";
 export default {
   name: "submit-page",
   components: {
@@ -316,7 +342,7 @@ export default {
   },
   data() {
     return {
-      step: 3,
+      step: 1,
       active_pack_id: 1,
       packs: [
         {
@@ -352,7 +378,7 @@ export default {
           active: false,
         },
       ],
-      movie_submitted: false,
+      submitted_movie: undefined,
       value_props: [
         {
           icon: "mdi-account-group",
@@ -424,20 +450,26 @@ export default {
         { name: "Thriller" },
         { name: "Others" },
       ],
-
+      roles: [
+        { name: "Actor" },
+        { name: "Director" },
+        { name: "Singer" },
+        { name: "Musician" },
+      ],
       loading: false,
       submit_error: {
         poster: "",
       },
       poster: undefined,
       error_msg: "",
+      success_msg: "",
       submit_data: {
         title: "Dhundh",
         link: "http://google.com",
         lang: undefined,
         runtime: "12",
         poster: "",
-        is_director: true,
+        roles: [],
         genres: [],
         director: {
           name: "",
@@ -445,23 +477,21 @@ export default {
           contact: "",
         },
       },
-      order: {
-        order_id: "order_FkkOwEvNcU2Une",
-        amount: 29900,
-      },
     };
   },
   mounted() {
     this.filtered_lang = this.languages;
-
     let script = document.createElement("script");
     script.setAttribute("src", "https://checkout.razorpay.com/v1/checkout.js");
     document.head.appendChild(script);
   },
   computed: {
     show_director_fields() {
-      if (this.submit_data.is_director == undefined) return false;
-      return !this.submit_data.is_director;
+      var show = true;
+      this.submit_data.roles.forEach((role) => {
+        if (role.name === "Director") show = false;
+      });
+      return show;
     },
     language_names() {
       var names = [];
@@ -469,6 +499,13 @@ export default {
         names.push(lang.name);
       }
       return names;
+    },
+    selected_pack() {
+      var selected = null;
+      this.packs.forEach((pack) => {
+        if (pack.id == this.active_pack_id) selected = pack;
+      });
+      return { name: selected.title };
     },
   },
   watch: {
@@ -491,58 +528,69 @@ export default {
     },
     map_error_fields(error) {
       if (!error || !error.response || !error.response.body) return false;
-      var has_field_errors = false;
-      var check_fields = function (source, dest, fields) {
-        if (!fields) return;
-        fields.forEach((field) => {
-          if (error.response.body[field]) {
-            has_field_errors = true;
-            dest[field] = source[field][0];
-          }
-        });
-      };
 
-      check_fields(error.response.body, this.submit_error, [
-        "poster",
-        "title",
-        "link",
-        "runtime",
-        "is_director",
-        "genres",
-      ]);
+      var has_errors1 = false;
+      var has_errors2 = false;
+      has_errors1 = this.check_fields_for_error(
+        error.response.body.payload,
+        this.submit_error,
+        ["poster", "title", "link", "runtime", "is_director", "genres"]
+      );
 
-      if (error.response.body.director) {
+      if (error.response.body.payload.director) {
         this.submit_error.director = {};
-        check_fields(error.response.body.director, this.submit_error.director, [
-          "name",
-          "email",
-          "contact",
-        ]);
+        has_errors2 = this.check_fields_for_error(
+          error.response.body.director,
+          this.submit_error.director,
+          ["name", "email", "contact"]
+        );
       }
-      return has_field_errors;
+      return has_errors1 || has_errors2;
+    },
+    build_form_data() {
+      const data = JSON.parse(JSON.stringify(this.submit_data));
+      delete data["poster"];
+      delete data["is_director"];
+
+      const form_data = new FormData();
+      form_data.append("poster", this.submit_data.poster);
+      if (data.director.name || data.director.email || data.director.contact) {
+        var name = data.director.name;
+        if (name) {
+          var name_segs = name.split(/[\s,]+/);
+          if (name_segs.length > 0)
+            data.director.first_name = name_segs.shift();
+          if (name_segs.length > 0)
+            data.director.last_name = name_segs.join(" ");
+          delete data.director["name"];
+        }
+      } else {
+        delete data["director"];
+      }
+
+      form_data.append("payload", JSON.stringify(data));
+      return form_data;
+    },
+    clear_errors() {
+      this.submit_error = {};
+      this.error_msg = "";
     },
     attempt_submit() {
-      if (this.movie_submitted) {
-        this.navigate_forward();
-        return;
-      }
+      this.clear_errors();
       this.$refs.submit.validate().then((valid) => {
         if (!valid) {
-          console.log("form invalid");
           return;
         }
-        console.log("attempt_submit");
         this.loading = true;
 
-        const form_data = new FormData();
-        form_data.append("poster", this.submit_data.poster);
-        form_data.append("payload", JSON.stringify(this.submit_data));
-        submission_service
-          .post(form_data)
+        var form_data = this.build_form_data();
+        // if the movie was earlier submitted, perform an PATCH call otherwwise do a POST
+        var action = this.submitted_movie ? "patch" : "post";
+        var movie_id = this.submitted_movie ? this.submitted_movie.id : "";
+        // movie_id will be ignored if its a POST
+        submission_service[action](form_data, movie_id)
           .then((res_data) => {
-            console.log(res_data);
-            this.order = res_data.order;
-            this.movie_submitted = true;
+            this.submitted_movie = res_data;
             this.loading = false;
             this.navigate_forward();
           })
@@ -578,16 +626,59 @@ export default {
         }
       });
     },
+    update_package() {
+      if (this.submitted_movie.order.order_id) {
+        this.attempt_payment();
+      }
+
+      var form_data = new FormData();
+      form_data.append(
+        "payload",
+        JSON.stringify({ package: this.selected_pack })
+      );
+      submission_service
+        .patch(form_data, this.submitted_movie.id)
+        .then((res_data) => {
+          this.submitted_movie = res_data;
+          this.loading = false;
+          this.attempt_payment();
+        })
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+          this.error_msg = "Package selected failed! Please try again";
+        });
+    },
     rzp_response_handler(rzp_response) {
-      console.log(rzp_response);
+      if (rzp_response.error) {
+        this.error_msg = `Payment failed! ${rzp_response.description}`;
+      } else {
+        payment_service
+          .post(rzp_response)
+          .then((data) => {
+            if (data.success) {
+              // redirect user
+              this.success_msg = "Payment Successful";
+              setTimeout(() => {
+                this.$router.push({ name: "home" });
+              }, 500);
+            } else {
+              this.error_msg = "Fail to verify Payment";
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            this.error_msg = this.decode_error_message(error);
+          });
+      }
     },
     attempt_payment() {
       let options = {
         key: process.env.VUE_APP_RZP_API_KEY,
         currency: "INR",
         name: this.website_title,
-        order_id: this.order.order_id,
-        amount: this.order.amount,
+        order_id: this.submitted_movie.order.order_id,
+        amount: this.submitted_movie.order.amount,
         handler: this.rzp_response_handler,
         prefill: {
           name: this.user_profile.name,
