@@ -14,9 +14,9 @@ clean() {
 
     if [ ${1:-1} -eq 1 ]; then
         echo "cleaning request and response files"
-        rm $TMP_REQ
-        rm $TMP_RES
-        rm $TMP_MERGE_RES
+        rm $TMP_REQ &>/dev/null
+        rm $TMP_RES &>/dev/null
+        rm $TMP_MERGE_RES &>/dev/null
     else
         cat $TMP_RES
     fi
@@ -50,7 +50,7 @@ raise_pr() {
     else
         /usr/bin/jshon -e html_url -u <$TMP_RES
         echo 'PR Created successfully'
-        # merge
+        merge
     fi
 }
 
