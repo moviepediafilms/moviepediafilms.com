@@ -5,7 +5,12 @@
       <p class="q-mt-sm">Join us to get enaged with likes of you!</p>
       <div class="row justify-center q-mt-lg">
         <div class="col-12 col-sm-6 col-sm-offset-3 q-col-gutter-md">
-          <q-form @submit="signup" class="q-gutter-md" v-if="!signup_success">
+          <q-form
+            ref="submitForm"
+            @submit="attempt_submit"
+            class="q-gutter-md"
+            v-if="!signup_success"
+          >
             <q-input
               v-model="signup_data.name"
               type="text"
@@ -67,6 +72,7 @@
               :rules="[
                 (val) =>
                   (val && val.length > 0) || 'Please fill your contact number',
+                (val) => val.length == 10 || '10 digits required',
               ]"
               :error-message="signup_error.mobile"
               :error="!!signup_error.mobile"
@@ -89,10 +95,12 @@
             <q-input
               filled
               v-model="signup_data.dob"
+              mask="####-##-##"
               label="Your Birthday"
               :rules="[
                 (val) =>
-                  (val && val.length > 0) || 'Please select your date of birth',
+                  (val && val.length > 0) || 'Please selected your birthday',
+                (val) => val.length == 10 || 'Invalid Date',
               ]"
               :error-message="signup_error.dob"
               :error="!!signup_error.dob"
@@ -100,15 +108,14 @@
               <template v-slot:append>
                 <q-icon name="mdi-calendar" class="cursor-pointer">
                   <q-popup-proxy
-                    ref="qDateProxy"
                     transition-show="scale"
                     transition-hide="scale"
                   >
                     <q-date
                       v-model="signup_data.dob"
                       text-color="dark"
-                      default-view="Years"
                       mask="YYYY-MM-DD"
+                      default-view="Years"
                     >
                       <div class="row items-center justify-end">
                         <q-btn v-close-popup label="ok" color="primary" flat />
@@ -159,27 +166,35 @@
               </div>
             </div>
             <div>
-              <q-checkbox v-model="signup_data.accept" color="primary" />
-              I accept the
-              <router-link
-                class="text-primary"
-                :to="{ name: 'tos' }"
-                target="_blank"
-                >terms and conditions</router-link
+              <q-field
+                borderless
+                v-model="signup_data.accept"
+                :rules="[
+                  (val) => val == true || 'Please accept terms and conditions',
+                ]"
               >
-              <div
-                class="text-caption text-negative"
-                v-if="signup_error.accept"
-              >
-                Please accept term and conditions
-              </div>
+                <div class="self-center">
+                  <q-checkbox
+                    class="q-mb-0"
+                    v-model="signup_data.accept"
+                    color="primary"
+                  />
+                  I accept the
+                  <router-link
+                    class="text-primary"
+                    :to="{ name: 'tos' }"
+                    target="_blank"
+                    >terms and conditions</router-link
+                  >
+                </div>
+              </q-field>
             </div>
             <div class="text-negative">
               {{ error_msg }}
             </div>
             <q-btn
               label="Register"
-              type="submit"
+              @click="attempt_submit"
               :disabled="loading"
               color="primary"
               text-color="dark"
@@ -271,7 +286,7 @@ export default {
       });
       var name_segs = this.signup_data.name.split(/[\s,]+/);
       var first_name = "";
-      var last_name = "";
+      var last_name = "Moviepedian";
       if (name_segs.length > 0) first_name = name_segs.shift();
       if (name_segs.length > 0) last_name = name_segs.join(" ");
       return {
@@ -291,8 +306,7 @@ export default {
     },
   },
   methods: {
-    extra_validation() {
-      var error_found = false;
+    clear_errors() {
       this.signup_error = {
         name: "",
         email: "",
@@ -304,16 +318,22 @@ export default {
         accept: false,
       };
       this.error_msg = "";
-
+    },
+    validate_accept() {
+      var error_found = false;
       if (!this.signup_data.accept) {
         this.signup_error.accept = true;
         error_found = true;
       }
       return !error_found;
     },
-    signup() {
-      this.loading = true;
-      if (this.extra_validation()) {
+    attempt_submit() {
+      this.clear_errors();
+      this.$refs.submitForm.validate().then((valid) => {
+        if (!valid) {
+          return;
+        }
+        this.loading = true;
         console.log(this.signup_payload);
         profile_service
           .post(this.signup_payload)
@@ -330,7 +350,7 @@ export default {
             if (!this.error_msg) this.error_msg = error.toJSON().message;
             this.loading = false;
           });
-      }
+      });
     },
     map_signup_error(err) {
       if (err.user) {
