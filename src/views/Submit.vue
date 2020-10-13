@@ -307,7 +307,7 @@
           </q-stepper-navigation>
         </q-step>
       </q-stepper>
-      <q-dialog :value="!is_authenticated" persistent>
+      <q-dialog :value="show_sign_in" persistent>
         <q-card>
           <q-card-section class="row items-center">
             <q-avatar size="56px" icon="mdi-account-circle-outline"></q-avatar>
@@ -486,6 +486,9 @@ export default {
     document.head.appendChild(script);
   },
   computed: {
+    show_sign_in() {
+      return this.step > 1 && !this.is_authenticated;
+    },
     show_director_fields() {
       var show = true;
       this.submit_data.roles.forEach((role) => {
