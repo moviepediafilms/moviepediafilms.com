@@ -88,6 +88,11 @@ const routes = [
 
   // static pages below
   {
+    path: '/about',
+    name: 'about',
+    component: () => import('../views/AboutUs.vue')
+  },
+  {
     path: '/tos',
     name: 'tos',
     component: () => import('../views/Tos.vue')
