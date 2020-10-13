@@ -75,17 +75,18 @@
         <p class="text-uppercase text-weight-bold text-primary q-mt-md">
           Other Links
         </p>
-        <router-link :to="{ name: 'refund-policy' }" class="other-link"
-          >Refund Policy</router-link
-        >
-
-        <router-link :to="{ name: 'privacy-policy' }" class="other-link"
-          >Privacy Policy</router-link
-        >
-
-        <router-link :to="{ name: 'tos' }" class="other-link"
-          >Terms of Services</router-link
-        >
+        <router-link :to="{ name: 'refund-policy' }" class="other-link">
+          Refund Policy
+        </router-link>
+        <router-link :to="{ name: 'privacy-policy' }" class="other-link">
+          Privacy Policy
+        </router-link>
+        <router-link :to="{ name: 'tos' }" class="other-link">
+          Terms of Services
+        </router-link>
+        <router-link :to="{ name: 'about' }" class="other-link">
+          About Us
+        </router-link>
       </div>
     </div>
   </footer>
