@@ -116,7 +116,7 @@ export default {
     BaseLayout,
   },
   metaInfo: {
-    title: "Terms of Services",
+    title: "About Us",
   },
   data() {
     return {};
