@@ -1,10 +1,12 @@
 <template>
   <base-layout>
     <div class="q-ma-md q-pt-lg">
-      <h2 class="text-primary mt-5 text-center text-uppercase">
+      <h4 class="text-primary mt-5 text-center text-uppercase">
         Moviepedia Privacy Policy
-      </h2>
-      <div class="text-h4 q-mt-md text-primary">Moviepedia Privacy Policy</div>
+      </h4>
+      <div class="text-h5 q-mt-lg q-mb-sm text-primary">
+        Moviepedia Privacy Policy
+      </div>
       <p>
         At Moviepedia, accessible from
         <a
@@ -28,7 +30,9 @@
         <strong>Consent</strong> By using our website, you hereby consent to our
         Privacy Policy and agree to its terms.
       </p>
-      <div class="text-h4 q-mt-md text-primary">Information we collect</div>
+      <div class="text-h5 q-mt-lg q-mb-sm text-primary">
+        Information we collect
+      </div>
       <p>
         The personal information that you are asked to provide, and the reasons
         why you are asked to provide it, Is stated below:-
@@ -66,8 +70,10 @@
         users&#39; movement on the website, and gathering demographic
         information.
       </p>
-      <div class="text-h4 q-mt-md text-primary">Cookies and Web Beacons</div>
-      <div class="text-h4 q-mt-md text-primary">What are Cookies?</div>
+      <div class="text-h5 q-mt-lg q-mb-sm text-primary">
+        Cookies and Web Beacons
+      </div>
+      <div class="text-h5 q-mt-lg q-mb-sm text-primary">What are Cookies?</div>
       <p>
         Cookies are text files with small pieces of data — like a username and
         password — that are used to identify your computer as you use a computer
@@ -81,7 +87,7 @@
         used to optimize the users&#39; experience by customizing our web page
         content based on visitors&#39; browser type and/or other information..
       </p>
-      <div class="text-h4 q-mt-md text-primary">
+      <div class="text-h5 q-mt-lg q-mb-sm text-primary">
         Advertising Partners Privacy Policies
       </div>
       <p>
@@ -104,7 +110,7 @@
         Note: MoviepediaFilms.com has no access to or control over these cookies
         that are used by third-party advertisers.
       </p>
-      <div class="text-h4 q-mt-md text-primary">
+      <div class="text-h5 q-mt-lg q-mb-sm text-primary">
         Third-Party Privacy Policies
       </div>
       <p>
@@ -120,7 +126,7 @@
         specific web browsers, it can be found at the browsers&#39; respective
         websites.
       </p>
-      <div class="text-h4 q-mt-md text-primary">
+      <div class="text-h5 q-mt-lg q-mb-sm text-primary">
         Does Moviepedia sell your data?
       </div>
       <p>
@@ -149,7 +155,9 @@
         respond to you. If you would like to exercise any of these rights,
         please contact us.
       </p>
-      <div class="text-h4 q-mt-md text-primary">Children&#39;s Information</div>
+      <div class="text-h5 q-mt-lg q-mb-sm text-primary">
+        Children&#39;s Information
+      </div>
       <p>
         Another part of our priority is adding protection for children while
         using the internet. We encourage parents and guardians to observe,
