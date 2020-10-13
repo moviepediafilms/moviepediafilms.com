@@ -37,7 +37,7 @@ merge() {
 raise_pr() {
     DATA="{\"base\": \"master\",
        \"head\":\"${CURR_BRANCH}\",
-       \"title\":\"Automatic PR\",
+       \"title\":\"${CURR_BRANCH}\",
        \"body\":\"PR raised by publish.sh\"}"
     echo $DATA >$TMP_REQ
     GITHUB_PR_LINK=https://api.github.com/repos/$GITHUB_REPO/pulls
