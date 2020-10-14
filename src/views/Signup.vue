@@ -286,7 +286,7 @@ export default {
       });
       var name_segs = this.signup_data.name.split(/[\s,]+/);
       var first_name = "";
-      var last_name = "Moviepedian";
+      var last_name = "";
       if (name_segs.length > 0) first_name = name_segs.shift();
       if (name_segs.length > 0) last_name = name_segs.join(" ");
       return {

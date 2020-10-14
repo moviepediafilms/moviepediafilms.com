@@ -294,7 +294,7 @@
               text-color="dark"
               :loading="loading"
               :disable="loading"
-              @click="update_package"
+              @click="select_package"
               label="Pay"
             />
             <q-btn
@@ -561,6 +561,7 @@ export default {
         var name = data.director.name;
         if (name) {
           var name_segs = name.split(/[\s,]+/);
+          data.director.last_name = "";
           if (name_segs.length > 0)
             data.director.first_name = name_segs.shift();
           if (name_segs.length > 0)
@@ -629,11 +630,14 @@ export default {
         }
       });
     },
-    update_package() {
+    select_package() {
+      this.clear_errors();
       if (this.submitted_movie.order.order_id) {
+        // this should never happend, the package is already selected and select_package was called
         this.attempt_payment();
+        return;
       }
-
+      this.loading = true;
       var form_data = new FormData();
       form_data.append(
         "payload",
