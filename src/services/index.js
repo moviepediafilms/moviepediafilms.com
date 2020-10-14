@@ -18,7 +18,7 @@ class BaseService {
         this.params = params || {}
     }
     get(params, url_suffix) {
-        var all_params = { ...params, ...this.params }
+        var all_params = {...params, ...this.params }
         url_suffix = url_suffix ? `${url_suffix}/` : ''
         return backend.get(this.url + url_suffix, { params: all_params }).then(response => {
             return Promise.resolve(response.data)
@@ -60,12 +60,12 @@ class BaseService {
 }
 
 // Third party services
-export const location_service = new BaseService("https://revgeocode.search.hereapi.com/v1/revgeocode",
-    { apiKey: 'pZa6ldSpU0FJnLGoiOxvPockZxZRQRbiLoKvc0Bl5xw' })
+export const location_service = new BaseService("https://revgeocode.search.hereapi.com/v1/revgeocode", { apiKey: 'pZa6ldSpU0FJnLGoiOxvPockZxZRQRbiLoKvc0Bl5xw' })
 
 // App backend
 export const token_service = new BaseService("v1/auth/")
 export const profile_service = new BaseService("v1/profile/")
 export const movie_service = new BaseService("v1/movie/")
+export const review_service = new BaseService("v1/review/")
 export const submission_service = new BaseService("v1/submit/")
 export const payment_service = new BaseService("v1/payment/verify/")

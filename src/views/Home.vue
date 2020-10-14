@@ -146,7 +146,9 @@ export default {
   },
   methods: {
     detail_page(movie) {
-      this.$router.push({ name: "movie-detail", params: { id: movie.id } });
+      var movie_id = movie.id;
+      movie_id = 1;
+      this.$router.push({ name: "movie-detail", params: { id: movie_id } });
     },
     show_filters() {
       this.show_filter = !this.show_filter;

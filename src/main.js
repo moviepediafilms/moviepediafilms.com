@@ -6,12 +6,12 @@ import './mixins'
 import '@/scss/style.scss';
 import './plugins/quasar'
 import './plugins/animate'
-
+import './plugins/hammer'
 
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')
