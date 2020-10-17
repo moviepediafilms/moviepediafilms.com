@@ -1,0 +1,12 @@
+.text-decoration-none {
+    text-decoration: none !important;
+    text-decoration-color: #f7cd23 !important;
+    &:visited {
+        text-decoration: none !important;
+        text-decoration-color: #f7cd23 !important;
+    }
+    &:hover {
+        text-decoration: underline !important;
+        text-decoration-color: #f7cd23 !important;
+    }
+}

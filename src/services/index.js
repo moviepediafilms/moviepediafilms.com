@@ -1,4 +1,6 @@
 import axios from 'axios';
+import store from "@/store"
+import { AUTH_LOGOUT } from "@/store/actions/auth";
 
 const token = localStorage.getItem('token') || ''
 var headers = {}
@@ -17,12 +19,21 @@ class BaseService {
         this.url = url;
         this.params = params || {}
     }
+    _handle_token_error(error) {
+        if (error && error.response && error.response.status == 401 && error.response.data.detail == "Invalid token.") {
+            // clear authorization and reload
+            store.dispatch(AUTH_LOGOUT);
+            console.log("Logged out")
+            window.location.reload()
+        }
+    }
     get(params, url_suffix) {
         var all_params = {...params, ...this.params }
         url_suffix = url_suffix ? `${url_suffix}/` : ''
         return backend.get(this.url + url_suffix, { params: all_params }).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
+            this._handle_token_error(error)
             return Promise.reject(error)
         })
     }
@@ -30,6 +41,7 @@ class BaseService {
         return backend.post(this.url, payload).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
+            this._handle_token_error(error)
             return Promise.reject(error)
         })
     }
@@ -38,6 +50,7 @@ class BaseService {
         return backend.put(this.url + url_suffix, payload).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
+            this._handle_token_error(error)
             return Promise.reject(error)
         })
     }
@@ -46,6 +59,7 @@ class BaseService {
         return backend.patch(this.url + url_suffix, payload).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
+            this._handle_token_error(error)
             return Promise.reject(error)
         })
     }
@@ -54,6 +68,7 @@ class BaseService {
         return backend.delete(this.url + url_suffix).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
+            this._handle_token_error(error)
             return Promise.reject(error)
         })
     }
@@ -69,3 +84,4 @@ export const movie_service = new BaseService("v1/movie/")
 export const review_service = new BaseService("v1/review/")
 export const submission_service = new BaseService("v1/submit/")
 export const payment_service = new BaseService("v1/payment/verify/")
+export const review_like_service = new BaseService("v1/review_like/")

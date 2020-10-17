@@ -1,7 +1,7 @@
 <template>
   <q-header reveal elevated class="bg-primary text-dark">
     <div class="row justify-center bg-warning text-overline">
-      <div class="text-center">
+      <div class="text-center" v-if="show_wip_bar">
         <q-icon size="md" name="mdi-rocket-outline"></q-icon> Website is under
         construction
       </div>
@@ -18,8 +18,8 @@
             <router-link
               :to="{ name: 'home' }"
               style="text-decoration: none"
-              class="text-dark"
-              >Moviepedia Films</router-link
+              class="text-dark text-uppercase text-caption"
+              >Moviepedia</router-link
             >
           </q-toolbar-title>
           <template v-for="action in action_btns">
@@ -96,6 +96,10 @@ export default {
     auth_action_str() {
       if (this.is_authenticated) return "Logout";
       else return "Login/Register";
+    },
+
+    show_wip_bar() {
+      return process.env.VUE_APP_WIP === "true";
     },
   },
 };
