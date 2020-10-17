@@ -17,6 +17,9 @@ Vue.mixin({
         },
     },
     methods: {
+        is_token_error(error) {
+            return error && error.response && error.response.status == 401 && error.response.data.detail == "Invalid token."
+        },
         first_of(arr) {
             if (arr && arr.length > 0)
                 return arr[0]

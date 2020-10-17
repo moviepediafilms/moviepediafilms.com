@@ -88,6 +88,11 @@ export default {
       },
     };
   },
+  computed: {
+    has_history() {
+      return window.history.length > 2;
+    },
+  },
   methods: {
     clear_errors() {
       this.login_error.email = "";
@@ -103,7 +108,8 @@ export default {
       this.$store
         .dispatch(AUTH_REQUEST, payload)
         .then(() => {
-          this.$router.push({ name: "home" });
+          if (this.has_history) this.$router.go(-1);
+          else this.$router.push({ name: "home" });
         })
         .catch((error) => {
           if (error.response && error.response.data) {
