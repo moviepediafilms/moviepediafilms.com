@@ -66,10 +66,11 @@
             </div>
             <div class="col q-mx-sm">
               <q-slider
-                v-model="my_rate_review.rating"
+                :value="my_rate_review.rating"
                 :min="0"
                 :max="10"
                 :step="1"
+                @input="change_rating"
                 @change="save_rate_review"
                 snap
                 label-text-color="black"
@@ -174,6 +175,7 @@
       <login-required-popup
         :message="login_required_msg"
         :show="login_required"
+        @hide="login_required = false"
       ></login-required-popup>
 
       <q-dialog
@@ -227,6 +229,7 @@ export default {
         rating: null,
       },
       old_review_content: "",
+      old_rating: null,
       show_review_dialog: false,
       login_required: false,
       login_required_msg: "",
@@ -372,6 +375,10 @@ export default {
         this.login_required_msg = "Login required to review the movie";
       }
     },
+    change_rating(new_rating) {
+      if (!this.is_authenticated) return;
+      this.my_rate_review.rating = new_rating;
+    },
     save_rate_review() {
       if (this.is_authenticated) {
         console.log("user is authenticated");
@@ -424,7 +431,12 @@ export default {
         });
     },
     submit_like(review) {
-      if (this.if_liked(review.liked_by)) {
+      if (!this.is_authenticated) {
+        this.login_required = true;
+        this.login_required_msg = "Login required to like reviews";
+        return;
+      }
+      if (this.if_i_liked(review.liked_by)) {
         review_like_service.delete(review.id).then((data) => {
           console.log("unlike", data);
           if (data.success) {
@@ -449,7 +461,7 @@ export default {
         });
       }
     },
-    if_liked(liked_by) {
+    if_i_liked(liked_by) {
       var liked = false;
       if (!this.user_profile) return liked;
 
@@ -466,7 +478,7 @@ export default {
       return `${liked_by.length} likes`;
     },
     get_like_btn_color(liked_by) {
-      return this.if_liked(liked_by) ? "primary" : "default";
+      return this.if_i_liked(liked_by) ? "primary" : "default";
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :value="show" persistent>
+  <q-dialog :value="show" @hide="$emit('hide')">
     <q-card>
       <q-card-section class="row items-center">
         <q-avatar size="56px" :icon="icon"></q-avatar>
