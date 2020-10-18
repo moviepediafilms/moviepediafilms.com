@@ -219,6 +219,52 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="show_share_dialog">
+        <q-card
+          class="bg-primary text-dark"
+          style="width: 700px; max-width: 80vw"
+        >
+          <q-card-section class="text-center q-pb-sm">
+            <div class="text-body1">Share with</div>
+          </q-card-section>
+          <q-card-section class="q-pt-none">
+            <div class="row justify-center">
+              <a
+                target="_blank"
+                :href="
+                  'https://facebook.com/sharer/sharer.php?u=https://moviepediafilms.com/%23' +
+                  $route.fullPath
+                "
+                class="text-decoration-off color-facebook q-mx-md"
+              >
+                <q-icon name="mdi-facebook" size="lg" />
+              </a>
+              <a
+                target="_blank"
+                :href="
+                  'https://twitter.com/intent/tweet?url=https://moviepediafilms.com/%23' +
+                  $route.fullPath +
+                  ' Check out this film I watched on Moviepedia. Absolutely loved it! 😍'
+                "
+                class="text-decoration-off color-twitter q-mx-md"
+              >
+                <q-icon name="mdi-twitter" size="lg" />
+              </a>
+              <a
+                target="_blank"
+                :href="
+                  'https://api.whatsapp.com/send?text=https://moviepediafilms.com/%23' +
+                  $route.fullPath +
+                  ' Check out this film I watched on Moviepedia. Absolutely loved it! 😍'
+                "
+                class="text-decoration-off color-whatsapp q-mx-md"
+              >
+                <q-icon name="mdi-whatsapp" size="lg" />
+              </a>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-dialog>
     </div>
   </base-layout>
 </template>
@@ -261,6 +307,7 @@ export default {
       old_review_content: "",
       old_rating: null,
       show_review_dialog: false,
+      show_share_dialog: false,
       login_required: false,
       login_required_msg: "",
       user_rating: null,
@@ -343,6 +390,7 @@ export default {
   mounted() {
     this.reviews.splice(0);
     this.load_data();
+    console.log(this.$route.fullPath);
   },
   methods: {
     scroll_handler() {
@@ -590,6 +638,7 @@ export default {
     },
     on_share() {
       console.log("sharing");
+      this.show_share_dialog = true;
     },
   },
 };
