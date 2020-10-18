@@ -148,7 +148,10 @@ export default {
     detail_page(movie) {
       var movie_id = movie.id;
       movie_id = 1;
-      this.$router.push({ name: "movie-detail", params: { id: movie_id } });
+      this.$router.push({
+        name: "movie-detail",
+        params: { id: movie_id, slug: movie.title },
+      });
     },
     show_filters() {
       this.show_filter = !this.show_filter;
@@ -186,6 +189,7 @@ export default {
       urls.forEach((url, i) => {
         items.push({
           id: i,
+          title: "some-movie",
           image: url,
         });
       });

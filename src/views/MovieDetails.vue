@@ -33,28 +33,45 @@
           </q-responsive>
         </div>
         <div class="col-12">
-          <div class="row justify-around q-mt-sm">
-            <q-btn
-              flat
-              size="sm"
-              color="primary"
-              icon="mdi-share-variant-outline"
-              label="share"
-            />
-            <q-btn
-              flat
-              size="sm"
-              color="primary"
-              icon="mdi-plus"
-              label="watchlist"
-            />
-            <q-btn
-              flat
-              size="sm"
-              color="primary"
-              icon="mdi-cards-heart"
-              label="Recommend"
-            />
+          <div class="row q-mt-sm">
+            <q-btn-group flat spread style="width: 100%">
+              <q-btn size="sm" flat color="" @click="on_share">
+                <div>
+                  <q-icon name="mdi-share-variant-outline" />
+                  <div class="" style="font-size: 8px">Share</div>
+                </div>
+              </q-btn>
+              <q-btn
+                size="sm"
+                flat
+                :color="watchlisted ? 'primary' : 'default'"
+                :loading="watchlist_loading"
+                @click="on_watchlist"
+              >
+                <div>
+                  <q-icon :name="watchlisted ? 'mdi-check' : 'mdi-plus'" />
+                  <div class="" style="font-size: 8px">
+                    Watchlist<template v-if="watchlisted">ed</template>
+                  </div>
+                </div>
+              </q-btn>
+              <q-btn
+                size="sm"
+                flat
+                @click="on_recommend"
+                :loading="recommend_loading"
+                :color="recommended ? 'primary' : 'default'"
+              >
+                <div>
+                  <q-icon
+                    :name="recommended ? 'mdi-heart' : 'mdi-heart-outline'"
+                  />
+                  <div class="" style="font-size: 8px">
+                    Recommend<template v-if="recommended">ed</template>
+                  </div>
+                </div>
+              </q-btn>
+            </q-btn-group>
           </div>
           <div class="row items-center q-mt-md">
             <div clss="col">
@@ -72,6 +89,7 @@
                 :step="1"
                 @input="change_rating"
                 @change="save_rate_review"
+                :disabled="rating_loading"
                 snap
                 label-text-color="black"
                 label
@@ -190,6 +208,7 @@
               clearable
               v-model="my_rate_review.content"
               autofocus
+              :disabled="rating_loading"
               label="Your Review"
             />
           </q-card-section>
@@ -209,7 +228,13 @@ import VueEasyPieChart from "vue-easy-pie-chart";
 import "vue-easy-pie-chart/dist/vue-easy-pie-chart.css";
 import BaseLayout from "@/layouts/Base";
 import LoginRequiredPopup from "@/components/LoginRequiredPopup";
-import { movie_service, review_service, review_like_service } from "@/services";
+import {
+  movie_service,
+  review_service,
+  review_like_service,
+  recommend_service,
+  watchlist_service,
+} from "@/services";
 import _ from "lodash";
 export default {
   name: "detail-page",
@@ -223,6 +248,11 @@ export default {
   },
   data() {
     return {
+      recommend_loading: false,
+      watchlist_loading: false,
+      rating_loading: false,
+      is_recommended: false,
+      is_watchlisted: false,
       my_rate_review: {
         id: null,
         content: null,
@@ -266,6 +296,8 @@ export default {
         title: "",
         link: "",
         published_at: "",
+        is_recommended: false,
+        is_watchlisted: false,
       },
     };
   },
@@ -275,6 +307,12 @@ export default {
     },
   },
   computed: {
+    watchlisted() {
+      return this.movie.is_watchlisted;
+    },
+    recommended() {
+      return this.movie.is_recommended;
+    },
     review_page_size() {
       return parseInt(process.env.VUE_APP_REVIEW_PAGE_SIZE);
     },
@@ -396,6 +434,7 @@ export default {
     },
     create_my_rate_review() {
       console.log("creating review");
+      this.rating_loading = true;
       review_service
         .post({
           movie: this.movie.id,
@@ -403,16 +442,19 @@ export default {
           content: this.my_rate_review.content,
         })
         .then((data) => {
+          this.rating_loading = false;
           this.my_rate_review.id = data.id;
           this.my_rate_review.content = data.content;
           this.my_rate_review.rating = data.rating;
         })
         .catch((error) => {
           console.log(error);
+          this.rating_loading = false;
         });
     },
     update_my_rate_review() {
       console.log("updating review");
+      this.rating_loading = true;
       review_service
         .patch(
           {
@@ -422,12 +464,14 @@ export default {
           this.my_rate_review.id
         )
         .then((data) => {
+          this.rating_loading = false;
           this.my_rate_review.content = data.content;
           this.my_rate_review.rating = data.rating;
           this.$refs.review_dialog.hide();
         })
         .catch((error) => {
           console.log(error);
+          this.rating_loading = false;
         });
     },
     submit_like(review) {
@@ -479,6 +523,73 @@ export default {
     },
     get_like_btn_color(liked_by) {
       return this.if_i_liked(liked_by) ? "primary" : "default";
+    },
+    on_watchlist() {
+      console.log("watchlisting");
+      this.watchlist_loading = true;
+      if (!this.movie.is_watchlisted) {
+        console.log("adding to watchlist");
+        watchlist_service
+          .patch({}, this.movie.id)
+          .then((data) => {
+            if (data.success) {
+              this.movie.is_watchlisted = true;
+            }
+            this.watchlist_loading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.watchlist_loading = false;
+          });
+      } else {
+        console.log("removing from watchlist");
+        watchlist_service
+          .delete(this.movie.id)
+          .then((data) => {
+            if (data.success) {
+              this.movie.is_watchlisted = false;
+            }
+            this.watchlist_loading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.watchlist_loading = false;
+          });
+      }
+    },
+    on_recommend() {
+      console.log("recommending");
+      this.recommend_loading = true;
+      if (!this.movie.is_recommended) {
+        recommend_service
+          .patch({}, this.movie.id)
+          .then((data) => {
+            if (data.success) {
+              this.movie.is_recommended = true;
+            }
+            this.recommend_loading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.recommend_loading = false;
+          });
+      } else {
+        recommend_service
+          .delete(this.movie.id)
+          .then((data) => {
+            if (data.success) {
+              this.movie.is_recommended = false;
+            }
+            this.recommend_loading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.recommend_loading = false;
+          });
+      }
+    },
+    on_share() {
+      console.log("sharing");
     },
   },
 };

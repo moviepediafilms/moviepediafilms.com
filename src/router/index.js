@@ -39,7 +39,7 @@ const routes = [
             import ('../views/ForgotPassword.vue')
     },
     {
-        path: '/movie/:id',
+        path: '/movie/:id/:slug/',
         name: 'movie-detail',
         component: () =>
             import ('../views/MovieDetails.vue')
