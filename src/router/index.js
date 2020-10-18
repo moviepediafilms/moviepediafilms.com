@@ -129,6 +129,11 @@ const routes = [
         component: () =>
             import ('../views/PrivacyPolicy.vue')
     },
+    {
+        path: '*',
+        component: () =>
+            import ('../views/404.vue')
+    }
 ]
 
 const router = new VueRouter({

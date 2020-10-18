@@ -1,12 +1,43 @@
 .text-decoration-none {
     text-decoration: none !important;
     text-decoration-color: #f7cd23 !important;
+    border-color: transparent !important;
     &:visited {
         text-decoration: none !important;
         text-decoration-color: #f7cd23 !important;
+        border-color: transparent !important;
     }
     &:hover {
         text-decoration: underline !important;
         text-decoration-color: #f7cd23 !important;
+        border-color: transparent !important;
     }
+}
+
+.text-decoration-off {
+    text-decoration: none !important;
+    text-decoration-color: transparent !important;
+    border-color: transparent !important;
+    &:visited {
+        text-decoration: none !important;
+        text-decoration-color: transparent !important;
+        border-color: transparent !important;
+    }
+    &:hover {
+        text-decoration: none !important;
+        text-decoration-color: transparent !important;
+        border-color: transparent !important;
+    }
+}
+
+.color-facebook {
+    color: #3b5998 !important;
+}
+
+.color-twitter {
+    color: #1da1f2 !important;
+}
+
+.color-whatsapp {
+    color: #25d366 !important;
 }
