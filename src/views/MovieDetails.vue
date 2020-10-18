@@ -352,6 +352,13 @@ export default {
     movie_id() {
       this.load_data();
     },
+    is_authenticated() {
+      if (!this.is_authenticated) {
+        console.log("reload the page, user logged");
+        this.my_rate_review = { id: null, content: null, rating: null };
+        this.load_data();
+      }
+    },
   },
   computed: {
     watchlisted() {
@@ -573,6 +580,11 @@ export default {
       return this.if_i_liked(liked_by) ? "primary" : "default";
     },
     on_watchlist() {
+      if (!this.is_authenticated) {
+        this.login_required = true;
+        this.login_required_msg = "Login required to watchlist a movie";
+        return;
+      }
       console.log("watchlisting");
       this.watchlist_loading = true;
       if (!this.movie.is_watchlisted) {
@@ -606,6 +618,11 @@ export default {
       }
     },
     on_recommend() {
+      if (!this.is_authenticated) {
+        this.login_required = true;
+        this.login_required_msg = "Login required to recommend a movie";
+        return;
+      }
       console.log("recommending");
       this.recommend_loading = true;
       if (!this.movie.is_recommended) {
