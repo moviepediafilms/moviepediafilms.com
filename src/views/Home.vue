@@ -150,7 +150,7 @@ export default {
       movie_id = 1;
       this.$router.push({
         name: "movie-detail",
-        params: { id: movie_id, slug: movie.title },
+        params: { id: movie_id, slug: this.slugify(movie.title) },
       });
     },
     show_filters() {
@@ -189,7 +189,7 @@ export default {
       urls.forEach((url, i) => {
         items.push({
           id: i,
-          title: "some-movie",
+          title: "30 Days of Existence | A Moviepedia Short Film on Depression",
           image: url,
         });
       });

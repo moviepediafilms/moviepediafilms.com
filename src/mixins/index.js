@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import slugify from '@/extras/slug'
 
 Vue.mixin({
     data() {
@@ -17,6 +18,9 @@ Vue.mixin({
         },
     },
     methods: {
+        slugify(content) {
+            return slugify(content)
+        },
         is_token_error(error) {
             return error && error.response && error.response.status == 401 && error.response.data.detail == "Invalid token."
         },
