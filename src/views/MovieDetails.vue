@@ -71,6 +71,12 @@
                   </div>
                 </div>
               </q-btn>
+              <q-btn size="sm" flat color="" @click="on_add_to_list">
+                <div>
+                  <q-icon name="mdi-plus" />
+                  <div class="" style="font-size: 8px">Add</div>
+                </div>
+              </q-btn>
             </q-btn-group>
           </div>
           <div class="row items-center q-mt-md">
@@ -83,6 +89,7 @@
             </div>
             <div class="col q-mx-sm">
               <q-slider
+                ref="rating_slider"
                 :value="my_rate_review.rating"
                 :min="0"
                 :max="10"
@@ -145,6 +152,14 @@
               @click="show_write_review_popup"
               >Write Review</q-btn
             >
+          </div>
+          <div class="row q-mt-lg">
+            <div class="text-caption">
+              Are you a crew member in this movie ? click
+              <q-btn style="display: inline-block" color="primary" flat text
+                >here</q-btn
+              >
+            </div>
           </div>
           <div class="row q-mt-lg">
             <div class="col">
@@ -289,8 +304,88 @@ export default {
     VueEasyPieChart,
     LoginRequiredPopup,
   },
-  metaInfo: {
-    title: "Home",
+  metaInfo() {
+    return {
+      title: "Home",
+      meta: [
+        { name: "laddu", content: "Laddu" },
+        {
+          property: "og:title",
+          content: this.movie.title + " | MDFF Shortlist | Moviepedia Films",
+          class: "next-head",
+        },
+        // {
+        //   property: "og:url",
+        //   content:
+        //     "https://moviepediafilms.com/{% url 'dff2020:shortlist-detail' movie.id %}",
+        //   class: "next-head",
+        // },
+        // { property: "og:type", content: "video.movie", class: "next-head" },
+        // {
+        //   property: "og:description",
+        //   content: "{{movie.review}}",
+        //   class: "next-head",
+        // },
+        // {
+        //   property: "og:image",
+        //   content: "{{movie.thumbnail}}",
+        //   class: "next-head",
+        // },
+
+        // {
+        //   itemProp: "name",
+        //   content: "{{movie.entry.name}} | MDFF Shortlist | Moviepedia Films",
+        //   class: "next-head",
+        // },
+        // {
+        //   itemProp: "headline",
+        //   content: "{{movie.entry.name}} | MDFF Shortlist | Moviepedia Films",
+        //   class: "next-head",
+        // },
+        // {
+        //   itemProp: "description",
+        //   content: "{{movie.review}}",
+        //   class: "next-head",
+        // },
+        // { itemProp: "image", content: "{{movie.thumbnail}}", class: "next-head" },
+        // { itemProp: "author", content: "moviepediafilms", class: "next-head" },
+
+        // {
+        //   name: "twitter:title",
+        //   content: "{{movie.entry.name}} | MDFF Shortlist | Moviepedia Films",
+        //   class: "next-head",
+        // },
+        // {
+        //   name: "twitter:url",
+        //   content:
+        //     "https://moviepediafilms.com/{% url 'dff2020:shortlist-detail' movie.id %}",
+        //   class: "next-head",
+        // },
+        // {
+        //   name: "twitter:description",
+        //   content: "{{movie.review}}",
+        //   class: "next-head",
+        // },
+        // {
+        //   name: "twitter:image",
+        //   content: "{{movie.thumbnail}}",
+        //   class: "next-head",
+        // },
+        // {
+        //   name: "twitter:card",
+        //   content: "summary_large_image",
+        //   class: "next-head",
+        // },
+
+        // { name: "description", content: "{{movie.review}}", class: "next-head" },
+        // { name: "publisher", content: "Moviepedia Films", class: "next-head" },
+        // {
+        //   property: "article:published_time",
+        //   content: "{{movie.publish_at.isoformat}}",
+        //   class: "next-head",
+        // },
+      ],
+    };
   },
   data() {
     return {
@@ -302,7 +397,7 @@ export default {
       my_rate_review: {
         id: null,
         content: null,
-        rating: null,
+        rating: 0,
       },
       old_review_content: "",
       old_rating: null,
@@ -400,6 +495,9 @@ export default {
     console.log(this.$route.fullPath);
   },
   methods: {
+    on_add_to_list() {
+      console.log("adding to a list");
+    },
     scroll_handler() {
       var list = this.$refs.reviews.$el;
       var dimens = list.getClientRects()[0];
@@ -469,8 +567,15 @@ export default {
       }
     },
     change_rating(new_rating) {
-      if (!this.is_authenticated) return;
-      this.my_rate_review.rating = new_rating;
+      console.log("change_rating", new_rating);
+      if (!this.is_authenticated) {
+        console.log("user not authenticated");
+        this.$refs.rating_slider.model = 0;
+      } else {
+        console.log("user authenticated");
+        this.my_rate_review.rating = new_rating;
+        this.save_rate_review();
+      }
     },
     save_rate_review() {
       if (this.is_authenticated) {
