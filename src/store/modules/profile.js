@@ -3,7 +3,10 @@ import { PROFILE_REQUEST, PROFILE_ERROR, PROFILE_SUCCESS } from "@/store/actions
 import { profile_service } from "@/services";
 import { AUTH_LOGOUT } from "@/store/actions/auth";
 
-const state = { status: "", profile: JSON.parse(localStorage.getItem("profile")) };
+const state = {
+    status: "",
+    profile: JSON.parse(localStorage.getItem("profile"))
+};
 
 const getters = {
     getProfile: state => state.profile,

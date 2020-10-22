@@ -5,7 +5,7 @@
         <div class="col-12">
           <div class="text-h5 text-primary q-mb-sm">{{ movie.title }}</div>
           <div class>
-            by
+            <q-icon name="mdi-movie-open-outline" class="q-mr-xs" />
             <router-link
               class="text-primary text-decoration-none"
               :to="{ name: 'profile', id: director.id }"
@@ -13,7 +13,7 @@
             >
           </div>
           <div class>
-            Genre:
+            <q-icon name="mdi-tag-outline" class="q-mr-xs" />
             <template v-for="(genre, index) in movie.genres">
               <router-link
                 class="text-decoration-none"
@@ -22,10 +22,15 @@
               >
                 <span class="text-primary">{{ genre.name }}</span>
               </router-link>
-              <template v-if="index < movie.genres.length - 1"> , </template>
+              <template v-if="index < movie.genres.length - 1">, </template>
             </template>
           </div>
-          <div class>Runtime: {{ movie.runtime }} Minutes</div>
+          <div>
+            <q-icon name="mdi-clock-outline" class="q-mr-xs" />{{
+              movie.runtime
+            }}
+            Minutes
+          </div>
         </div>
         <div class="col-12 q-mt-lg">
           <q-responsive :ratio="16 / 9" class="col">
@@ -35,10 +40,12 @@
         <div class="col-12">
           <div class="row q-mt-sm">
             <q-btn-group flat spread style="width: 100%">
-              <q-btn size="sm" flat color="" @click="on_share">
+              <q-btn size="sm" flat @click="on_share">
                 <div>
                   <q-icon name="mdi-share-variant-outline" />
-                  <div class="" style="font-size: 8px">Share</div>
+                  <div class="text-muted q-mt-xs" style="font-size: 8px">
+                    Share
+                  </div>
                 </div>
               </q-btn>
               <q-btn
@@ -49,8 +56,12 @@
                 @click="on_watchlist"
               >
                 <div>
-                  <q-icon :name="watchlisted ? 'mdi-check' : 'mdi-plus'" />
-                  <div class="" style="font-size: 8px">
+                  <q-icon
+                    :name="
+                      watchlisted ? 'mdi-bookmark' : 'mdi-bookmark-outline'
+                    "
+                  />
+                  <div class="text-muted q-mt-xs" style="font-size: 8px">
                     Watchlist<template v-if="watchlisted">ed</template>
                   </div>
                 </div>
@@ -66,15 +77,28 @@
                   <q-icon
                     :name="recommended ? 'mdi-heart' : 'mdi-heart-outline'"
                   />
-                  <div class="" style="font-size: 8px">
+                  <div class="text-muted q-mt-xs" style="font-size: 8px">
                     Recommend<template v-if="recommended">ed</template>
                   </div>
                 </div>
               </q-btn>
-              <q-btn size="sm" flat color="" @click="on_add_to_list">
+              <q-btn
+                size="sm"
+                flat
+                @click="on_add_to_list"
+                :color="is_added_to_any_list ? 'primary' : 'default'"
+              >
                 <div>
-                  <q-icon name="mdi-plus" />
-                  <div class="" style="font-size: 8px">Add</div>
+                  <q-icon
+                    :name="
+                      is_added_to_any_list
+                        ? 'mdi-checkbox-multiple-marked'
+                        : 'mdi-check-box-multiple-outline'
+                    "
+                  />
+                  <div class="text-muted q-mt-xs" style="font-size: 8px">
+                    Save<template v-if="is_added_to_any_list">ed</template>
+                  </div>
                 </div>
               </q-btn>
             </q-btn-group>
@@ -179,8 +203,11 @@
                     </q-item-label>
                     <q-item-label caption>
                       <div class="text-right q-mt-xs">
+                        <span class="q-mr-md" v-if="review.rating">
+                          <q-icon name="mdi-star-outline" />
+                          {{ review.rating }}/10
+                        </span>
                         <span class="q-mr-md">
-                          {{ get_like_txt(review.liked_by) }}
                           <q-btn
                             round
                             flat
@@ -189,8 +216,10 @@
                             :color="get_like_btn_color(review.liked_by)"
                             size="xs"
                           ></q-btn>
+                          {{ get_like_txt(review.liked_by) }}
                         </span>
                         <span class="self-center">
+                          <q-icon name="mdi-clock-outline" />
                           {{ from_now(review.published_at) }}
                         </span>
                       </div>
@@ -280,6 +309,46 @@
           </q-card-section>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="show_list_dialog" position="bottom" full-width>
+        <q-card>
+          <q-card-section class="row q-mb-none q-pb-none">
+            <div class="text-caption self-center" style="text-align: center">
+              Save to
+            </div>
+            <q-space dir="horizontal" />
+            <q-btn
+              class="self-right"
+              color="primary"
+              flat
+              icon="mdi-plus"
+              label="New List"
+            />
+          </q-card-section>
+          <q-card-section class="q-mt-none q-pt-none">
+            <q-list dense>
+              <q-item
+                tag="label"
+                v-ripple
+                v-for="list in my_lists"
+                :key="list.id"
+                dense
+              >
+                <q-item-section side top>
+                  <q-checkbox
+                    size="sm"
+                    :value="is_movie_in_list(list)"
+                    @input="toggle_movie_from_list(list)"
+                    color="primary"
+                  />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ list.name }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card-section>
+        </q-card>
+      </q-dialog>
     </div>
   </base-layout>
 </template>
@@ -295,7 +364,12 @@ import {
   review_like_service,
   recommend_service,
   watchlist_service,
+  list_service,
 } from "@/services";
+import {
+  LIST_REQUEST,
+  TOGGLE_MOVIE_IN_LIST_REQUEST,
+} from "@/store/actions/list";
 import _ from "lodash";
 export default {
   name: "detail-page",
@@ -308,47 +382,44 @@ export default {
     return {
       title: "Home",
       meta: [
-        { name: "laddu", content: "Laddu" },
         {
           property: "og:title",
-          content: this.movie.title + " | MDFF Shortlist | Moviepedia Films",
+          content: this.movie.title + " | Moviepedia Films",
           class: "next-head",
         },
-        // {
-        //   property: "og:url",
-        //   content:
-        //     "https://moviepediafilms.com/{% url 'dff2020:shortlist-detail' movie.id %}",
-        //   class: "next-head",
-        // },
-        // { property: "og:type", content: "video.movie", class: "next-head" },
-        // {
-        //   property: "og:description",
-        //   content: "{{movie.review}}",
-        //   class: "next-head",
-        // },
-        // {
-        //   property: "og:image",
-        //   content: "{{movie.thumbnail}}",
-        //   class: "next-head",
-        // },
-
-        // {
-        //   itemProp: "name",
-        //   content: "{{movie.entry.name}} | MDFF Shortlist | Moviepedia Films",
-        //   class: "next-head",
-        // },
-        // {
-        //   itemProp: "headline",
-        //   content: "{{movie.entry.name}} | MDFF Shortlist | Moviepedia Films",
-        //   class: "next-head",
-        // },
-        // {
-        //   itemProp: "description",
-        //   content: "{{movie.review}}",
-        //   class: "next-head",
-        // },
-        // { itemProp: "image", content: "{{movie.thumbnail}}", class: "next-head" },
-        // { itemProp: "author", content: "moviepediafilms", class: "next-head" },
+        {
+          property: "og:url",
+          content: "https://moviepediafilms.com/#" + this.$route.fullPath,
+          class: "next-head",
+        },
+        { property: "og:type", content: "video.movie", class: "next-head" },
+        {
+          property: "og:description",
+          content: this.movie.about,
+          class: "next-head",
+        },
+        {
+          property: "og:image",
+          content: this.movie.poster,
+          class: "next-head",
+        },
+        {
+          itemProp: "name",
+          content: this.movie.title + " | Moviepedia Films",
+          class: "next-head",
+        },
+        {
+          itemProp: "headline",
+          content: this.movie.title + " | Moviepedia Films",
+          class: "next-head",
+        },
+        {
+          itemProp: "description",
+          content: this.movie.about,
+          class: "next-head",
+        },
+        { itemProp: "image", content: this.movie.poster, class: "next-head" },
+        { itemProp: "author", content: "Moviepedia Films", class: "next-head" },
 
         // {
         //   name: "twitter:title",
@@ -377,8 +448,8 @@ export default {
         //   class: "next-head",
         // },
 
-        // { name: "description", content: "{{movie.review}}", class: "next-head" },
-        // { name: "publisher", content: "Moviepedia Films", class: "next-head" },
+        { name: "description", content: this.movie.about, class: "next-head" },
+        { name: "publisher", content: "Moviepedia Films", class: "next-head" },
         // {
         //   property: "article:published_time",
         //   content: "{{movie.publish_at.isoformat}}",
@@ -389,6 +460,7 @@ export default {
   },
   data() {
     return {
+      // my_lists: [{ name: "", id: 1, like_count: 0, owner: 0, movies: [0, 1] }],
       recommend_loading: false,
       watchlist_loading: false,
       rating_loading: false,
@@ -403,6 +475,7 @@ export default {
       old_rating: null,
       show_review_dialog: false,
       show_share_dialog: false,
+      show_list_dialog: false,
       login_required: false,
       login_required_msg: "",
       user_rating: null,
@@ -437,6 +510,7 @@ export default {
         runtime: "12",
         title: "",
         link: "",
+        poster: "",
         published_at: "",
         is_recommended: false,
         is_watchlisted: false,
@@ -456,6 +530,15 @@ export default {
     },
   },
   computed: {
+    is_added_to_any_list() {
+      var found = false;
+      this.my_lists.forEach((list) => {
+        if (list.movies.indexOf(this.movie.id) != -1) {
+          found = true;
+        }
+      });
+      return found;
+    },
     watchlisted() {
       return this.movie.is_watchlisted;
     },
@@ -482,6 +565,9 @@ export default {
     throttled_scroll_handler() {
       return _.throttle(this.scroll_handler, 300);
     },
+    my_lists() {
+      return this.$store.getters.getMyLists;
+    },
   },
   created() {
     window.addEventListener("scroll", this.throttled_scroll_handler);
@@ -490,14 +576,15 @@ export default {
     window.removeEventListener("scroll", this.throttled_scroll_handler);
   },
   mounted() {
+    // one dummy object were created in the list for future objects in list to become reactive
+    // clearing those dummy items here
     this.reviews.splice(0);
+    // this.my_lists.splice(0);
+
     this.load_data();
     console.log(this.$route.fullPath);
   },
   methods: {
-    on_add_to_list() {
-      console.log("adding to a list");
-    },
     scroll_handler() {
       var list = this.$refs.reviews.$el;
       var dimens = list.getClientRects()[0];
@@ -508,6 +595,10 @@ export default {
     load_data() {
       this.fetch_movie();
       this.fetch_reviews();
+
+      if (this.is_authenticated)
+        this.$store.dispatch(LIST_REQUEST, this.user_profile.id);
+      // this.fetch_my_lists();
     },
     swipe(event) {
       // 0 = none, 2 = left, 4 = right, 8 = up, 16 = down
@@ -553,6 +644,17 @@ export default {
             this.loading_reviews = false;
           });
       }
+    },
+    fetch_my_lists() {
+      list_service
+        .get({ owner__id: this.user_profile.id })
+        .then((data) => {
+          console.log(data);
+          this.my_lists.push(...data.results);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     on_hide_write_review_popup() {
       this.my_rate_review.content = this.old_review_content;
@@ -684,6 +786,15 @@ export default {
     get_like_btn_color(liked_by) {
       return this.if_i_liked(liked_by) ? "primary" : "default";
     },
+    is_movie_in_list(list) {
+      return list.movies.indexOf(this.movie.id) != -1;
+    },
+    toggle_movie_from_list(list) {
+      this.$store.dispatch(TOGGLE_MOVIE_IN_LIST_REQUEST, {
+        list: list,
+        movie_id: this.movie.id,
+      });
+    },
     on_watchlist() {
       if (!this.is_authenticated) {
         this.login_required = true;
@@ -761,6 +872,15 @@ export default {
     on_share() {
       console.log("sharing");
       this.show_share_dialog = true;
+    },
+    on_add_to_list() {
+      console.log("adding to a list");
+      if (!this.is_authenticated) {
+        this.login_required = true;
+        this.login_required_msg = "Login is required to save a movie";
+        return;
+      }
+      this.show_list_dialog = true;
     },
   },
 };
