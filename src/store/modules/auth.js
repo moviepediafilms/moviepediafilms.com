@@ -5,6 +5,7 @@ import {
     AUTH_LOGOUT
 } from "@/store/actions/auth";
 import { PROFILE_REQUEST } from "@/store/actions/profile";
+import { LIST_REQUEST } from "@/store/actions/list";
 import { backend, token_service } from "@/services";
 const state = {
     token: localStorage.getItem("token") || "",
@@ -28,6 +29,7 @@ const actions = {
                     backend.defaults.headers.common['Authorization'] = `Token ${data.token}`
                     commit(AUTH_SUCCESS, data.token);
                     dispatch(PROFILE_REQUEST, data.user_id);
+                    dispatch(LIST_REQUEST, data.user_id);
                     resolve(data);
                 })
                 .catch(err => {
