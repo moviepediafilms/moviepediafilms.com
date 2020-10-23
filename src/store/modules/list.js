@@ -4,7 +4,7 @@ import { list_service } from "@/services";
 import { AUTH_LOGOUT } from "@/store/actions/auth";
 const state = {
     loading: "",
-    my_lists: JSON.parse(localStorage.getItem("my_lists")),
+    my_lists: JSON.parse(localStorage.getItem("my_lists")) || [],
 };
 
 const getters = {
