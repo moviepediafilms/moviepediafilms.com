@@ -917,7 +917,7 @@ export default {
               console.log(data);
               this.new_crew = { roles: [] };
               this.show_crew_dialog = false;
-              if (data.status == "A") this.show_request_created_message = "Added crew member";
+              if (data.state === "A") this.show_request_created_message = "Added crew member";
               this.show_request_created_dialog = true;
               this.loading_new_crew = false;
             })
