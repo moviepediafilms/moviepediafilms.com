@@ -106,7 +106,7 @@ export default {
         password: this.login_data.password,
       };
       this.$store
-        .dispatch(AUTH_REQUEST, payload)
+        .dispatch(`auth/${AUTH_REQUEST}`, payload)
         .then(() => {
           if (this.has_history) this.$router.go(-1);
           else this.$router.push({ name: "home" });

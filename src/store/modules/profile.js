@@ -1,16 +1,20 @@
 import Vue from "vue";
-import { PROFILE_REQUEST, PROFILE_ERROR, PROFILE_SUCCESS } from "@/store/actions/profile";
+import {
+    AUTH_LOGOUT,
+    PROFILE_REQUEST,
+    PROFILE_ERROR,
+    PROFILE_SUCCESS
+} from "@/store/actions";
 import { profile_service } from "@/services";
-import { AUTH_LOGOUT } from "@/store/actions/auth";
 
 const state = {
-    status: "",
-    profile: JSON.parse(localStorage.getItem("profile"))
+    loading: false,
+    error: "",
+    profile: JSON.parse(localStorage.getItem("profile")) || {}
 };
 
 const getters = {
-    getProfile: state => state.profile,
-    isProfileLoaded: state => !!state.profile.name
+
 };
 
 const actions = {
@@ -20,33 +24,36 @@ const actions = {
             .then(profile => {
                 commit(PROFILE_SUCCESS, profile);
             })
-            .catch(() => {
-                commit(PROFILE_ERROR);
+            .catch((error) => {
+                commit(PROFILE_ERROR, error);
                 // if resp is unauthorized, logout, to
-                dispatch(AUTH_LOGOUT);
+                dispatch(`auth/${AUTH_LOGOUT}`, null, { root: true });
             });
     }
 };
 
 const mutations = {
     [PROFILE_REQUEST]: state => {
-        state.status = "loading";
+        state.loading = true;
     },
     [PROFILE_SUCCESS]: (state, profile) => {
-        state.status = "success";
+        state.loading = false;
+        state.error = "";
         localStorage.setItem("profile", JSON.stringify(profile));
         Vue.set(state, "profile", profile);
     },
-    [PROFILE_ERROR]: state => {
-        state.status = "error";
+    [PROFILE_ERROR]: (state, error) => {
+        state.loading = false;
+        state.error = error;
     },
     [AUTH_LOGOUT]: state => {
-        state.profile = undefined;
+        state.profile = {};
         localStorage.removeItem("profile");
     }
 };
 
 export default {
+    namespaced: true,
     state,
     getters,
     actions,
