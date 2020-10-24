@@ -2,39 +2,37 @@ import {
     AUTH_REQUEST,
     AUTH_ERROR,
     AUTH_SUCCESS,
-    AUTH_LOGOUT
-} from "@/store/actions/auth";
-import { PROFILE_REQUEST } from "@/store/actions/profile";
-import { LIST_REQUEST } from "@/store/actions/list";
+    AUTH_LOGOUT,
+    PROFILE_REQUEST,
+    LIST_REQUEST
+} from "@/store/actions";
 import { backend, token_service } from "@/services";
 const state = {
-    token: localStorage.getItem("token") || "",
-    status: "",
-    hasLoadedOnce: false
+    token: localStorage.getItem("auth_token") || "",
+    loading: false,
+    error: null,
 };
 
 const getters = {
-    isAuthenticated: state => !!state.token,
-    authStatus: state => state.status
+    is_authenticated: state => !!state.token
 };
 
 const actions = {
-    [AUTH_REQUEST]: ({ commit, dispatch }, payload) => {
+    [AUTH_REQUEST]: ({ commit, dispatch }, payload, ) => {
 
         return new Promise((resolve, reject) => {
             commit(AUTH_REQUEST);
             token_service.post(payload)
                 .then(data => {
-                    localStorage.setItem("token", data.token);
                     backend.defaults.headers.common['Authorization'] = `Token ${data.token}`
                     commit(AUTH_SUCCESS, data.token);
-                    dispatch(PROFILE_REQUEST, data.user_id);
-                    dispatch(LIST_REQUEST, data.user_id);
+                    dispatch(`profile/${PROFILE_REQUEST}`, data.user_id, { root: true });
+                    dispatch(`list/${LIST_REQUEST}`, data.user_id, { root: true });
                     resolve(data);
                 })
                 .catch(err => {
+                    console.log(err)
                     commit(AUTH_ERROR, err);
-                    localStorage.removeItem("token");
                     reject(err);
                 });
         });
@@ -44,7 +42,8 @@ const actions = {
         return new Promise(resolve => {
             commit(AUTH_LOGOUT);
             delete backend.defaults.headers.common['Authorization']
-            localStorage.removeItem("token");
+
+            window.location.reload();
             resolve();
         });
     }
@@ -52,23 +51,28 @@ const actions = {
 
 const mutations = {
     [AUTH_REQUEST]: state => {
-        state.status = "loading";
+        state.loading = true;
     },
     [AUTH_SUCCESS]: (state, token) => {
-        state.status = "success";
+        state.loading = false;
+        state.error = null;
         state.token = token;
-        state.hasLoadedOnce = true;
+        localStorage.setItem("auth_token", token);
     },
-    [AUTH_ERROR]: state => {
-        state.status = "error";
-        state.hasLoadedOnce = true;
+    [AUTH_ERROR]: (state, error) => {
+        state.loading = false;
+        state.error = error;
+        state.token = "";
+        localStorage.removeItem("auth_token");
     },
     [AUTH_LOGOUT]: state => {
         state.token = "";
+        localStorage.removeItem("auth_token");
     }
 };
 
 export default {
+    namespaced: true,
     state,
     getters,
     actions,

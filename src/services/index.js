@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from "@/store"
 import { AUTH_LOGOUT } from "@/store/actions/auth";
 
-const token = localStorage.getItem('token') || ''
+const token = localStorage.getItem('auth_token') || ''
 var headers = {}
 if (token) {
     headers['Authorization'] = `Token ${token}`
@@ -22,7 +22,7 @@ class BaseService {
     _handle_token_error(error) {
         if (error && error.response && error.response.status == 401 && error.response.data.detail == "Invalid token.") {
             // clear authorization and reload
-            store.dispatch(AUTH_LOGOUT);
+            store.dispatch(`auth/${AUTH_LOGOUT}`);
             console.log("Logged out")
             window.location.reload()
         }
@@ -84,7 +84,9 @@ export const movie_service = new BaseService("v1/movie/")
 export const review_service = new BaseService("v1/review/")
 export const submission_service = new BaseService("v1/submit/")
 export const payment_service = new BaseService("v1/payment/verify/")
-export const review_like_service = new BaseService("v1/review_like/")
+export const review_like_service = new BaseService("v1/review-like/")
 export const recommend_service = new BaseService("v1/recommend/")
 export const watchlist_service = new BaseService("v1/watchlist/")
-export const list_service = new BaseService("v1/list/")
+export const list_service = new BaseService("v1/movie-list/")
+export const role_service = new BaseService("v1/role/")
+export const crew_request_service = new BaseService("v1/crew-member-request/")

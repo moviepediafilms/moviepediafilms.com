@@ -688,9 +688,9 @@ export default {
         amount: this.submitted_movie.order.amount,
         handler: this.rzp_response_handler,
         prefill: {
-          name: this.user_profile.name,
-          email: this.user_profile.email,
-          contact: this.user_profile.mobile,
+          name: this.my_profile.name,
+          email: this.my_profile.email,
+          contact: this.my_profile.mobile,
         },
         offers: ["offer_Fkl0Kfpdx70wq8", "offer_Fkkx6hkOZTDRER"],
       };

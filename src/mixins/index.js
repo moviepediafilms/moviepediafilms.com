@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import slugify from '@/extras/slug'
-
+import decode_error_message from "@/extras/error"
+import { mapGetters, mapState } from "vuex";
 Vue.mixin({
     data() {
         return {
@@ -9,13 +10,12 @@ Vue.mixin({
         }
     },
     computed: {
-        user_profile() {
-            // {}
-            return this.$store.getters.getProfile;
-        },
-        is_authenticated() {
-            return this.$store.getters.isAuthenticated;
-        },
+        ...mapState("profile", {
+            my_profile: (state) => state.profile
+        }),
+        ...mapGetters("auth", [
+            "is_authenticated"
+        ])
     },
     methods: {
         slugify(content) {
@@ -31,21 +31,7 @@ Vue.mixin({
         scroll_top() {
             window.scrollTo(0, 0);
         },
-        decode_error_message(error) {
-            if (!error)
-                return "Unknown error occured!"
-            if (error.response && error.response.data && error.response.data.detail)
-                return error.response.data.detail;
-            if (error.response && error.response.data && error.response.data.non_field_errors)
-                return error.response.data.non_field_errors[0];
-            console.log(error.toJSON())
-            var message = error.toJSON().message;
-            if (message === "Network Error")
-                message = "Unable to reach server!"
-            if (message === "Request failed with status code 500")
-                message = "We failed to process that request!"
-            return message
-        },
+        decode_error_message: decode_error_message,
         check_fields_for_error(source, dest, fields) {
             var has_errors = true;
             if (!fields) return;

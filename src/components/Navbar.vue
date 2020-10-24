@@ -86,7 +86,7 @@ export default {
   methods: {
     auth_action() {
       if (this.is_authenticated) {
-        this.$store.dispatch(AUTH_LOGOUT);
+        this.$store.dispatch(`auth/${AUTH_LOGOUT}`);
       } else {
         if (this.$route.name !== "login") this.$router.push({ name: "login" });
       }
@@ -94,8 +94,8 @@ export default {
   },
   computed: {
     auth_action_str() {
-      if (this.is_authenticated) return "Logout";
-      else return "Login/Register";
+      if (this.is_authenticated) return "Signout";
+      else return "Signin";
     },
 
     show_wip_bar() {

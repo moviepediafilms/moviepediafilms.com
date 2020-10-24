@@ -1,14 +1,21 @@
 import Vue from "vue";
-import { LIST_REQUEST, LIST_SUCCESS, LIST_ERROR, TOGGLE_MOVIE_IN_LIST_REQUEST, TOGGLE_MOVIE_IN_LIST_SUCCESS, TOGGLE_MOVIE_IN_LIST_ERROR } from "@/store/actions/list";
+import {
+    AUTH_LOGOUT,
+    LIST_REQUEST,
+    LIST_SUCCESS,
+    LIST_ERROR,
+    TOGGLE_MOVIE_IN_LIST_REQUEST,
+    TOGGLE_MOVIE_IN_LIST_SUCCESS,
+    TOGGLE_MOVIE_IN_LIST_ERROR
+} from "@/store/actions";
 import { list_service } from "@/services";
-import { AUTH_LOGOUT } from "@/store/actions/auth";
 const state = {
     loading: "",
     my_lists: JSON.parse(localStorage.getItem("my_lists")) || [],
 };
 
 const getters = {
-    getMyLists: state => state.my_lists
+
 };
 
 const actions = {
@@ -45,7 +52,7 @@ const actions = {
 
 const mutations = {
     [AUTH_LOGOUT]: state => {
-        state.my_lists = undefined;
+        state.my_lists = [];
         localStorage.removeItem("my_lists");
     },
     [LIST_REQUEST]: state => {
@@ -60,7 +67,6 @@ const mutations = {
     [LIST_ERROR]: state => {
         state.loading = false
     },
-
     [TOGGLE_MOVIE_IN_LIST_REQUEST]: state => {
         state.loading = true
     },
@@ -83,6 +89,7 @@ const mutations = {
 };
 
 export default {
+    namespaced: true,
     state,
     getters,
     actions,

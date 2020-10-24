@@ -134,11 +134,14 @@
                       <span class="q-mx-xs text-grey-6">&bull;</span>
                       <a
                         href="#"
-                        @click.stop="follow(director)"
+                        @click.stop="on_follow(director)"
                         class="text-light-blue-11 text-decoration-none text-caption"
                         >Follow</a
                       >
-                      <div class="text-caption text-grey-6">
+                      <div
+                        class="text-caption text-grey-6"
+                        v-if="movie.crew.length > 1"
+                      >
                         Directed with {{ movie.crew.length - 1 }} other crew
                         member<template v-if="movie.crew.length > 2"
                           >s</template
@@ -164,26 +167,26 @@
                         >{{ crew.profile.name }}</router-link
                       >
                       <div class="text-caption text-grey-6">
-                        {{ join_roles(crew.roles) }}
+                        {{ get_roles_str(crew.roles) }}
                         &bull;
                         {{ crew.profile.id + 6 }} Followers
                       </div>
                     </q-item-label>
                   </q-item-section>
                   <q-item-section side>
-                    <q-btn flat icon="mdi-plus" label="Follow" />
+                    <q-btn
+                      flat
+                      icon="mdi-plus"
+                      label="Follow"
+                      @click.stop="on_follow(crew.profile)"
+                    />
                   </q-item-section>
                 </q-item>
                 <q-item v-ripple>
-                  <q-item-section avatar top>
-                    <q-avatar color="primary">
-                      <q-icon name="?" color="dark" />
-                    </q-avatar>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-primary"> Add More </q-item-label>
-                    <q-item-label caption
-                      >Request to add more crew members</q-item-label
+                  <q-item-section class="text-center" @click="on_add_crew">
+                    <q-item-label class="text-grey-6">Add Crew</q-item-label>
+                    <q-item-label caption class="text-grey-6"
+                      >Create a request to add new crew member</q-item-label
                     >
                   </q-item-section>
                 </q-item>
@@ -262,14 +265,6 @@
                 @click="show_write_review_popup"
                 >Write Review</q-btn
               >
-            </div>
-            <div class="row q-mt-lg">
-              <div class="text-caption">
-                Are you a crew member in this movie ? click
-                <q-btn style="display: inline-block" color="primary" flat text
-                  >here</q-btn
-                >
-              </div>
             </div>
             <div class="row q-mt-lg">
               <div class="col">
@@ -410,6 +405,7 @@
                 flat
                 icon="mdi-plus"
                 label="New List"
+                @click="show_add_list_dialog = true"
               />
             </q-card-section>
             <q-card-section class="q-mt-none q-pt-none">
@@ -437,6 +433,101 @@
             </q-card-section>
           </q-card>
         </q-dialog>
+        <q-dialog v-model="show_crew_dialog">
+          <q-card style="width: 700px; max-width: 80vw">
+            <q-card-section>
+              <div class="text-title text-primary">Add New Crew</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+              <q-form
+                class="q-gutter-sm"
+                @submit="save_crew_request"
+                ref="new_crew_form"
+              >
+                <q-input
+                  type="text"
+                  v-model="new_crew.name"
+                  autofocus
+                  label="Full Name"
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Please enter name',
+                  ]"
+                  :error="!!new_crew_error.name"
+                  :error-message="new_crew_error.name"
+                />
+                <q-input
+                  type="email"
+                  v-model="new_crew.email"
+                  autocomplete="email"
+                  @keydown.enter="save_crew_request"
+                  label="Email address"
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Please enter email',
+                  ]"
+                  :error="!!new_crew_error.email"
+                  :error-message="new_crew_error.email"
+                />
+                <div class="q-pa-sm">
+                  Roles:
+                  <q-option-group
+                    :options="role_options"
+                    type="checkbox"
+                    color="primary"
+                    v-model="new_crew.roles"
+                    :error="!!new_crew_error.roles"
+                    :error-message="new_crew_error.roles"
+                  />
+                </div>
+              </q-form>
+            </q-card-section>
+            <q-card-actions align="right" class="text-primary">
+              <q-btn flat label="Cancel" v-close-popup />
+              <q-btn
+                flat
+                label="Add"
+                :loading="loading_new_crew"
+                @click="save_crew_request"
+              />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+        <q-dialog v-model="show_add_list_dialog">
+          <q-card style="width: 700px; max-width: 80vw">
+            <q-card-section title>Create New List</q-card-section>
+            <q-card-section class="q-pt-none">
+              <q-input
+                type="text"
+                v-model="new_list.name"
+                autofocus
+                label="Name"
+                :error-message="err_new_list_request"
+                :error="!!err_new_list_request"
+              />
+            </q-card-section>
+
+            <q-card-actions align="right" class="text-primary">
+              <q-btn flat label="Cancel" v-close-popup />
+              <q-btn flat label="Create" @click="save_new_list_request" />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+        <q-dialog v-model="show_request_created_dialog">
+          <q-card style="width: 700px; max-width: 80vw">
+            <q-card-section class="text-center text-h6 text-primary">
+              Request Successfully Created</q-card-section
+            >
+            <q-card-section class="q-pt-none text-center">
+              <q-icon name="mdi-check" class="text-positive" size="30px" />
+              <div class="text-body">
+                {{show_request_created_message}}
+              </div>
+            </q-card-section>
+
+            <q-card-actions align="right" class="text-primary">
+              <q-btn flat label="OK" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
       </div>
     </div>
   </base-layout>
@@ -454,12 +545,16 @@ import {
   recommend_service,
   watchlist_service,
   list_service,
+  crew_request_service,
 } from "@/services";
 import {
   LIST_REQUEST,
   TOGGLE_MOVIE_IN_LIST_REQUEST,
 } from "@/store/actions/list";
+import { ROLE_REQUEST } from "@/store/actions";
+
 import _ from "lodash";
+import { mapState } from "vuex";
 export default {
   name: "detail-page",
   components: {
@@ -565,6 +660,10 @@ export default {
       show_review_dialog: false,
       show_share_dialog: false,
       show_list_dialog: false,
+      show_crew_dialog: false,
+      show_add_list_dialog: false,
+      show_request_created_dialog: false,
+      show_request_created_message: "Your request is sent to the director for approval.",
       login_required: false,
       login_required_msg: "",
       user_rating: null,
@@ -591,6 +690,9 @@ export default {
       ],
       max_reviews: undefined,
       loading_reviews: false,
+      loading_new_list_request: false,
+      loading_new_crew: false,
+      err_new_list_request: "",
       movie: {
         id: null,
         audience_rating: 0,
@@ -604,6 +706,19 @@ export default {
         published_at: "",
         is_recommended: false,
         is_watchlisted: false,
+      },
+      new_crew: {
+        name: "",
+        email: "",
+        roles: [],
+      },
+      new_crew_error: {
+        name: "",
+        email: "",
+        roles: "",
+      },
+      new_list: {
+        name: "",
       },
     };
   },
@@ -620,6 +735,13 @@ export default {
     },
   },
   computed: {
+    role_options() {
+      var roles = [];
+      this.roles.forEach((role) => {
+        roles.push({ label: role.name, value: role.id });
+      });
+      return roles;
+    },
     crew_except_director() {
       // ignore the first director and return the rest of the crew
       if (this.movie && this.movie.crew)
@@ -661,14 +783,15 @@ export default {
       return director;
     },
     movie_id() {
-      return this.$route.params.id;
+      return parseInt(this.$route.params.id);
     },
     throttled_scroll_handler() {
       return _.throttle(this.scroll_handler, 300);
     },
-    my_lists() {
-      return this.$store.getters.getMyLists;
-    },
+    ...mapState({
+      roles: (state) => state.role.roles,
+      my_lists: (state) => state.list.my_lists,
+    }),
   },
   created() {
     window.addEventListener("scroll", this.throttled_scroll_handler);
@@ -681,9 +804,7 @@ export default {
     // clearing those dummy items here
     this.reviews.splice(0);
     // this.my_lists.splice(0);
-
     this.load_data();
-    console.log(this.$route.fullPath);
   },
   methods: {
     scroll_handler() {
@@ -694,12 +815,12 @@ export default {
       }
     },
     load_data() {
-      this.fetch_movie();
+      this.fetch_movie(this.movie_id);
       this.fetch_reviews();
-
-      if (this.is_authenticated)
-        this.$store.dispatch(LIST_REQUEST, this.user_profile.id);
-      // this.fetch_my_lists();
+      this.$store.dispatch(`role/${ROLE_REQUEST}`);
+      if (this.is_authenticated) {
+        this.$store.dispatch(`list/${LIST_REQUEST}`, this.my_profile.id);
+      }
     },
     swipe(event) {
       // 0 = none, 2 = left, 4 = right, 8 = up, 16 = down
@@ -708,9 +829,9 @@ export default {
     from_now(datetime) {
       return moment(datetime).fromNow();
     },
-    fetch_movie() {
+    fetch_movie(movie_id) {
       movie_service
-        .get({}, this.movie_id)
+        .get({}, movie_id)
         .then((movie) => {
           if (movie.requestor_rating)
             this.my_rate_review = movie.requestor_rating;
@@ -745,17 +866,6 @@ export default {
             this.loading_reviews = false;
           });
       }
-    },
-    fetch_my_lists() {
-      list_service
-        .get({ owner__id: this.user_profile.id })
-        .then((data) => {
-          console.log(data);
-          this.my_lists.push(...data.results);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     },
     on_hide_write_review_popup() {
       this.my_rate_review.content = this.old_review_content;
@@ -794,6 +904,53 @@ export default {
         this.login_required = true;
         this.login_required_msg = "Login required to rate or review the movie";
       }
+    },
+    save_crew_request() {
+      this.$refs.new_crew_form.validate().then((valid) => {
+        if (valid) {
+          this.loading_new_crew = true;
+          var payload = { movie: this.movie_id };
+          Object.assign(payload, this.new_crew);
+          crew_request_service
+            .post(payload)
+            .then((data) => {
+              console.log(data);
+              this.new_crew = { roles: [] };
+              this.show_crew_dialog = false;
+              if (data.status == "A") this.show_request_created_message = "Added crew member";
+              this.show_request_created_dialog = true;
+              this.loading_new_crew = false;
+            })
+            .catch((error) => {
+              console.log(error, error.response.data);
+              this.check_fields_for_error(
+                error.response.data,
+                this.new_crew_error,
+                ["name", "email", "roles"]
+              );
+              this.loading_new_crew = false;
+            });
+        } else {
+          this.loading_new_crew = false;
+        }
+      });
+    },
+    save_new_list_request() {
+      this.loading_new_list_request = true;
+      console.log("creating new list", this.new_list.name);
+      list_service
+        .post(this.new_list)
+        .then((data) => {
+          console.log(data);
+          this.$store.dispatch(`list/${LIST_REQUEST}`, this.my_profile.id);
+          this.loading_new_list_request = false;
+          this.show_add_list_dialog = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.err_new_list_request = this.decode_error_message(error);
+          this.loading_new_list_request = false;
+        });
     },
     create_my_rate_review() {
       console.log("creating review");
@@ -849,7 +1006,7 @@ export default {
           if (data.success) {
             var to_remove = null;
             review.liked_by.forEach((item, index) => {
-              if (item.id == this.user_profile.id) {
+              if (item.id == this.my_profile.id) {
                 to_remove = index;
               }
             });
@@ -861,8 +1018,8 @@ export default {
           console.log("like", data);
           if (data.success) {
             review.liked_by.push({
-              id: this.user_profile.id,
-              name: this.user_profile.name,
+              id: this.my_profile.id,
+              name: this.my_profile.name,
             });
           }
         });
@@ -873,7 +1030,7 @@ export default {
       if (!this.user_profile) return liked;
 
       liked_by.forEach((user) => {
-        if (user.id == this.user_profile.id) {
+        if (user.id == this.my_profile.id) {
           liked = true;
         }
       });
@@ -887,11 +1044,18 @@ export default {
     get_like_btn_color(liked_by) {
       return this.if_i_liked(liked_by) ? "primary" : "default";
     },
+    get_roles_str(roles) {
+      var names = [];
+      roles.forEach((role) => {
+        names.push(role.name);
+      });
+      return names.join(", ");
+    },
     is_movie_in_list(list) {
       return list.movies.indexOf(this.movie.id) != -1;
     },
     toggle_movie_from_list(list) {
-      this.$store.dispatch(TOGGLE_MOVIE_IN_LIST_REQUEST, {
+      this.$store.dispatch(`list/${TOGGLE_MOVIE_IN_LIST_REQUEST}`, {
         list: list,
         movie_id: this.movie.id,
       });
@@ -983,15 +1147,22 @@ export default {
       }
       this.show_list_dialog = true;
     },
-    join_roles(roles) {
-      var names = [];
-      roles.forEach((role) => {
-        names.push(role.name);
-      });
-      return names.join(", ");
-    },
-    follow(profile) {
+    on_follow(profile) {
+      if (!this.is_authenticated) {
+        this.login_required = true;
+        this.login_required_msg = "Login required to follow";
+        return;
+      }
       console.log(profile, "follow");
+    },
+    on_add_crew() {
+      if (!this.is_authenticated) {
+        this.login_required = true;
+        this.login_required_msg = "Login required to submit add crew";
+        return;
+      }
+      this.show_crew_dialog = true;
+      console.log("show add crew member popup");
     },
   },
 };
