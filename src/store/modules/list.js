@@ -1,12 +1,12 @@
 import Vue from "vue";
 import {
-    AUTH_LOGOUT,
-    LIST_REQUEST,
-    LIST_SUCCESS,
-    LIST_ERROR,
-    TOGGLE_MOVIE_IN_LIST_REQUEST,
-    TOGGLE_MOVIE_IN_LIST_SUCCESS,
-    TOGGLE_MOVIE_IN_LIST_ERROR
+    LOGOUT_,
+    REQUEST_,
+    SUCCESS_,
+    ERROR_,
+    LIST_TOGGLE_MOVIE_REQUEST_,
+    LIST_TOGGLE_MOVIE_SUCCESS_,
+    LIST_TOGGLE_MOVIE_ERROR_
 } from "@/store/actions";
 import { list_service } from "@/services";
 const state = {
@@ -19,15 +19,15 @@ const getters = {
 };
 
 const actions = {
-    [LIST_REQUEST]: ({ commit, }, user_id) => {
+    [REQUEST_]: ({ commit, }, user_id) => {
         return new Promise((resolve, reject) => {
             if (!state.loading) {
-                commit(LIST_REQUEST);
+                commit(REQUEST_);
                 list_service.get({ owner__id: user_id }).then(data => {
-                    commit(LIST_SUCCESS, data.results);
+                    commit(SUCCESS_, data.results);
                     resolve(data.results)
                 }).catch(error => {
-                    commit(LIST_ERROR, error);
+                    commit(ERROR_, error);
                     reject(error)
                 })
             } else {
@@ -35,9 +35,9 @@ const actions = {
             }
         })
     },
-    [TOGGLE_MOVIE_IN_LIST_REQUEST]: ({ commit }, { list, movie_id }) => {
+    [LIST_TOGGLE_MOVIE_REQUEST_]: ({ commit }, { list, movie_id }) => {
         return new Promise((resolve, reject) => {
-            commit(TOGGLE_MOVIE_IN_LIST_REQUEST);
+            commit(LIST_TOGGLE_MOVIE_REQUEST_);
             var movies = [...list.movies]
             var idx = movies.indexOf(movie_id)
             if (idx == -1)
@@ -46,10 +46,10 @@ const actions = {
                 movies.splice(idx, 1)
             }
             list_service.patch({ movies: movies }, list.id).then(data => {
-                commit(TOGGLE_MOVIE_IN_LIST_SUCCESS, data)
+                commit(LIST_TOGGLE_MOVIE_SUCCESS_, data)
                 resolve(data)
             }).catch(error => {
-                commit(TOGGLE_MOVIE_IN_LIST_ERROR, error)
+                commit(LIST_TOGGLE_MOVIE_ERROR_, error)
                 reject(error)
             })
         })
@@ -58,26 +58,26 @@ const actions = {
 };
 
 const mutations = {
-    [AUTH_LOGOUT]: state => {
+    [LOGOUT_]: state => {
         state.my_lists = [];
         localStorage.removeItem("my_lists");
     },
-    [LIST_REQUEST]: state => {
+    [REQUEST_]: state => {
         state.loading = true
     },
-    [LIST_SUCCESS]: (state, my_lists) => {
+    [SUCCESS_]: (state, my_lists) => {
         state.loading = false
         state.lists_last_updated = new Date();
         localStorage.setItem("my_lists", JSON.stringify(my_lists));
         Vue.set(state, "my_lists", my_lists);
     },
-    [LIST_ERROR]: state => {
+    [ERROR_]: state => {
         state.loading = false
     },
-    [TOGGLE_MOVIE_IN_LIST_REQUEST]: state => {
+    [LIST_TOGGLE_MOVIE_REQUEST_]: state => {
         state.loading = true
     },
-    [TOGGLE_MOVIE_IN_LIST_SUCCESS]: (state, updated_list) => {
+    [LIST_TOGGLE_MOVIE_SUCCESS_]: (state, updated_list) => {
         console.log("adding movie in a list")
         state.loading = false
         var index = -1
@@ -90,13 +90,8 @@ const mutations = {
             Vue.set(state.my_lists, index, updated_list)
 
     },
-    [TOGGLE_MOVIE_IN_LIST_ERROR]: state => {
+    [LIST_TOGGLE_MOVIE_ERROR_]: state => {
         state.loading = false
-    },
-    [AUTH_LOGOUT]: state => {
-        console.log("logout event from list module")
-        state.my_lists = []
-        localStorage.removeItem("my_lists")
     }
 };
 

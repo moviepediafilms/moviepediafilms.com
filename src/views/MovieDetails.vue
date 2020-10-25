@@ -559,10 +559,10 @@ import {
 } from "@/services";
 import {
   LIST_REQUEST,
-  TOGGLE_MOVIE_IN_LIST_REQUEST,
+  LIST_TOGGLE_MOVIE_REQUEST,
   ROLE_REQUEST,
-  FOLLOW_PROFILE,
-  UNFOLLOW_PROFILE,
+  PROFILE_FOLLOW,
+  PROFILE_UNFOLLOW,
 } from "@/store/actions";
 
 import _ from "lodash";
@@ -834,9 +834,9 @@ export default {
     load_data() {
       this.fetch_movie(this.movie_id);
       this.fetch_reviews();
-      this.$store.dispatch(`role/${ROLE_REQUEST}`);
+      this.$store.dispatch(ROLE_REQUEST);
       if (this.is_authenticated) {
-        this.$store.dispatch(`list/${LIST_REQUEST}`, this.my_profile.id);
+        this.$store.dispatch(LIST_REQUEST, this.my_profile.id);
       }
     },
     swipe(event) {
@@ -963,7 +963,7 @@ export default {
         .post(this.new_list)
         .then((data) => {
           console.log(data);
-          this.$store.dispatch(`list/${LIST_REQUEST}`, this.my_profile.id);
+          this.$store.dispatch(LIST_REQUEST, this.my_profile.id);
           this.loading_new_list_request = false;
           this.show_add_list_dialog = false;
         })
@@ -1076,7 +1076,7 @@ export default {
       return list.movies.indexOf(this.movie.id) != -1;
     },
     toggle_movie_from_list(list) {
-      this.$store.dispatch(`list/${TOGGLE_MOVIE_IN_LIST_REQUEST}`, {
+      this.$store.dispatch(LIST_TOGGLE_MOVIE_REQUEST, {
         list: list,
         movie_id: this.movie.id,
       });
@@ -1175,8 +1175,8 @@ export default {
         return;
       }
       if (this.is_following(profile))
-        this.$store.dispatch(`profile/${UNFOLLOW_PROFILE}`, profile);
-      else this.$store.dispatch(`profile/${FOLLOW_PROFILE}`, profile);
+        this.$store.dispatch(PROFILE_UNFOLLOW, profile);
+      else this.$store.dispatch(PROFILE_FOLLOW, profile);
     },
     is_following(profile) {
       if (this.is_authenticated)

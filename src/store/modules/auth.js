@@ -1,10 +1,12 @@
 import {
-    AUTH_REQUEST,
-    AUTH_ERROR,
-    AUTH_SUCCESS,
-    AUTH_LOGOUT,
+    REQUEST_,
+    ERROR_,
+    SUCCESS_,
+    LOGOUT_,
     PROFILE_REQUEST,
-    LIST_REQUEST
+    PROFILE_LOGOUT,
+    LIST_REQUEST,
+    LIST_LOGOUT,
 } from "@/store/actions";
 import { backend, token_service } from "@/services";
 const state = {
@@ -18,30 +20,29 @@ const getters = {
 };
 
 const actions = {
-    [AUTH_REQUEST]: ({ commit, dispatch }, payload, ) => {
+    [REQUEST_]: ({ commit, dispatch }, payload, ) => {
         return new Promise((resolve, reject) => {
-            commit(AUTH_REQUEST);
+            commit(REQUEST_);
             token_service.post(payload)
                 .then(data => {
                     backend.defaults.headers.common['Authorization'] = `Token ${data.token}`
-                    commit(AUTH_SUCCESS, data.token);
-                    dispatch(`profile/${PROFILE_REQUEST}`, data.user_id, { root: true });
-                    dispatch(`list/${LIST_REQUEST}`, data.user_id, { root: true });
+                    commit(SUCCESS_, data.token);
+                    dispatch(PROFILE_REQUEST, data.user_id, { root: true });
+                    dispatch(LIST_REQUEST, data.user_id, { root: true });
                     resolve(data);
                 })
                 .catch(err => {
                     console.log(err)
-                    commit(AUTH_ERROR, err);
+                    commit(ERROR_, err);
                     reject(err);
                 });
         });
     },
-    [AUTH_LOGOUT]: ({ commit }) => {
-        console.log("AUTH_LOGOUT triggered")
+    [LOGOUT_]: ({ commit }) => {
         return new Promise(resolve => {
-            commit(AUTH_LOGOUT);
-            commit(`profile/${AUTH_LOGOUT}`, null, { root: true });
-            commit(`list/${AUTH_LOGOUT}`, null, { root: true });
+            commit(LOGOUT_);
+            commit(PROFILE_LOGOUT, null, { root: true });
+            commit(LIST_LOGOUT, null, { root: true });
             delete backend.defaults.headers.common['Authorization']
             window.location.reload();
             resolve();
@@ -50,22 +51,22 @@ const actions = {
 };
 
 const mutations = {
-    [AUTH_REQUEST]: state => {
+    [REQUEST_]: state => {
         state.loading = true;
     },
-    [AUTH_SUCCESS]: (state, token) => {
+    [SUCCESS_]: (state, token) => {
         state.loading = false;
         state.error = null;
         state.token = token;
         localStorage.setItem("auth_token", token);
     },
-    [AUTH_ERROR]: (state, error) => {
+    [ERROR_]: (state, error) => {
         state.loading = false;
         state.error = error;
         state.token = "";
         localStorage.removeItem("auth_token");
     },
-    [AUTH_LOGOUT]: state => {
+    [LOGOUT_]: state => {
         state.token = "";
         localStorage.removeItem("auth_token");
     }

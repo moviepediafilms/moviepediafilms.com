@@ -76,7 +76,7 @@
 </template>
 <script>
 import setting from "@/setting";
-import { AUTH_LOGOUT } from "@/store/actions/auth";
+import { AUTH_LOGOUT } from "@/store/actions";
 export default {
   data() {
     return {
@@ -86,7 +86,7 @@ export default {
   methods: {
     auth_action() {
       if (this.is_authenticated) {
-        this.$store.dispatch(`auth/${AUTH_LOGOUT}`);
+        this.$store.dispatch(AUTH_LOGOUT);
       } else {
         if (this.$route.name !== "login") this.$router.push({ name: "login" });
       }

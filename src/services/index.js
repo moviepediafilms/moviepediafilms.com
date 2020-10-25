@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from "@/store"
-import { AUTH_LOGOUT } from "@/store/actions/auth";
+import { AUTH_LOGOUT } from "@/store/actions";
 
 const token = localStorage.getItem('auth_token') || ''
 var headers = {}
@@ -22,7 +22,7 @@ class BaseService {
     _handle_token_error(error) {
         if (error && error.response && error.response.status == 401 && error.response.data.detail == "Invalid token.") {
             // clear authorization and reload
-            store.dispatch(`auth/${AUTH_LOGOUT}`);
+            store.dispatch(AUTH_LOGOUT);
             console.log("Logged out")
             window.location.reload()
         }
