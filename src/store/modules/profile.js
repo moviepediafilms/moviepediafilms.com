@@ -1,12 +1,13 @@
 import Vue from "vue";
 import {
     AUTH_LOGOUT,
-    PROFILE_REQUEST,
-    PROFILE_ERROR,
-    PROFILE_SUCCESS,
-    FOLLOW_PROFILE,
-    UNFOLLOW_PROFILE,
-    FOLLOW_DONE
+    LOGOUT_,
+    REQUEST_,
+    ERROR_,
+    SUCCESS_,
+    PROFILE_FOLLOW_,
+    PROFILE_UNFOLLOW_,
+    PROFILE_FOLLOW_DONE_
 } from "@/store/actions";
 import { profile_service, follow_service } from "@/services";
 
@@ -21,64 +22,75 @@ const getters = {
 };
 
 const actions = {
-    [PROFILE_REQUEST]: ({ commit, dispatch }, id) => {
-        commit(PROFILE_REQUEST);
-        profile_service.get({}, id)
-            .then(profile => {
-                commit(PROFILE_SUCCESS, profile);
-            })
-            .catch((error) => {
-                commit(PROFILE_ERROR, error);
-                // if resp is unauthorized, logout, to
-                dispatch(`auth/${AUTH_LOGOUT}`, null, { root: true });
-            });
+    [REQUEST_]: ({ commit, dispatch }, id) => {
+        return new Promise((resolve, reject) => {
+            commit(REQUEST_);
+            profile_service.get({}, id)
+                .then(profile => {
+                    commit(SUCCESS_, profile);
+                    resolve(profile)
+                })
+                .catch((error) => {
+                    commit(ERROR_, error);
+                    // if resp is unauthorized, logout, to
+                    dispatch(AUTH_LOGOUT, null, { root: true });
+                    reject(error)
+                });
+        })
     },
-    [FOLLOW_PROFILE]: ({ commit }, profile) => {
-        follow_service
-            .patch({ follow: true }, profile.profile_id)
-            .then((data) => {
-                console.log(data);
-                commit(FOLLOW_DONE, data.follows)
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    [PROFILE_FOLLOW_]: ({ commit }, profile) => {
+        return new Promise((resolve, reject) => {
+            follow_service
+                .patch({ follow: true }, profile.profile_id)
+                .then((data) => {
+                    console.log(data);
+                    commit(PROFILE_FOLLOW_DONE_, data.follows)
+                    resolve(data)
+                })
+                .catch((error) => {
+                    console.log(error)
+                    reject(error)
+                });
+        })
 
     },
-    [UNFOLLOW_PROFILE]: ({ commit }, profile) => {
-        follow_service
-            .patch({ follow: false }, profile.profile_id)
-            .then((data) => {
-                console.log(data);
-                commit(FOLLOW_DONE, data.follows)
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
+    [PROFILE_UNFOLLOW_]: ({ commit }, profile) => {
+        return new Promise((resolve, reject) => {
+            follow_service
+                .patch({ follow: false }, profile.profile_id)
+                .then((data) => {
+                    console.log(data);
+                    commit(PROFILE_FOLLOW_DONE_, data.follows)
+                    resolve(data)
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error)
+                });
+        })
     },
 
 };
 
 const mutations = {
-    [PROFILE_REQUEST]: state => {
+    [REQUEST_]: state => {
         state.loading = true;
     },
-    [PROFILE_SUCCESS]: (state, profile) => {
+    [SUCCESS_]: (state, profile) => {
         state.loading = false;
         state.error = "";
         localStorage.setItem("profile", JSON.stringify(profile));
         Vue.set(state, "profile", profile);
     },
-    [PROFILE_ERROR]: (state, error) => {
+    [ERROR_]: (state, error) => {
         state.loading = false;
         state.error = error;
     },
-    [AUTH_LOGOUT]: state => {
+    [LOGOUT_]: state => {
         state.profile = {};
         localStorage.removeItem("profile");
     },
-    [FOLLOW_DONE]: (state, follows) => {
+    [PROFILE_FOLLOW_DONE_]: (state, follows) => {
         Vue.set(state.profile, "follows", follows)
         localStorage.setItem("profile", JSON.stringify(state.profile));
     }

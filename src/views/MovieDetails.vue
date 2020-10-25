@@ -27,12 +27,13 @@
                     {{ genre.name }}
                   </router-link>
                   <template v-if="index < top_movie_genres.length - 1"
-                    ><span :key="genre.id + '_'">, </span></template
+                    ><span :key="genre.id + '_'">/</span></template
                   >
                 </template>
               </div>
-              <div class="text-grey-6 text-caption">
-                <q-icon name="mdi-projector-screen" /> in Jan 2020
+              <div class="text-grey-6 text-caption" v-if="movie_publish_date">
+                <q-icon name="mdi-projector-screen" />
+                {{ movie_publish_date }}
               </div>
             </div>
           </div>
@@ -553,15 +554,15 @@ import {
   review_like_service,
   recommend_service,
   watchlist_service,
-  list_service,
   crew_request_service,
 } from "@/services";
 import {
+  LIST_CREATE,
   LIST_REQUEST,
-  TOGGLE_MOVIE_IN_LIST_REQUEST,
+  LIST_TOGGLE_MOVIE_REQUEST,
   ROLE_REQUEST,
-  FOLLOW_PROFILE,
-  UNFOLLOW_PROFILE,
+  PROFILE_FOLLOW,
+  PROFILE_UNFOLLOW,
 } from "@/store/actions";
 
 import _ from "lodash";
@@ -739,14 +740,18 @@ export default {
       this.load_data();
     },
     is_authenticated() {
+      // watch authentication state and reload the page if it changes
       if (!this.is_authenticated) {
-        console.log("reload the page, user logged");
         this.my_rate_review = { id: null, content: null, rating: null };
         this.load_data();
       }
     },
   },
   computed: {
+    movie_publish_date() {
+      if (this.movie.publish_on) return moment(this.movie.publish_on).fromNow();
+      return "";
+    },
     role_options() {
       var roles = [];
       this.roles.forEach((role) => {
@@ -762,7 +767,7 @@ export default {
     },
     top_movie_genres() {
       // var genres = [];
-      if (this.movie && this.movie.genres) return this.movie.genres.slice(0, 3);
+      if (this.movie && this.movie.genres) return this.movie.genres.slice(0, 2);
       else return [];
     },
     is_added_to_any_list() {
@@ -829,9 +834,9 @@ export default {
     load_data() {
       this.fetch_movie(this.movie_id);
       this.fetch_reviews();
-      this.$store.dispatch(`role/${ROLE_REQUEST}`);
+      this.$store.dispatch(ROLE_REQUEST);
       if (this.is_authenticated) {
-        this.$store.dispatch(`list/${LIST_REQUEST}`, this.my_profile.id);
+        this.$store.dispatch(LIST_REQUEST, this.my_profile.id);
       }
     },
     swipe(event) {
@@ -895,21 +900,16 @@ export default {
       }
     },
     change_rating(new_rating) {
-      console.log("change_rating", new_rating);
       if (!this.is_authenticated) {
-        console.log("user not authenticated");
         this.$refs.rating_slider.model = 0;
       } else {
-        console.log("user authenticated");
         this.my_rate_review.rating = new_rating;
         this.save_rate_review();
       }
     },
     save_rate_review() {
       if (this.is_authenticated) {
-        console.log("user is authenticated");
         if (this.my_rate_review.id) {
-          console.log("review id present");
           this.update_my_rate_review();
         } else {
           this.create_my_rate_review();
@@ -929,7 +929,6 @@ export default {
           crew_request_service
             .post(payload)
             .then((data) => {
-              console.log(data);
               this.new_crew = { roles: [] };
               this.show_crew_dialog = false;
               if (data.state === "A")
@@ -938,7 +937,6 @@ export default {
               this.loading_new_crew = false;
             })
             .catch((error) => {
-              console.log(error, error.response.data);
               this.check_fields_for_error(
                 error.response.data,
                 this.new_crew_error,
@@ -953,12 +951,9 @@ export default {
     },
     save_new_list_request() {
       this.loading_new_list_request = true;
-      console.log("creating new list", this.new_list.name);
-      list_service
-        .post(this.new_list)
-        .then((data) => {
-          console.log(data);
-          this.$store.dispatch(`list/${LIST_REQUEST}`, this.my_profile.id);
+      this.$store
+        .dispatch(LIST_CREATE, this.new_list)
+        .then(() => {
           this.loading_new_list_request = false;
           this.show_add_list_dialog = false;
         })
@@ -969,7 +964,6 @@ export default {
         });
     },
     create_my_rate_review() {
-      console.log("creating review");
       this.rating_loading = true;
       review_service
         .post({
@@ -989,7 +983,6 @@ export default {
         });
     },
     update_my_rate_review() {
-      console.log("updating review");
       this.rating_loading = true;
       review_service
         .patch(
@@ -1018,7 +1011,6 @@ export default {
       }
       if (this.if_i_liked(review.liked_by)) {
         review_like_service.delete(review.id).then((data) => {
-          console.log("unlike", data);
           if (data.success) {
             var to_remove = null;
             review.liked_by.forEach((item, index) => {
@@ -1031,7 +1023,6 @@ export default {
         });
       } else {
         review_like_service.patch({}, review.id).then((data) => {
-          console.log("like", data);
           if (data.success) {
             review.liked_by.push({
               id: this.my_profile.id,
@@ -1071,7 +1062,7 @@ export default {
       return list.movies.indexOf(this.movie.id) != -1;
     },
     toggle_movie_from_list(list) {
-      this.$store.dispatch(`list/${TOGGLE_MOVIE_IN_LIST_REQUEST}`, {
+      this.$store.dispatch(LIST_TOGGLE_MOVIE_REQUEST, {
         list: list,
         movie_id: this.movie.id,
       });
@@ -1082,10 +1073,8 @@ export default {
         this.login_required_msg = "Login required to watchlist a movie";
         return;
       }
-      console.log("watchlisting");
       this.watchlist_loading = true;
       if (!this.movie.is_watchlisted) {
-        console.log("adding to watchlist");
         watchlist_service
           .patch({}, this.movie.id)
           .then((data) => {
@@ -1099,7 +1088,6 @@ export default {
             this.watchlist_loading = false;
           });
       } else {
-        console.log("removing from watchlist");
         watchlist_service
           .delete(this.movie.id)
           .then((data) => {
@@ -1120,7 +1108,6 @@ export default {
         this.login_required_msg = "Login required to recommend a movie";
         return;
       }
-      console.log("recommending");
       this.recommend_loading = true;
       if (!this.movie.is_recommended) {
         recommend_service
@@ -1151,11 +1138,9 @@ export default {
       }
     },
     on_share() {
-      console.log("sharing");
       this.show_share_dialog = true;
     },
     on_add_to_list() {
-      console.log("adding to a list");
       if (!this.is_authenticated) {
         this.login_required = true;
         this.login_required_msg = "Login is required to save a movie";
@@ -1170,8 +1155,8 @@ export default {
         return;
       }
       if (this.is_following(profile))
-        this.$store.dispatch(`profile/${UNFOLLOW_PROFILE}`, profile);
-      else this.$store.dispatch(`profile/${FOLLOW_PROFILE}`, profile);
+        this.$store.dispatch(PROFILE_UNFOLLOW, profile);
+      else this.$store.dispatch(PROFILE_FOLLOW, profile);
     },
     is_following(profile) {
       if (this.is_authenticated)
@@ -1185,7 +1170,6 @@ export default {
         return;
       }
       this.show_crew_dialog = true;
-      console.log("show add crew member popup");
     },
   },
 };

@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { ROLE_REQUEST, ROLE_SUCCESS, ROLE_ERROR } from "@/store/actions/role";
+import { REQUEST_, SUCCESS_, ERROR_ } from "@/store/actions";
 import { role_service } from "@/services";
 import decode_error_message from "@/extras/error"
 
@@ -17,29 +17,35 @@ const getters = {
 };
 
 const actions = {
-    [ROLE_REQUEST]: (state) => {
-        if (!state.loading) {
-            state.commit(ROLE_REQUEST);
-            role_service.get({}).then(data => {
-                state.commit(ROLE_SUCCESS, data.results);
-            }).catch(error => {
-                state.commit(ROLE_ERROR, decode_error_message(error));
-            })
-        }
+    [REQUEST_]: (state) => {
+        return new Promise((resolve, reject) => {
+            if (!state.loading) {
+                state.commit(REQUEST_);
+                role_service.get({}).then(data => {
+                    state.commit(SUCCESS_, data.results);
+                    resolve(data.results)
+                }).catch(error => {
+                    state.commit(ERROR_, decode_error_message(error));
+                    resolve(error)
+                })
+            } else {
+                reject({ detail: "Role fetch already in progress" })
+            }
+        })
     }
 };
 
 const mutations = {
-    [ROLE_REQUEST]: state => {
+    [REQUEST_]: state => {
         state.loading = true
     },
-    [ROLE_SUCCESS]: (state, roles) => {
+    [SUCCESS_]: (state, roles) => {
         state.loading = false
         state.last_updated = new Date();
         localStorage.setItem("roles", JSON.stringify(roles));
         Vue.set(state, "roles", roles);
     },
-    [ROLE_ERROR]: (state, error_msg) => {
+    [ERROR_]: (state, error_msg) => {
         state.loading = false
         state.error = error_msg
     }
