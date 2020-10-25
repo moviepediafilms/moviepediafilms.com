@@ -90,6 +90,7 @@ export default {
   },
   computed: {
     has_history() {
+      console.log("history_length", window.history.length);
       return window.history.length > 2;
     },
   },
@@ -112,17 +113,15 @@ export default {
           else this.$router.push({ name: "home" });
         })
         .catch((error) => {
+          var got_err_msg = false;
           if (error.response && error.response.data) {
-            if (error.response.data.non_field_errors)
-              this.error_msg = error.response.data.non_field_errors[0];
-            else if (error.response.data.username) {
-              this.login_error.email = error.response.data.username[0];
-            } else if (error.response.data.password) {
-              this.login_error.password = error.response.data.password[0];
-            }
-          } else {
-            this.error_msg = error.toJSON().message;
+            got_err_msg = this.check_fields_for_error(
+              error.response.data,
+              this.this.login_error,
+              ["email", "password"]
+            );
           }
+          if (!got_err_msg) this.error_msg = this.decode_error_message(error);
         });
     },
   },

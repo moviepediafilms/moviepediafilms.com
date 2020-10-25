@@ -5,6 +5,7 @@ export const REQUEST_ = "REQUEST";
 export const SUCCESS_ = "SUCCESS";
 export const ERROR_ = "ERROR";
 export const LOGOUT_ = "LOGOUT";
+export const CREATE_ = "CREATE";
 
 // MODULE SPECIFIC STORE ACTIONS
 export const PROFILE_FOLLOW_ = "FOLLOW";
@@ -31,6 +32,7 @@ export const LIST_REQUEST = `list/${REQUEST_}`;
 export const LIST_SUCCESS = `list/${SUCCESS_}`;
 export const LIST_ERROR = `list/${ERROR_}`;
 export const LIST_LOGOUT = `list/${LOGOUT_}`;
+export const LIST_CREATE = `list/${CREATE_}`;
 export const LIST_TOGGLE_MOVIE_REQUEST = `list/${LIST_TOGGLE_MOVIE_REQUEST_}`
 export const LIST_TOGGLE_MOVIE_SUCCESS = `list/${LIST_TOGGLE_MOVIE_SUCCESS_}`
 export const LIST_TOGGLE_MOVIE_ERROR = `list/${LIST_TOGGLE_MOVIE_ERROR_}`

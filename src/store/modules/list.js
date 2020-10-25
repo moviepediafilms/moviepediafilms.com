@@ -3,12 +3,14 @@ import {
     LOGOUT_,
     REQUEST_,
     SUCCESS_,
+    CREATE_,
     ERROR_,
     LIST_TOGGLE_MOVIE_REQUEST_,
     LIST_TOGGLE_MOVIE_SUCCESS_,
     LIST_TOGGLE_MOVIE_ERROR_
 } from "@/store/actions";
 import { list_service } from "@/services";
+import { Promise } from "core-js";
 const state = {
     loading: "",
     my_lists: JSON.parse(localStorage.getItem("my_lists")) || [],
@@ -33,6 +35,19 @@ const actions = {
             } else {
                 reject({ details: "Movie List fetch already in progress" })
             }
+        })
+    },
+    [CREATE_]: ({ commit }, new_list_data) => {
+        return new Promise((resolve, reject) => {
+            list_service
+                .post(new_list_data)
+                .then((new_list) => {
+                    commit(CREATE_, new_list);
+                    resolve(new_list)
+                })
+                .catch((error) => {
+                    reject(error)
+                });
         })
     },
     [LIST_TOGGLE_MOVIE_REQUEST_]: ({ commit }, { list, movie_id }) => {
@@ -73,6 +88,10 @@ const mutations = {
     },
     [ERROR_]: state => {
         state.loading = false
+    },
+    [CREATE_]: (state, new_list) => {
+        state.my_lists.push(new_list)
+        localStorage.setItem("my_lists", JSON.stringify(state.my_lists));
     },
     [LIST_TOGGLE_MOVIE_REQUEST_]: state => {
         state.loading = true
