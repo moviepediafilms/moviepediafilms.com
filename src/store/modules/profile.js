@@ -3,9 +3,12 @@ import {
     AUTH_LOGOUT,
     PROFILE_REQUEST,
     PROFILE_ERROR,
-    PROFILE_SUCCESS
+    PROFILE_SUCCESS,
+    FOLLOW_PROFILE,
+    UNFOLLOW_PROFILE,
+    FOLLOW_DONE
 } from "@/store/actions";
-import { profile_service } from "@/services";
+import { profile_service, follow_service } from "@/services";
 
 const state = {
     loading: false,
@@ -29,7 +32,32 @@ const actions = {
                 // if resp is unauthorized, logout, to
                 dispatch(`auth/${AUTH_LOGOUT}`, null, { root: true });
             });
-    }
+    },
+    [FOLLOW_PROFILE]: ({ commit }, profile) => {
+        follow_service
+            .patch({ follow: true }, profile.profile_id)
+            .then((data) => {
+                console.log(data);
+                commit(FOLLOW_DONE, data.follows)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    },
+    [UNFOLLOW_PROFILE]: ({ commit }, profile) => {
+        follow_service
+            .patch({ follow: false }, profile.profile_id)
+            .then((data) => {
+                console.log(data);
+                commit(FOLLOW_DONE, data.follows)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    },
+
 };
 
 const mutations = {
@@ -49,6 +77,10 @@ const mutations = {
     [AUTH_LOGOUT]: state => {
         state.profile = {};
         localStorage.removeItem("profile");
+    },
+    [FOLLOW_DONE]: (state, follows) => {
+        Vue.set(state.profile, "follows", follows)
+        localStorage.setItem("profile", JSON.stringify(state.profile));
     }
 };
 

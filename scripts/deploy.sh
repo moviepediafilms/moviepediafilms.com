@@ -5,6 +5,7 @@ SERVER=moviepediafilms.com
 TMP_FOLDER=/tmp
 DEST_DIR=/var/www/moviepediafilms.com
 TAR_FILE=dist.tar.gz
+CURR_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 # programms used
 npm=/home/zeeshan/.nvm/versions/node/v14.11.0/bin/npm
@@ -21,3 +22,4 @@ $tar -zcvf $WORKSPACE/$TAR_FILE .
 scp $WORKSPACE/$TAR_FILE $USER@$SERVER:$TMP_FOLDER/
 ssh $USER@$SERVER "$tar -zxvf $TMP_FOLDER/$TAR_FILE -C $DEST_DIR && rm $TMP_FOLDER/$TAR_FILE"
 rm $WORKSPACE/$TAR_FILE
+$git checkout $CURR_BRANCH
