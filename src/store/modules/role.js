@@ -18,14 +18,20 @@ const getters = {
 
 const actions = {
     [ROLE_REQUEST]: (state) => {
-        if (!state.loading) {
-            state.commit(ROLE_REQUEST);
-            role_service.get({}).then(data => {
-                state.commit(ROLE_SUCCESS, data.results);
-            }).catch(error => {
-                state.commit(ROLE_ERROR, decode_error_message(error));
-            })
-        }
+        return new Promise((resolve, reject) => {
+            if (!state.loading) {
+                state.commit(ROLE_REQUEST);
+                role_service.get({}).then(data => {
+                    state.commit(ROLE_SUCCESS, data.results);
+                    resolve(data.results)
+                }).catch(error => {
+                    state.commit(ROLE_ERROR, decode_error_message(error));
+                    resolve(error)
+                })
+            } else {
+                reject({ detail: "Role fetch already in progress" })
+            }
+        })
     }
 };
 

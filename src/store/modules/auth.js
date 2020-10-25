@@ -19,7 +19,6 @@ const getters = {
 
 const actions = {
     [AUTH_REQUEST]: ({ commit, dispatch }, payload, ) => {
-
         return new Promise((resolve, reject) => {
             commit(AUTH_REQUEST);
             token_service.post(payload)
@@ -41,8 +40,9 @@ const actions = {
         console.log("AUTH_LOGOUT triggered")
         return new Promise(resolve => {
             commit(AUTH_LOGOUT);
+            commit(`profile/${AUTH_LOGOUT}`, null, { root: true });
+            commit(`list/${AUTH_LOGOUT}`, null, { root: true });
             delete backend.defaults.headers.common['Authorization']
-
             window.location.reload();
             resolve();
         });

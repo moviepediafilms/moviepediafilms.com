@@ -27,12 +27,13 @@
                     {{ genre.name }}
                   </router-link>
                   <template v-if="index < top_movie_genres.length - 1"
-                    ><span :key="genre.id + '_'">, </span></template
+                    ><span :key="genre.id + '_'">/</span></template
                   >
                 </template>
               </div>
-              <div class="text-grey-6 text-caption">
-                <q-icon name="mdi-projector-screen" /> in Jan 2020
+              <div class="text-grey-6 text-caption" v-if="movie_publish_date">
+                <q-icon name="mdi-projector-screen" />
+                {{ movie_publish_date }}
               </div>
             </div>
           </div>
@@ -747,6 +748,10 @@ export default {
     },
   },
   computed: {
+    movie_publish_date() {
+      if (this.movie.publish_on) return moment(this.movie.publish_on).fromNow();
+      return "";
+    },
     role_options() {
       var roles = [];
       this.roles.forEach((role) => {
@@ -762,7 +767,7 @@ export default {
     },
     top_movie_genres() {
       // var genres = [];
-      if (this.movie && this.movie.genres) return this.movie.genres.slice(0, 3);
+      if (this.movie && this.movie.genres) return this.movie.genres.slice(0, 2);
       else return [];
     },
     is_added_to_any_list() {

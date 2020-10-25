@@ -22,40 +22,51 @@ const getters = {
 
 const actions = {
     [PROFILE_REQUEST]: ({ commit, dispatch }, id) => {
-        commit(PROFILE_REQUEST);
-        profile_service.get({}, id)
-            .then(profile => {
-                commit(PROFILE_SUCCESS, profile);
-            })
-            .catch((error) => {
-                commit(PROFILE_ERROR, error);
-                // if resp is unauthorized, logout, to
-                dispatch(`auth/${AUTH_LOGOUT}`, null, { root: true });
-            });
+        return new Promise((resolve, reject) => {
+            commit(PROFILE_REQUEST);
+            profile_service.get({}, id)
+                .then(profile => {
+                    commit(PROFILE_SUCCESS, profile);
+                    resolve(profile)
+                })
+                .catch((error) => {
+                    commit(PROFILE_ERROR, error);
+                    // if resp is unauthorized, logout, to
+                    dispatch(`auth/${AUTH_LOGOUT}`, null, { root: true });
+                    reject(error)
+                });
+        })
     },
     [FOLLOW_PROFILE]: ({ commit }, profile) => {
-        follow_service
-            .patch({ follow: true }, profile.profile_id)
-            .then((data) => {
-                console.log(data);
-                commit(FOLLOW_DONE, data.follows)
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        return new Promise((resolve, reject) => {
+            follow_service
+                .patch({ follow: true }, profile.profile_id)
+                .then((data) => {
+                    console.log(data);
+                    commit(FOLLOW_DONE, data.follows)
+                    resolve(data)
+                })
+                .catch((error) => {
+                    console.log(error)
+                    reject(error)
+                });
+        })
 
     },
     [UNFOLLOW_PROFILE]: ({ commit }, profile) => {
-        follow_service
-            .patch({ follow: false }, profile.profile_id)
-            .then((data) => {
-                console.log(data);
-                commit(FOLLOW_DONE, data.follows)
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
+        return new Promise((resolve, reject) => {
+            follow_service
+                .patch({ follow: false }, profile.profile_id)
+                .then((data) => {
+                    console.log(data);
+                    commit(FOLLOW_DONE, data.follows)
+                    resolve(data)
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error)
+                });
+        })
     },
 
 };
