@@ -110,7 +110,7 @@
                       class="text-muted text-grey-6 q-mt-xs"
                       style="font-size: 8px"
                     >
-                      Save<template v-if="is_added_to_any_list">ed</template>
+                      Save<template v-if="is_added_to_any_list">d</template>
                     </div>
                   </div>
                 </q-btn>
@@ -131,13 +131,18 @@
                         :to="{ name: 'profile', id: director.id }"
                         >{{ director.name }}</router-link
                       >
-                      <span class="q-mx-xs text-grey-6">&bull;</span>
-                      <a
-                        href="#"
-                        @click.stop="on_follow(director)"
-                        class="text-light-blue-11 text-decoration-none text-caption"
-                        >Follow</a
-                      >
+                      <template v-if="my_profile.id != director.id">
+                        <span class="q-mx-xs text-grey-6">&bull;</span>
+                        <a
+                          href="#"
+                          @click.stop="on_follow(director)"
+                          class="text-light-blue-11 text-decoration-none text-caption"
+                        >
+                          Follow<template v-if="is_following(director)"
+                            >ing</template
+                          >
+                        </a>
+                      </template>
                       <div
                         class="text-caption text-grey-6"
                         v-if="movie.crew.length > 1"
@@ -173,11 +178,15 @@
                       </div>
                     </q-item-label>
                   </q-item-section>
-                  <q-item-section side>
+                  <q-item-section side v-if="my_profile.id != crew.profile.id">
                     <q-btn
                       flat
-                      icon="mdi-plus"
-                      label="Follow"
+                      :icon="
+                        is_following(crew.profile) ? 'mdi-check' : 'mdi-plus'
+                      "
+                      :label="
+                        is_following(crew.profile) ? 'Following' : 'Follow'
+                      "
                       @click.stop="on_follow(crew.profile)"
                     />
                   </q-item-section>
@@ -519,7 +528,7 @@
             <q-card-section class="q-pt-none text-center">
               <q-icon name="mdi-check" class="text-positive" size="30px" />
               <div class="text-body">
-                {{show_request_created_message}}
+                {{ show_request_created_message }}
               </div>
             </q-card-section>
 
@@ -550,8 +559,10 @@ import {
 import {
   LIST_REQUEST,
   TOGGLE_MOVIE_IN_LIST_REQUEST,
-} from "@/store/actions/list";
-import { ROLE_REQUEST } from "@/store/actions";
+  ROLE_REQUEST,
+  FOLLOW_PROFILE,
+  UNFOLLOW_PROFILE,
+} from "@/store/actions";
 
 import _ from "lodash";
 import { mapState } from "vuex";
@@ -663,7 +674,8 @@ export default {
       show_crew_dialog: false,
       show_add_list_dialog: false,
       show_request_created_dialog: false,
-      show_request_created_message: "Your request is sent to the director for approval.",
+      show_request_created_message:
+        "Your request is sent to the director for approval.",
       login_required: false,
       login_required_msg: "",
       user_rating: null,
@@ -848,7 +860,10 @@ export default {
         return;
       }
       // if max_reviews is not defined or its greater than the current fetched reviews
-      if (!this.max_reviews || this.reviews.length < this.max_reviews) {
+      if (
+        this.max_reviews == undefined ||
+        this.reviews.length < this.max_reviews
+      ) {
         this.loading_reviews = true;
         review_service
           .get({
@@ -917,7 +932,8 @@ export default {
               console.log(data);
               this.new_crew = { roles: [] };
               this.show_crew_dialog = false;
-              if (data.state === "A") this.show_request_created_message = "Added crew member";
+              if (data.state === "A")
+                this.show_request_created_message = "Added crew member";
               this.show_request_created_dialog = true;
               this.loading_new_crew = false;
             })
@@ -1027,7 +1043,7 @@ export default {
     },
     if_i_liked(liked_by) {
       var liked = false;
-      if (!this.user_profile) return liked;
+      if (!this.my_profile) return liked;
 
       liked_by.forEach((user) => {
         if (user.id == this.my_profile.id) {
@@ -1037,8 +1053,8 @@ export default {
       return liked;
     },
     get_like_txt(liked_by) {
-      if (liked_by.length == 0) return "nobody liked it";
-      if (liked_by.length == 1) return `${liked_by.length} like`;
+      if (liked_by.length == 0) return "no likes";
+      if (liked_by.length == 1) return "1 like";
       return `${liked_by.length} likes`;
     },
     get_like_btn_color(liked_by) {
@@ -1153,7 +1169,14 @@ export default {
         this.login_required_msg = "Login required to follow";
         return;
       }
-      console.log(profile, "follow");
+      if (this.is_following(profile))
+        this.$store.dispatch(`profile/${UNFOLLOW_PROFILE}`, profile);
+      else this.$store.dispatch(`profile/${FOLLOW_PROFILE}`, profile);
+    },
+    is_following(profile) {
+      if (this.is_authenticated)
+        return this.my_profile.follows.indexOf(profile.profile_id) != -1;
+      return false;
     },
     on_add_crew() {
       if (!this.is_authenticated) {
