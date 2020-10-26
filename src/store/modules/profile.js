@@ -7,13 +7,17 @@ import {
     SUCCESS_,
     PROFILE_FOLLOW_,
     PROFILE_UNFOLLOW_,
-    PROFILE_FOLLOW_DONE_
+    PROFILE_FOLLOW_DONE_,
+    PROFILE_WATCHLIST_REQUEST_,
+    PROFILE_RECOMMENDS_REQUEST_
 } from "@/store/actions";
-import { profile_service, follow_service } from "@/services";
+import { profile_service, follow_service, my_watchlist_service, my_recommends_service } from "@/services";
 
 const state = {
     loading: false,
     error: "",
+    watchlist: JSON.parse(localStorage.getItem("watchlist")) || [],
+    recommends: JSON.parse(localStorage.getItem("recommends")) || [],
     profile: JSON.parse(localStorage.getItem("profile")) || {}
 };
 
@@ -69,7 +73,26 @@ const actions = {
                 });
         })
     },
-
+    [PROFILE_WATCHLIST_REQUEST_]: ({ commit }) => {
+        return new Promise((resolve, reject) => {
+            my_watchlist_service.get().then(data => {
+                commit(PROFILE_WATCHLIST_REQUEST_, data.results)
+                resolve(data.results)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    },
+    [PROFILE_RECOMMENDS_REQUEST_]: ({ commit }) => {
+        return new Promise((resolve, reject) => {
+            my_recommends_service.get().then(data => {
+                commit(PROFILE_RECOMMENDS_REQUEST_, data.results)
+                resolve(data.results)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
 };
 
 const mutations = {
@@ -93,7 +116,37 @@ const mutations = {
     [PROFILE_FOLLOW_DONE_]: (state, follows) => {
         Vue.set(state.profile, "follows", follows)
         localStorage.setItem("profile", JSON.stringify(state.profile));
-    }
+    },
+    [PROFILE_WATCHLIST_REQUEST_]: (state, new_watchlist_items) => {
+        new_watchlist_items.forEach(new_item => {
+            var item_at = -1
+            state.watchlist.forEach((existing_item, index) => {
+                if (existing_item.id == new_item.id) {
+                    item_at = index
+                }
+            })
+            if (item_at != -1)
+                Vue.set(state.watchlist, item_at, new_item)
+            else
+                state.watchlist.push(new_item)
+        })
+        localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
+    },
+    [PROFILE_RECOMMENDS_REQUEST_]: (state, new_recommend_items) => {
+        new_recommend_items.forEach(new_item => {
+            var item_at = -1
+            state.recommends.forEach((existing_item, index) => {
+                if (existing_item.id == new_item.id) {
+                    item_at = index
+                }
+            })
+            if (item_at != -1)
+                Vue.set(state.recommends, item_at, new_item)
+            else
+                state.recommends.push(new_item)
+        })
+        localStorage.setItem("recommends", JSON.stringify(state.recommends));
+    },
 };
 
 export default {
