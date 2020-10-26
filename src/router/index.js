@@ -137,6 +137,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+    mode: 'history',
     routes,
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
@@ -146,5 +147,9 @@ const router = new VueRouter({
         }
     }
 })
-
+router.beforeEach((to, from, next) => {
+    setTimeout(() => {
+        next()
+    }, 150)
+})
 export default router

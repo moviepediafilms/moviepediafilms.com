@@ -107,6 +107,8 @@ const mutations = {
         });
         if (index != -1)
             Vue.set(state.my_lists, index, updated_list)
+        else
+            state.my_lists.push(updated_list)
 
     },
     [LIST_TOGGLE_MOVIE_ERROR_]: state => {
