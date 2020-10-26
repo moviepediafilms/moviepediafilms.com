@@ -204,11 +204,7 @@
             </div>
             <div class="row items-center q-mt-md">
               <div clss="col">
-                <q-icon
-                  size="48px"
-                  color="primary"
-                  name="mdi-emoticon-sad-outline"
-                />
+                <q-icon size="48px" color="primary" name="mdi-emoticon-dead" />
               </div>
               <div class="col q-mx-sm">
                 <q-slider
@@ -227,11 +223,7 @@
                 />
               </div>
               <div clss="col">
-                <q-icon
-                  size="48px"
-                  color="primary"
-                  name="mdi-emoticon-excited-outline"
-                />
+                <q-icon size="48px" color="primary" name="mdi-emoticon-kiss" />
               </div>
             </div>
             <div class="row q-mt-lg">{{ movie.synopsis }}</div>
