@@ -223,7 +223,11 @@
                 />
               </div>
               <div clss="col">
-                <q-icon size="48px" color="primary" name="mdi-emoticon-kiss" />
+                <q-icon
+                  size="48px"
+                  color="primary"
+                  name="mdi-emoticon-excited"
+                />
               </div>
             </div>
             <div class="row q-mt-lg">{{ movie.synopsis }}</div>
