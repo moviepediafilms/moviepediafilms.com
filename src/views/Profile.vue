@@ -95,11 +95,17 @@
           </q-tabs>
           <q-separator />
           <q-tab-panels v-model="tab" animated>
-            <q-tab-panel name="watchlist">
-              <movie-list :source="watchlist"></movie-list>
+            <q-tab-panel name="watchlist" class="q-px-none">
+              <movie-list
+                :source="watchlist"
+                @item-selected="on_movie_click"
+              ></movie-list>
             </q-tab-panel>
             <q-tab-panel name="recommends">
-              <movie-list :source="recommends"></movie-list>
+              <movie-list
+                :source="recommends"
+                @item-selected="on_movie_click"
+              ></movie-list>
             </q-tab-panel>
             <q-tab-panel name="lists">
               <div class="text-h6">Lists</div>
@@ -151,6 +157,12 @@ export default {
     },
     show_badge_info_dialog() {
       this.badge_info_dialog = true;
+    },
+    on_movie_click(item) {
+      this.$router.push({
+        name: "movie-detail",
+        params: { id: item.id, slug: this.slugify(item.title) },
+      });
     },
   },
 };

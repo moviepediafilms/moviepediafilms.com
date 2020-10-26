@@ -9,9 +9,18 @@ import {
     PROFILE_UNFOLLOW_,
     PROFILE_FOLLOW_DONE_,
     PROFILE_WATCHLIST_REQUEST_,
-    PROFILE_RECOMMENDS_REQUEST_
+    PROFILE_RECOMMENDS_REQUEST_,
+    PROFILE_TOGGLE_WATCHLIST_,
+    PROFILE_TOGGLE_RECOMMEND_
 } from "@/store/actions";
-import { profile_service, follow_service, my_watchlist_service, my_recommends_service } from "@/services";
+import {
+    profile_service,
+    follow_service,
+    my_watchlist_service,
+    my_recommends_service,
+    watchlist_service,
+    recommend_service
+} from "@/services";
 
 const state = {
     loading: false,
@@ -92,6 +101,37 @@ const actions = {
                 reject(error)
             })
         })
+    },
+    [PROFILE_TOGGLE_WATCHLIST_]: ({ commit }, movie) => {
+        return new Promise((resolve, reject) => {
+            var fn_name = movie.is_watchlisted ? "delete" : "patch"
+            var params = movie.is_watchlisted ? [movie.id] : [{}, movie.id]
+            watchlist_service[fn_name](...params)
+                .then((data) => {
+                    if (data.success)
+                        commit(PROFILE_TOGGLE_WATCHLIST_, movie)
+                    resolve(data)
+                })
+                .catch((error) => {
+                    reject(error)
+                });
+        })
+    },
+    [PROFILE_TOGGLE_RECOMMEND_]: ({ commit }, movie) => {
+        return new Promise((resolve, reject) => {
+            var fn_name = movie.is_recommended ? "delete" : "patch"
+            var params = movie.is_recommended ? [movie.id] : [{}, movie.id]
+            recommend_service[fn_name](...params)
+                .then((data) => {
+                    if (data.success)
+                        commit(PROFILE_TOGGLE_RECOMMEND_, movie)
+                    resolve(data)
+                })
+                .catch((error) => {
+                    reject(error)
+                });
+
+        })
     }
 };
 
@@ -112,6 +152,8 @@ const mutations = {
     [LOGOUT_]: state => {
         state.profile = {};
         localStorage.removeItem("profile");
+        localStorage.removeItem("recommends");
+        localStorage.removeItem("watchlist");
     },
     [PROFILE_FOLLOW_DONE_]: (state, follows) => {
         Vue.set(state.profile, "follows", follows)
@@ -147,6 +189,30 @@ const mutations = {
         })
         localStorage.setItem("recommends", JSON.stringify(state.recommends));
     },
+    [PROFILE_TOGGLE_WATCHLIST_]: (state, movie) => {
+        var found_at = -1
+        state.watchlist.forEach((item, index) => {
+            if (item.id == movie.id) {
+                found_at = index
+            }
+        })
+        if (found_at == -1)
+            state.watchlist.push({ title: movie.title, poster: movie.poster, id: movie.id, about: movie.about })
+        else
+            state.watchlist.splice(found_at, 1)
+    },
+    [PROFILE_TOGGLE_RECOMMEND_]: (state, movie) => {
+        var found_at = -1
+        state.recommends.forEach((item, index) => {
+            if (item.id == movie.id) {
+                found_at = index
+            }
+        })
+        if (found_at == -1)
+            state.recommends.push({ title: movie.title, poster: movie.poster, id: movie.id, about: movie.about })
+        else
+            state.recommends.splice(found_at, 1)
+    }
 };
 
 export default {

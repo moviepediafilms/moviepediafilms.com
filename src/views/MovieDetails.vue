@@ -552,8 +552,6 @@ import {
   movie_service,
   review_service,
   review_like_service,
-  recommend_service,
-  watchlist_service,
   crew_request_service,
 } from "@/services";
 import {
@@ -563,6 +561,8 @@ import {
   ROLE_REQUEST,
   PROFILE_FOLLOW,
   PROFILE_UNFOLLOW,
+  PROFILE_TOGGLE_WATCHLIST,
+  PROFILE_TOGGLE_RECOMMEND,
 } from "@/store/actions";
 
 import _ from "lodash";
@@ -616,41 +616,8 @@ export default {
         },
         { itemProp: "image", content: this.movie.poster, class: "next-head" },
         { itemProp: "author", content: "Moviepedia Films", class: "next-head" },
-
-        // {
-        //   name: "twitter:title",
-        //   content: "{{movie.entry.name}} | MDFF Shortlist | Moviepedia Films",
-        //   class: "next-head",
-        // },
-        // {
-        //   name: "twitter:url",
-        //   content:
-        //     "https://moviepediafilms.com/{% url 'dff2020:shortlist-detail' movie.id %}",
-        //   class: "next-head",
-        // },
-        // {
-        //   name: "twitter:description",
-        //   content: "{{movie.review}}",
-        //   class: "next-head",
-        // },
-        // {
-        //   name: "twitter:image",
-        //   content: "{{movie.thumbnail}}",
-        //   class: "next-head",
-        // },
-        // {
-        //   name: "twitter:card",
-        //   content: "summary_large_image",
-        //   class: "next-head",
-        // },
-
         { name: "description", content: this.movie.about, class: "next-head" },
         { name: "publisher", content: "Moviepedia Films", class: "next-head" },
-        // {
-        //   property: "article:published_time",
-        //   content: "{{movie.publish_at.isoformat}}",
-        //   class: "next-head",
-        // },
       ],
     };
   },
@@ -1074,33 +1041,19 @@ export default {
         return;
       }
       this.watchlist_loading = true;
-      if (!this.movie.is_watchlisted) {
-        watchlist_service
-          .patch({}, this.movie.id)
-          .then((data) => {
-            if (data.success) {
-              this.movie.is_watchlisted = true;
-            }
-            this.watchlist_loading = false;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.watchlist_loading = false;
-          });
-      } else {
-        watchlist_service
-          .delete(this.movie.id)
-          .then((data) => {
-            if (data.success) {
-              this.movie.is_watchlisted = false;
-            }
-            this.watchlist_loading = false;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.watchlist_loading = false;
-          });
-      }
+      this.$store
+        .dispatch(PROFILE_TOGGLE_WATCHLIST, this.movie)
+        .then((data) => {
+          console.log(data);
+          if (data.success) {
+            this.movie.is_watchlisted = !this.movie.is_watchlisted;
+          }
+          this.watchlist_loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.watchlist_loading = false;
+        });
     },
     on_recommend() {
       if (!this.is_authenticated) {
@@ -1109,33 +1062,18 @@ export default {
         return;
       }
       this.recommend_loading = true;
-      if (!this.movie.is_recommended) {
-        recommend_service
-          .patch({}, this.movie.id)
-          .then((data) => {
-            if (data.success) {
-              this.movie.is_recommended = true;
-            }
-            this.recommend_loading = false;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.recommend_loading = false;
-          });
-      } else {
-        recommend_service
-          .delete(this.movie.id)
-          .then((data) => {
-            if (data.success) {
-              this.movie.is_recommended = false;
-            }
-            this.recommend_loading = false;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.recommend_loading = false;
-          });
-      }
+      this.$store
+        .dispatch(PROFILE_TOGGLE_RECOMMEND, this.movie)
+        .then((data) => {
+          if (data.success) {
+            this.movie.is_recommended = !this.movie.is_recommended;
+          }
+          this.recommend_loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.recommend_loading = false;
+        });
     },
     on_share() {
       this.show_share_dialog = true;

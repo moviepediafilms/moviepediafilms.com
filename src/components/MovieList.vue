@@ -1,10 +1,16 @@
 <template>
   <q-list>
-    <q-item v-for="item in source" :key="item.id">
-      <q-item-section top thumbnail class="q-ml-none">
+    <q-item
+      v-for="item in source"
+      :key="item.id"
+      clickable
+      v-ripple
+      class="q-ma-none"
+      @click="on_item_click(item)"
+    >
+      <q-item-section top thumbnail>
         <img :src="item.poster" />
       </q-item-section>
-
       <q-item-section>
         <q-item-label class="">{{ item.title }}</q-item-label>
         <q-item-label caption>{{ item.about }}</q-item-label>
@@ -20,6 +26,10 @@ export default {
   },
   computed: {},
   mounted() {},
-  methods: {},
+  methods: {
+    on_item_click(item) {
+      this.$emit("item-selected", item);
+    },
+  },
 };
 </script>
