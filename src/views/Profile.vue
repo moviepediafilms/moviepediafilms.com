@@ -2,10 +2,21 @@
   <base-layout>
     <div class="q-pa-md">
       <div class="row justify-center">
-        <div class="text-center">
-          <q-avatar size="100px">
-            <img :src="my_profile.image" />
-          </q-avatar>
+        <div class="col text-center">
+          <div class="row justify-center">
+            <q-avatar size="100px" style="margin-left: 24px">
+              <img :src="my_profile.image" />
+            </q-avatar>
+            <div class="self-end">
+              <q-icon
+                @click="on_change_icon"
+                size="16px"
+                v-ripple
+                class="q-pa-xs"
+                name="mdi-border-color"
+              />
+            </div>
+          </div>
           <div class="text-h5 text-weight-bold q-mt-md">
             {{ my_profile.name }}
           </div>
@@ -162,6 +173,11 @@
           </q-card-section>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="change_icon_dialog">
+        <q-card class="" style="width: 400px; max-width: 50vw">
+          <q-card-section> Change logo </q-card-section>
+        </q-card>
+      </q-dialog>
     </div>
   </base-layout>
 </template>
@@ -184,12 +200,14 @@ export default {
   },
   data() {
     return {
+      hover: false,
       tab: "lists",
       engagement: 0.8,
       xp_info_dialog: false,
       earning_info_dialog: false,
       badge_info_dialog: false,
       edit_name_dialog: false,
+      change_icon_dialog: false,
       list_item_menu: false,
     };
   },
@@ -221,7 +239,11 @@ export default {
       });
     },
     on_list_click(list) {
+      // redirect to page where he can see his list stats and movies in it
       console.log(list);
+    },
+    on_change_icon() {
+      this.change_icon_dialog = true;
     },
     list_description(list) {
       var plural = list.movies.length == 0 || list.movies.length > 1 ? "s" : "";
