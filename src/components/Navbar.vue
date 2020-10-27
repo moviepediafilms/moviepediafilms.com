@@ -1,5 +1,5 @@
 <template>
-  <q-header reveal elevated class="bg-primary text-dark">
+  <q-header reveal class="bg-dark text-dark">
     <div class="row justify-center bg-warning text-overline">
       <div class="text-center" v-if="show_wip_bar">
         <q-icon size="md" name="mdi-rocket-outline"></q-icon> Website is under
@@ -9,24 +9,26 @@
     <div class="row">
       <div class="col-12 col-md-6 offset-md-3">
         <q-toolbar>
-          <q-toolbar-title>
+          <q-toolbar-title class="row">
             <router-link :to="{ name: 'home' }">
-              <q-avatar class="q-mr-md">
-                <img src="@/assets/logo.png" />
-              </q-avatar>
+              <div class="q-mt-xs">
+                <img src="@/assets/new_icon_white.png" width="48px" />
+              </div>
             </router-link>
             <router-link
               :to="{ name: 'home' }"
               style="text-decoration: none"
-              class="text-dark text-uppercase text-caption"
-              >Moviepedia</router-link
+              class="text-primary text-uppercase text-title self-center q-ml-sm"
+              v-if="false"
+            >
+              Moviepedia</router-link
             >
           </q-toolbar-title>
           <template v-for="action in action_btns">
             <q-btn
               flat
               round
-              color="secondary"
+              color="primary"
               class="q-mr-sm"
               :icon="action.icon"
               :to="action.to"
@@ -36,7 +38,7 @@
             <q-btn
               flat
               round
-              color="secondary"
+              color="primary"
               class="q-mr-sm"
               :key="action.icon"
               :icon="action.icon"
@@ -45,7 +47,7 @@
             />
           </template>
 
-          <q-btn flat round color="secondary" class="q-mr-sm" icon="mdi-menu">
+          <q-btn flat round color="primary" class="q-mr-sm" icon="mdi-menu">
             <q-menu auto-close content-class="negative">
               <q-list style="min-width: 100px">
                 <q-item clickable :to="{ name: 'submit' }">
