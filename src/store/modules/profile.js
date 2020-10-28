@@ -11,10 +11,12 @@ import {
     PROFILE_WATCHLIST_REQUEST_,
     PROFILE_RECOMMENDS_REQUEST_,
     PROFILE_TOGGLE_WATCHLIST_,
-    PROFILE_TOGGLE_RECOMMEND_
+    PROFILE_TOGGLE_RECOMMEND_,
+    PROFILE_IMAGE_UPDATE_
 } from "@/store/actions";
 import {
     profile_service,
+    profile_picture_service,
     follow_service,
     my_watchlist_service,
     my_recommends_service,
@@ -51,10 +53,10 @@ const actions = {
                 });
         })
     },
-    [PROFILE_FOLLOW_]: ({ commit }, profile) => {
+    [PROFILE_FOLLOW_]: ({ commit }, profile_to_follow) => {
         return new Promise((resolve, reject) => {
             follow_service
-                .patch({ follow: true }, profile.profile_id)
+                .patch({ follow: true }, profile_to_follow.profile_id)
                 .then((data) => {
                     console.log(data);
                     commit(PROFILE_FOLLOW_DONE_, data.follows)
@@ -67,10 +69,10 @@ const actions = {
         })
 
     },
-    [PROFILE_UNFOLLOW_]: ({ commit }, profile) => {
+    [PROFILE_UNFOLLOW_]: ({ commit }, profile_to_unfollow) => {
         return new Promise((resolve, reject) => {
             follow_service
-                .patch({ follow: false }, profile.profile_id)
+                .patch({ follow: false }, profile_to_unfollow.profile_id)
                 .then((data) => {
                     console.log(data);
                     commit(PROFILE_FOLLOW_DONE_, data.follows)
@@ -131,6 +133,18 @@ const actions = {
                     reject(error)
                 });
 
+        })
+    },
+    [PROFILE_IMAGE_UPDATE_]: ({ commit }, profile_image) => {
+        return new Promise((resolve, reject) => {
+            var payload = new FormData()
+            payload.append("image", profile_image)
+            profile_picture_service.patch(payload, state.profile.profile_id).then(data => {
+                resolve(data)
+                commit(SUCCESS_, data)
+            }).catch(error => {
+                reject(error)
+            })
         })
     }
 };
