@@ -80,9 +80,12 @@
           >
             <q-tab name="watchlist" label="Watchlist" />
             <q-tab name="recommends" label="Recommends" />
-            <q-tab name="lists" label="My Lists" />
-            <q-tab name="followings" label="Followings" />
-            <q-tab name="follows" label="Follows" />
+            <q-tab name="lists" label="Lists" />
+            <q-tab name="followers" :label="followers.length + ' Followers'" />
+            <q-tab
+              name="followings"
+              :label="followings.length + ' Followings'"
+            />
           </q-tabs>
           <q-separator />
           <q-tab-panels v-model="tab" animated>
@@ -174,8 +177,36 @@
         </q-card>
       </q-dialog>
       <q-dialog v-model="change_icon_dialog">
-        <q-card class="" style="width: 400px; max-width: 50vw">
-          <q-card-section> Change logo </q-card-section>
+        <q-card class="" style="width: 400px; max-width: 80vw">
+          <q-card-section class="text-center">
+            <div class="text-h6">Change Picture</div>
+            <q-avatar size="100px" class="q-mt-md">
+              <img :src="profile_image_url" />
+            </q-avatar>
+            <q-file
+              filled
+              class="q-mt-md"
+              style="max-width: 300px"
+              v-model="profile_image.file"
+              label="Select File"
+              accept=".jpg, image/*"
+              max-file-size="1000000"
+              @rejected="on_profile_image_reject"
+              :error="!!profile_image.error"
+              :error-message="profile_image.error"
+            />
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn flat label="Cancel" v-close-popup />
+            <q-btn
+              flat
+              :loading="profile_image.loading"
+              :disable="!profile_image.file"
+              color="primary"
+              label="Upload"
+              @click="save_profile_image"
+            />
+          </q-card-actions>
         </q-card>
       </q-dialog>
     </div>
@@ -187,6 +218,7 @@ import MovieList from "@/components/MovieList";
 import {
   PROFILE_WATCHLIST_REQUEST,
   PROFILE_RECOMMENDS_REQUEST,
+  PROFILE_IMAGE_UPDATE,
 } from "@/store/actions";
 import { mapState } from "vuex";
 export default {
@@ -203,6 +235,15 @@ export default {
       hover: false,
       tab: "lists",
       engagement: 0.8,
+      followers: [],
+      followings: [],
+      profile_image: {
+        file: null,
+        error: "",
+        loading: false,
+      },
+      new_profile_image: null,
+      selected_file_error: "",
       xp_info_dialog: false,
       earning_info_dialog: false,
       badge_info_dialog: false,
@@ -214,6 +255,17 @@ export default {
   computed: {
     ...mapState("profile", ["watchlist", "recommends"]),
     ...mapState("list", ["my_lists"]),
+    profile_image_url() {
+      if (this.profile_image.file)
+        return URL.createObjectURL(this.profile_image.file);
+      return this.my_profile.image;
+    },
+  },
+  watch: {
+    profile_image_url() {
+      // called when the select file has changed then reset the error
+      this.profile_image.error = "";
+    },
   },
   mounted() {
     this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
@@ -254,6 +306,21 @@ export default {
       var plural = list.like_count == 0 || list.like_count > 1 ? "s" : "";
       var prefix = list.like_count == 0 ? "No" : list.like_count;
       return `${prefix} like${plural}`;
+    },
+    on_profile_image_reject() {
+      this.profile_image.error = "Select an image file with size < 1MB";
+    },
+    save_profile_image() {
+      this.profile_image.loading = true;
+      this.$store
+        .dispatch(PROFILE_IMAGE_UPDATE, this.profile_image.file)
+        .then(() => {
+          this.profile_image.loading = false;
+        })
+        .catch((error) => {
+          this.profile_image.loading = false;
+          console.log(error);
+        });
     },
   },
 };
