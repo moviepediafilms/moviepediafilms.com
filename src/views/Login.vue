@@ -88,9 +88,11 @@ export default {
       },
     };
   },
+  mounted() {
+    console.log();
+  },
   computed: {
     has_history() {
-      console.log("history_length", window.history.length);
       return window.history.length > 2;
     },
   },
@@ -109,8 +111,9 @@ export default {
       this.$store
         .dispatch(AUTH_REQUEST, payload)
         .then(() => {
-          if (this.has_history) this.$router.go(-1);
-          else this.$router.push({ name: "home" });
+          if (this.has_history && !this.$route.query.next) {
+            this.$router.go(-1);
+          } else this.$router.push({ name: this.$route.query.next || "home" });
         })
         .catch((error) => {
           var got_err_msg = false;
