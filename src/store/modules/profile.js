@@ -138,7 +138,8 @@ const actions = {
     [PROFILE_IMAGE_UPDATE_]: ({ commit }, profile_image) => {
         return new Promise((resolve, reject) => {
             var payload = new FormData()
-            payload.append("image", profile_image)
+            payload.append("image", profile_image, "profile.png")
+            console.log(payload)
             profile_picture_service.patch(payload, state.profile.profile_id).then(data => {
                 resolve(data)
                 commit(SUCCESS_, data)

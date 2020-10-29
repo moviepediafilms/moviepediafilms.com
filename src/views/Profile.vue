@@ -104,10 +104,7 @@
             <q-tab name="recommends" label="Recommends" />
             <q-tab name="lists" label="Lists" />
             <q-tab name="followers" :label="followers.length + ' Followers'" />
-            <q-tab
-              name="followings"
-              :label="followings.length + ' Followings'"
-            />
+            <q-tab name="following" :label="followings.length + ' Following'" />
           </q-tabs>
           <q-separator />
           <q-tab-panels v-model="tab" animated>
@@ -173,7 +170,7 @@
                 </q-item>
               </q-list>
             </q-tab-panel>
-            <q-tab-panel name="followings"> </q-tab-panel>
+            <q-tab-panel name="following"> </q-tab-panel>
             <q-tab-panel name="follows"> </q-tab-panel>
           </q-tab-panels>
         </q-card>
@@ -202,27 +199,15 @@
         <q-card class="" style="width: 400px; max-width: 80vw">
           <q-card-section class="text-center">
             <div class="text-h6 q-mb-lg">Change Picture</div>
-            <q-avatar
-              size="110px"
-              style="margin-left: 8px"
-              :class="{ 'bg-grey-9': !profile_image_url }"
-            >
-              <img :src="profile_image_url" v-if="profile_image_url" />
-              <q-icon name="mdi-account" size="145px" color="grey-5" v-else />
-            </q-avatar>
-
-            <q-file
-              filled
-              class="q-mt-lg"
-              style="max-width: 300px"
-              v-model="profile_image.file"
-              label="Select File"
-              accept=".jpg, image/*"
-              max-file-size="1000000"
-              @rejected="on_profile_image_reject"
-              :error="!!profile_image.error"
-              :error-message="profile_image.error"
-            />
+            <div>
+              <vue-cropper
+                ref="cropper"
+                :aspect-ratio="1"
+                :src="profile_image_url"
+                alt="Profile Picture"
+              >
+              </vue-cropper>
+            </div>
           </q-card-section>
           <q-card-actions align="right">
             <q-btn flat label="Cancel" v-close-popup />
@@ -237,10 +222,20 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+      <div style="display: none">
+        <q-file
+          ref="file_select"
+          v-model="profile_image.file"
+          accept=".jpg, image/*"
+          @rejected="on_profile_image_reject"
+        />
+      </div>
     </div>
   </base-layout>
 </template>
 <script>
+import VueCropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
 import BaseLayout from "@/layouts/Base";
 import MovieList from "@/components/MovieList";
 import {
@@ -254,6 +249,7 @@ export default {
   components: {
     BaseLayout,
     MovieList,
+    VueCropper,
   },
   metaInfo: {
     title: "Profile",
@@ -298,6 +294,7 @@ export default {
     profile_image_url() {
       // called when the select file has changed then reset the error
       this.profile_image.error = "";
+      this.change_icon_dialog = true;
     },
   },
   mounted() {
@@ -330,7 +327,7 @@ export default {
       console.log(list);
     },
     on_change_icon() {
-      this.change_icon_dialog = true;
+      this.$refs.file_select.$el.click();
     },
     list_description(list) {
       var plural = list.movies.length == 0 || list.movies.length > 1 ? "s" : "";
@@ -343,19 +340,24 @@ export default {
       return `${prefix} like${plural}`;
     },
     on_profile_image_reject() {
-      this.profile_image.error = "Select an image file with size < 1MB";
+      this.profile_image.error = "Select an image";
     },
     save_profile_image() {
       this.profile_image.loading = true;
-      this.$store
-        .dispatch(PROFILE_IMAGE_UPDATE, this.profile_image.file)
-        .then(() => {
-          this.profile_image.loading = false;
-        })
-        .catch((error) => {
-          this.profile_image.loading = false;
-          console.log(error);
-        });
+      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
+        this.$store
+          .dispatch(PROFILE_IMAGE_UPDATE, blob)
+          .then(() => {
+            this.profile_image.loading = false;
+            this.change_icon_dialog = false;
+          })
+          .catch((error) => {
+            this.profile_image.loading = false;
+            // TODO: show error message wither on the popup or seperately
+            this.change_icon_dialog = false;
+            console.log(error);
+          });
+      }, "image/png");
     },
   },
 };
