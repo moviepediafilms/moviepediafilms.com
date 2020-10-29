@@ -12,7 +12,7 @@
           <q-toolbar-title class="row">
             <router-link :to="{ name: 'home' }">
               <div class="q-mt-xs">
-                <img src="@/assets/new_icon_white.png" width="48px" />
+                <img src="@/assets/icon.png" width="48px" />
               </div>
             </router-link>
             <router-link

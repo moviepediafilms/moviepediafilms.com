@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12 col-md-4 q-mt-md text-center align-middle">
         <router-link :to="{ name: 'home' }">
-          <img height="100px" src="@/assets/new_icon_white.png" />
+          <img height="100px" src="@/assets/icon.png" />
         </router-link>
         <br />
         <span class="text-uppercase text-weight-bold text-primary">

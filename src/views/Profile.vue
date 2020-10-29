@@ -7,9 +7,13 @@
             <q-avatar
               size="110px"
               style="margin-left: 8px"
-              :class="{ 'bg-grey-9': !my_profile.image }"
+              :class="{ 'bg-grey-9': show_dummy_img || !my_profile.image }"
             >
-              <img :src="my_profile.image" v-if="my_profile.image" />
+              <img
+                :src="my_profile.image"
+                @error="on_profile_img_load_err"
+                v-if="!show_dummy_img && my_profile.image"
+              />
               <q-icon name="mdi-account" size="145px" color="grey-5" v-else />
             </q-avatar>
             <div class="self-end" style="margin-left: -24px">
@@ -67,7 +71,8 @@
           style="max-width: 180px"
         />
         <span class="text-xs q-ml-sm">
-          65 <q-icon name="mdi-percent" /> <q-icon name="mdi-chevron-down"
+          {{ engagement * 100 }} <q-icon name="mdi-percent" />
+          <q-icon name="mdi-chevron-down"
         /></span>
       </div>
       <div class="row justify-around q-mt-none q-pa-none">
@@ -256,8 +261,9 @@ export default {
   },
   data() {
     return {
-      tab: "lists",
-      engagement: 0.8,
+      show_dummy_img: false,
+      tab: "watchlist",
+      engagement: 0.86,
       followers: [],
       followings: [],
       profile_image: {
@@ -328,6 +334,10 @@ export default {
     },
     on_change_icon() {
       this.$refs.file_select.$el.click();
+    },
+    on_profile_img_load_err() {
+      console.log("image load failed");
+      this.show_dummy_img = true;
     },
     list_description(list) {
       var plural = list.movies.length == 0 || list.movies.length > 1 ? "s" : "";
