@@ -96,8 +96,8 @@ export default {
   },
   computed: {
     auth_action_str() {
-      if (this.is_authenticated) return "Signout";
-      else return "Signin";
+      if (this.is_authenticated) return "Sign Out";
+      else return "Sign In";
     },
 
     show_wip_bar() {

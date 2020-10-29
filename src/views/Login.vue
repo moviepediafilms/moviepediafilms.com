@@ -120,7 +120,7 @@ export default {
           if (error.response && error.response.data) {
             got_err_msg = this.check_fields_for_error(
               error.response.data,
-              this.this.login_error,
+              this.login_error,
               ["email", "password"]
             );
           }
