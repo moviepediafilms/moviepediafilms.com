@@ -33,8 +33,8 @@ Vue.mixin({
         },
         decode_error_message: decode_error_message,
         check_fields_for_error(source, dest, fields) {
-            var has_errors = true;
-            if (!fields) return;
+            var has_errors = false;
+            if (!fields) return has_errors;
             fields.forEach((field) => {
                 if (source[field]) {
                     has_errors = true;
