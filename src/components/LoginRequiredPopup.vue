@@ -1,9 +1,11 @@
 <template>
-  <q-dialog :value="show" @hide="$emit('hide')">
+  <q-dialog :value="show" @hide="$emit('hide')" :persistent="persistent">
     <q-card>
       <q-card-section class="row items-center">
-        <q-avatar size="56px" :icon="icon"></q-avatar>
-        <span>{{ message }}</span>
+        <div class="text-center negative">
+          <q-icon color="red" size="50px" :name="icon" />
+          <div class="q-mt-sm">{{ message }}</div>
+        </div>
       </q-card-section>
 
       <q-card-actions align="right">
@@ -32,7 +34,11 @@ export default {
     },
     icon: {
       type: String,
-      default: "mdi-account-circle-outline",
+      default: "mdi-alert",
+    },
+    persistent: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

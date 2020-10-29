@@ -212,7 +212,11 @@
               <q-icon name="mdi-check-circle" color="green-5" size="190px" />
 
               <p class="q-mt-md">You have successfully signed up!</p>
-              <q-btn :to="{ name: 'login' }" color="primary" text-color="dark">
+              <q-btn
+                :to="{ name: 'login', query: { next: 'home' } }"
+                color="primary"
+                text-color="dark"
+              >
                 Proceed to Login
               </q-btn>
             </div>

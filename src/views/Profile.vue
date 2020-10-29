@@ -4,16 +4,24 @@
       <div class="row justify-center">
         <div class="col text-center">
           <div class="row justify-center">
-            <q-avatar size="100px" style="margin-left: 24px">
-              <img :src="my_profile.image" />
+            <q-avatar
+              size="110px"
+              style="margin-left: 8px"
+              :class="{ 'bg-grey-9': !my_profile.image }"
+            >
+              <img :src="my_profile.image" v-if="my_profile.image" />
+              <q-icon name="mdi-account" size="145px" color="grey-5" v-else />
             </q-avatar>
-            <div class="self-end">
-              <q-icon
+            <div class="self-end" style="margin-left: -24px">
+              <q-btn
+                round
+                flat
                 @click="on_change_icon"
-                size="16px"
+                size="8px"
+                color="white"
                 v-ripple
-                class="q-pa-xs"
-                name="mdi-border-color"
+                class="q-pa-xs bg-grey-7"
+                icon="mdi-camera"
               />
             </div>
           </div>
@@ -26,27 +34,31 @@
         <div class="col-8 offset-2">
           <div class="row">
             <div class="col-4 text-center">
-              <div class="text-uppercase text-title text-weight-bolder">
+              <q-skeleton class="q-mx-sm" type="text" v-if="hide_mode" />
+              <div class="text-uppercase text-title text-weight-bolder" v-else>
                 cinephile
               </div>
               <div class="q-mt-xs text-uppercase text-caption">level</div>
             </div>
             <div class="col-4 text-center">
-              <div class="text-uppercase text-title text-weight-bolder">
+              <q-skeleton class="q-mx-sm" type="text" v-if="hide_mode" />
+              <div class="text-uppercase text-title text-weight-bolder" v-else>
                 100
               </div>
               <div class="q-mt-xs text-uppercase text-caption">rank</div>
             </div>
             <div class="col-4 text-center">
-              <div class="text-uppercase text-title text-weight-bolder">
+              <q-skeleton class="q-mx-sm" type="text" v-if="hide_mode" />
+              <div class="text-uppercase text-title text-weight-bolder" v-else>
                 300
               </div>
-              <div class="q-mt-xs text-uppercase text-caption">review</div>
+              <div class="q-mt-xs text-uppercase text-caption">reviews</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="row justify-center q-mt-md">
+      <q-skeleton class="q-mt-md q-mx-lg" type="text" v-if="hide_mode" />
+      <div class="row justify-center q-mt-md" v-else>
         <q-linear-progress
           size="5px"
           :value="engagement"
@@ -66,7 +78,17 @@
           Engagement meter
         </div>
       </div>
-      <div class="q-mt-md">
+      <div class="q-mt-lg text-center" v-if="hide_mode">
+        <div>Sign In to check your profile</div>
+        <q-btn
+          flat
+          text
+          color="primary"
+          :to="{ name: 'login' }"
+          label="Sign In"
+        />
+      </div>
+      <div class="q-mt-md" v-else>
         <q-card flat>
           <q-tabs
             v-model="tab"
@@ -179,13 +201,19 @@
       <q-dialog v-model="change_icon_dialog">
         <q-card class="" style="width: 400px; max-width: 80vw">
           <q-card-section class="text-center">
-            <div class="text-h6">Change Picture</div>
-            <q-avatar size="100px" class="q-mt-md">
-              <img :src="profile_image_url" />
+            <div class="text-h6 q-mb-lg">Change Picture</div>
+            <q-avatar
+              size="110px"
+              style="margin-left: 8px"
+              :class="{ 'bg-grey-9': !profile_image_url }"
+            >
+              <img :src="profile_image_url" v-if="profile_image_url" />
+              <q-icon name="mdi-account" size="145px" color="grey-5" v-else />
             </q-avatar>
+
             <q-file
               filled
-              class="q-mt-md"
+              class="q-mt-lg"
               style="max-width: 300px"
               v-model="profile_image.file"
               label="Select File"
@@ -232,7 +260,6 @@ export default {
   },
   data() {
     return {
-      hover: false,
       tab: "lists",
       engagement: 0.8,
       followers: [],
@@ -255,6 +282,12 @@ export default {
   computed: {
     ...mapState("profile", ["watchlist", "recommends"]),
     ...mapState("list", ["my_lists"]),
+    show_login_popup() {
+      return !this.is_authenticated;
+    },
+    hide_mode() {
+      return !this.is_authenticated;
+    },
     profile_image_url() {
       if (this.profile_image.file)
         return URL.createObjectURL(this.profile_image.file);
@@ -268,8 +301,10 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
-    this.$store.dispatch(PROFILE_RECOMMENDS_REQUEST);
+    if (this.is_authenticated) {
+      this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
+      this.$store.dispatch(PROFILE_RECOMMENDS_REQUEST);
+    }
   },
   methods: {
     show_xp_info_dialog() {
