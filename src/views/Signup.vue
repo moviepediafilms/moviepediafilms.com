@@ -20,8 +20,8 @@
               :rules="[
                 (val) => (val && val.length > 0) || 'Please fill your name',
               ]"
-              :error-message="signup_error.name"
-              :error="!!signup_error.name"
+              :error-message="signup_error.first_name || signup_error.last_name"
+              :error="!!(signup_error.first_name || signup_error.last_name)"
             />
             <q-input
               v-model="signup_data.city"
@@ -153,19 +153,6 @@
               ]"
             />
             <div>
-              Who are you?<br />
-              <small>you can select more than one or none at all</small>
-              <div class="q-gutter-sm q-mt-none">
-                <q-checkbox
-                  v-model="signup_data.roles"
-                  :val="role.value"
-                  :label="role.label"
-                  v-for="role in possible_roles"
-                  :key="role.value"
-                />
-              </div>
-            </div>
-            <div>
               <q-field
                 borderless
                 v-model="signup_data.accept"
@@ -246,7 +233,8 @@ export default {
       getting_location: false,
       location: undefined,
       signup_error: {
-        name: "",
+        first_name: "",
+        last_name: "",
         email: "",
         city: "",
         mobile: "",
@@ -255,13 +243,6 @@ export default {
         password: "",
         accept: "",
       },
-      possible_roles: [
-        { value: "Actor", label: "Actor" },
-        { value: "Director", label: "Director" },
-        { value: "Producer", label: "Producer" },
-        { value: "Musician", label: "Musician" },
-        { value: "Singer", label: "Singer" },
-      ],
       genders: [
         { value: null, label: "Select" },
         { value: "M", label: "Male" },
@@ -277,17 +258,12 @@ export default {
         dob: "",
         password: "",
         cnf_password: "",
-        roles: [],
         accept: false,
       },
     };
   },
   computed: {
     signup_payload() {
-      var role_objs = [];
-      this.signup_data.roles.forEach((role_name) => {
-        role_objs.push({ name: role_name });
-      });
       var name_segs = this.signup_data.name.split(/[\s,]+/);
       var first_name = "";
       var last_name = "";
@@ -305,14 +281,14 @@ export default {
         dob: this.signup_data.dob,
         gender: this.signup_data.gender,
         mobile: this.signup_data.mobile,
-        roles: role_objs,
       };
     },
   },
   methods: {
     clear_errors() {
       this.signup_error = {
-        name: "",
+        first_name: "",
+        last_name: "",
         email: "",
         city: "",
         mobile: "",
@@ -341,46 +317,33 @@ export default {
         console.log(this.signup_payload);
         profile_service
           .post(this.signup_payload)
-          .then((data) => {
+          .then(() => {
             this.scroll_top();
-            console.log(data);
             // flash a success message then route to login
             this.signup_success = true;
             this.loading = false;
           })
           .catch((error) => {
-            console.log(error.response.data);
-            this.map_signup_error(error.response.data);
-            if (!this.error_msg) this.error_msg = error.toJSON().message;
+            var found_field_error = false;
+            if (error.response && error.response.data) {
+              found_field_error = this.check_fields_for_error(
+                error.response.data,
+                this.signup_error,
+                ["city", "dob", "gender", "mobile"]
+              );
+              if (error.response.data.user)
+                found_field_error = this.check_fields_for_error(
+                  error.response.data.user,
+                  this.signup_error,
+                  ["first_name", "last_name", "email", "password"]
+                );
+            }
+            if (found_field_error) {
+              this.error_msg = "Please resolve above errors";
+            } else this.error_msg = this.decode_error_message(error);
             this.loading = false;
           });
       });
-    },
-    map_signup_error(err) {
-      if (err.user) {
-        this.signup_error.email =
-          this.first_of(err.user.email) || this.first_of(err.user.username);
-        this.signup_error.name =
-          this.first_of(err.user.first_name) ||
-          this.first_of(err.user.last_name);
-        this.signup_error.password = this.first_of(err.user.password);
-      }
-      this.signup_error.city = this.first_of(err.city);
-      this.signup_error.dob = this.first_of(err.dob);
-      this.signup_error.gender = this.first_of(err.gender);
-      this.signup_error.mobile = this.first_of(err.mobile);
-      if (err.non_field_errors)
-        this.error_msg = this.first_of(err.non_field_errors);
-      if (
-        this.signup_error.mobile ||
-        this.signup_error.gender ||
-        this.signup_error.dob ||
-        this.signup_error.city ||
-        this.signup_error.password ||
-        this.signup_error.name ||
-        (this.signup_error.email && !this.error_msg)
-      )
-        this.error_msg = "Please resolve above errors";
     },
     get_current_location() {
       if (this.getting_location) return;
