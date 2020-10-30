@@ -15,7 +15,10 @@ Vue.mixin({
         }),
         ...mapGetters("auth", [
             "is_authenticated"
-        ])
+        ]),
+        is_director() {
+            return this.my_profile.roles && this.my_profile.roles.filter(role => role.name !== "Director").length == 1
+        }
     },
     methods: {
         slugify(content) {

@@ -4,11 +4,21 @@
       <div class="col text-center">
         <profile-picture></profile-picture>
         <div class="text-h5 text-weight-bold q-mt-md">
-          Audience {{ my_profile.name }}
+          {{ my_profile.name }}
+        </div>
+        <div class="row justify-center q-mt-xs">
+          <q-btn
+            flat
+            text
+            color="primary"
+            size="xs"
+            @click="dialog_profile_type = true"
+            >Audience</q-btn
+          >
         </div>
       </div>
     </div>
-    <div class="row q-mt-lg">
+    <div class="row q-mt-md">
       <div class="col-8 offset-2">
         <div class="row">
           <div class="col-4 text-center">
@@ -174,16 +184,41 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="dialog_profile_type">
+      <q-card class="" style="width: 400px; max-width: 80vw">
+        <q-card-section>
+          <div class="text-h5">Audience Profile</div>
+        </q-card-section>
+        <q-card-section>
+          This is your profile as Audience,
+          <template v-if="is_director">
+            you also have a profile as Filmmaker</template
+          >
+          <template v-else
+            >your Filmmaker profile will be unlocked once you submitting a
+            film</template
+          >
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="OK" v-close-popup />
+          <q-btn
+            flat
+            color="primary"
+            label="my Filmmaker profile"
+            @click="$emit('switch-profile')"
+            v-close-popup
+            v-if="is_director"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script>
 import MovieList from "@/components/MovieList";
 import ProfilePicture from "@/components/ProfilePicture";
 
-import {
-  PROFILE_WATCHLIST_REQUEST,
-  PROFILE_RECOMMENDS_REQUEST,
-} from "@/store/actions";
 import { mapState } from "vuex";
 export default {
   name: "profile-audience",
@@ -201,6 +236,7 @@ export default {
       earning_info_dialog: false,
       badge_info_dialog: false,
       edit_name_dialog: false,
+      dialog_profile_type: false,
       list_item_menu: false,
     };
   },
@@ -213,13 +249,6 @@ export default {
     hide_mode() {
       return !this.is_authenticated;
     },
-  },
-  watch: {},
-  mounted() {
-    if (this.is_authenticated) {
-      this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
-      this.$store.dispatch(PROFILE_RECOMMENDS_REQUEST);
-    }
   },
   methods: {
     show_xp_info_dialog() {
