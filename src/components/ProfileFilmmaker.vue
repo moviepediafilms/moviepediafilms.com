@@ -4,19 +4,29 @@
       <div class="col text-center">
         <profile-picture></profile-picture>
         <div class="text-h5 text-weight-bold q-mt-md">
-          Filmmaker {{ my_profile.name }}
+          {{ my_profile.name }}
+        </div>
+        <div class="row justify-center q-mt-xs">
+          <q-btn
+            flat
+            text
+            size="xs"
+            color="primary"
+            @click="dialog_profile_type = true"
+            >Filmmaker</q-btn
+          >
         </div>
       </div>
     </div>
-    <div class="row q-mt-lg">
+    <div class="row q-mt-md">
       <div class="col-8 offset-2">
         <div class="row">
           <div class="col-4 text-center">
             <q-skeleton class="q-mx-sm" type="text" v-if="hide_mode" />
             <div class="text-uppercase text-title text-weight-bolder" v-else>
-              cinephile
+              450+
             </div>
-            <div class="q-mt-xs text-uppercase text-caption">level</div>
+            <div class="q-mt-xs text-uppercase text-caption">Popularity</div>
           </div>
           <div class="col-4 text-center">
             <q-skeleton class="q-mx-sm" type="text" v-if="hide_mode" />
@@ -30,7 +40,7 @@
             <div class="text-uppercase text-title text-weight-bolder" v-else>
               300
             </div>
-            <div class="q-mt-xs text-uppercase text-caption">reviews</div>
+            <div class="q-mt-xs text-uppercase text-caption">Films</div>
           </div>
         </div>
       </div>
@@ -54,7 +64,7 @@
         class="text-overline text-uppercase"
         style="font-size: 9px; line-height: 1em"
       >
-        Engagement meter
+        fund-ready meter
       </div>
     </div>
     <div class="q-mt-lg text-center" v-if="hide_mode">
@@ -174,16 +184,33 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="dialog_profile_type">
+      <q-card class="" style="width: 400px; max-width: 80vw">
+        <q-card-section>
+          <div class="text-h5">Filmmaker Profile</div>
+        </q-card-section>
+        <q-card-section>
+          This is your profile as Filmmaker, you also have a profile as Audience
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="ok" v-close-popup />
+          <q-btn
+            flat
+            color="primary"
+            label="my Audience profile"
+            @click="$emit('switch-profile')"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script>
 import MovieList from "@/components/MovieList";
 import ProfilePicture from "@/components/ProfilePicture";
 
-import {
-  PROFILE_WATCHLIST_REQUEST,
-  PROFILE_RECOMMENDS_REQUEST,
-} from "@/store/actions";
 import { mapState } from "vuex";
 export default {
   name: "profile-filmmaker",
@@ -202,6 +229,7 @@ export default {
       badge_info_dialog: false,
       edit_name_dialog: false,
       list_item_menu: false,
+      dialog_profile_type: false,
     };
   },
   computed: {
@@ -213,13 +241,6 @@ export default {
     hide_mode() {
       return !this.is_authenticated;
     },
-  },
-  watch: {},
-  mounted() {
-    if (this.is_authenticated) {
-      this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
-      this.$store.dispatch(PROFILE_RECOMMENDS_REQUEST);
-    }
   },
   methods: {
     show_xp_info_dialog() {

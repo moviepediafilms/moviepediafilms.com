@@ -37,8 +37,14 @@
       </div>
     </div>
     <template v-else>
-      <profile-audience v-if="is_audience_profile"></profile-audience>
-      <profile-filmmaker v-else></profile-filmmaker>
+      <profile-audience
+        @switch-profile="show_audience_profile = !show_audience_profile"
+        v-show="show_audience_profile"
+      ></profile-audience>
+      <profile-filmmaker
+        @switch-profile="show_audience_profile = !show_audience_profile"
+        v-show="!show_audience_profile"
+      ></profile-filmmaker>
     </template>
   </base-layout>
 </template>
@@ -46,6 +52,11 @@
 import BaseLayout from "@/layouts/Base";
 import ProfileAudience from "@/components/ProfileAudience";
 import ProfileFilmmaker from "@/components/ProfileFilmmaker";
+import {
+  PROFILE_WATCHLIST_REQUEST,
+  PROFILE_RECOMMENDS_REQUEST,
+  PROFILE_REQUEST,
+} from "@/store/actions";
 export default {
   name: "profile-page",
   components: {
@@ -58,8 +69,16 @@ export default {
   },
   data() {
     return {
-      is_audience_profile: true,
+      show_audience_profile: true,
     };
+  },
+  mounted() {
+    this.show_audience_profile = !this.is_director;
+    if (this.is_authenticated) {
+      this.$store.dispatch(PROFILE_REQUEST, this.my_profile.profile_id);
+      this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
+      this.$store.dispatch(PROFILE_RECOMMENDS_REQUEST);
+    }
   },
   computed: {
     hidden_mode() {
@@ -74,5 +93,7 @@ export default {
 }
 .q-linear-progress__model {
   background: linear-gradient(45deg, yellow, green);
+}
+.profile-options {
 }
 </style>
