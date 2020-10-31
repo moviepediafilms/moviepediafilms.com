@@ -59,8 +59,8 @@
         </q-card>
       </q-dialog>
       <div v-for="cat in categories" :key="cat.name">
-        <div class="q-pa-md row">
-          <h6>{{ cat.name }}</h6>
+        <div class="q-pb-sm row">
+          <div class="text-lg">{{ cat.name }}</div>
         </div>
         <q-scroll-area
           :thumb-style="thumbStyle"

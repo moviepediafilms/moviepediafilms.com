@@ -3,7 +3,7 @@
     <div class="row justify-center">
       <div class="col text-center">
         <profile-picture></profile-picture>
-        <div class="text-h5 text-weight-bold q-mt-md">
+        <div class="text-h2 q-mt-md">
           {{ my_profile.name }}
         </div>
         <div class="row justify-center q-mt-xs">
@@ -11,7 +11,7 @@
             flat
             text
             color="primary"
-            size="xs"
+            size="sm"
             @click="dialog_profile_type = true"
             >Audience</q-btn
           >
@@ -22,31 +22,21 @@
       <div class="col-8 offset-2">
         <div class="row">
           <div class="col-4 text-center">
-            <q-skeleton class="q-mx-sm" type="text" v-if="hide_mode" />
-            <div class="text-uppercase text-title text-weight-bolder" v-else>
-              cinephile
-            </div>
-            <div class="q-mt-xs text-uppercase text-caption">level</div>
+            <div class="text-uppercase text-h4 text-weight-bold">cinephile</div>
+            <div class="q-mt-xs text-uppercase text-sm">level</div>
           </div>
           <div class="col-4 text-center">
-            <q-skeleton class="q-mx-sm" type="text" v-if="hide_mode" />
-            <div class="text-uppercase text-title text-weight-bolder" v-else>
-              100
-            </div>
-            <div class="q-mt-xs text-uppercase text-caption">rank</div>
+            <div class="text-uppercase text-h4 text-weight-bolder">100</div>
+            <div class="q-mt-xs text-uppercase text-sm">rank</div>
           </div>
           <div class="col-4 text-center">
-            <q-skeleton class="q-mx-sm" type="text" v-if="hide_mode" />
-            <div class="text-uppercase text-title text-weight-bolder" v-else>
-              300
-            </div>
-            <div class="q-mt-xs text-uppercase text-caption">reviews</div>
+            <div class="text-uppercase text-h4 text-weight-bolder">300</div>
+            <div class="q-mt-xs text-uppercase text-sm">reviews</div>
           </div>
         </div>
       </div>
     </div>
-    <q-skeleton class="q-mt-md q-mx-lg" type="text" v-if="hide_mode" />
-    <div class="row justify-center q-mt-md" v-else>
+    <div class="row justify-center q-mt-md">
       <q-linear-progress
         size="5px"
         :value="engagement"
@@ -67,17 +57,7 @@
         Engagement meter
       </div>
     </div>
-    <div class="q-mt-lg text-center" v-if="hide_mode">
-      <div>Sign In to check your profile</div>
-      <q-btn
-        flat
-        text
-        color="primary"
-        :to="{ name: 'login' }"
-        label="Sign In"
-      />
-    </div>
-    <div class="q-mt-md" v-else>
+    <div class="q-mt-md">
       <q-card flat>
         <q-tabs
           v-model="tab"
@@ -184,40 +164,18 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="dialog_profile_type">
-      <q-card class="" style="width: 400px; max-width: 80vw">
-        <q-card-section>
-          <div class="text-h5">Audience Profile</div>
-        </q-card-section>
-        <q-card-section>
-          This is your profile as Audience,
-          <template v-if="is_director">
-            you also have a profile as Filmmaker</template
-          >
-          <template v-else
-            >your Filmmaker profile will be unlocked once you submitting a
-            film</template
-          >
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="OK" v-close-popup />
-          <q-btn
-            flat
-            color="primary"
-            label="my Filmmaker profile"
-            @click="$emit('switch-profile')"
-            v-close-popup
-            v-if="is_director"
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+    <profile-switch-dialog
+    type="audience"
+      :show="dialog_profile_type"
+      @hide="dialog_profile_type = false"
+      @switch-profile="$emit('switch-profile')"
+    ></profile-switch-dialog>
   </div>
 </template>
 <script>
 import MovieList from "@/components/MovieList";
 import ProfilePicture from "@/components/ProfilePicture";
+import ProfileSwitchDialog from "@/components/ProfileSwitchDialog";
 
 import { mapState } from "vuex";
 export default {
@@ -225,6 +183,7 @@ export default {
   components: {
     MovieList,
     ProfilePicture,
+    ProfileSwitchDialog,
   },
   data() {
     return {
