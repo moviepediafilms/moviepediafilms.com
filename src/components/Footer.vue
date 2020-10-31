@@ -6,13 +6,12 @@
           <img height="100px" src="@/assets/icon.png" />
         </router-link>
         <br />
-        <span class="text-uppercase text-weight-bold text-primary">
+        <span class="text-uppercase text-primary text-h1">
           Moviepedia Films
         </span>
-        <br />
       </div>
-      <div class="col-12 col-md-4 q-mt-md text-center align-middle">
-        <p class="text-uppercase text-weight-bold text-primary">About Us</p>
+      <div class="col-12 col-md-4 q-mt-lg text-center align-middle">
+        <p class="text-uppercase text-primary text-h4">About Us</p>
         <span class="text-muted">
           Moviepedia, as a community of film-makers, film enthusiasts, actors,
           scriptwriters, etc. is constantly growing. We already share similar
@@ -26,7 +25,7 @@
         <br />
       </div>
       <div class="col-12 col-md-4 q-mt-md text-center">
-        <p class="text-uppercase text-weight-bold text-primary">Contact Us</p>
+        <p class="text-uppercase text-primary text-h4">Contact Us</p>
         <div class="text-center social-links text-muted">
           <a
             target="_blank"
@@ -70,9 +69,7 @@
             >contactus@moviepediafilms.com
           </a>
         </div>
-        <p class="text-uppercase text-weight-bold text-primary q-mt-md">
-          Other Links
-        </p>
+        <p class="text-uppercase text-primary q-mt-md text-h4">Other Links</p>
         <router-link :to="{ name: 'refund-policy' }" class="other-link">
           Refund Policy
         </router-link>
