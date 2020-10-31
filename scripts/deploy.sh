@@ -15,7 +15,7 @@ tar=/bin/tar
 $git status
 $git checkout master
 $git pull
-$npm install --only=prod
+$npm install
 $npm run build
 cd $WORKSPACE/dist
 $tar -zcvf $WORKSPACE/$TAR_FILE .
