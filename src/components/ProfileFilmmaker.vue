@@ -7,31 +7,36 @@
           {{ my_profile.name }}
         </div>
         <div class="row justify-center q-mt-xs">
-          <q-btn
-            flat
-            text
-            size="sm"
-            color="primary"
-            @click="dialog_profile_type = true"
-            >Filmmaker</q-btn
-          >
+          <profile-type-switch />
         </div>
       </div>
     </div>
     <div class="row q-mt-md">
-      <div class="col-8 offset-2">
+      <div class="col-10 offset-1">
         <div class="row">
           <div class="col-4 text-center">
-            <div class="text-uppercase text-h4 text-weight-bolder">450+</div>
-            <div class="q-mt-xs text-uppercase text-caption">Popularity</div>
+            <q-btn flat stack>
+              <div class="text-uppercase text-h5 text-weight-bolder">
+                {{ my_profile.pop_score }}
+              </div>
+              <div class="q-mt-xs text-uppercase text-caption">Popularity</div>
+            </q-btn>
           </div>
           <div class="col-4 text-center">
-            <div class="text-uppercase text-h4 text-weight-bolder">100</div>
-            <div class="q-mt-xs text-uppercase text-caption">rank</div>
+            <q-btn flat stack @click="on_rank_click">
+              <div class="text-uppercase text-h5 text-weight-bolder">
+                {{ rank_txt }}
+              </div>
+              <div class="q-mt-xs text-uppercase text-caption">rank</div>
+            </q-btn>
           </div>
           <div class="col-4 text-center">
-            <div class="text-uppercase text-h4 text-weight-bolder">300</div>
-            <div class="q-mt-xs text-uppercase text-caption">Films</div>
+            <q-btn flat stack>
+              <div class="text-uppercase text-h5 text-weight-bolder">
+                {{ my_profile.film_count || "-" }}
+              </div>
+              <div class="q-mt-xs text-uppercase text-caption">Films</div>
+            </q-btn>
           </div>
         </div>
       </div>
@@ -174,18 +179,12 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-    <profile-switch-dialog
-      type="filmmaker"
-      :show="dialog_profile_type"
-      @hide="dialog_profile_type = false"
-      @switch-profile="$emit('switch-profile')"
-    ></profile-switch-dialog>
   </div>
 </template>
 <script>
 import MovieList from "@/components/MovieList";
 import ProfilePicture from "@/components/ProfilePicture";
-import ProfileSwitchDialog from "@/components/ProfileSwitchDialog";
+import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
 
 import { mapState } from "vuex";
 export default {
@@ -193,7 +192,7 @@ export default {
   components: {
     MovieList,
     ProfilePicture,
-    ProfileSwitchDialog,
+    ProfileTypeSwitch,
   },
   data() {
     return {
@@ -218,6 +217,9 @@ export default {
     hide_mode() {
       return !this.is_authenticated;
     },
+    rank_txt() {
+      return this.my_profile.rank == -1 ? "-" : this.my_profile.rank;
+    },
   },
   methods: {
     show_xp_info_dialog() {
@@ -231,6 +233,9 @@ export default {
     },
     show_edit_popup() {
       this.edit_name_dialog = true;
+    },
+    on_rank_click(){
+      this.$router.push({name: 'filmmaker-leaderboard'})
     },
     on_movie_click(item) {
       this.$router.push({

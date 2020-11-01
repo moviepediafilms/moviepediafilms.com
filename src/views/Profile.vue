@@ -37,14 +37,16 @@
       </div>
     </div>
     <template v-else>
-      <profile-audience
-        @switch-profile="show_audience_profile = !show_audience_profile"
-        v-show="show_audience_profile"
-      ></profile-audience>
-      <profile-filmmaker
-        @switch-profile="show_audience_profile = !show_audience_profile"
-        v-show="!show_audience_profile"
-      ></profile-filmmaker>
+      <transition
+        name="custom-classes-transition"
+        enter-active-class="animated animate__fadeIn"
+        leave-active-class="animated animate__fadeOut"
+        mode="out-in"
+        :duration="200"
+      >
+        <profile-filmmaker v-if="show_filmmaker_profile"></profile-filmmaker>
+        <profile-audience v-if="!show_filmmaker_profile"></profile-audience>
+      </transition>
     </template>
   </base-layout>
 </template>
@@ -57,6 +59,7 @@ import {
   PROFILE_RECOMMENDS_REQUEST,
   PROFILE_REQUEST,
 } from "@/store/actions";
+import { mapState } from "vuex";
 export default {
   name: "profile-page",
   components: {
@@ -68,22 +71,23 @@ export default {
     title: "Profile",
   },
   data() {
-    return {
-      show_audience_profile: true,
-    };
+    return {};
   },
   mounted() {
-    this.show_audience_profile = !this.is_director;
     if (this.is_authenticated) {
       this.$store.dispatch(PROFILE_REQUEST, this.my_profile.profile_id);
       this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
       this.$store.dispatch(PROFILE_RECOMMENDS_REQUEST);
     }
   },
+  watch: {},
   computed: {
     hidden_mode() {
       return !this.is_authenticated;
     },
+    ...mapState("profile", {
+      show_filmmaker_profile: (state) => state.show_filmmaker_profile,
+    }),
   },
 };
 </script>
