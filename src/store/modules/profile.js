@@ -12,7 +12,8 @@ import {
     PROFILE_RECOMMENDS_REQUEST_,
     PROFILE_TOGGLE_WATCHLIST_,
     PROFILE_TOGGLE_RECOMMEND_,
-    PROFILE_IMAGE_UPDATE_
+    PROFILE_IMAGE_UPDATE_,
+    PROFILE_VIEW_TOGGLE_
 } from "@/store/actions";
 import {
     profile_service,
@@ -29,7 +30,8 @@ const state = {
     error: "",
     watchlist: JSON.parse(localStorage.getItem("watchlist")) || [],
     recommends: JSON.parse(localStorage.getItem("recommends")) || [],
-    profile: JSON.parse(localStorage.getItem("profile")) || {}
+    profile: JSON.parse(localStorage.getItem("profile")) || {},
+    show_filmmaker_profile: JSON.parse(localStorage.getItem("show_filmmaker_profile", 'true'))
 };
 
 const getters = {
@@ -147,6 +149,9 @@ const actions = {
                 reject(error)
             })
         })
+    },
+    [PROFILE_VIEW_TOGGLE_]: ({ commit }) => {
+        commit(PROFILE_VIEW_TOGGLE_)
     }
 };
 
@@ -227,6 +232,10 @@ const mutations = {
             state.recommends.push({ title: movie.title, poster: movie.poster, id: movie.id, about: movie.about })
         else
             state.recommends.splice(found_at, 1)
+    },
+    [PROFILE_VIEW_TOGGLE_]: (state) => {
+        state.show_filmmaker_profile = !state.show_filmmaker_profile
+        localStorage.setItem("show_filmmaker_profile", state.show_filmmaker_profile)
     }
 };
 

@@ -69,6 +69,12 @@ const routes = [
             import ('../views/TopCreator.vue')
     },
     {
+        path: '/top-curator',
+        name: 'top-curator',
+        component: () =>
+            import ('../views/TopCurator.vue')
+    },
+    {
         path: '/submit',
         name: 'submit',
         component: () =>
@@ -93,10 +99,16 @@ const routes = [
             import ('../views/MDFFTop.vue')
     },
     {
-        path: '/leaderboard',
-        name: 'leaderboard',
+        path: '/audience-leaderboard',
+        name: 'audience-leaderboard',
         component: () =>
-            import ('../views/Leaderboard.vue')
+            import ('../views/AudienceLeaderboard.vue')
+    },
+    {
+        path: '/filmmaker-leaderboard',
+        name: 'filmmaker-leaderboard',
+        component: () =>
+            import ('../views/FilmmakerLeaderboard.vue')
     },
     {
         path: '/movie-by-genre/:genre',

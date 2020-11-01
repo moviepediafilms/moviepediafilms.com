@@ -7,31 +7,36 @@
           {{ my_profile.name }}
         </div>
         <div class="row justify-center q-mt-xs">
-          <q-btn
-            flat
-            text
-            color="primary"
-            size="sm"
-            @click="dialog_profile_type = true"
-            >Audience</q-btn
-          >
+          <profile-type-switch />
         </div>
       </div>
     </div>
     <div class="row q-mt-md">
-      <div class="col-8 offset-2">
+      <div class="col-10 offset-1">
         <div class="row">
           <div class="col-4 text-center">
-            <div class="text-uppercase text-h4 text-weight-bold">cinephile</div>
-            <div class="q-mt-xs text-uppercase text-sm">level</div>
+            <q-btn flat stack @click="on_level_clicked">
+              <div class="text-uppercase text-h5 text-weight-bold">
+                {{ get_level_name() }}
+              </div>
+              <div class="q-mt-xs text-uppercase text-sm">level</div>
+            </q-btn>
           </div>
           <div class="col-4 text-center">
-            <div class="text-uppercase text-h4 text-weight-bolder">100</div>
-            <div class="q-mt-xs text-uppercase text-sm">rank</div>
+            <q-btn flat stack @click="on_rank_clicked">
+              <div class="text-uppercase text-h5 text-weight-bolder">
+                {{ get_rank() }}
+              </div>
+              <div class="q-mt-xs text-uppercase text-sm">rank</div>
+            </q-btn>
           </div>
           <div class="col-4 text-center">
-            <div class="text-uppercase text-h4 text-weight-bolder">300</div>
-            <div class="q-mt-xs text-uppercase text-sm">reviews</div>
+            <q-btn flat stack @click="on_reviews_clicked">
+              <div class="text-uppercase text-h5 text-weight-bolder">
+                {{ get_review_count() }}
+              </div>
+              <div class="q-mt-xs text-uppercase text-sm">reviews</div>
+            </q-btn>
           </div>
         </div>
       </div>
@@ -80,110 +85,43 @@
           <q-tab-panel name="watchlist" class="q-px-none">
             <movie-list
               :source="watchlist"
+              :options="watchlist_menu_options"
+              @remove="on_movie_remove_watchlist"
+              @rename="on_movie_rename_watchlist"
               @item-selected="on_movie_click"
             ></movie-list>
           </q-tab-panel>
-          <q-tab-panel name="recommends">
+          <q-tab-panel name="recommends" class="q-px-none">
             <movie-list
               :source="recommends"
+              :options="recomment_menu_options"
+              @remove="on_movie_remove_recommends"
               @item-selected="on_movie_click"
             ></movie-list>
           </q-tab-panel>
-          <q-tab-panel name="lists">
-            <q-list>
-              <q-item
-                v-for="list in my_lists"
-                :key="list.id"
-                class="q-ma-none"
-                v-ripple
-                clickable
-                @click="on_list_click(list)"
-              >
-                <q-item-section>
-                  <q-item-label class="text-title">
-                    {{ list.name }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-item-label class="text-center">
-                    <div class="text-title">{{ list.movies.length }}</div>
-                    <div
-                      class="text-caption text-uppercase"
-                      style="font-size: 0.7em"
-                    >
-                      Movies
-                    </div>
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-item-label class="text-center">
-                    <div class="text-title">{{ list.like_count }}</div>
-                    <div
-                      class="text-caption text-uppercase"
-                      style="font-size: 0.7em"
-                    >
-                      Likes
-                    </div>
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-btn
-                    size="sm"
-                    flat
-                    round
-                    icon="mdi-dots-vertical"
-                    @click.stop="list_item_menu = !list_item_menu"
-                  >
-                  </q-btn>
-                </q-item-section>
-              </q-item>
-            </q-list>
+          <q-tab-panel name="lists" class="q-px-none">
+            <lists :lists="my_lists" />
           </q-tab-panel>
           <q-tab-panel name="following"> </q-tab-panel>
           <q-tab-panel name="follows"> </q-tab-panel>
         </q-tab-panels>
       </q-card>
     </div>
-    <q-dialog v-model="list_item_menu">
-      <q-card class="" style="width: 400px; max-width: 50vw">
-        <q-card-section>
-          <q-list class="">
-            <q-item clickable v-ripple v-close-popup>
-              <q-item-section side>
-                <q-icon name="mdi-border-color" size="xs" />
-              </q-item-section>
-              <q-item-section> Edit </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple v-close-popup>
-              <q-item-section side>
-                <q-icon name="mdi-trash-can" size="xs" />
-              </q-item-section>
-              <q-item-section> Delete </q-item-section>
-            </q-item>
-          </q-list>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
-    <profile-switch-dialog
-    type="audience"
-      :show="dialog_profile_type"
-      @hide="dialog_profile_type = false"
-      @switch-profile="$emit('switch-profile')"
-    ></profile-switch-dialog>
   </div>
 </template>
 <script>
 import MovieList from "@/components/MovieList";
 import ProfilePicture from "@/components/ProfilePicture";
-import ProfileSwitchDialog from "@/components/ProfileSwitchDialog";
-
+import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
+import Lists from "@/components/Lists";
 import { mapState } from "vuex";
 export default {
   name: "profile-audience",
   components: {
     MovieList,
     ProfilePicture,
-    ProfileSwitchDialog,
+    ProfileTypeSwitch,
+    Lists,
   },
   data() {
     return {
@@ -196,12 +134,19 @@ export default {
       badge_info_dialog: false,
       edit_name_dialog: false,
       dialog_profile_type: false,
-      list_item_menu: false,
+      watchlist_menu_options: [
+        { name: "Rename", icon: "mdi-border-color", emit: "rename" },
+        { name: "Remove", icon: "mdi-trash-can", emit: "remove" },
+      ],
+      recomment_menu_options: [
+        { name: "Remove", icon: "mdi-trash-can", emit: "remove" },
+      ],
     };
   },
   computed: {
     ...mapState("profile", ["watchlist", "recommends"]),
     ...mapState("list", ["my_lists"]),
+
     show_login_popup() {
       return !this.is_authenticated;
     },
@@ -210,6 +155,23 @@ export default {
     },
   },
   methods: {
+    get_level_name() {
+      var level_map = {
+        1: "Cienphile",
+        2: "Level2",
+        3: "Level3",
+        4: "Level4",
+      };
+      return level_map[this.my_profile.level];
+    },
+    get_rank() {
+      if (this.my_profile.rank != -1) return this.my_profile.rank;
+      else return "-";
+    },
+    get_review_count() {
+      //TODO: get it somehow
+      return "-";
+    },
     show_xp_info_dialog() {
       this.xp_info_dialog = true;
     },
@@ -231,6 +193,24 @@ export default {
     on_list_click(list) {
       // redirect to page where he can see his list stats and movies in it
       console.log(list);
+    },
+    on_level_clicked() {
+      console.log("level clicked");
+    },
+    on_rank_clicked() {
+      this.$router.push({ name: "audience-leaderboard" });
+    },
+    on_reviews_clicked() {
+      console.log("level reviews");
+    },
+    on_movie_remove_watchlist(movie) {
+      console.log("remove watchlist", movie);
+    },
+    on_movie_rename_watchlist(movie) {
+      console.log("rename", movie);
+    },
+    on_movie_remove_recommends(movie) {
+      console.log("remove recommendation", movie);
     },
     list_description(list) {
       var plural = list.movies.length == 0 || list.movies.length > 1 ? "s" : "";
