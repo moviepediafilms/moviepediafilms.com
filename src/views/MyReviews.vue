@@ -10,9 +10,11 @@
               review.movie.title
             }}</q-item-label>
             <q-item-label caption align="right">
-              {{ review.liked_by.length }} likes
-              <q-icon name="mdi-circle-medium" />
-              {{ date_to_txt(review.published_at) }}
+              <span>{{ review.rating }} / 10 <q-icon name="mdi-star" /></span>
+              <q-icon name="mdi-circle-medium" class="q-mx-xs" color="grey-6" />
+              <span>{{ review.liked_by.length }} likes</span>
+              <q-icon name="mdi-circle-medium" class="q-mx-xs" color="grey-6" />
+              <span>{{ date_to_txt(review.published_at) }}</span>
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -36,31 +38,6 @@ export default {
       reviews: [
         {
           id: 1,
-          author: {
-            id: 2,
-            email: "zkhan1093@gmail.com",
-            name: "Zeeshan Khan",
-          },
-          content:
-            "Damn. \r\nThis was both beautiful and haunting, as someone who's been through terrible Depression, I could feel it scene by scene, it was too amazing for words Mann, keep it up ❤️",
-          liked_by: [],
-          published_at: "2020-10-01T17:21:08.672000Z",
-          rating: 5.0,
-          movie: {
-            id: 1,
-            title:
-              "30 Days of Existence | A Moviepedia Short Film on Depression",
-            poster: "https://img.youtube.com/vi/KS0bagkAC4Y/hqdefault.jpg",
-            about: "This is a good movie",
-          },
-        },
-        {
-          id: 2,
-          author: {
-            id: 2,
-            email: "zkhan1093@gmail.com",
-            name: "Zeeshan Khan",
-          },
           content:
             "Damn. \r\nThis was both beautiful and haunting, as someone who's been through terrible Depression, I could feel it scene by scene, it was too amazing for words Mann, keep it up ❤️",
           liked_by: [],
@@ -78,7 +55,8 @@ export default {
     };
   },
   mounted() {
-    // this.get_reviews();
+    this.reviews.splice(0, 1);
+    this.get_reviews();
   },
   methods: {
     get_reviews() {
