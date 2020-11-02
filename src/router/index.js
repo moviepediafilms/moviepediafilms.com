@@ -45,6 +45,12 @@ const routes = [
             import ('../views/MovieDetails.vue')
     },
     {
+        path: '/my-reviews/',
+        name: 'my-reviews',
+        component: () =>
+            import ('../views/MyReviews.vue')
+    },
+    {
         path: '/partner-judges',
         name: 'partner-judges',
         component: () =>

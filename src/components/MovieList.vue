@@ -2,7 +2,7 @@
   <div>
     <q-list>
       <q-item
-        v-for="item in source"
+        v-for="item in movies"
         :key="item.id"
         clickable
         v-ripple
@@ -35,7 +35,7 @@ export default {
     PopupMenu,
   },
   props: {
-    source: {
+    movies: {
       type: Array,
       default() {
         return [];

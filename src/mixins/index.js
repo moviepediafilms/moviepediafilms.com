@@ -2,6 +2,7 @@ import Vue from 'vue'
 import slugify from '@/extras/slug'
 import decode_error_message from "@/extras/error"
 import { mapGetters, mapState } from "vuex";
+import moment from "moment";
 Vue.mixin({
     data() {
         return {
@@ -17,7 +18,7 @@ Vue.mixin({
             "is_authenticated"
         ]),
         is_director() {
-            return this.my_profile.roles && this.my_profile.roles.filter(role => role.name !== "Director").length == 1
+            return true //this.my_profile.roles && this.my_profile.roles.filter(role => role.name !== "Director").length == 1
         }
     },
     methods: {
@@ -33,6 +34,9 @@ Vue.mixin({
         },
         scroll_top() {
             window.scrollTo(0, 0);
+        },
+        date_to_txt(datetime) {
+            return moment(datetime).fromNow()
         },
         decode_error_message: decode_error_message,
         check_fields_for_error(source, dest, fields) {

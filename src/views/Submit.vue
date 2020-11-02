@@ -343,24 +343,8 @@ export default {
   data() {
     return {
       step: 1,
-      active_pack_id: 1,
+      active_pack_id: 2,
       packs: [
-        {
-          id: 1,
-          title: "Standard Pack",
-          price: "INR 375",
-          content: [
-            { text: "Interactive Film Screening", included: true },
-            { text: "Filmmaker of the Month", included: true },
-            { text: "Celebrity Recommendation", included: true },
-            { text: "Content Analytics", included: true },
-            { text: "Instagram Promotion", included: false },
-            { text: "Facebook Marketing", included: false },
-            { text: "E-mail Campaigns", included: false },
-            { text: "Moviepedia Feature Review", included: false },
-          ],
-          active: false,
-        },
         {
           id: 2,
           title: "Premium Pack",
@@ -374,6 +358,22 @@ export default {
             { text: "Facebook Marketing", included: true },
             { text: "E-mail Campaigns", included: true },
             { text: "Moviepedia Feature Review", included: true },
+          ],
+          active: false,
+        },
+        {
+          id: 1,
+          title: "Standard Pack",
+          price: "INR 375",
+          content: [
+            { text: "Interactive Film Screening", included: true },
+            { text: "Filmmaker of the Month", included: true },
+            { text: "Celebrity Recommendation", included: true },
+            { text: "Content Analytics", included: true },
+            { text: "Instagram Promotion", included: false },
+            { text: "Facebook Marketing", included: false },
+            { text: "E-mail Campaigns", included: false },
+            { text: "Moviepedia Feature Review", included: false },
           ],
           active: false,
         },

@@ -83,21 +83,10 @@
         <q-separator />
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="watchlist" class="q-px-none">
-            <movie-list
-              :source="watchlist"
-              :options="watchlist_menu_options"
-              @remove="on_movie_remove_watchlist"
-              @rename="on_movie_rename_watchlist"
-              @item-selected="on_movie_click"
-            ></movie-list>
+            <watchlist :movies="watchlist"></watchlist>
           </q-tab-panel>
           <q-tab-panel name="recommends" class="q-px-none">
-            <movie-list
-              :source="recommends"
-              :options="recomment_menu_options"
-              @remove="on_movie_remove_recommends"
-              @item-selected="on_movie_click"
-            ></movie-list>
+            <recommends :movies="recommends"></recommends>
           </q-tab-panel>
           <q-tab-panel name="lists" class="q-px-none">
             <lists :lists="my_lists" />
@@ -110,7 +99,8 @@
   </div>
 </template>
 <script>
-import MovieList from "@/components/MovieList";
+import Recommends from "@/components/Recommends";
+import Watchlist from "@/components/Watchlist";
 import ProfilePicture from "@/components/ProfilePicture";
 import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
 import Lists from "@/components/Lists";
@@ -118,7 +108,8 @@ import { mapState } from "vuex";
 export default {
   name: "profile-audience",
   components: {
-    MovieList,
+    Recommends,
+    Watchlist,
     ProfilePicture,
     ProfileTypeSwitch,
     Lists,
@@ -134,13 +125,6 @@ export default {
       badge_info_dialog: false,
       edit_name_dialog: false,
       dialog_profile_type: false,
-      watchlist_menu_options: [
-        { name: "Rename", icon: "mdi-border-color", emit: "rename" },
-        { name: "Remove", icon: "mdi-trash-can", emit: "remove" },
-      ],
-      recomment_menu_options: [
-        { name: "Remove", icon: "mdi-trash-can", emit: "remove" },
-      ],
     };
   },
   computed: {
@@ -184,16 +168,7 @@ export default {
     show_edit_popup() {
       this.edit_name_dialog = true;
     },
-    on_movie_click(item) {
-      this.$router.push({
-        name: "movie-detail",
-        params: { id: item.id, slug: this.slugify(item.title) },
-      });
-    },
-    on_list_click(list) {
-      // redirect to page where he can see his list stats and movies in it
-      console.log(list);
-    },
+
     on_level_clicked() {
       console.log("level clicked");
     },
@@ -201,26 +176,7 @@ export default {
       this.$router.push({ name: "audience-leaderboard" });
     },
     on_reviews_clicked() {
-      console.log("level reviews");
-    },
-    on_movie_remove_watchlist(movie) {
-      console.log("remove watchlist", movie);
-    },
-    on_movie_rename_watchlist(movie) {
-      console.log("rename", movie);
-    },
-    on_movie_remove_recommends(movie) {
-      console.log("remove recommendation", movie);
-    },
-    list_description(list) {
-      var plural = list.movies.length == 0 || list.movies.length > 1 ? "s" : "";
-      var prefix = list.movies.length == 0 ? "No" : list.movies.length;
-      return `${prefix} Movie${plural}`;
-    },
-    list_like_text(list) {
-      var plural = list.like_count == 0 || list.like_count > 1 ? "s" : "";
-      var prefix = list.like_count == 0 ? "No" : list.like_count;
-      return `${prefix} like${plural}`;
+      this.$router.push({ name: "my-reviews" });
     },
   },
 };

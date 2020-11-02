@@ -11,7 +11,9 @@ import {
     PROFILE_WATCHLIST_REQUEST_,
     PROFILE_RECOMMENDS_REQUEST_,
     PROFILE_TOGGLE_WATCHLIST_,
+    PROFILE_REMOVE_WATCHLIST_,
     PROFILE_TOGGLE_RECOMMEND_,
+    PROFILE_REMOVE_RECOMMEND_,
     PROFILE_IMAGE_UPDATE_,
     PROFILE_VIEW_TOGGLE_
 } from "@/store/actions";
@@ -106,6 +108,19 @@ const actions = {
             })
         })
     },
+    [PROFILE_REMOVE_WATCHLIST_]: ({ commit }, movie) => {
+        return new Promise((resolve, reject) => {
+            watchlist_service.delete(movie.id)
+                .then((data) => {
+                    if (data.success)
+                        commit(PROFILE_TOGGLE_WATCHLIST_, movie)
+                    resolve(data)
+                })
+                .catch((error) => {
+                    reject(error)
+                });
+        })
+    },
     [PROFILE_TOGGLE_WATCHLIST_]: ({ commit }, movie) => {
         return new Promise((resolve, reject) => {
             var fn_name = movie.is_watchlisted ? "delete" : "patch"
@@ -114,6 +129,19 @@ const actions = {
                 .then((data) => {
                     if (data.success)
                         commit(PROFILE_TOGGLE_WATCHLIST_, movie)
+                    resolve(data)
+                })
+                .catch((error) => {
+                    reject(error)
+                });
+        })
+    },
+    [PROFILE_REMOVE_RECOMMEND_]: ({ commit }, movie) => {
+        return new Promise((resolve, reject) => {
+            recommend_service.delete(movie.id)
+                .then((data) => {
+                    if (data.success)
+                        commit(PROFILE_TOGGLE_RECOMMEND_, movie)
                     resolve(data)
                 })
                 .catch((error) => {
@@ -179,34 +207,14 @@ const mutations = {
         Vue.set(state.profile, "follows", follows)
         localStorage.setItem("profile", JSON.stringify(state.profile));
     },
-    [PROFILE_WATCHLIST_REQUEST_]: (state, new_watchlist_items) => {
-        new_watchlist_items.forEach(new_item => {
-            var item_at = -1
-            state.watchlist.forEach((existing_item, index) => {
-                if (existing_item.id == new_item.id) {
-                    item_at = index
-                }
-            })
-            if (item_at != -1)
-                Vue.set(state.watchlist, item_at, new_item)
-            else
-                state.watchlist.push(new_item)
-        })
+    [PROFILE_WATCHLIST_REQUEST_]: (state, watchlist_items) => {
+        state.watchlist.splice(0, state.watchlist.length)
+        state.watchlist.push(...watchlist_items)
         localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
     },
-    [PROFILE_RECOMMENDS_REQUEST_]: (state, new_recommend_items) => {
-        new_recommend_items.forEach(new_item => {
-            var item_at = -1
-            state.recommends.forEach((existing_item, index) => {
-                if (existing_item.id == new_item.id) {
-                    item_at = index
-                }
-            })
-            if (item_at != -1)
-                Vue.set(state.recommends, item_at, new_item)
-            else
-                state.recommends.push(new_item)
-        })
+    [PROFILE_RECOMMENDS_REQUEST_]: (state, recommend_items) => {
+        state.recommends.splice(0, state.watchlist.length)
+        state.recommends.push(...recommend_items)
         localStorage.setItem("recommends", JSON.stringify(state.recommends));
     },
     [PROFILE_TOGGLE_WATCHLIST_]: (state, movie) => {
@@ -216,10 +224,12 @@ const mutations = {
                 found_at = index
             }
         })
-        if (found_at == -1)
+        if (found_at == -1) {
+            // create a new object with from details from movie, this is to prevent movie object from becoming a part of state
             state.watchlist.push({ title: movie.title, poster: movie.poster, id: movie.id, about: movie.about })
-        else
+        } else
             state.watchlist.splice(found_at, 1)
+        localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
     },
     [PROFILE_TOGGLE_RECOMMEND_]: (state, movie) => {
         var found_at = -1
