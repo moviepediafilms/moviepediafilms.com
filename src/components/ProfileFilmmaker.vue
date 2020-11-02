@@ -84,63 +84,42 @@
           outside-arrows
           mobile-arrows
         >
-          <q-tab name="watchlist" label="Watchlist" />
-          <q-tab name="recommends" label="Recommends" />
-          <q-tab name="lists" label="Lists" />
-          <q-tab name="followers" :label="followers.length + ' Followers'" />
-          <q-tab name="following" :label="followings.length + ' Following'" />
+          <q-tab name="performance" label="Performance" />
+          <q-tab name="reviews" label="Reviews" />
+          <q-tab name="now-playing" label="Now Playing" />
         </q-tabs>
         <q-separator />
         <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="watchlist" class="q-px-none">
-            <watchlist :movies="watchlist"></watchlist>
-          </q-tab-panel>
-          <q-tab-panel name="recommends" class="q-px-none">
-            <recommends :movies="recommends"></recommends>
-          </q-tab-panel>
-          <q-tab-panel name="lists" class="q-px-none">
-            <lists :lists="my_lists" />
-          </q-tab-panel>
-          <q-tab-panel name="following"> </q-tab-panel>
-          <q-tab-panel name="follows"> </q-tab-panel>
+          <q-tab-panel name="performance" class="q-px-none"></q-tab-panel>
+          <q-tab-panel name="reviews" class="q-px-none"
+            ><reviews :reviews="reviews"></reviews
+          ></q-tab-panel>
+          <q-tab-panel name="now-playing" class="q-px-none"></q-tab-panel>
         </q-tab-panels>
       </q-card>
     </div>
   </div>
 </template>
 <script>
-import Recommends from "@/components/Recommends";
-import Watchlist from "@/components/Watchlist";
 import ProfilePicture from "@/components/ProfilePicture";
 import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
-import Lists from "@/components/Lists";
-import { mapState } from "vuex";
+import Reviews from "@/components/Reviews";
 export default {
   name: "profile-filmmaker",
   components: {
-    Recommends,
-    Watchlist,
     ProfilePicture,
     ProfileTypeSwitch,
-    Lists,
+    Reviews,
   },
   data() {
     return {
-      tab: "watchlist",
+      reviews: [],
+      tab: "performance",
       engagement: 0.86,
-      followers: [],
-      followings: [],
       xp_info_dialog: false,
-      earning_info_dialog: false,
-      badge_info_dialog: false,
-      edit_name_dialog: false,
-      list_item_menu: false,
-      dialog_profile_type: false,
     };
   },
   computed: {
-    ...mapState("profile", ["watchlist", "recommends"]),
-    ...mapState("list", ["my_lists"]),
     show_login_popup() {
       return !this.is_authenticated;
     },
@@ -154,15 +133,6 @@ export default {
   methods: {
     show_xp_info_dialog() {
       this.xp_info_dialog = true;
-    },
-    show_earning_info_dialog() {
-      this.earning_info_dialog = true;
-    },
-    show_badge_info_dialog() {
-      this.badge_info_dialog = true;
-    },
-    show_edit_popup() {
-      this.edit_name_dialog = true;
     },
     on_rank_click() {
       this.$router.push({ name: "filmmaker-leaderboard" });

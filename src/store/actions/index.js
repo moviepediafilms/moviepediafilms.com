@@ -62,3 +62,4 @@ export const ALB_ERROR = `alb/${ERROR_}`;
 export const FLB_REQUEST = `flb/${REQUEST_}`;
 export const FLB_SUCCESS = `flb/${SUCCESS_}`;
 export const FLB_ERROR = `flb/${ERROR_}`;
+export const FOLLOW_REQUEST = `follow/${REQUEST_}`;
