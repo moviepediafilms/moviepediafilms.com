@@ -15,7 +15,8 @@ import {
     PROFILE_TOGGLE_RECOMMEND_,
     PROFILE_REMOVE_RECOMMEND_,
     PROFILE_IMAGE_UPDATE_,
-    PROFILE_VIEW_TOGGLE_
+    PROFILE_VIEW_TOGGLE_,
+    FOLLOW_REQUEST
 } from "@/store/actions";
 import {
     profile_service,
@@ -37,7 +38,9 @@ const state = {
 };
 
 const getters = {
-
+    following: state => {
+        return state.profile.follow
+    }
 };
 
 const actions = {
@@ -57,13 +60,14 @@ const actions = {
                 });
         })
     },
-    [PROFILE_FOLLOW_]: ({ commit }, profile_to_follow) => {
+    [PROFILE_FOLLOW_]: ({ commit, dispatch }, profile_to_follow) => {
         return new Promise((resolve, reject) => {
             follow_service
                 .patch({ follow: true }, profile_to_follow.profile_id)
                 .then((data) => {
                     console.log(data);
                     commit(PROFILE_FOLLOW_DONE_, data.follows)
+                    dispatch(FOLLOW_REQUEST, {}, { root: true })
                     resolve(data)
                 })
                 .catch((error) => {
@@ -73,13 +77,14 @@ const actions = {
         })
 
     },
-    [PROFILE_UNFOLLOW_]: ({ commit }, profile_to_unfollow) => {
+    [PROFILE_UNFOLLOW_]: ({ commit, dispatch }, profile_to_unfollow) => {
         return new Promise((resolve, reject) => {
             follow_service
                 .patch({ follow: false }, profile_to_unfollow.profile_id)
                 .then((data) => {
                     console.log(data);
                     commit(PROFILE_FOLLOW_DONE_, data.follows)
+                    dispatch(FOLLOW_REQUEST, {}, { root: true })
                     resolve(data)
                 })
                 .catch((error) => {

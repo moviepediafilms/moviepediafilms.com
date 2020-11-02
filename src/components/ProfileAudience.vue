@@ -78,7 +78,7 @@
           <q-tab name="recommends" label="Recommends" />
           <q-tab name="lists" label="Lists" />
           <q-tab name="followers" :label="followers.length + ' Followers'" />
-          <q-tab name="following" :label="followings.length + ' Following'" />
+          <q-tab name="following" :label="following.length + ' Following'" />
         </q-tabs>
         <q-separator />
         <q-tab-panels v-model="tab" animated>
@@ -89,10 +89,23 @@
             <recommends :movies="recommends"></recommends>
           </q-tab-panel>
           <q-tab-panel name="lists" class="q-px-none">
-            <lists :lists="my_lists" />
+            <lists :lists="my_lists" @select="on_list_select" />
           </q-tab-panel>
-          <q-tab-panel name="following"> </q-tab-panel>
-          <q-tab-panel name="follows"> </q-tab-panel>
+          <q-tab-panel name="following" class="q-px-none">
+            <follow-user-list
+              :users="following"
+              :actions="following_actions"
+              @unfollow="on_unfollow_user"
+            />
+          </q-tab-panel>
+          <q-tab-panel name="followers" class="q-px-none">
+            <follow-user-list
+              :users="followers"
+              :actions="follower_actions"
+              @follow="on_follow_user"
+              @unfollow="on_unfollow_user"
+            />
+          </q-tab-panel>
         </q-tab-panels>
       </q-card>
     </div>
@@ -103,8 +116,10 @@ import Recommends from "@/components/Recommends";
 import Watchlist from "@/components/Watchlist";
 import ProfilePicture from "@/components/ProfilePicture";
 import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
+import FollowUserList from "@/components/FollowUserList";
 import Lists from "@/components/Lists";
 import { mapState } from "vuex";
+import { PROFILE_FOLLOW, PROFILE_UNFOLLOW } from "@/store/actions";
 export default {
   name: "profile-audience",
   components: {
@@ -113,23 +128,34 @@ export default {
     ProfilePicture,
     ProfileTypeSwitch,
     Lists,
+    FollowUserList,
   },
   data() {
     return {
       tab: "watchlist",
       engagement: 0.86,
-      followers: [],
-      followings: [],
-      xp_info_dialog: false,
-      earning_info_dialog: false,
-      badge_info_dialog: false,
-      edit_name_dialog: false,
-      dialog_profile_type: false,
+      following_actions: [{ name: "Unfollow", emit: "unfollow" }],
+      follower_actions: [
+        {
+          name: "Follow Back",
+          emit: "follow",
+          disable: (user) =>
+            this.following.filter((f) => f.id == user.id).length == 0,
+        },
+        {
+          name: "Following",
+          emit: "unfollow",
+          icon: "mdi-check",
+          disable: (user) =>
+            this.following.filter((f) => f.id == user.id).length > 0,
+        },
+      ],
     };
   },
   computed: {
     ...mapState("profile", ["watchlist", "recommends"]),
     ...mapState("list", ["my_lists"]),
+    ...mapState("follow", ["followers", "following"]),
 
     show_login_popup() {
       return !this.is_authenticated;
@@ -156,19 +182,18 @@ export default {
       //TODO: get it somehow
       return "-";
     },
-    show_xp_info_dialog() {
-      this.xp_info_dialog = true;
+    on_list_select(list) {
+      this.$router.push({
+        name: "list-detail",
+        params: { id: list.id, slug: this.slugify(list.name) },
+      });
     },
-    show_earning_info_dialog() {
-      this.earning_info_dialog = true;
+    on_follow_user(user) {
+      this.$store.dispatch(PROFILE_FOLLOW, user);
     },
-    show_badge_info_dialog() {
-      this.badge_info_dialog = true;
+    on_unfollow_user(user) {
+      this.$store.dispatch(PROFILE_UNFOLLOW, user);
     },
-    show_edit_popup() {
-      this.edit_name_dialog = true;
-    },
-
     on_level_clicked() {
       console.log("level clicked");
     },

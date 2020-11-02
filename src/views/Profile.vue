@@ -58,6 +58,7 @@ import {
   PROFILE_WATCHLIST_REQUEST,
   PROFILE_RECOMMENDS_REQUEST,
   PROFILE_REQUEST,
+  FOLLOW_REQUEST,
 } from "@/store/actions";
 import { mapState } from "vuex";
 export default {
@@ -78,6 +79,8 @@ export default {
       this.$store.dispatch(PROFILE_REQUEST, this.my_profile.profile_id);
       this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
       this.$store.dispatch(PROFILE_RECOMMENDS_REQUEST);
+      this.$store.dispatch(FOLLOW_REQUEST, { followers: true });
+      this.$store.dispatch(FOLLOW_REQUEST, {});
     }
   },
   watch: {},

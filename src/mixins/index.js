@@ -22,6 +22,9 @@ Vue.mixin({
         }
     },
     methods: {
+        on_img_load_fail(img) {
+            img.target.src = "/default_avatar.png";
+        },
         slugify(content) {
             return slugify(content)
         },
