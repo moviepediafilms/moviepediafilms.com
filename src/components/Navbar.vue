@@ -59,9 +59,6 @@
                 <q-item clickable :to="{ name: 'mdff-top' }">
                   <q-item-section>MDFF Top 10</q-item-section>
                 </q-item>
-                <q-item clickable :to="{ name: 'leaderboard' }">
-                  <q-item-section>Contest Leaderboard</q-item-section>
-                </q-item>
                 <q-item clickable :to="{ name: 'partner-judges' }">
                   <q-item-section>Partner Celebs</q-item-section>
                 </q-item>

@@ -93,106 +93,36 @@
         <q-separator />
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="watchlist" class="q-px-none">
-            <movie-list
-              :source="watchlist"
-              @item-selected="on_movie_click"
-            ></movie-list>
+            <watchlist :movies="watchlist"></watchlist>
           </q-tab-panel>
-          <q-tab-panel name="recommends">
-            <movie-list
-              :source="recommends"
-              @item-selected="on_movie_click"
-            ></movie-list>
+          <q-tab-panel name="recommends" class="q-px-none">
+            <recommends :movies="recommends"></recommends>
           </q-tab-panel>
-          <q-tab-panel name="lists">
-            <q-list>
-              <q-item
-                v-for="list in my_lists"
-                :key="list.id"
-                class="q-ma-none"
-                v-ripple
-                clickable
-                @click="on_list_click(list)"
-              >
-                <q-item-section>
-                  <q-item-label class="text-title">
-                    {{ list.name }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-item-label class="text-center">
-                    <div class="text-title">{{ list.movies.length }}</div>
-                    <div
-                      class="text-caption text-uppercase"
-                      style="font-size: 0.7em"
-                    >
-                      Movies
-                    </div>
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-item-label class="text-center">
-                    <div class="text-title">{{ list.like_count }}</div>
-                    <div
-                      class="text-caption text-uppercase"
-                      style="font-size: 0.7em"
-                    >
-                      Likes
-                    </div>
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-btn
-                    size="sm"
-                    flat
-                    round
-                    icon="mdi-dots-vertical"
-                    @click.stop="list_item_menu = !list_item_menu"
-                  >
-                  </q-btn>
-                </q-item-section>
-              </q-item>
-            </q-list>
+          <q-tab-panel name="lists" class="q-px-none">
+            <lists :lists="my_lists" />
           </q-tab-panel>
           <q-tab-panel name="following"> </q-tab-panel>
           <q-tab-panel name="follows"> </q-tab-panel>
         </q-tab-panels>
       </q-card>
     </div>
-    <q-dialog v-model="list_item_menu">
-      <q-card class="" style="width: 400px; max-width: 50vw">
-        <q-card-section>
-          <q-list class="">
-            <q-item clickable v-ripple v-close-popup>
-              <q-item-section side>
-                <q-icon name="mdi-border-color" size="xs" />
-              </q-item-section>
-              <q-item-section> Edit </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple v-close-popup>
-              <q-item-section side>
-                <q-icon name="mdi-trash-can" size="xs" />
-              </q-item-section>
-              <q-item-section> Delete </q-item-section>
-            </q-item>
-          </q-list>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
   </div>
 </template>
 <script>
-import MovieList from "@/components/MovieList";
+import Recommends from "@/components/Recommends";
+import Watchlist from "@/components/Watchlist";
 import ProfilePicture from "@/components/ProfilePicture";
 import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
-
+import Lists from "@/components/Lists";
 import { mapState } from "vuex";
 export default {
   name: "profile-filmmaker",
   components: {
-    MovieList,
+    Recommends,
+    Watchlist,
     ProfilePicture,
     ProfileTypeSwitch,
+    Lists,
   },
   data() {
     return {
@@ -234,28 +164,8 @@ export default {
     show_edit_popup() {
       this.edit_name_dialog = true;
     },
-    on_rank_click(){
-      this.$router.push({name: 'filmmaker-leaderboard'})
-    },
-    on_movie_click(item) {
-      this.$router.push({
-        name: "movie-detail",
-        params: { id: item.id, slug: this.slugify(item.title) },
-      });
-    },
-    on_list_click(list) {
-      // redirect to page where he can see his list stats and movies in it
-      console.log(list);
-    },
-    list_description(list) {
-      var plural = list.movies.length == 0 || list.movies.length > 1 ? "s" : "";
-      var prefix = list.movies.length == 0 ? "No" : list.movies.length;
-      return `${prefix} Movie${plural}`;
-    },
-    list_like_text(list) {
-      var plural = list.like_count == 0 || list.like_count > 1 ? "s" : "";
-      var prefix = list.like_count == 0 ? "No" : list.like_count;
-      return `${prefix} like${plural}`;
+    on_rank_click() {
+      this.$router.push({ name: "filmmaker-leaderboard" });
     },
   },
 };

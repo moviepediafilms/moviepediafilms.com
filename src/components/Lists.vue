@@ -47,12 +47,11 @@
       :show="show_menu"
       @hide="show_menu = false"
       @select="on_option_select"
-      @remove="on_remove"
-      @rename="on_rename"
     />
   </div>
 </template>
 <script>
+import { LIST_DELETE } from "@/store/actions";
 import PopupMenu from "@/components/PopupMenu";
 export default {
   components: {
@@ -78,14 +77,16 @@ export default {
   },
   methods: {
     on_option_select(option) {
-      console.log(option, "selected");
+      if (option.emit === "delete") this.on_delete();
+      if (option.emit === "rename") this.on_rename();
     },
     on_show_menu(list) {
       this.active_list = list;
       this.show_menu = true;
     },
-    on_remove() {
+    on_delete() {
       console.log("delete", this.active_list);
+      this.$store.dispatch(LIST_DELETE);
     },
     on_rename() {
       console.log("rename", this.active_list);

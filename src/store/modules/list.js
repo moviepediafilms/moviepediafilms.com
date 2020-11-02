@@ -4,6 +4,7 @@ import {
     REQUEST_,
     SUCCESS_,
     CREATE_,
+    DELETE_,
     ERROR_,
     LIST_TOGGLE_MOVIE_REQUEST_,
     LIST_TOGGLE_MOVIE_SUCCESS_,
@@ -44,6 +45,19 @@ const actions = {
                 .then((new_list) => {
                     commit(CREATE_, new_list);
                     resolve(new_list)
+                })
+                .catch((error) => {
+                    reject(error)
+                });
+        })
+    },
+    [DELETE_]: ({ commit }, list) => {
+        return new Promise((resolve, reject) => {
+            list_service
+                .delete(list.id)
+                .then(() => {
+                    commit(CREATE_, list);
+                    resolve()
                 })
                 .catch((error) => {
                     reject(error)
@@ -91,6 +105,17 @@ const mutations = {
     },
     [CREATE_]: (state, new_list) => {
         state.my_lists.push(new_list)
+        localStorage.setItem("my_lists", JSON.stringify(state.my_lists));
+    },
+    [DELETE_]: (state, del_list) => {
+        var index = -1
+        state.my_lists.forEach((list, i) => {
+            if (list.id == del_list.id) {
+                index = i
+            }
+        });
+        if (index != -1)
+            state.my_lists.removeItem(index)
         localStorage.setItem("my_lists", JSON.stringify(state.my_lists));
     },
     [LIST_TOGGLE_MOVIE_REQUEST_]: state => {
