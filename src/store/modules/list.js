@@ -56,7 +56,7 @@ const actions = {
             list_service
                 .delete(list.id)
                 .then(() => {
-                    commit(CREATE_, list);
+                    commit(DELETE_, list);
                     resolve()
                 })
                 .catch((error) => {
@@ -115,7 +115,7 @@ const mutations = {
             }
         });
         if (index != -1)
-            state.my_lists.removeItem(index)
+            state.my_lists.splice(index, 1)
         localStorage.setItem("my_lists", JSON.stringify(state.my_lists));
     },
     [LIST_TOGGLE_MOVIE_REQUEST_]: state => {

@@ -16,7 +16,7 @@
         </q-item-section>
         <q-item-section side>
           <q-item-label class="text-center">
-            <div class="text-title">{{ list.movies.length }}</div>
+            <div class="text-title">{{ list.movies.length || 0 }}</div>
             <div class="text-caption text-uppercase" style="font-size: 0.7em">
               Movies
             </div>
@@ -24,7 +24,7 @@
         </q-item-section>
         <q-item-section side>
           <q-item-label class="text-center">
-            <div class="text-title">{{ list.like_count }}</div>
+            <div class="text-title">{{ list.like_count || 0 }}</div>
             <div class="text-caption text-uppercase" style="font-size: 0.7em">
               Likes
             </div>
@@ -70,7 +70,7 @@ export default {
       active_list: null,
       show_menu: false,
       options: [
-        { name: "Rename", icon: "mdi-border-color", emit: "rename" },
+        // { name: "Rename", icon: "mdi-border-color", emit: "rename" },
         { name: "Delete", icon: "mdi-trash-can", emit: "delete" },
       ],
     };
@@ -86,7 +86,7 @@ export default {
     },
     on_delete() {
       console.log("delete", this.active_list);
-      this.$store.dispatch(LIST_DELETE);
+      this.$store.dispatch(LIST_DELETE, this.active_list);
     },
     on_rename() {
       console.log("rename", this.active_list);
