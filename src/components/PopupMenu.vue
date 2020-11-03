@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog" @hide="$emit('hide')">
-    <q-card class="" style="width: 400px; max-width: 50vw">
+    <q-card class="" style="width: 400px; max-width: 70vw">
       <q-card-section>
         <q-list class="">
           <q-item

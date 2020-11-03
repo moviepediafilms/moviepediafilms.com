@@ -68,3 +68,8 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.q-item__section--side {
+  padding-left: 0;
+}
+</style>

@@ -122,7 +122,10 @@
                 <template slot="header">
                   <q-item-section avatar top>
                     <q-avatar>
-                      <img :src="director.image" />
+                      <img
+                        :src="director.image || '/default_avatar.png'"
+                        @error="on_img_load_fail"
+                      />
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
@@ -144,14 +147,14 @@
                           >
                         </a>
                       </template>
-                      <div
-                        class="text-caption text-grey-6"
-                        v-if="movie.crew.length > 1"
-                      >
-                        Directed with {{ movie.crew.length - 1 }} other crew
-                        member<template v-if="movie.crew.length > 2"
-                          >s</template
-                        >
+                      <div class="text-caption text-grey-6">
+                        <template v-if="movie.crew.length > 1">
+                          Directed with {{ movie.crew.length - 1 }} other crew
+                          member<template v-if="movie.crew.length > 2"
+                            >s</template
+                          >
+                        </template>
+                        <template v-else>Director</template>
                       </div>
                     </q-item-label>
                   </q-item-section>
@@ -230,7 +233,14 @@
                 />
               </div>
             </div>
-            <div class="row q-mt-lg">{{ movie.synopsis }}</div>
+            <div class="text-center text-grey-6">
+              <template v-if="my_rate_review.rating != null">
+                You rated {{ my_rate_review.rating }} / 10
+              </template>
+              <template v-else>You have not rated the film</template>
+            </div>
+
+            <div class="row q-mt-lg">{{ movie.about }}</div>
             <div class="row q-mt-lg">
               <div class="col">
                 <vue-easy-pie-chart
@@ -276,6 +286,7 @@
               <div class="col">
                 <div
                   class="text-uppercase text-primary text-weight-bold q-mb-sm"
+                  v-show="reviews.length > 0"
                 >
                   Recent Reviews
                 </div>
@@ -628,7 +639,7 @@ export default {
       my_rate_review: {
         id: null,
         content: null,
-        rating: 0,
+        rating: null,
       },
       old_review_content: "",
       old_rating: null,
@@ -867,7 +878,7 @@ export default {
         this.$refs.rating_slider.model = 0;
       } else {
         this.my_rate_review.rating = new_rating;
-        this.save_rate_review();
+        // this.save_rate_review();
       }
     },
     save_rate_review() {
@@ -930,7 +941,7 @@ export default {
       this.rating_loading = true;
       review_service
         .post({
-          movie: this.movie.id,
+          movie_id: this.movie.id,
           rating: this.my_rate_review.rating,
           content: this.my_rate_review.content,
         })
