@@ -3,6 +3,7 @@ import {
     REQUEST_,
     SUCCESS_,
     ERROR_,
+    LOGOUT_
 } from "@/store/actions";
 import { follow_service } from "@/services";
 import { Promise } from "core-js";
@@ -38,7 +39,14 @@ const actions = {
 };
 
 const mutations = {
-
+    [LOGOUT_]: state => {
+        state.loading = false
+        state.followers = [];
+        state.following = [];
+        state.last_updated = null;
+        localStorage.removeItem("followers");
+        localStorage.removeItem("following");
+    },
     [REQUEST_]: state => {
         state.loading = true
     },

@@ -7,6 +7,7 @@ import {
     PROFILE_LOGOUT,
     LIST_REQUEST,
     LIST_LOGOUT,
+    FOLLOW_LOGOUT
 } from "@/store/actions";
 import { backend, token_service } from "@/services";
 const state = {
@@ -43,6 +44,7 @@ const actions = {
             commit(LOGOUT_);
             commit(PROFILE_LOGOUT, null, { root: true });
             commit(LIST_LOGOUT, null, { root: true });
+            commit(FOLLOW_LOGOUT, null, { root: true });
             delete backend.defaults.headers.common['Authorization']
             window.location.reload();
             resolve();

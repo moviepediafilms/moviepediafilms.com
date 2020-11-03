@@ -122,8 +122,7 @@ const mutations = {
         state.loading = true
     },
     [LIST_TOGGLE_MOVIE_SUCCESS_]: (state, updated_list) => {
-        console.log("adding movie in a list")
-        state.loading = false
+        console.log("movie_list update", updated_list)
         var index = -1
         state.my_lists.forEach((list, i) => {
             if (list.id == updated_list.id) {
@@ -134,7 +133,7 @@ const mutations = {
             Vue.set(state.my_lists, index, updated_list)
         else
             state.my_lists.push(updated_list)
-
+        state.loading = false
     },
     [LIST_TOGGLE_MOVIE_ERROR_]: state => {
         state.loading = false
