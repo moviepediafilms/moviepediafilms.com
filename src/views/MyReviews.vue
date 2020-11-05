@@ -38,17 +38,15 @@ export default {
       reviews: [
         {
           id: 1,
-          content:
-            "Damn. \r\nThis was both beautiful and haunting, as someone who's been through terrible Depression, I could feel it scene by scene, it was too amazing for words Mann, keep it up ❤️",
+          content: "",
           liked_by: [],
-          published_at: "2020-10-01T17:21:08.672000Z",
+          published_at: "",
           rating: 5.0,
           movie: {
             id: 1,
-            title:
-              "30 Days of Existence | A Moviepedia Short Film on Depression",
-            poster: "https://img.youtube.com/vi/KS0bagkAC4Y/hqdefault.jpg",
-            about: "This is a good movie",
+            title: "",
+            poster: "",
+            about: "",
           },
         },
       ],

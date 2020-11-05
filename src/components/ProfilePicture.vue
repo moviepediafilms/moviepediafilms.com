@@ -3,16 +3,16 @@
     <q-avatar
       size="110px"
       style="margin-left: 8px"
-      :class="{ 'bg-grey-9': show_dummy_img || !my_profile.image }"
+      :class="{ 'bg-grey-9': show_dummy_img || !profile.image }"
     >
       <img
-        :src="my_profile.image"
+        :src="profile.image"
         @error="on_profile_img_load_err"
-        v-if="!show_dummy_img && my_profile.image"
+        v-if="!show_dummy_img && profile.image"
       />
       <q-icon name="mdi-account" size="145px" color="grey-5" v-else />
     </q-avatar>
-    <div class="self-end" style="margin-left: -24px">
+    <div class="self-end" style="margin-left: -24px" v-if="editable">
       <q-btn
         round
         flat
@@ -23,16 +23,17 @@
         class="q-pa-xs bg-grey-7"
         icon="mdi-camera"
       />
+      <div style="display: none">
+        <q-file
+          ref="file_select"
+          v-model="profile_image.file"
+          accept=".jpg, image/*"
+          @rejected="on_profile_image_reject"
+        />
+      </div>
     </div>
-    <div style="display: none">
-      <q-file
-        ref="file_select"
-        v-model="profile_image.file"
-        accept=".jpg, image/*"
-        @rejected="on_profile_image_reject"
-      />
-    </div>
-    <q-dialog v-model="change_icon_dialog">
+
+    <q-dialog v-model="change_icon_dialog" v-if="editable">
       <q-card class="" style="width: 400px; max-width: 80vw">
         <q-card-section class="text-center">
           <div class="text-h6 q-mb-lg">Change Picture</div>
@@ -66,6 +67,18 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import { PROFILE_IMAGE_UPDATE } from "@/store/actions";
 export default {
+  props: {
+    editable: {
+      type: Boolean,
+      default: true,
+    },
+    profile: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+  },
   components: {
     VueCropper,
   },
@@ -91,7 +104,7 @@ export default {
     profile_image_url() {
       if (this.profile_image.file)
         return URL.createObjectURL(this.profile_image.file);
-      return this.my_profile.image;
+      return this.profile.image;
     },
   },
   methods: {

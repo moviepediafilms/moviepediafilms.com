@@ -5,29 +5,27 @@
     class="text-grey-6"
     color="primary"
     size="xs"
-    @input="toggle_view"
-    :disable="!is_director"
-    :value="show_filmmaker_profile"
-    :label="show_filmmaker_profile ? 'Filmmaker' : 'Audience'"
+    @input="on_toggle"
+    :value="filmmaker"
+    :label="filmmaker ? 'Filmmaker' : 'Audience'"
   />
 </template>
 <script>
-import { PROFILE_VIEW_TOGGLE } from "@/store/actions";
-import { mapState } from "vuex";
 export default {
-  data() {
-    return {
-      dialog_profile_type: false,
-    };
-  },
-  computed: {
-    ...mapState("profile", {
-      show_filmmaker_profile: (state) => state.show_filmmaker_profile,
-    }),
+  props: {
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    filmmaker: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
-    toggle_view() {
-      this.$store.dispatch(PROFILE_VIEW_TOGGLE);
+    on_toggle() {
+      if (!this.disabled) this.$emit("toggle");
+      else console.log("show popup about why its disabled");
     },
   },
 };

@@ -31,6 +31,9 @@ Vue.mixin({
         is_token_error(error) {
             return error && error.response && error.response.status == 401 && error.response.data.detail == "Invalid token."
         },
+        is_filmmaker(profile) {
+            return profile.roles && profile.roles.filter(role => role.name !== "Director").length == 1
+        },
         first_of(arr) {
             if (arr && arr.length > 0)
                 return arr[0]

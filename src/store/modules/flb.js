@@ -1,3 +1,4 @@
+/** Filmmaker Leaderboard */
 import Vue from "vue";
 import {
     REQUEST_,

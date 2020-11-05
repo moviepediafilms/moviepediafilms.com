@@ -15,7 +15,11 @@
           <q-item-label class="text-sm">{{ item.title }}</q-item-label>
           <q-item-label caption>{{ item.about }}</q-item-label>
         </q-item-section>
-        <q-item-section side @click.stop="on_menu_click(item)">
+        <q-item-section
+          side
+          @click.stop="on_menu_click(item)"
+          v-if="options.length > 0"
+        >
           <q-btn round flat icon="mdi-dots-vertical" />
         </q-item-section>
       </q-item>

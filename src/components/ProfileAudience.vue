@@ -2,12 +2,16 @@
   <div class="q-pa-md">
     <div class="row justify-center">
       <div class="col text-center">
-        <profile-picture></profile-picture>
+        <profile-picture :editable="is_viwers_profile"></profile-picture>
         <div class="text-h2 q-mt-md">
-          {{ my_profile.name }}
+          {{ profile.name }}
         </div>
         <div class="row justify-center q-mt-xs">
-          <profile-type-switch />
+          <profile-type-switch
+            :disabled="!this.profile_is_filmmaker"
+            :filmmaker="false"
+            @toggle="$emit('toggle')"
+          />
         </div>
       </div>
     </div>
@@ -41,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div class="row justify-center q-mt-md">
+    <div class="row justify-center q-mt-md" v-if="is_viwers_profile">
       <q-linear-progress
         size="5px"
         :value="engagement"
@@ -54,7 +58,10 @@
         <q-icon name="mdi-chevron-down"
       /></span>
     </div>
-    <div class="row justify-around q-mt-none q-pa-none">
+    <div
+      class="row justify-around q-mt-none q-pa-none"
+      v-if="is_viwers_profile"
+    >
       <div
         class="text-overline text-uppercase"
         style="font-size: 9px; line-height: 1em"
@@ -74,7 +81,7 @@
           outside-arrows
           mobile-arrows
         >
-          <q-tab name="watchlist" label="Watchlist" />
+          <q-tab name="watchlist" label="Watchlist" v-if="is_viwers_profile" />
           <q-tab name="recommends" label="Recommends" />
           <q-tab name="lists" label="Lists" />
           <q-tab name="followers" :label="followers.length + ' Followers'" />
@@ -82,14 +89,18 @@
         </q-tabs>
         <q-separator />
         <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="watchlist" class="q-px-none">
+          <q-tab-panel
+            name="watchlist"
+            class="q-px-none"
+            v-if="is_viwers_profile"
+          >
             <watchlist :movies="watchlist"></watchlist>
           </q-tab-panel>
           <q-tab-panel name="recommends" class="q-px-none">
             <recommends :movies="recommends"></recommends>
           </q-tab-panel>
           <q-tab-panel name="lists" class="q-px-none">
-            <lists :lists="my_lists" @select="on_list_select" />
+            <lists :lists="lists" @select="on_list_select" />
           </q-tab-panel>
           <q-tab-panel name="following" class="q-px-none">
             <follow-user-list
@@ -118,10 +129,23 @@ import ProfilePicture from "@/components/ProfilePicture";
 import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
 import FollowUserList from "@/components/FollowUserList";
 import Lists from "@/components/Lists";
+import { recommend_service, follow_service, list_service } from "@/services";
+import {
+  PROFILE_WATCHLIST_REQUEST,
+  PROFILE_FOLLOW,
+  PROFILE_UNFOLLOW,
+} from "@/store/actions";
 import { mapState } from "vuex";
-import { PROFILE_FOLLOW, PROFILE_UNFOLLOW } from "@/store/actions";
 export default {
   name: "profile-audience",
+  props: {
+    profile: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+  },
   components: {
     Recommends,
     Watchlist,
@@ -134,35 +158,51 @@ export default {
     return {
       tab: "watchlist",
       engagement: 0.86,
-      following_actions: [{ name: "Unfollow", emit: "unfollow" }],
-      follower_actions: [
-        {
-          name: "Follow Back",
-          emit: "follow",
-          disable: (user) =>
-            this.following.filter((f) => f.id == user.id).length == 0,
-        },
-        {
-          name: "Following",
-          emit: "unfollow",
-          icon: "mdi-check",
-          disable: (user) =>
-            this.following.filter((f) => f.id == user.id).length > 0,
-        },
-      ],
+      recommends: [],
+      lists: [],
+      followers: [],
+      following: [],
     };
   },
   computed: {
-    ...mapState("profile", ["watchlist", "recommends"]),
-    ...mapState("list", ["my_lists"]),
-    ...mapState("follow", ["followers", "following"]),
-
-    show_login_popup() {
-      return !this.is_authenticated;
+    ...mapState("profile", ["watchlist"]),
+    profile_is_filmmaker() {
+      return true; //this.is_filmmaker(this.profile);
     },
-    hide_mode() {
-      return !this.is_authenticated;
+    is_viwers_profile() {
+      return this.profile.id == this.my_profile.id;
     },
+    following_actions() {
+      if (this.is_viwers_profile)
+        return [{ name: "Unfollow", emit: "unfollow" }];
+      else return [];
+    },
+    follower_actions() {
+      if (this.is_viwers_profile)
+        return [
+          {
+            name: "Follow Back",
+            emit: "follow",
+            disable: (user) =>
+              this.following.filter((f) => f.id == user.id).length == 0,
+          },
+          {
+            name: "Following",
+            emit: "unfollow",
+            icon: "mdi-check",
+            disable: (user) =>
+              this.following.filter((f) => f.id == user.id).length > 0,
+          },
+        ];
+      else return [];
+    },
+  },
+  mounted() {
+    this.get_recommends();
+    if (this.is_viwers_profile) this.get_watchlist();
+    this.get_followers();
+    this.get_following();
+    this.get_lists();
   },
   methods: {
     get_level_name() {
@@ -172,15 +212,38 @@ export default {
         3: "Level3",
         4: "Level4",
       };
-      return level_map[this.my_profile.level];
+      return level_map[this.profile.level];
     },
     get_rank() {
-      if (this.my_profile.rank != -1) return this.my_profile.rank;
+      if (this.profile.rank != -1) return this.profile.rank;
       else return "-";
     },
     get_review_count() {
       //TODO: get it somehow
       return "-";
+    },
+    get_recommends() {
+      recommend_service.get({}, `${this.profile.id}/movies`).then((data) => {
+        this.recommends.push(...data);
+      });
+    },
+    get_watchlist() {
+      this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
+    },
+    get_followers() {
+      follow_service.get({}, `${this.profile.id}/followers`).then((data) => {
+        this.followers.push(...data.results);
+      });
+    },
+    get_following() {
+      follow_service.get({}, `${this.profile.id}/following`).then((data) => {
+        this.following.push(...data.results);
+      });
+    },
+    get_lists() {
+      list_service.get().then((data) => {
+        this.lists.push(...data.results);
+      });
     },
     on_list_select(list) {
       this.$router.push({

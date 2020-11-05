@@ -165,7 +165,8 @@
                 >
                   <q-item-section avatar top>
                     <q-avatar>
-                      <img :src="crew.profile.image" />
+                      <img :src="crew.profile.image || '/default_avatar.png'"
+                        @error="on_img_load_fail" />
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
