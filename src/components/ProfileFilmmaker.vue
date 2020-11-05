@@ -2,12 +2,16 @@
   <div class="q-pa-md">
     <div class="row justify-center">
       <div class="col text-center">
-        <profile-picture></profile-picture>
+        <profile-picture :editable="is_viwers_profile"></profile-picture>
         <div class="text-h2 q-mt-md">
-          {{ my_profile.name }}
+          {{ profile.name }}
         </div>
         <div class="row justify-center q-mt-xs">
-          <profile-type-switch />
+          <profile-type-switch
+            :disabled="false"
+            :filmmaker="true"
+            @toggle="$emit('toggle')"
+          />
         </div>
       </div>
     </div>
@@ -17,7 +21,7 @@
           <div class="col-4 text-center">
             <q-btn flat stack>
               <div class="text-uppercase text-h5 text-weight-bolder">
-                {{ my_profile.pop_score }}
+                {{ profile.pop_score }}
               </div>
               <div class="q-mt-xs text-uppercase text-caption">Popularity</div>
             </q-btn>
@@ -33,7 +37,7 @@
           <div class="col-4 text-center">
             <q-btn flat stack>
               <div class="text-uppercase text-h5 text-weight-bolder">
-                {{ my_profile.film_count || "-" }}
+                {{ profile.film_count || "-" }}
               </div>
               <div class="q-mt-xs text-uppercase text-caption">Films</div>
             </q-btn>
@@ -41,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div class="row justify-center q-mt-md">
+    <div class="row justify-center q-mt-md" v-if="is_viwers_profile">
       <q-linear-progress
         size="5px"
         :value="engagement"
@@ -54,7 +58,10 @@
         <q-icon name="mdi-chevron-down"
       /></span>
     </div>
-    <div class="row justify-around q-mt-none q-pa-none">
+    <div
+      class="row justify-around q-mt-none q-pa-none"
+      v-if="is_viwers_profile"
+    >
       <div
         class="text-overline text-uppercase"
         style="font-size: 9px; line-height: 1em"
@@ -62,17 +69,7 @@
         fund-ready meter
       </div>
     </div>
-    <div class="q-mt-lg text-center" v-if="hide_mode">
-      <div>Sign In to check your profile</div>
-      <q-btn
-        flat
-        text
-        color="primary"
-        :to="{ name: 'login' }"
-        label="Sign In"
-      />
-    </div>
-    <div class="q-mt-md" v-else>
+    <div class="q-mt-md">
       <q-card flat>
         <q-tabs
           v-model="tab"
@@ -84,17 +81,30 @@
           outside-arrows
           mobile-arrows
         >
-          <q-tab name="performance" label="Performance" />
+          <q-tab name="followers" label="Followers" />
+          <q-tab name="following" label="Following" />
           <q-tab name="reviews" label="Reviews" />
-          <q-tab name="now-playing" label="Now Playing" />
         </q-tabs>
         <q-separator />
         <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="performance" class="q-px-none"></q-tab-panel>
+          <q-tab-panel name="followers" class="q-px-none">
+            <follow-user-list
+              :users="followers"
+              :actions="follower_actions"
+              @follow="on_follow_user"
+              @unfollow="on_unfollow_user"
+            />
+          </q-tab-panel>
+          <q-tab-panel name="following" class="q-px-none">
+            <follow-user-list
+              :users="following"
+              :actions="following_actions"
+              @unfollow="on_unfollow_user"
+            />
+          </q-tab-panel>
           <q-tab-panel name="reviews" class="q-px-none"
             ><reviews :reviews="reviews"></reviews
           ></q-tab-panel>
-          <q-tab-panel name="now-playing" class="q-px-none"></q-tab-panel>
         </q-tab-panels>
       </q-card>
     </div>
@@ -104,31 +114,87 @@
 import ProfilePicture from "@/components/ProfilePicture";
 import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
 import Reviews from "@/components/Reviews";
+import FollowUserList from "@/components/FollowUserList";
+import { review_service, follow_service } from "@/services";
+import {
+  FOLLOW_REQUEST,
+  PROFILE_FOLLOW,
+  PROFILE_UNFOLLOW,
+} from "@/store/actions";
 export default {
   name: "profile-filmmaker",
+  props: {
+    profile: {
+      type: Object,
+      default() {
+        return null;
+      },
+    },
+  },
   components: {
     ProfilePicture,
     ProfileTypeSwitch,
     Reviews,
+    FollowUserList,
   },
   data() {
     return {
+      new_followers: [],
+      new_following: [],
       reviews: [],
-      tab: "performance",
+      tab: "followers",
       engagement: 0.86,
       xp_info_dialog: false,
     };
   },
   computed: {
+    followers() {
+      console.log(this.$store);
+      if (this.is_viwers_profile) return this.$store.state.follow.followers;
+      else return this.new_followers;
+    },
+    following() {
+      if (this.is_viwers_profile) return this.$store.state.follow.following;
+      else return this.new_following;
+    },
     show_login_popup() {
       return !this.is_authenticated;
     },
-    hide_mode() {
-      return !this.is_authenticated;
+    is_viwers_profile() {
+      return this.profile.id == this.my_profile.id;
     },
     rank_txt() {
-      return this.my_profile.rank == -1 ? "-" : this.my_profile.rank;
+      return this.profile.rank == -1 ? "-" : this.profile.rank;
     },
+    following_actions() {
+      if (this.is_viwers_profile)
+        return [{ name: "Unfollow", emit: "unfollow" }];
+      else return [];
+    },
+    follower_actions() {
+      if (this.is_viwers_profile)
+        return [
+          {
+            name: "Follow Back",
+            emit: "follow",
+            disable: (user) =>
+              this.following.filter((f) => f.id == user.id).length == 0,
+          },
+          {
+            name: "Following",
+            emit: "unfollow",
+            icon: "mdi-check",
+            disable: (user) =>
+              this.following.filter((f) => f.id == user.id).length > 0,
+          },
+        ];
+      else return [];
+    },
+  },
+  mounted() {
+    this.get_reviews();
+    this.get_followers();
+    this.get_following();
   },
   methods: {
     show_xp_info_dialog() {
@@ -136,6 +202,47 @@ export default {
     },
     on_rank_click() {
       this.$router.push({ name: "filmmaker-leaderboard" });
+    },
+    on_follow_user(user) {
+      this.$store.dispatch(PROFILE_FOLLOW, user);
+    },
+    on_unfollow_user(user) {
+      this.$store.dispatch(PROFILE_UNFOLLOW, user);
+    },
+    get_reviews() {
+      console.log("calling");
+      review_service
+        .get({ author__id: this.profile.id })
+        .then((res) => {
+          this.reviews = res.results;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    get_followers() {
+      if (this.is_viwers_profile) {
+        this.$store.dispatch(FOLLOW_REQUEST, {
+          profile_id: this.profile.id,
+          type: "followers",
+        });
+      } else {
+        follow_service.get({}, `${this.profile.id}/followers`).then((data) => {
+          this.new_followers.push(...data.results);
+        });
+      }
+    },
+    get_following() {
+      if (this.is_viwers_profile) {
+        this.$store.dispatch(FOLLOW_REQUEST, {
+          profile_id: this.profile.id,
+          type: "following",
+        });
+      } else {
+        follow_service.get({}, `${this.profile.id}/following`).then((data) => {
+          this.new_following.push(...data.results);
+        });
+      }
     },
   },
 };

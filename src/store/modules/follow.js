@@ -19,12 +19,11 @@ const getters = {
 };
 
 const actions = {
-    [REQUEST_]: ({ commit, }, params) => {
+    [REQUEST_]: ({ commit, }, { profile_id, type }) => {
         return new Promise((resolve, reject) => {
             commit(REQUEST_);
-            var is_followers = !!params.followers
-            follow_service.get(params).then(data => {
-                if (is_followers)
+            follow_service.get({}, `${profile_id}/${type}`).then(data => {
+                if (type === "followers")
                     commit(SUCCESS_, { followers: data.results });
                 else
                     commit(SUCCESS_, { following: data.results });

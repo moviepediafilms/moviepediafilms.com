@@ -67,7 +67,7 @@ const actions = {
                 .then((data) => {
                     console.log(data);
                     commit(PROFILE_FOLLOW_DONE_, data.follows)
-                    dispatch(FOLLOW_REQUEST, {}, { root: true })
+                    dispatch(FOLLOW_REQUEST, { profile_id: state.profile.id, type: 'following' }, { root: true })
                     resolve(data)
                 })
                 .catch((error) => {
@@ -84,7 +84,7 @@ const actions = {
                 .then((data) => {
                     console.log(data);
                     commit(PROFILE_FOLLOW_DONE_, data.follows)
-                    dispatch(FOLLOW_REQUEST, {}, { root: true })
+                    dispatch(FOLLOW_REQUEST, { profile_id: state.profile.id, type: 'following' }, { root: true })
                     resolve(data)
                 })
                 .catch((error) => {
