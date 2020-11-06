@@ -7,7 +7,7 @@
           review.movie.title
         }}</q-item-label>
         <q-item-label caption align="right">
-          <span>{{ review.rating }} / 10 <q-icon name="mdi-star" /></span>
+          <span><q-icon name="mdi-star" /> {{ review.rating }} / 10 </span>
           <q-icon name="mdi-circle-medium" class="q-mx-xs" color="grey-6" />
           <span>{{ review.liked_by.length }} likes</span>
           <q-icon name="mdi-circle-medium" class="q-mx-xs" color="grey-6" />

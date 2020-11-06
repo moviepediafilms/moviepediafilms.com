@@ -2,33 +2,19 @@
   <base-layout>
     <div class="q-ma-md text-center q-pt-xs">
       <h3 class="text-primary">My Reviews</h3>
-      <q-list padding separator>
-        <q-item v-for="review in reviews" :key="review.id">
-          <q-item-section>
-            <q-item-label align="left"> {{ review.content }}</q-item-label>
-            <q-item-label caption align="left">{{
-              review.movie.title
-            }}</q-item-label>
-            <q-item-label caption align="right">
-              <span>{{ review.rating }} / 10 <q-icon name="mdi-star" /></span>
-              <q-icon name="mdi-circle-medium" class="q-mx-xs" color="grey-6" />
-              <span>{{ review.liked_by.length }} likes</span>
-              <q-icon name="mdi-circle-medium" class="q-mx-xs" color="grey-6" />
-              <span>{{ date_to_txt(review.published_at) }}</span>
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
+      <reviews :reviews="reviews" />
     </div>
   </base-layout>
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
+import Reviews from "@/components/Reviews";
 import { review_service } from "@/services";
 export default {
   name: "my-review-page",
   components: {
     BaseLayout,
+    Reviews,
   },
   metaInfo: {
     title: "My Reviews",
