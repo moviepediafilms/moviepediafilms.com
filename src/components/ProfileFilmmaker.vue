@@ -81,8 +81,8 @@
           outside-arrows
           mobile-arrows
         >
-          <q-tab name="followers" label="Followers" />
-          <q-tab name="following" label="Following" />
+          <q-tab name="followers" :label="followers.length + ' Followers'" />
+          <q-tab name="following" :label="following.length + ' Following'" />
           <q-tab name="reviews" label="Reviews" />
         </q-tabs>
         <q-separator />
@@ -149,7 +149,6 @@ export default {
   },
   computed: {
     followers() {
-      console.log(this.$store);
       if (this.is_viwers_profile) return this.$store.state.follow.followers;
       else return this.new_followers;
     },
