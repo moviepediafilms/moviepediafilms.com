@@ -1,16 +1,10 @@
 <template>
   <div class="row justify-center">
-    <q-avatar
-      size="110px"
-      style="margin-left: 8px"
-      :class="{ 'bg-grey-9': show_dummy_img || !profile.image }"
-    >
+    <q-avatar size="110px" style="margin-left: 8px">
       <img
-        :src="profile.image"
-        @error="on_profile_img_load_err"
-        v-if="!show_dummy_img && profile.image"
+        :src="profile.image || '/media/default_avatar.png'"
+        @error="on_img_load_fail"
       />
-      <q-icon name="mdi-account" size="145px" color="grey-5" v-else />
     </q-avatar>
     <div class="self-end" style="margin-left: -24px" v-if="editable">
       <q-btn
@@ -84,7 +78,6 @@ export default {
   },
   data() {
     return {
-      show_dummy_img: false,
       change_icon_dialog: false,
       profile_image: {
         file: null,
@@ -108,9 +101,6 @@ export default {
     },
   },
   methods: {
-    on_profile_img_load_err() {
-      this.show_dummy_img = true;
-    },
     on_profile_image_reject() {
       this.profile_image.error = "Select an image";
     },

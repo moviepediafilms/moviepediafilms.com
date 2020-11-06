@@ -23,6 +23,7 @@ Vue.mixin({
     },
     methods: {
         on_img_load_fail(img) {
+            console.log(`error loading image ${img.target.src}`)
             img.target.src = "/default_avatar.png";
         },
         slugify(content) {
