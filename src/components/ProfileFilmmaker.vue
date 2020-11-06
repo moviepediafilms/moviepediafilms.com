@@ -2,7 +2,10 @@
   <div class="q-pa-md">
     <div class="row justify-center">
       <div class="col text-center">
-        <profile-picture :editable="is_viwers_profile"></profile-picture>
+        <profile-picture
+          :profile="profile"
+          :editable="is_viwers_profile"
+        ></profile-picture>
         <div class="text-h2 q-mt-md">
           {{ profile.name }}
         </div>
