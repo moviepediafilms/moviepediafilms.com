@@ -125,6 +125,11 @@ export default {
       return this.$route.params.id;
     },
   },
+  watch: {
+    my_profile() {
+      if (this.is_my_profile) this.profile = this.my_profile;
+    },
+  },
   methods: {
     load_data() {
       if (this.is_my_profile) {
