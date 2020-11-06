@@ -2,7 +2,7 @@
   <div class="row justify-center">
     <q-avatar size="110px" style="margin-left: 8px">
       <img
-        :src="profile.image || '/media/default_avatar.png'"
+        :src="profile.image || '/default_avatar.png'"
         @error="on_img_load_fail"
       />
     </q-avatar>
