@@ -126,6 +126,9 @@ export default {
     },
   },
   watch: {
+    $route() {
+      this.load_data();
+    },
     my_profile() {
       if (this.is_my_profile) this.profile = this.my_profile;
     },

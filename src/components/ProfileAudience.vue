@@ -200,14 +200,22 @@ export default {
       else return [];
     },
   },
+  watch: {
+    profile() {
+      if (this.profile.id) this.load_data();
+    },
+  },
   mounted() {
-    this.get_recommends();
-    if (this.is_viwers_profile) this.get_watchlist();
-    this.get_followers();
-    this.get_following();
-    this.get_lists();
+    this.load_data();
   },
   methods: {
+    load_data() {
+      this.get_recommends();
+      if (this.is_viwers_profile) this.get_watchlist();
+      this.get_followers();
+      this.get_following();
+      this.get_lists();
+    },
     get_level_name() {
       var level_map = {
         1: "Cienphile",
