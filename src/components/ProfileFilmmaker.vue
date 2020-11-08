@@ -40,7 +40,7 @@
           <div class="col-4 text-center">
             <q-btn flat stack>
               <div class="text-uppercase text-h5 text-weight-bolder">
-                {{ profile.film_count || "-" }}
+                {{ profile.movies_directed || "-" }}
               </div>
               <div class="q-mt-xs text-uppercase text-caption">Films</div>
             </q-btn>
@@ -51,13 +51,13 @@
     <div class="row justify-center q-mt-md" v-if="is_viwers_profile">
       <q-linear-progress
         size="5px"
-        :value="engagement"
+        :value="fund_meter"
         track-color="white"
         class="row q-mt-sm"
         style="max-width: 180px"
       />
       <span class="text-xs q-ml-sm">
-        {{ engagement * 100 }} <q-icon name="mdi-percent" />
+        {{ fund_meter * 100 }} <q-icon name="mdi-percent" />
         <q-icon name="mdi-chevron-down"
       /></span>
     </div>
@@ -146,11 +146,13 @@ export default {
       new_following: [],
       reviews: [],
       tab: "followers",
-      engagement: 0.86,
       xp_info_dialog: false,
     };
   },
   computed: {
+    fund_meter() {
+      return this.profile.pop_score / 6400;
+    },
     followers() {
       if (this.is_viwers_profile) return this.$store.state.follow.followers;
       else return this.new_followers;
@@ -193,12 +195,20 @@ export default {
       else return [];
     },
   },
+  watch: {
+    profile() {
+      if (this.profile.id) this.load_data();
+    },
+  },
   mounted() {
-    this.get_reviews();
-    this.get_followers();
-    this.get_following();
+    if (this.profile.id) this.load_data();
   },
   methods: {
+    load_data() {
+      this.get_reviews();
+      this.get_followers();
+      this.get_following();
+    },
     show_xp_info_dialog() {
       this.xp_info_dialog = true;
     },
