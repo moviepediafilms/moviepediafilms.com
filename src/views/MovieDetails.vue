@@ -173,7 +173,7 @@
                     <q-item-label>
                       <router-link
                         class="text-primary text-decoration-none"
-                        :to="{ name: 'profile', id: crew.profile.id }"
+                        :to="{ name: 'profile', params: {id: crew.profile.id} }"
                         >{{ crew.profile.name }}</router-link
                       >
                       <div class="text-caption text-grey-6">

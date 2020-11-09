@@ -205,9 +205,11 @@ export default {
   },
   methods: {
     load_data() {
-      this.get_reviews();
-      this.get_followers();
-      this.get_following();
+      if (this.is_authenticated) {
+        this.get_reviews();
+        this.get_followers();
+        this.get_following();
+      }
     },
     show_xp_info_dialog() {
       this.xp_info_dialog = true;
