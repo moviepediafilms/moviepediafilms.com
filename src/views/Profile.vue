@@ -136,7 +136,7 @@ export default {
   methods: {
     load_data() {
       if (this.is_my_profile) {
-        this.load_self_data();
+        if (this.is_authenticated) this.load_self_data();
       } else {
         this.get_profile();
       }

@@ -210,11 +210,13 @@ export default {
   },
   methods: {
     load_data() {
-      this.get_recommends();
-      if (this.is_viwers_profile) this.get_watchlist();
-      this.get_followers();
-      this.get_following();
-      this.get_lists();
+      if (this.is_authenticated) {
+        this.get_recommends();
+        if (this.is_viwers_profile) this.get_watchlist();
+        this.get_followers();
+        this.get_following();
+        this.get_lists();
+      }
     },
     get_level_name() {
       var level_map = {
