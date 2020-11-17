@@ -12,6 +12,21 @@
             <div class="text-body1 text-primary">
               {{ movie.title }}
             </div>
+            <div class="row">
+              <q-badge
+                v-if="movie.contest.is_live"
+                color="positive"
+                class="q-mr-xs"
+                >Live</q-badge
+              >
+              <q-badge
+                v-if="movie.contest"
+                color="grey-5"
+                text-color="dark"
+                class="q-mr-xs"
+                >{{ movie.contest.name }}</q-badge
+              >
+            </div>
             <div class="row justify-between no-wrap">
               <div class="ellipsis text-grey-6 text-caption">
                 <q-icon name="mdi-tag" class="q-mr-xs" />
@@ -165,15 +180,20 @@
                 >
                   <q-item-section avatar top>
                     <q-avatar>
-                      <img :src="crew.profile.image || '/default_avatar.png'"
-                        @error="on_img_load_fail" />
+                      <img
+                        :src="crew.profile.image || '/default_avatar.png'"
+                        @error="on_img_load_fail"
+                      />
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
                     <q-item-label>
                       <router-link
                         class="text-primary text-decoration-none"
-                        :to="{ name: 'profile', params: {id: crew.profile.id} }"
+                        :to="{
+                          name: 'profile',
+                          params: { id: crew.profile.id },
+                        }"
                         >{{ crew.profile.name }}</router-link
                       >
                       <div class="text-caption text-grey-6">
@@ -683,6 +703,7 @@ export default {
       err_new_list_request: "",
       movie: {
         id: null,
+        contest: {},
         audience_rating: 0,
         jury_rating: 0,
         genre: [],
@@ -831,6 +852,8 @@ export default {
           this.movie = movie;
         })
         .catch((error) => {
+          if (error.response.status == 404)
+            console.log("show 404 page")
           console.log(error);
         });
     },

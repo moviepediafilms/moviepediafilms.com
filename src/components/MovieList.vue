@@ -12,7 +12,17 @@
           <img :src="item.poster" />
         </q-item-section>
         <q-item-section @click="on_item_click(item)">
-          <q-item-label class="text-sm">{{ item.title }}</q-item-label>
+          <q-item-label class="text-sm ellipsis">{{ item.title }}</q-item-label>
+          <q-item-label caption>
+            <q-badge color="positive" v-if="item.is_live">Live</q-badge>
+            <q-badge
+              color="grey-5"
+              class="q-ml-xs"
+              text-color="dark"
+              v-if="item.contest"
+              >{{ item.contest }}</q-badge
+            >
+          </q-item-label>
           <q-item-label caption>{{ item.about }}</q-item-label>
         </q-item-section>
         <q-item-section

@@ -155,6 +155,7 @@ const routes = [
     },
     {
         path: '*',
+        name: "not-found",
         component: () =>
             import ('../views/404.vue')
     }
