@@ -30,7 +30,7 @@
             </div>
           </q-item-label>
         </q-item-section>
-        <q-item-section side>
+        <q-item-section side v-if="!list.frozen">
           <q-btn
             size="sm"
             flat
