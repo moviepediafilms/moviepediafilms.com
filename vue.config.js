@@ -21,7 +21,7 @@ module.exports = {
                 var config = args[0]
                 if (!config.minify)
                     config.minify = {}
-                config.removeAttributeQuotes = false
+                config.minify.removeAttributeQuotes = false
                 return args
             })
         plugins: [
