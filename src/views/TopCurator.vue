@@ -4,121 +4,74 @@
       <h3 class="text-primary text-weight-light q-mb-xs">Top Curators</h3>
 
       <div class="row q-mt-sm q-col-gutter-md justify-center">
-        <div
-          v-for="creator in creators"
-          :key="creator.id"
-          class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2"
-          style="display: inline-block"
-        >
-          <div class="">
-            <q-avatar
-              color="white"
-              size="100px"
-              @click.prevent="open_profile(creator)"
-            >
-              <img :src="creator.image" />
-            </q-avatar>
-            <div class="text-h6 q-mt-md text-primary">
-              {{ creator.pop_score }}
-            </div>
-            <div class="text-weight-bold text-subtitle1 ellipsis">
-              {{ creator.name }}
-            </div>
-            <!-- <div class="text-caption text-primary">{{ creator.pop_score }}</div> -->
-          </div>
-        </div>
+        <leaderboard
+          ref="leaderboard"
+          :users="curators"
+          :loading="loading"
+          :show_page_indicator="false"
+          @click="on_profile_select"
+          :pin_self_top="false"
+          :highlight_top="10"
+        />
       </div>
     </div>
   </base-layout>
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
+import Leaderboard from "@/components/Leaderboard";
+import { top_curator_service } from "@/services";
+import _ from "lodash";
 export default {
   name: "top-curator-page",
   components: {
     BaseLayout,
+    Leaderboard,
   },
   metaInfo: {
     title: "Top Curators",
   },
   data() {
     return {
-      creators: [],
-      sorted_creators: [],
+      page_size: 20,
+      loading: false,
+      curators: [],
     };
   },
   mounted() {
-    this.fetch_creators();
+    this.new_page_load();
+  },
+  computed: {
+    throttled_scroll_handler() {
+      return _.throttle(this.scroll_handler, 300);
+    },
+  },
+  created() {
+    window.addEventListener("scroll", this.throttled_scroll_handler);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.throttled_scroll_handler);
   },
   methods: {
-    get_rand_avatar(height, width) {
-      if (!height) height = 400;
-      if (!width) width = 400;
-      var size = `h_${height},w_${width}`;
-      var avatars = [
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/male4_mnxpb7.png`,
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/male1_nicpgf.png`,
-        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/neutral_uik7av.png`,
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/male2_ioz3nb.png`,
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972826/avatars/male3_r8xkgb.png`,
-        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female2_k1ste4.png`,
-        `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/male_nam8xo.png`,
-        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female1_tvzgya.png`,
-        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female4_hg2nvm.png`,
-        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female_w7jycr.png`,
-        // `https://res.cloudinary.com/moviepedia/image/upload/${size}/v1600972825/avatars/female3_aiuwgu.png`,
-      ];
-      var rand_idx = Math.floor(Math.random() * avatars.length);
-      return avatars[rand_idx];
-    },
-    get_random_pop_score() {
-      var MAX_SCORE = 10000;
-      return Math.floor(Math.random() * MAX_SCORE + 1);
-    },
-    get_random_name() {
-      var first_names = [
-        "Rahul",
-        "Shivam",
-        "Durbar",
-        "Pankaj",
-        "Rohit",
-        "Vyom",
-        "Ravi",
-        "Parmesh",
-        "Roshan",
-        "Monomay",
-      ];
-      var last_names = [
-        "Kumar",
-        "Sharma",
-        "Sengupta",
-        "Srivastava",
-        "Kapoor",
-        "Mishra",
-        "Pandey",
-        "Karmakar",
-      ];
-      var first_idx = Math.floor(Math.random() * first_names.length);
-      var last_idx = Math.floor(Math.random() * last_names.length);
-      return `${first_names[first_idx]} ${last_names[last_idx]}`;
-    },
-    open_profile(creator) {
-      this.$router.push({ name: "profile", params: { id: creator.id } });
-    },
-    fetch_creators() {
-      this.creators = [];
-      for (var i = 0; i < 10; i++) {
-        this.creators.push({
-          id: i,
-          image: this.get_rand_avatar(),
-          name: this.get_random_name(),
-          pop_score: this.get_random_pop_score(),
-        });
+    scroll_handler() {
+      var list = this.$refs.leaderboard.$el;
+      var dimens = list.getClientRects()[0];
+      if (dimens.bottom < window.innerHeight) {
+        this.new_page_load();
       }
-      // reverse sort by popularity score
-      this.creators.sort((f, s) => {
-        return s.pop_score - f.pop_score;
-      });
+    },
+    new_page_load() {
+      top_curator_service
+        .get({ offset: this.curators.length, limit: this.page_size })
+        .then((data) => {
+          this.curators.push(...data.results);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    on_profile_select(creator) {
+      this.$router.push({ name: "profile", params: { id: creator.id } });
     },
   },
 };
