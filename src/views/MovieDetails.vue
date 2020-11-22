@@ -226,6 +226,14 @@
                 </q-item>
               </q-expansion-item>
             </div>
+            <div class="row q-mt-md" v-if="movie.about">
+              <div class="col text-center text-grey-5">
+                <div class="text-h4 text-primary">Moviepedia Critic</div>
+                <p class="q-mt-xs">
+                  {{ movie.about }}
+                </p>
+              </div>
+            </div>
             <div class="row items-center q-mt-md">
               <div clss="col">
                 <q-icon size="48px" color="primary" name="mdi-emoticon-dead" />
@@ -261,7 +269,6 @@
               <template v-else>You have not rated the film</template>
             </div>
 
-            <div class="row q-mt-lg">{{ movie.about }}</div>
             <div class="row q-mt-lg">
               <div class="col">
                 <vue-easy-pie-chart
@@ -852,8 +859,7 @@ export default {
           this.movie = movie;
         })
         .catch((error) => {
-          if (error.response.status == 404)
-            console.log("show 404 page")
+          if (error.response.status == 404) console.log("show 404 page");
           console.log(error);
         });
     },

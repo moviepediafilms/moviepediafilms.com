@@ -14,8 +14,6 @@
         </div>
       </div>
       <leaderboard
-        :pages="pages"
-        :page_size="page_size"
         :users="users"
         :loading="loading"
         @page-change="on_page_change"

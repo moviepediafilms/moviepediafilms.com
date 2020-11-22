@@ -244,7 +244,7 @@
               :key="pack.id"
               clickable
               v-ripple
-              @click="active_pack_id = pack.id"
+              @click="on_change_active_pack(pack)"
               :class="index > 0 ? 'q-mt-lg' : 'q-mt-md'"
               class="q-pa-md pack-border"
               active-class="selected-pack-border"
@@ -678,6 +678,10 @@ export default {
             this.error_msg = this.decode_error_message(error);
           });
       }
+    },
+    on_change_active_pack(pack) {
+      if (!this.submitted_movie.order.order_id) this.active_pack_id = pack.id;
+      else console.log("show notification, you already selected a package");
     },
     attempt_payment() {
       let options = {

@@ -38,6 +38,7 @@
           v-ripple
           class="bg-light-green-10"
           style="border-radius: 10px"
+          v-if="pin_self_top"
         >
           <q-item-section avatar>
             <q-avatar>
@@ -56,7 +57,15 @@
             #{{ my_profile.rank }}
           </q-item-section>
         </q-item>
-        <q-item v-for="user in users" :key="user.id">
+        <q-item
+          clickable
+          v-ripple
+          v-for="(user, index) in users"
+          :key="user.id"
+          style="border-radius: 10px"
+          :class="{ 'bg-light-green-10 q-mb-xs': index < highlight_top }"
+          @click="$emit('click', user)"
+        >
           <q-item-section avatar>
             <q-avatar>
               <img
@@ -67,19 +76,18 @@
           </q-item-section>
           <q-item-section no-wrap class="ellipsis text-left">
             {{ user.name }}
-
-            <span class="text-grey-6 text-caption">{{ my_profile.city }}</span>
+            <span class="text-grey-6 text-caption">{{ user.city }}</span>
           </q-item-section>
           <q-item-section side style="min-width: 55px">
             {{ user.score }}
           </q-item-section>
           <q-item-section side style="min-width: 55px">
-            #{{ user.rank }}
+            {{ user.rank == -1 ? "--" : `#${user.rank}` }}
           </q-item-section>
         </q-item>
       </q-list>
     </transition>
-    <div class="row justify-center q-mt-md">
+    <div class="row justify-center q-mt-md" v-if="show_page_indicator">
       <q-pagination
         v-model="curr_page"
         color="grey-6"
@@ -102,10 +110,6 @@ export default {
         return [];
       },
     },
-    page_size: {
-      type: Number,
-      dafault: 10,
-    },
     pages: {
       type: Number,
       dafault: 1,
@@ -113,6 +117,18 @@ export default {
     loading: {
       type: Boolean,
       dafault: true,
+    },
+    show_page_indicator: {
+      type: Boolean,
+      dafault: true,
+    },
+    pin_self_top: {
+      type: Boolean,
+      dafault: true,
+    },
+    highlight_top: {
+      type: Number,
+      dafault: 0,
     },
   },
 
