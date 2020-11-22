@@ -16,6 +16,14 @@ module.exports = {
         'quasar'
     ],
     chainWebpack: config => {
+        config.plugin('html')
+            .tap(args => {
+                var config = args[0]
+                if (!config.minify)
+                    config.minify = {}
+                config.removeAttributeQuotes = false
+                return args
+            })
         plugins: [
             new GoogleFontsPlugin({
                 fonts: [
