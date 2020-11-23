@@ -4,7 +4,7 @@
       <h3 class="text-primary text-weight-light q-mb-xs">Top Creators</h3>
 
       <div class="row q-mt-sm q-col-gutter-md justify-center">
-        <leaderboard
+        <creators
           ref="leaderboard"
           :users="creators"
           :loading="loading"
@@ -19,14 +19,14 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import Leaderboard from "@/components/Leaderboard";
-import { top_creator_service } from "@/services";
+import Creators from "@/components/Creators";
+import { contest_service } from "@/services";
 import _ from "lodash";
 export default {
   name: "top-creator-page",
   components: {
     BaseLayout,
-    Leaderboard,
+    Creators,
   },
   metaInfo: {
     title: "Top Creators",
@@ -37,6 +37,7 @@ export default {
       loading: false,
       creators: [],
       sorted_creators: [],
+      contest_id: 1,
     };
   },
   mounted() {
@@ -62,8 +63,11 @@ export default {
       }
     },
     new_page_load() {
-      top_creator_service
-        .get({ offset: this.creators.length, limit: this.page_size })
+      contest_service
+        .get(
+          { offset: this.creators.length, limit: this.page_size },
+          `${this.contest_id}/top-creators`
+        )
         .then((data) => {
           this.creators.push(...data.results);
         })
