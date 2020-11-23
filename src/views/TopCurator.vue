@@ -4,7 +4,7 @@
       <h3 class="text-primary text-weight-light q-mb-xs">Top Curators</h3>
 
       <div class="row q-mt-sm q-col-gutter-md justify-center">
-        <leaderboard
+        <curators
           ref="leaderboard"
           :users="curators"
           :loading="loading"
@@ -19,14 +19,14 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import Leaderboard from "@/components/Leaderboard";
-import { top_curator_service } from "@/services";
+import Curators from "@/components/Curators";
+import { contest_service } from "@/services";
 import _ from "lodash";
 export default {
   name: "top-curator-page",
   components: {
     BaseLayout,
-    Leaderboard,
+    Curators,
   },
   metaInfo: {
     title: "Top Curators",
@@ -36,6 +36,7 @@ export default {
       page_size: 20,
       loading: false,
       curators: [],
+      contest_id: 1,
     };
   },
   mounted() {
@@ -61,8 +62,11 @@ export default {
       }
     },
     new_page_load() {
-      top_curator_service
-        .get({ offset: this.curators.length, limit: this.page_size })
+      contest_service
+        .get(
+          { offset: this.curators.length, limit: this.page_size },
+          `${this.contest_id}/top-curators`
+        )
         .then((data) => {
           this.curators.push(...data.results);
         })
