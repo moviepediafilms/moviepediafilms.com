@@ -1,74 +1,72 @@
 <template>
   <base-layout>
-    <div class="q-ma-md text-center">
+    <div class="q-ma-sm text-center">
       <h3 class="text-primary text-weight-light q-mb-xs">Top Curators</h3>
 
-      <div class="row q-mt-sm q-col-gutter-md justify-center">
-        <curators
-          ref="leaderboard"
-          :users="curators"
-          :loading="loading"
-          :show_page_indicator="false"
-          @click="on_profile_select"
-          :pin_self_top="false"
-          :highlight_top="10"
-        />
-      </div>
+      <q-card flat class="q-mt-md">
+        <q-tabs
+          v-model="tab"
+          dense
+          class="white"
+          indicator-color="primary"
+          inline-label
+          outside-arrows
+          mobile-arrows
+        >
+          <q-tab
+            :name="contest.name"
+            :label="contest.name"
+            v-for="contest in contests"
+            :key="contest.id"
+          />
+        </q-tabs>
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel
+            :name="contest.name"
+            v-for="contest in contests"
+            :key="contest.id"
+          >
+            <curator-paginated
+              :contest="contest"
+              @click="on_profile_select"
+              :key="contest.id"
+            />
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-card>
     </div>
   </base-layout>
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import Curators from "@/components/Curators";
+import CuratorPaginated from "@/components/CuratorPaginated";
 import { contest_service } from "@/services";
-import _ from "lodash";
 export default {
   name: "top-curator-page",
   components: {
     BaseLayout,
-    Curators,
+    CuratorPaginated,
   },
   metaInfo: {
     title: "Top Curators",
   },
   data() {
     return {
-      page_size: 20,
-      loading: false,
-      curators: [],
-      contest_id: 1,
+      contests: [],
+      tab: "",
     };
   },
   mounted() {
-    this.new_page_load();
-  },
-  computed: {
-    throttled_scroll_handler() {
-      return _.throttle(this.scroll_handler, 300);
-    },
-  },
-  created() {
-    window.addEventListener("scroll", this.throttled_scroll_handler);
-  },
-  destroyed() {
-    window.removeEventListener("scroll", this.throttled_scroll_handler);
+    this.load_live_monthly_contests();
   },
   methods: {
-    scroll_handler() {
-      var list = this.$refs.leaderboard.$el;
-      var dimens = list.getClientRects()[0];
-      if (dimens.bottom < window.innerHeight) {
-        this.new_page_load();
-      }
-    },
-    new_page_load() {
+    load_live_monthly_contests() {
       contest_service
-        .get(
-          { offset: this.curators.length, limit: this.page_size },
-          `${this.contest_id}/top-curators`
-        )
+        .get({ ordering: "start", is_live: "true", type__name: "Monthly" })
         .then((data) => {
-          this.curators.push(...data.results);
+          console.log(data);
+          this.contests.push(...data.results);
+          this.tab = this.contests[this.contests.length - 1].name;
         })
         .catch((error) => {
           console.log(error);
