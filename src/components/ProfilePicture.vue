@@ -28,18 +28,18 @@
     </div>
 
     <q-dialog v-model="change_icon_dialog" v-if="editable">
-      <q-card class="" style="width: 400px; max-width: 80vw">
+      <q-card style="width: 400px; max-width: 80vw">
         <q-card-section class="text-center">
           <div class="text-h6 q-mb-lg">Change Picture</div>
-          <div>
-            <vue-cropper
-              ref="cropper"
-              :aspect-ratio="1"
-              :src="profile_image_url"
-              alt="Profile Picture"
-            >
-            </vue-cropper>
-          </div>
+
+          <vue-cropper
+            style="height: 60vw; width: 100%"
+            ref="cropper"
+            :aspect-ratio="1"
+            :src="profile_image_url"
+            alt="Profile Picture"
+          >
+          </vue-cropper>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancel" v-close-popup />

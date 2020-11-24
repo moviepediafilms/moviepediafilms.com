@@ -62,6 +62,9 @@
                 :rules="[
                   (val) =>
                     (val && val.length > 0) || 'Please enter movie title',
+                  (val) =>
+                    (val && val.match(/^[\x00-\x7F]*$/)) ||
+                    'Please use alpha numeric characters only',
                 ]"
                 filled
               ></q-input>

@@ -38,7 +38,7 @@
             </q-btn>
           </div>
           <div class="col-4 text-center">
-            <q-btn flat stack>
+            <q-btn flat stack @click="on_films_click">
               <div class="text-uppercase text-h5 text-weight-bolder">
                 {{ profile.movies_directed || "-" }}
               </div>
@@ -219,6 +219,9 @@ export default {
     },
     on_rank_click() {
       this.$router.push({ name: "filmmaker-leaderboard" });
+    },
+    on_films_click() {
+      this.$router.push({ name: "my-movies" });
     },
     on_follow_user(user) {
       this.$store.dispatch(PROFILE_FOLLOW, user);
