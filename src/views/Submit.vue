@@ -420,12 +420,6 @@ export default {
             "We simplify the fundraising for your projects. We connect you with film enthusiasts to get your projects funded.",
         },
         {
-          icon: "mdi-chart-timeline-variant",
-          color: "white",
-          text:
-            "We provide deep analytics support on your content performance and trends.",
-        },
-        {
           icon: "mdi-currency-usd",
           color: "green",
           text:
