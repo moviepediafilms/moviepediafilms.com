@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="col">
     <transition
       appear
       name="custom-classes-transition"
