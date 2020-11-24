@@ -162,18 +162,20 @@ export default {
       tab: "watchlist",
       engagement: 0.86,
       // recommendation used when is_viwers_profile is false
-      recommends_: [],
+      their_recommends: [],
       lists: [],
       followers: [],
       following: [],
     };
   },
   computed: {
-    ...mapState("profile", ["watchlist"]),
+    ...mapState("profile", {
+      watchlist: (state) => state.watchlist,
+      my_recommends: (state) => state.recommends,
+    }),
     recommends() {
-      console.log("recommends", this.$store.recommends);
-      if (this.is_viwers_profile) return this.$store.recommends;
-      else return this.recommends_;
+      if (this.is_viwers_profile) return this.my_recommends;
+      else return this.their_recommends;
     },
     profile_is_filmmaker() {
       return true; //this.is_filmmaker(this.profile);
@@ -243,7 +245,7 @@ export default {
     },
     get_recommends() {
       recommend_service.get({}, `${this.profile.id}/movies`).then((data) => {
-        this.recommends_.push(...data);
+        this.their_recommends.push(...data);
       });
     },
     get_watchlist() {
@@ -260,7 +262,7 @@ export default {
       });
     },
     get_lists() {
-      list_service.get().then((data) => {
+      list_service.get({ owner__id: this.profile.id }).then((data) => {
         this.lists.push(...data.results);
       });
     },

@@ -218,7 +218,7 @@ const mutations = {
         localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
     },
     [PROFILE_RECOMMENDS_REQUEST_]: (state, recommend_items) => {
-        state.recommends.splice(0, state.watchlist.length)
+        state.recommends.splice(0, state.recommends.length)
         state.recommends.push(...recommend_items)
         localStorage.setItem("recommends", JSON.stringify(state.recommends));
     },
@@ -243,10 +243,12 @@ const mutations = {
                 found_at = index
             }
         })
-        if (found_at == -1)
+        if (found_at == -1) {
             state.recommends.push({ title: movie.title, poster: movie.poster, id: movie.id, about: movie.about })
-        else
+        } else {
             state.recommends.splice(found_at, 1)
+        }
+        localStorage.setItem("recommends", JSON.stringify(state.recommends));
     },
     [PROFILE_VIEW_TOGGLE_]: (state) => {
         state.show_filmmaker_profile = !state.show_filmmaker_profile

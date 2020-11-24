@@ -662,8 +662,6 @@ export default {
       recommend_loading: false,
       watchlist_loading: false,
       rating_loading: false,
-      is_recommended: false,
-      is_watchlisted: false,
       my_rate_review: {
         id: null,
         content: null,
@@ -856,7 +854,7 @@ export default {
           if (movie.requestor_rating)
             this.my_rate_review = movie.requestor_rating;
           delete movie["requestor_rating"];
-          this.movie = movie;
+          Object.assign(this.movie, movie);
         })
         .catch((error) => {
           if (error.response.status == 404) console.log("show 404 page");
