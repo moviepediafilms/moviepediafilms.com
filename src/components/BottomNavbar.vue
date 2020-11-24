@@ -10,14 +10,14 @@
       />
       <q-route-tab
         name="top-creator"
-        icon="mdi-trophy-variant-outline mdi-18px"
+        icon="mdi-movie-open-outline mdi-18px"
         label="Top Creators"
         no-caps
         :to="{ name: 'top-creator' }"
       />
       <q-route-tab
         name="top-curators"
-        icon="mdi-trophy-variant-outline mdi-18px"
+        icon="mdi-bullhorn-outline mdi-18px"
         label="Top Curators"
         no-caps
         :to="{ name: 'top-curator' }"
