@@ -151,7 +151,10 @@ export default {
   },
   computed: {
     fund_meter() {
-      return this.profile.pop_score / 6400;
+      // 6000 is the max score we are aiming at, as of now
+      var score = this.profile.pop_score / 6400;
+      // round up to 2 decimal places
+      return Math.round((score + Number.EPSILON) * 100) / 100;
     },
     followers() {
       if (this.is_viwers_profile) return this.$store.state.follow.followers;

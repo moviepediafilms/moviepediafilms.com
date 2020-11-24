@@ -160,7 +160,6 @@ export default {
   data() {
     return {
       tab: "watchlist",
-      engagement: 0.86,
       // recommendation used when is_viwers_profile is false
       their_recommends: [],
       lists: [],
@@ -173,6 +172,12 @@ export default {
       watchlist: (state) => state.watchlist,
       my_recommends: (state) => state.recommends,
     }),
+    engagement() {
+      // 6000 is the max score we are aiming at, as of now
+      var score = this.my_profile.engagement_score / 6000;
+      // round up to 2 decimal places
+      return Math.round((score + Number.EPSILON) * 100) / 100;
+    },
     recommends() {
       if (this.is_viwers_profile) return this.my_recommends;
       else return this.their_recommends;
