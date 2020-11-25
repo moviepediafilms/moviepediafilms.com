@@ -109,21 +109,26 @@ export default {
     },
     save_profile_image() {
       this.profile_image.loading = true;
-      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
-        this.$store
-          .dispatch(PROFILE_IMAGE_UPDATE, blob)
-          .then(() => {
-            this.profile_image.loading = false;
-            this.profile_image.file = null;
-            this.change_icon_dialog = false;
-          })
-          .catch((error) => {
-            this.profile_image.loading = false;
-            // TODO: show error message wither on the popup or seperately
-            this.change_icon_dialog = false;
-            console.log(error);
-          });
-      }, "image/png");
+      this.$refs.cropper
+        .getCroppedCanvas({
+          width: 400,
+          height: 400,
+        })
+        .toBlob((blob) => {
+          this.$store
+            .dispatch(PROFILE_IMAGE_UPDATE, blob)
+            .then(() => {
+              this.profile_image.loading = false;
+              this.profile_image.file = null;
+              this.change_icon_dialog = false;
+            })
+            .catch((error) => {
+              this.profile_image.loading = false;
+              // TODO: show error message wither on the popup or seperately
+              this.change_icon_dialog = false;
+              console.log(error);
+            });
+        }, "image/png");
     },
   },
 };

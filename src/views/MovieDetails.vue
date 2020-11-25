@@ -126,7 +126,7 @@
                       class="text-muted text-grey-6 q-mt-xs"
                       style="font-size: 8px"
                     >
-                      Save<template v-if="is_added_to_any_list">d</template>
+                      Curate<template v-if="is_added_to_any_list">d</template>
                     </div>
                   </div>
                 </q-btn>
