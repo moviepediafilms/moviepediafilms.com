@@ -86,7 +86,7 @@
         >
           <q-tab name="watchlist" label="Watchlist" v-if="is_viwers_profile" />
           <q-tab name="recommends" label="Recommends" />
-          <q-tab name="lists" label="Lists" />
+          <q-tab name="curations" label="Curations" />
           <q-tab name="followers" :label="followers.length + ' Followers'" />
           <q-tab name="following" :label="following.length + ' Following'" />
         </q-tabs>
@@ -102,7 +102,7 @@
           <q-tab-panel name="recommends" class="q-px-none">
             <recommends :movies="recommends"></recommends>
           </q-tab-panel>
-          <q-tab-panel name="lists" class="q-px-none">
+          <q-tab-panel name="curations" class="q-px-none">
             <lists :lists="lists" @select="on_list_select" />
           </q-tab-panel>
           <q-tab-panel name="following" class="q-px-none">

@@ -2,6 +2,7 @@
   <base-layout>
     <div class="q-ma-md text-center">
       <h3 class="text-primary">Films Directed</h3>
+      <small v-if="profile.name">by {{ profile.name }}</small>
       <div class="q-mt-md text-left">
         <movie-list :movies="movies" @item-selected="on_select" />
       </div>
@@ -11,7 +12,7 @@
 <script>
 import BaseLayout from "@/layouts/Base";
 import MovieList from "@/components/MovieList";
-import { movie_service } from "@/services/";
+import { movies_by_service, profile_service } from "@/services/";
 export default {
   name: "my-movies-page",
   components: {
@@ -24,16 +25,33 @@ export default {
   data() {
     return {
       movies: [],
+      profile: {},
     };
+  },
+  computed: {
+    profile_id() {
+      return this.$route.params.profile_id;
+    },
   },
   mounted() {
     this.fetch_my_movies();
+    this.fetch_profile();
   },
   methods: {
+    fetch_profile() {
+      profile_service
+        .get({}, this.profile_id)
+        .then((data) => {
+          this.profile = data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     fetch_my_movies() {
-      console.log(this.my_profile.profile_id);
-      movie_service
-        .get({}, "my")
+      console.log(this.profile_id);
+      movies_by_service
+        .get({}, this.profile_id)
         .then((data) => {
           this.movies.splice(0, this.movies.length);
           this.movies.push(...data.results);

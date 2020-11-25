@@ -57,10 +57,10 @@ const routes = [
             import ('../views/MyReviews.vue')
     },
     {
-        path: '/my-movies/',
-        name: 'my-movies',
+        path: '/movies/:profile_id',
+        name: 'movies-by-profile',
         component: () =>
-            import ('../views/MyMovies.vue')
+            import ('../views/MoviesByProfile.vue')
     },
     {
         path: '/partner-judges',

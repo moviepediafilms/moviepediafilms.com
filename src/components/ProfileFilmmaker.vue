@@ -221,7 +221,10 @@ export default {
       this.$router.push({ name: "filmmaker-leaderboard" });
     },
     on_films_click() {
-      this.$router.push({ name: "my-movies" });
+      this.$router.push({
+        name: "movies-by-profile",
+        params: { profile_id: this.profile.id },
+      });
     },
     on_follow_user(user) {
       this.$store.dispatch(PROFILE_FOLLOW, user);
