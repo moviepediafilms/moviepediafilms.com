@@ -66,14 +66,10 @@
               type="tel"
               required
               filled
-              mask="+91 ### ### ####"
+              mask="+## ##########"
               unmasked-value
               label="Mobile Number"
-              :rules="[
-                (val) =>
-                  (val && val.length > 0) || 'Please fill your contact number',
-                (val) => val.length == 10 || '10 digits required',
-              ]"
+              :rules="[(val) => !!val || 'Please provide your contact number']"
               :error-message="signup_error.mobile"
               :error="!!signup_error.mobile"
             />
