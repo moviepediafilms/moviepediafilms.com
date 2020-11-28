@@ -37,20 +37,14 @@ export default {
   },
   computed: {},
   mounted() {
-    this.$gsap.fromTo(
-      this.$refs.sidebar,
-      {
-        x: -60,
+    this.$gsap.from(this.$refs.sidebar, {
+      xPercent: -110,
+      duration: 0.8,
+      scrollTrigger: {
+        trigger: this.$refs.sidebar,
+        start: "top 50%",
       },
-      {
-        x: 0,
-        duration: 0.5,
-        scrollTrigger: {
-          trigger: this.$refs.sidebar,
-          start: "top 50%",
-        },
-      }
-    );
+    });
   },
 };
 </script>
