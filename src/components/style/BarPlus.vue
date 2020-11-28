@@ -1,26 +1,47 @@
 <template>
-  <div class="flex justify-end items-center">
-    <transition
-      appear
-      name="custom-classes-transition"
-      enter-active-class="animated animate__fadeInLeftBig"
-      mode="out-in"
-      :duration="200"
-    >
-      <div class="col q-mr-sm">
-        <div style="border-top: 2px solid white; width: 100%"></div>
-      </div>
-    </transition>
-    <transition
-      appear
-      name="custom-classes-transition"
-      enter-active-class="animated animate__fadeIn"
-      mode="out-in"
-      :duration="200"
-    >
-      <div class="color-bg-white">
-        <q-icon name="mdi-plus" color="primary" size="32px" class="q-mr-md" />
-      </div>
-    </transition>
+  <div class="flex justify-end items-center" style="overflow-x: hidden">
+    <div class="col q-mr-sm" ref="bar">
+      <div style="border-top: 2px solid white; width: 100%"></div>
+    </div>
+
+    <div class="color-bg-white" ref="plus">
+      <q-icon name="mdi-plus" color="primary" size="32px" class="q-mr-md" />
+    </div>
   </div>
 </template>
+<script>
+export default {
+  data() {
+    return {};
+  },
+  mounted() {
+    setTimeout(this.add_animation, 200);
+  },
+  methods: {
+    add_animation() {
+      this.$gsap.fromTo(
+        this.$refs.bar,
+        {
+          x: -300,
+        },
+        {
+          x: 0,
+          duration: 0.5,
+          scrollTrigger: this.$refs.bar,
+        }
+      );
+      this.$gsap.fromTo(
+        this.$refs.plus,
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: this.$refs.plus,
+        }
+      );
+    },
+  },
+};
+</script>

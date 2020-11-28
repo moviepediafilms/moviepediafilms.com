@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-end items-center">
+  <div class="flex justify-end items-center" style="overflow-x: hidden">
     <div class="col" ref="bar">
       <div style="border-top: 2px solid white; width: 100%"></div>
     </div>
@@ -22,6 +22,7 @@ export default {
       {
         x: 0,
         opacity: 1,
+        duration: 1,
         scrollTrigger: this.$refs.bar,
       }
     );
@@ -32,6 +33,7 @@ export default {
       },
       {
         x: 0,
+        duration: 2,
         scrollTrigger: this.$refs.hammer,
       }
     );

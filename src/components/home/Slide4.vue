@@ -19,7 +19,7 @@
         :title="item.title"
         :desc="item.desc"
         :icon="item.icon"
-        :key="index"
+        :key="'slide-4-' + index"
         v-for="(item, index) in items"
       ></circular-item>
     </div>

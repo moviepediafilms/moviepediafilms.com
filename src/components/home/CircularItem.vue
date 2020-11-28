@@ -41,7 +41,7 @@ export default {
         duration: 0.6,
         scrollTrigger: {
           trigger: this.$el,
-          bottom: "50%",
+          start: "top 70%",
         },
       }
     );
