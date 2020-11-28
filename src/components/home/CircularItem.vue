@@ -28,23 +28,16 @@ export default {
     },
   },
   mounted() {
-    this.$gsap.fromTo(
-      this.$el,
-      {
-        scale: 0,
-        opacity: 0,
+    this.$gsap.from(this.$el, {
+      scale: 0,
+      opacity: 0,
+      duration: 0.6,
+      ease: "back",
+      scrollTrigger: {
+        trigger: this.$el,
+        start: "top 70%",
       },
-      {
-        scale: 1,
-        transformOrigin: "50% 50%",
-        opacity: 1,
-        duration: 0.6,
-        scrollTrigger: {
-          trigger: this.$el,
-          start: "top 70%",
-        },
-      }
-    );
+    });
   },
 };
 </script>

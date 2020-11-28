@@ -5,6 +5,7 @@
         Our Partner Celebrities
       </div>
       <celeb-item
+        ref="celebs"
         v-for="(celeb, index) in celebs"
         :name="celeb.name"
         :title="celeb.title"
@@ -65,6 +66,21 @@ export default {
         },
       ],
     };
+  },
+  mounted() {
+    this.$refs.celebs.forEach((celb) => {
+      this.$gsap.from(celb.$el, {
+        yPercent: 150,
+        opacity: 0,
+        duration: 0.7,
+        stagger: true,
+        ease: "back",
+        scrollTrigger: {
+          trigger: celb.$el,
+          start: "top 85%",
+        },
+      });
+    });
   },
 };
 </script>

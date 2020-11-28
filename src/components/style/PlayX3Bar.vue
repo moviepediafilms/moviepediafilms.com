@@ -21,34 +21,22 @@ export default {
   mounted() {
     console.log(this.$refs.play);
     this.$refs.play.forEach((play, index) => {
-      this.$gsap.fromTo(
-        play.$el,
-        {
-          x: -100,
+      this.$gsap.from(play.$el, {
+        x: -100,
+        duration: 1.8 - 0.4 * (index + 1),
+        scrollTrigger: {
+          trigger: play.$el,
         },
-        {
-          x: 0,
-          duration: 1.6 - 0.4 * (index + 1),
-          scrollTrigger: {
-            trigger: play.$el,
-          },
-        }
-      );
+      });
     });
 
-    this.$gsap.fromTo(
-      this.$refs.bar,
-      {
-        x: 100,
+    this.$gsap.from(this.$refs.bar, {
+      x: 200,
+      duration: 1,
+      scrollTrigger: {
+        trigger: this.$refs.bar,
       },
-      {
-        x: 0,
-        duration: 1,
-        scrollTrigger: {
-          trigger: this.$refs.bar,
-        },
-      }
-    );
+    });
   },
 };
 </script>

@@ -33,24 +33,7 @@ export default {
       default: "/default_avatar.png",
     },
   },
-  mounted() {
-    this.$gsap.fromTo(
-      this.$el,
-      {
-        y: -100,
-        opacity: 0,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        scrollTrigger: {
-          trigger: this.$el,
-          start: "top 80%",
-        },
-      }
-    );
-  },
+  mounted() {},
 };
 </script>
 <style scoped>
