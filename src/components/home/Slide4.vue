@@ -1,14 +1,73 @@
 <template>
-  <div class="q-mt-lg mp-bg q-py-lg">
-    <img src="/img/slides/4.png" width="100%" />
+  <div
+    style="background-image: url('/img/4_bg.png')"
+    class="q-px-lg q-mt-lg q-py-lg mp-bg"
+  >
+    <bar />
+    <div class="mp-title2 q-mt-lg text-weight-bold text-primary">
+      What's in it for you?
+    </div>
+    <div class="mp-title2 q-mt-md text-weight-bold">CURATORS</div>
+    <div class="q-mt-md mp-subtitle">
+      Moviepedia Films is a platform that bridges the gap between the creators
+      and their audience. We consider curation is also an art and on our
+      platform, the curators get to recommend films and they get rewarded for
+      their eye for good content.
+    </div>
+    <div class="row q-col-gutter-md q-mt-md">
+      <circular-item
+        :title="item.title"
+        :desc="item.desc"
+        :icon="item.icon"
+        :key="index"
+        v-for="(item, index) in items"
+      ></circular-item>
+    </div>
   </div>
 </template>
 <script>
-// import gsap from "gsap";
+import Bar from "@/components/style/Bar";
+import CircularItem from "@/components/home/CircularItem";
 export default {
-  components: {},
+  components: {
+    Bar,
+    CircularItem,
+  },
   data() {
-    return {};
+    return {
+      items: [
+        {
+          title: "15,000",
+          desc: "Curator of the Month Title",
+          icon: "mdi-trophy",
+        },
+        {
+          title: "Be the Jury",
+          desc: "Rate & Review Films",
+          icon: "mdi-checkbox-multiple-marked-outline",
+        },
+        {
+          title: "Recommend",
+          desc: "good content and win rewards",
+          icon: "mdi-bullhorn",
+        },
+        {
+          title: "Recognition",
+          desc: "focussed profiling",
+          icon: "mdi-domino-mask",
+        },
+        {
+          title: "Curate",
+          desc: "list and maintain your film journal",
+          icon: "mdi-playlist-star",
+        },
+        {
+          title: "Build Network",
+          desc: "and share the love for cinema",
+          icon: "mdi-account-group",
+        },
+      ],
+    };
   },
   computed: {},
   mounted() {},
