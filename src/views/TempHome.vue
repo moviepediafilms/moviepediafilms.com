@@ -1,6 +1,6 @@
 <template>
   <base-layout>
-    <div class="row justify-center">
+    <div class="row">
       <slide1></slide1>
       <slide2></slide2>
       <slide3></slide3>
@@ -64,7 +64,6 @@ export default {
   line-height: 1.1;
 }
 .mp-bg {
-  max-width: 500px;
   width: 100%;
   background-position: center;
   background-size: cover;

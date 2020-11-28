@@ -1,16 +1,28 @@
 <template>
   <div class="flex justify-end items-center" style="overflow-x: hidden">
+    <template v-if="rtl">
+      <div class="color-bg-white" ref="plus">
+        <q-icon name="mdi-plus" color="primary" size="32px" class="q-mr-md" />
+      </div>
+    </template>
     <div class="col q-mr-sm" ref="bar">
       <div style="border-top: 2px solid white; width: 100%"></div>
     </div>
-
-    <div class="color-bg-white" ref="plus">
-      <q-icon name="mdi-plus" color="primary" size="32px" class="q-mr-md" />
-    </div>
+    <template v-if="!rtl">
+      <div class="color-bg-white" ref="plus">
+        <q-icon name="mdi-plus" color="primary" size="32px" class="q-mr-md" />
+      </div>
+    </template>
   </div>
 </template>
 <script>
 export default {
+  props: {
+    rtl: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {};
   },
@@ -22,7 +34,7 @@ export default {
       this.$gsap.fromTo(
         this.$refs.bar,
         {
-          x: -300,
+          x: this.rtl ? 300 : -300,
         },
         {
           x: 0,

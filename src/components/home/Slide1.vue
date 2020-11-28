@@ -13,7 +13,7 @@
     <div class="mp-subtitle text-primary q-mt-md">
       The First Social Content Discovery Platform
     </div>
-    <div class="q-mt-md mp-subtitle q-px-md text-grey-6">
+    <div class="q-mt-md mp-subtitle q-px-md text-grey-4">
       Join our community of 170k+ members. Create, Curate & Recommend short
       films and get a chance to win monthly cash rewards worth
     </div>
