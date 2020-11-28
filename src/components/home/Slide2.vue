@@ -1,17 +1,72 @@
 <template>
   <div
-    style="background-image: url('/img/3_bg.png')"
-    class="q-mt-lg mp-bg q-py-lg mp-bg"
+    style="background-image: url('/img/2_bg.png')"
+    class="q-px-lg q-mt-lg q-py-lg mp-bg"
   >
-    <img src="/img/slides/2.png" width="100%" />
+    <bar />
+    <div class="q-mt-lg text-weight-bold text-center mp-title2 text-primary">
+      What's in it for you?
+    </div>
+    <div class="q-mt-md text-center mp-title2 text-weight-bold">CREATORS</div>
+    <div class="q-mt-md text-center mp-subtitle2 text-grey-6">
+      We help you with filmmaking needs, from building your own reputed OTT
+      channel to getting curators, celebrities and funding for you.
+    </div>
+    <div class="row q-col-gutter-md q-mt-md">
+      <circular-item
+        v-for="(item, index) in items"
+        :key="index"
+        ref="items"
+        :icon="item.icon"
+        :desc="item.desc"
+        :title="item.title"
+      ></circular-item>
+    </div>
   </div>
 </template>
 <script>
-// import gsap from "gsap";
+import Bar from "@/components/style/Bar";
+import CircularItem from "@/components/home/CircularItem";
 export default {
-  components: {},
+  components: {
+    Bar,
+    CircularItem,
+  },
   data() {
-    return {};
+    return {
+      items: [
+        {
+          icon: "mdi-trophy",
+          title: "₹ 15,000",
+          desc: "Filmaker of the Month Title",
+        },
+        {
+          icon: "mdi-youtube",
+          title: "Drive Views",
+          desc: "to your TouTube channel",
+        },
+        {
+          icon: "mdi-star",
+          title: "Celebrities",
+          desc: "recommend your films",
+        },
+        {
+          icon: "mdi-domino-mask",
+          title: "Recognition",
+          desc: "focussed profiling",
+        },
+        {
+          icon: "mdi-cash-multiple",
+          title: "Get Funded",
+          desc: "for yout upcoming projects",
+        },
+        {
+          icon: "mdi-video-account",
+          title: "Social Media",
+          desc: "campaigns for your films",
+        },
+      ],
+    };
   },
   computed: {},
   mounted() {},
