@@ -15,7 +15,11 @@
         CREATORS
       </div>
       <template v-for="(item, index) in items">
-        <div :key="index" class="flex q-mb-lg items-center">
+        <div
+          :key="index"
+          class="flex q-mb-lg items-center"
+          style="overflow: hidden"
+        >
           <div class="col" ref="page2itemsleft">
             <div class="mp-title text-primary">{{ item.title }}</div>
             <div class="mp-subtitle q-mt-md text-grey-6">
@@ -85,11 +89,12 @@ export default {
           x: -100,
         },
         {
-          duration: 0.8,
+          duration: 0.6,
           opacity: 1,
           x: 0,
           scrollTrigger: {
             trigger: section,
+            start: "top 80%",
           },
         }
       );
@@ -107,6 +112,7 @@ export default {
           x: 0,
           scrollTrigger: {
             trigger: section,
+            start: "top 80%",
           },
         }
       );

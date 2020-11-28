@@ -15,8 +15,7 @@
     <div class="row q-col-gutter-md q-mt-md">
       <circular-item
         v-for="(item, index) in items"
-        :key="index"
-        ref="items"
+        :key="'slide-2-' + index"
         :icon="item.icon"
         :desc="item.desc"
         :title="item.title"
