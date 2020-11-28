@@ -109,7 +109,6 @@ export default {
           opacity: 1,
           x: 0,
           scrollTrigger: {
-            markers: true,
             trigger: section,
           },
         }
