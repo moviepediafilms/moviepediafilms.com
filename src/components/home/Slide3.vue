@@ -5,11 +5,14 @@
   >
     <bar-hammer />
     <div class="q-mx-lg q-mt-lg">
-      <div class="mp-title text-primary" style="font-size: 32px">
+      <div
+        class="mp-title text-primary text-weight-bold"
+        style="font-size: 32px"
+      >
         How it Works?
       </div>
       <div
-        class="mp-title text-weight-normal q-mt-sm q-mb-xl"
+        class="mp-title text-weight-bold q-mt-sm q-mb-xl"
         style="font-size: 32px"
       >
         CREATORS
@@ -20,13 +23,13 @@
           class="flex q-mb-lg items-center"
           style="overflow: hidden"
         >
-          <div class="col" ref="page2itemsleft">
+          <div class="col" ref="lefts">
             <div class="mp-title text-primary">{{ item.title }}</div>
-            <div class="mp-subtitle q-mt-md text-grey-6">
+            <div class="mp-subtitle q-mt-md text-grey-4">
               {{ item.desc }}
             </div>
           </div>
-          <div class="q-ml-sm" ref="page2itemsright">
+          <div class="q-ml-sm" ref="rights">
             <q-btn
               round
               color="primary"
@@ -81,7 +84,7 @@ export default {
     };
   },
   mounted() {
-    this.$refs.page2itemsleft.forEach((section) => {
+    this.$refs.lefts.forEach((section) => {
       this.$gsap.fromTo(
         section,
         {
@@ -99,7 +102,7 @@ export default {
         }
       );
     });
-    this.$refs.page2itemsright.forEach((section) => {
+    this.$refs.rights.forEach((section) => {
       this.$gsap.fromTo(
         section,
         {

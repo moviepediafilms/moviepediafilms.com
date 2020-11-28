@@ -1,16 +1,56 @@
 <template>
-  <div class="q-mt-lg mp-bg q-py-lg">
-    <img src="/img/slides/7.png" width="100%" />
+  <div
+    style="background-image: url('/img/7_bg.png')"
+    class="q-mt-md mp-bg q-py-lg"
+  >
+    <div class="row items-stretch">
+      <div
+        class="bg-primary"
+        ref="sidebar"
+        style="width: 50px; z-index: 1"
+      ></div>
+      <div class="col" style="z-index: 10">
+        <bar-plus />
+        <div class="q-my-md q-mx-lg">
+          <div class="mp-title2 text-weight-bold">Creator Profile</div>
+          <div class="mp-subtitle q-mt-sm">
+            Showcase your films, grow popularity and stay fund-ready for your
+            upcoming projects
+          </div>
+        </div>
+        <bar-plus :rtl="true" />
+        <div class="q-mx-lg q-px-lg q-mt-lg q-pt-lg">
+          <img src="/img/7.png" width="100%" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-// import gsap from "gsap";
+import BarPlus from "@/components/style/BarPlus";
 export default {
-  components: {},
+  components: {
+    BarPlus,
+  },
   data() {
     return {};
   },
   computed: {},
-  mounted() {},
+  mounted() {
+    this.$gsap.fromTo(
+      this.$refs.sidebar,
+      {
+        x: -60,
+      },
+      {
+        x: 0,
+        duration: 0.5,
+        scrollTrigger: {
+          trigger: this.$refs.sidebar,
+          start: "top 50%",
+        },
+      }
+    );
+  },
 };
 </script>

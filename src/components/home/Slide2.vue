@@ -8,14 +8,14 @@
       What's in it for you?
     </div>
     <div class="q-mt-md text-center mp-title2 text-weight-bold">CREATORS</div>
-    <div class="q-mt-md text-center mp-subtitle2 text-grey-6">
+    <div class="q-mt-md text-center mp-subtitle2 text-grey-4">
       We help you with filmmaking needs, from building your own reputed OTT
       channel to getting curators, celebrities and funding for you.
     </div>
     <div class="row q-col-gutter-md q-mt-md">
       <circular-item
         v-for="(item, index) in items"
-        :key="'slide-2-' + index"
+        :key="index"
         :icon="item.icon"
         :desc="item.desc"
         :title="item.title"

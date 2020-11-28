@@ -8,7 +8,7 @@
       What's in it for you?
     </div>
     <div class="mp-title2 q-mt-md text-weight-bold">CURATORS</div>
-    <div class="q-mt-md mp-subtitle">
+    <div class="q-mt-md mp-subtitle text-grey-4">
       Moviepedia Films is a platform that bridges the gap between the creators
       and their audience. We consider curation is also an art and on our
       platform, the curators get to recommend films and they get rewarded for
@@ -19,7 +19,7 @@
         :title="item.title"
         :desc="item.desc"
         :icon="item.icon"
-        :key="'slide-4-' + index"
+        :key="index"
         v-for="(item, index) in items"
       ></circular-item>
     </div>
