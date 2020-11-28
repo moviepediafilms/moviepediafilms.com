@@ -1,10 +1,10 @@
 <template>
   <div
     style="background-image: url('/img/2_bg.png')"
-    class="q-mt-lg mp-bg q-py-lg mp-bg"
+    class="q-mt-md mp-bg q-py-lg mp-bg"
   >
     <bar-hammer />
-    <div class="q-ml-lg q-mt-lg">
+    <div class="q-mx-lg q-mt-lg">
       <div class="mp-title text-primary" style="font-size: 32px">
         How it Works?
       </div>
@@ -22,7 +22,7 @@
               {{ item.desc }}
             </div>
           </div>
-          <div class="q-mr-lg q-ml-sm" ref="page2itemsright">
+          <div class="q-ml-sm" ref="page2itemsright">
             <q-btn
               round
               color="primary"
@@ -38,8 +38,6 @@
 </template>
 <script>
 import BarHammer from "@/components/style/BarHammer";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 
 export default {
   components: {
@@ -79,9 +77,8 @@ export default {
     };
   },
   mounted() {
-    gsap.registerPlugin(ScrollTrigger);
     this.$refs.page2itemsleft.forEach((section) => {
-      gsap.fromTo(
+      this.$gsap.fromTo(
         section,
         {
           opacity: 0,
@@ -98,7 +95,7 @@ export default {
       );
     });
     this.$refs.page2itemsright.forEach((section) => {
-      gsap.fromTo(
+      this.$gsap.fromTo(
         section,
         {
           opacity: 0,

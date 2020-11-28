@@ -44,7 +44,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.mp-subtitle {
+.mp-subtitle2 {
   font-family: "Prompt", "-apple-system", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
   font-size: 14px;
@@ -53,6 +53,13 @@ export default {
   font-family: "Prompt", "-apple-system", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
   font-size: 20px;
+  font-weight: 300;
+  line-height: 1.1;
+}
+.mp-title2 {
+  font-family: "Prompt", "-apple-system", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 32px;
   font-weight: 300;
   line-height: 1.1;
 }

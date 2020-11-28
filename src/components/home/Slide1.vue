@@ -48,7 +48,6 @@
 <script>
 import BarPlus from "@/components/style/BarPlus";
 import PlayX3Bar from "@/components/style/PlayX3Bar";
-import gsap from "gsap";
 export default {
   components: {
     BarPlus,
@@ -69,7 +68,7 @@ export default {
     },
   },
   mounted() {
-    gsap.to(this.monthly_cash, {
+    this.$gsap.to(this.monthly_cash, {
       duration: 0.8,
       val: this.monthly_cash.total,
     });
