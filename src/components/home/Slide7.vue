@@ -19,7 +19,7 @@
           </div>
         </div>
         <bar-plus :rtl="true" />
-        <div class="q-mx-lg q-px-lg q-mt-lg q-pt-lg">
+        <div class="q-mt-lg q-pt-lg bg-red" style="width: 100%">
           <img src="/img/7.png" width="100%" />
         </div>
       </div>
