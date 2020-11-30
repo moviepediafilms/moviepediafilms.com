@@ -10,6 +10,7 @@
       <slide7></slide7>
       <slide8></slide8>
       <slide9></slide9>
+      <slide10></slide10>
     </div>
   </base-layout>
 </template>
@@ -24,6 +25,7 @@ import Slide6 from "@/components/home/Slide6";
 import Slide7 from "@/components/home/Slide7";
 import Slide8 from "@/components/home/Slide8";
 import Slide9 from "@/components/home/Slide9";
+import Slide10 from "@/components/home/Slide10";
 export default {
   components: {
     Slide1,
@@ -35,6 +37,7 @@ export default {
     Slide7,
     Slide8,
     Slide9,
+    Slide10,
     BaseLayout,
   },
   data() {
