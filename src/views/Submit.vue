@@ -66,6 +66,8 @@
                     (val && val.match(/^[\x00-\x7F]*$/)) ||
                     'Please use alpha numeric characters only',
                 ]"
+                :error-message="submit_error.title"
+                :error="!!submit_error.title"
                 filled
               ></q-input>
             </div>
@@ -79,6 +81,8 @@
                 ]"
                 hint="should be publicly accessible"
                 label="Link"
+                :error-message="submit_error.link"
+                :error="!!submit_error.link"
                 filled
               ></q-input>
             </div>
@@ -122,6 +126,8 @@
                 ]"
                 v-model="submit_data.runtime"
                 label="Runtime (in minutes)"
+                :error-message="submit_error.runtime"
+                :error="!!submit_error.runtime"
                 filled
               ></q-input>
             </div>
@@ -188,6 +194,8 @@
                 label="Name"
                 :rules="[(val) => !!val || 'Please enter director\'s name']"
                 filled
+                :error-message="submit_error.director.name"
+                :error="!!submit_error.director.name"
               ></q-input>
             </div>
             <div v-if="show_director_fields">
@@ -197,6 +205,8 @@
                 :rules="[(val) => !!val || 'Please enter director\'s email']"
                 label="Email"
                 filled
+                :error-message="submit_error.director.email"
+                :error="!!submit_error.director.email"
               ></q-input>
             </div>
             <div v-if="show_director_fields">
@@ -209,6 +219,8 @@
                 ]"
                 label="Mobile"
                 filled
+                :error-message="submit_error.director.contact"
+                :error="!!submit_error.director.contact"
               ></q-input>
             </div>
             <div class="text-negative">
@@ -446,7 +458,18 @@ export default {
       ],
       loading: false,
       submit_error: {
+        title: "",
+        link: "",
+        lang: "",
+        runtime: "",
         poster: "",
+        roles: "",
+        genres: "",
+        director: {
+          name: "",
+          email: "",
+          contact: "",
+        },
       },
       poster: undefined,
       error_msg: "",
@@ -518,23 +541,23 @@ export default {
       this.step = this.step - 1;
     },
     map_error_fields(error) {
-      if (!error || !error.response || !error.response.body) return false;
-
       var has_errors1 = false;
       var has_errors2 = false;
-      has_errors1 = this.check_fields_for_error(
-        error.response.body.payload,
-        this.submit_error,
-        ["poster", "title", "link", "runtime", "is_director", "genres"]
-      );
-
-      if (error.response.body.payload.director) {
-        this.submit_error.director = {};
-        has_errors2 = this.check_fields_for_error(
-          error.response.body.director,
-          this.submit_error.director,
-          ["name", "email", "contact"]
-        );
+      if (error.response && error.response.data) {
+        if (error.response.data.payload)
+          has_errors1 = this.check_fields_for_error(
+            error.response.data.payload,
+            this.submit_error,
+            ["poster", "title", "link", "runtime", "is_director", "genres"]
+          );
+        if (error.response.data.payload.director) {
+          this.submit_error.director = {};
+          has_errors2 = this.check_fields_for_error(
+            error.response.data.director,
+            this.submit_error.director,
+            ["name", "email", "contact"]
+          );
+        }
       }
       return has_errors1 || has_errors2;
     },
@@ -564,7 +587,20 @@ export default {
       return form_data;
     },
     clear_errors() {
-      this.submit_error = {};
+      this.submit_error = {
+        title: "",
+        link: "",
+        lang: "",
+        runtime: "",
+        poster: "",
+        roles: "",
+        genres: "",
+        director: {
+          name: "",
+          email: "",
+          contact: "",
+        },
+      };
       this.error_msg = "";
     },
     attempt_submit() {
@@ -588,9 +624,10 @@ export default {
           })
           .catch((err) => {
             this.loading = false;
-            if (!this.map_error_fields(err)) {
-              this.error_msg = this.decode_error_message(err);
-            }
+            var found_field_error = this.map_error_fields(err);
+            if (found_field_error) {
+              this.error_msg = "Please resolve above errors";
+            } else this.error_msg = this.decode_error_message(err);
           });
       });
     },
@@ -669,7 +706,22 @@ export default {
     },
     on_change_active_pack(pack) {
       if (!this.submitted_movie.order.order_id) this.active_pack_id = pack.id;
-      else console.log("show notification, you already selected a package");
+      else{
+        this.$q.notify({
+          message:
+            "You cannot change your package now! please contact support if you are facing issue with payment",
+          color: "negative",
+          textColor: "white",
+          icon: "mdi-alert-circle-outline",
+          timeout: 5000,
+          actions: [
+            {
+              label: "OK",
+              color: "white",
+            },
+          ],
+        });
+      }
     },
     attempt_payment() {
       let options = {
