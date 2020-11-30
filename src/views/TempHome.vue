@@ -1,6 +1,6 @@
 <template>
   <base-layout>
-    <div class="row">
+    <div class="row" style="overflow-x: hidden">
       <slide1></slide1>
       <slide2></slide2>
       <slide3></slide3>
