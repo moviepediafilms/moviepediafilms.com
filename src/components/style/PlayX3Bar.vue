@@ -19,7 +19,6 @@
 <script>
 export default {
   mounted() {
-    console.log(this.$refs.play);
     this.$refs.play.forEach((play, index) => {
       this.$gsap.from(play.$el, {
         x: -100,
