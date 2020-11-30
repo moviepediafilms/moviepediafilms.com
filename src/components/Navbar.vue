@@ -24,7 +24,7 @@
               Moviepedia</router-link
             >
           </q-toolbar-title>
-          <template v-for="action in action_btns">
+          <template v-for="action in filtered_actions">
             <q-btn
               flat
               round
@@ -96,7 +96,11 @@ export default {
       if (this.is_authenticated) return "Sign Out";
       else return "Sign In";
     },
-
+    filtered_actions() {
+      return this.action_btns.filter(
+        (item) => !item.auth || this.is_authenticated
+      );
+    },
     show_wip_bar() {
       return process.env.VUE_APP_WIP === "true";
     },

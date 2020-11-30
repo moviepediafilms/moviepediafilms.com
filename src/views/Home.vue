@@ -120,7 +120,12 @@ export default {
       },
       show_filter: false,
       action_btns: [
-        { icon: "mdi-filter-outline", to: this.show_filters, type: "dialog" },
+        {
+          icon: "mdi-filter-outline",
+          to: this.show_filters,
+          type: "dialog",
+          auth: false,
+        },
       ],
       slide: "",
       thumbStyle: {

@@ -69,10 +69,15 @@ export default {
     },
   },
   mounted() {
-    this.$gsap.to(this.monthly_cash, {
-      duration: 0.8,
-      val: this.monthly_cash.total,
-    });
+    setTimeout(this.add_animation, 100);
+  },
+  methods: {
+    add_animation() {
+      this.$gsap.to(this.monthly_cash, {
+        duration: 0.8,
+        val: this.monthly_cash.total,
+      });
+    },
   },
 };
 </script>

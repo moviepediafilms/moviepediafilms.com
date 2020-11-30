@@ -9,7 +9,7 @@
         <img src="@/assets/icon_stripped.png" width="200px" />
       </div>
       <div class="mp-subtitle q-mb-lg text-center text-primary">
-        The First Content Discovery Platform
+        The First Social Content Discovery Platform
       </div>
 
       <div class="row q-my-md" v-for="(item, index) in contacts" :key="index">
@@ -77,23 +77,26 @@ export default {
   },
   computed: {},
   mounted() {
-    this.$refs.icons.forEach((icon, index) => {
-      this.$gsap.from(icon, {
-        scale: 0,
-        duration: 0.3 + 0.3 * index,
-        ease: "back",
-        scrollTrigger: icon,
-      });
-    });
-    this.$refs.content.forEach((text) => {
-      this.$gsap.from(text, {
-        opacity: 0,
-        duration: 0.5,
-        scrollTrigger: text,
-      });
-    });
+    setTimeout(this.add_animation, 100);
   },
   methods: {
+    add_animation() {
+      this.$refs.icons.forEach((icon, index) => {
+        this.$gsap.from(icon, {
+          scale: 0,
+          duration: 0.3 + 0.3 * index,
+          ease: "back",
+          scrollTrigger: icon,
+        });
+      });
+      this.$refs.content.forEach((text) => {
+        this.$gsap.from(text, {
+          opacity: 0,
+          duration: 0.5,
+          scrollTrigger: text,
+        });
+      });
+    },
     on_action(item) {
       this.$refs[item.action][0].click();
     },

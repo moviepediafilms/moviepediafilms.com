@@ -706,7 +706,7 @@ export default {
     },
     on_change_active_pack(pack) {
       if (!this.submitted_movie.order.order_id) this.active_pack_id = pack.id;
-      else{
+      else {
         this.$q.notify({
           message:
             "You cannot change your package now! please contact support if you are facing issue with payment",

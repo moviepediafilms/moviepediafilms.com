@@ -12,6 +12,7 @@
   </div>
 </template>
 <script>
+
 export default {
   props: {
     icon: {
@@ -28,17 +29,22 @@ export default {
     },
   },
   mounted() {
-    this.$gsap.from(this.$el, {
+    setTimeout(this.add_animation, 100)
+  },
+  methods: {
+    add_animation(){
+      this.$gsap.from(this.$el, {
       scale: 0,
       opacity: 0,
       duration: 0.6,
       ease: "back",
       scrollTrigger: {
         trigger: this.$el,
-        start: "top 70%",
+        start: "top 80%",
       },
     });
-  },
+    }
+  }
 };
 </script>
 <style scoped>

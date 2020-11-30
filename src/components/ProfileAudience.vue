@@ -232,8 +232,9 @@ export default {
       }
     },
     get_level_name() {
+      // TODO: update level names
       var level_map = {
-        1: "Cienphile",
+        1: "Cinephile",
         2: "Level2",
         3: "Level3",
         4: "Level4",
