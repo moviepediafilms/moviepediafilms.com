@@ -68,19 +68,24 @@ export default {
     };
   },
   mounted() {
-    this.$refs.celebs.forEach((celb) => {
-      this.$gsap.from(celb.$el, {
-        yPercent: 150,
-        opacity: 0,
-        duration: 0.7,
-        stagger: true,
-        ease: "back",
-        scrollTrigger: {
-          trigger: celb.$el,
-          start: "top 85%",
-        },
+    setTimeout(this.add_animation, 100);
+  },
+  methods: {
+    add_animation() {
+      this.$refs.celebs.forEach((celb) => {
+        this.$gsap.from(celb.$el, {
+          yPercent: 150,
+          opacity: 0,
+          duration: 0.7,
+          stagger: true,
+          ease: "back",
+          scrollTrigger: {
+            trigger: celb.$el,
+            start: "top 85%",
+          },
+        });
       });
-    });
+    },
   },
 };
 </script>

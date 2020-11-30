@@ -4,10 +4,10 @@ import router from './router'
 import store from "./store";
 import './mixins'
 import '@/scss/style.scss';
-import './plugins/gsap'
 import './plugins/quasar'
 import './plugins/animate'
 import './plugins/hammer'
+import './plugins/gsap'
 
 Vue.config.productionTip = false
 

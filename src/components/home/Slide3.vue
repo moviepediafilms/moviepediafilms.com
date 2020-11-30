@@ -84,43 +84,34 @@ export default {
     };
   },
   mounted() {
-    this.$refs.lefts.forEach((section) => {
-      this.$gsap.fromTo(
-        section,
-        {
-          opacity: 0,
-          x: -100,
-        },
-        {
-          duration: 0.6,
-          opacity: 1,
-          x: 0,
-          scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-          },
-        }
-      );
-    });
-    this.$refs.rights.forEach((section) => {
-      this.$gsap.fromTo(
-        section,
-        {
-          opacity: 0,
-          x: 100,
-        },
-        {
-          duration: 0.8,
-          opacity: 1,
-          x: 0,
-          scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-          },
-        }
-      );
-    });
+    setTimeout(this.add_animation, 100);
   },
   computed: {},
+  methods: {
+    add_animation() {
+      this.$refs.lefts.forEach((section) => {
+        this.$gsap.from(section, {
+          opacity: 0,
+          x: -100,
+          duration: 0.6,
+          scrollTrigger: {
+            trigger: section,
+            start: "top 80%",
+          },
+        });
+      });
+      this.$refs.rights.forEach((section) => {
+        this.$gsap.from(section, {
+          opacity: 0,
+          x: 100,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: section,
+            start: "top 80%",
+          },
+        });
+      });
+    },
+  },
 };
 </script>

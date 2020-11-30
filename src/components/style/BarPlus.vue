@@ -27,7 +27,7 @@ export default {
     return {};
   },
   mounted() {
-    setTimeout(this.add_animation, 200);
+    setTimeout(this.add_animation, 100);
   },
   methods: {
     add_animation() {

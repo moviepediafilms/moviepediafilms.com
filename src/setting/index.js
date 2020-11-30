@@ -1,7 +1,7 @@
 export default {
     debug: true,
     data: {
-        action_btns: [{ icon: "mdi-bell-outline", to: "notification", type: "path" }]
+        action_btns: [{ icon: "mdi-bell-outline", to: "notification", type: "path", auth: true }]
     },
     addActionBtn(newBtn) {
         if (this.debug) console.log('addActionBtn triggered with', newBtn)
@@ -10,7 +10,7 @@ export default {
     removeActionBtn(btn) {
         if (this.debug) console.log('removeActionBtn triggered', btn)
         var removeIdx = -1
-        this.data.action_btns.forEach(function (obj, idx) {
+        this.data.action_btns.forEach(function(obj, idx) {
             if (obj.icon === btn.icon)
                 removeIdx = idx;
         });
