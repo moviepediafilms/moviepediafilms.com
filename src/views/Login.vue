@@ -105,7 +105,7 @@ export default {
     attempt_login() {
       this.clear_errors();
       var payload = {
-        username: this.login_data.email,
+        username: this.login_data.email.toLowerCase(),
         password: this.login_data.password,
       };
       this.$store

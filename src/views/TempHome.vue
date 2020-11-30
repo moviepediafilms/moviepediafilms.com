@@ -27,6 +27,9 @@ import Slide8 from "@/components/home/Slide8";
 import Slide9 from "@/components/home/Slide9";
 import Slide10 from "@/components/home/Slide10";
 export default {
+  metaInfo: {
+    title: "Home",
+  },
   components: {
     Slide1,
     Slide2,
