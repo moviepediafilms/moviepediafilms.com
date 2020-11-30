@@ -452,10 +452,10 @@ export default {
       error_msg: "",
       success_msg: "",
       submit_data: {
-        title: "Dhundh",
-        link: "http://google.com",
+        title: "",
+        link: "",
         lang: undefined,
-        runtime: "12",
+        runtime: "",
         poster: "",
         roles: [],
         genres: [],

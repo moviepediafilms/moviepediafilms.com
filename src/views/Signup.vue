@@ -96,7 +96,7 @@
               :rules="[
                 (val) =>
                   (val && val.length > 0) || 'Please selected your birthday',
-                (val) => val.length == 10 || 'Invalid Date',
+                (val) => is_valid_date(val) || 'Invalid Date',
                 (val) =>
                   is_above_min_age(val) ||
                   'Too early for you to register, wait till you are 13 years old',
@@ -295,6 +295,9 @@ export default {
     this.set_initial_dob();
   },
   methods: {
+    is_valid_date(date_str) {
+      return moment(date_str, "YYYY-MM-DD").isValid();
+    },
     get_last_valid_dob() {
       var min_age = 13;
       var today = new Date();

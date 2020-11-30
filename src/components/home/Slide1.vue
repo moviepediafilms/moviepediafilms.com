@@ -34,6 +34,7 @@
           rounded
           text-color="dark"
           class="text-uppercase q-px-md q-py-xs text-dark mp-btn"
+          :to="{ name: 'submit' }"
           translate=""
           ><div class="">
             <div style="line-height: 1">Submit</div>
