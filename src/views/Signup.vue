@@ -97,6 +97,9 @@
                 (val) =>
                   (val && val.length > 0) || 'Please selected your birthday',
                 (val) => val.length == 10 || 'Invalid Date',
+                (val) =>
+                  is_above_min_age(val) ||
+                  'Too early for you to register, wait till you are 13 years old',
               ]"
               :error-message="signup_error.dob"
               :error="!!signup_error.dob"
@@ -111,7 +114,8 @@
                       v-model="signup_data.dob"
                       text-color="dark"
                       mask="YYYY-MM-DD"
-                      default-view="Years"
+                      :navigation-max-year-month="minus_18_yrs"
+                      default-view="Calendar"
                     >
                       <div class="row items-center justify-end">
                         <q-btn v-close-popup label="ok" color="primary" flat />
@@ -210,6 +214,7 @@
   </base-layout>
 </template>
 <script>
+import moment from "moment";
 import BaseLayout from "@/layouts/Base";
 import { location_service, profile_service } from "@/services";
 export default {
@@ -259,6 +264,12 @@ export default {
     };
   },
   computed: {
+    minus_18_yrs() {
+      var tmp_date = new Date();
+      var year = tmp_date.getFullYear() - 13;
+      var month = tmp_date.getMonth() + 1;
+      return `${year}/${month}`;
+    },
     signup_payload() {
       var name_segs = this.signup_data.name.split(/[\s,]+/);
       var first_name = "";
@@ -280,7 +291,23 @@ export default {
       };
     },
   },
+  mounted() {
+    this.set_initial_dob();
+  },
   methods: {
+    get_last_valid_dob() {
+      var min_age = 13;
+      var today = new Date();
+      return new Date(today.getFullYear() - min_age, today.getMonth() + 1);
+    },
+    set_initial_dob() {
+      var last_valid_date = this.get_last_valid_dob();
+      this.signup_data.dob = last_valid_date.toISOString().split("T")[0];
+    },
+    is_above_min_age(selected_date) {
+      var last_valid_date = this.get_last_valid_dob();
+      return moment(selected_date).isSameOrBefore(last_valid_date);
+    },
     clear_errors() {
       this.signup_error = {
         first_name: "",

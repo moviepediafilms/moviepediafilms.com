@@ -18,7 +18,7 @@ Vue.mixin({
             "is_authenticated"
         ]),
         is_director() {
-            return true //this.my_profile.roles && this.my_profile.roles.filter(role => role.name !== "Director").length == 1
+            return this.my_profile.roles && this.my_profile.roles.filter(role => role.name !== "Director").length == 1
         }
     },
     methods: {

@@ -353,10 +353,8 @@ export default {
           title: "Premium Pack",
           price: "INR 375 + INR 99",
           content: [
-            { text: "Interactive Film Screening", included: true },
             { text: "Filmmaker of the Month", included: true },
             { text: "Celebrity Recommendation", included: true },
-            { text: "Content Analytics", included: true },
             { text: "Instagram Promotion", included: true },
             { text: "Facebook Marketing", included: true },
             { text: "E-mail Campaigns", included: true },
@@ -369,10 +367,8 @@ export default {
           title: "Standard Pack",
           price: "INR 375",
           content: [
-            { text: "Interactive Film Screening", included: true },
             { text: "Filmmaker of the Month", included: true },
             { text: "Celebrity Recommendation", included: true },
-            { text: "Content Analytics", included: true },
             { text: "Instagram Promotion", included: false },
             { text: "Facebook Marketing", included: false },
             { text: "E-mail Campaigns", included: false },
@@ -405,7 +401,7 @@ export default {
           icon: "mdi-trophy",
           color: "amber",
           text:
-            "You stand a chance to win the ‘Filmmaker of the Month’ title, cash prize of over Rs. 5000 and an extended feature period on the platform.",
+            "You stand a chance to win the ‘Filmmaker of the Month’ title, cash prize of over Rs. 15, 000 and an extended feature period on the platform.",
         },
         {
           icon: "mdi-bullseye-arrow",
@@ -418,12 +414,6 @@ export default {
           color: "light-blue",
           text:
             "We simplify the fundraising for your projects. We connect you with film enthusiasts to get your projects funded.",
-        },
-        {
-          icon: "mdi-currency-usd",
-          color: "green",
-          text:
-            "You stand a chance to get your content noticed by top OTT buyers. We ensure the best price for your content rights.",
         },
       ],
       languages: [
@@ -450,6 +440,7 @@ export default {
       roles: [
         { name: "Actor" },
         { name: "Director" },
+        { name: "Producer" },
         { name: "Singer" },
         { name: "Musician" },
       ],
