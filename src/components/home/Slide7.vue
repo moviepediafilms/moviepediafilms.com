@@ -1,27 +1,26 @@
 <template>
   <div
     style="background-image: url('/img/7_bg.png')"
-    class="q-mt-md mp-bg q-py-lg"
+    class="q-mt-md mp-bg q-mb-none"
   >
-    <div class="row items-stretch">
-      <div
-        class="bg-primary"
-        ref="sidebar"
-        style="width: 50px; z-index: 1"
-      ></div>
-      <div class="col" style="z-index: 10">
+    <div class="row items-stretch q-mt-md" style="display: relative">
+      <div class="col-12">
         <bar-plus />
+      </div>
+      <div class="col-10 offset-2 q-pa-md">
         <div class="q-my-md q-mx-lg">
-          <div class="mp-title2 text-weight-bold">Creator Profile</div>
+          <div class="mp-title2 text-weight-bold">Our product</div>
           <div class="mp-subtitle q-mt-sm">
-            Showcase your films, grow popularity and stay fund-ready for your
-            upcoming projects
+            Create, CUrate, Recommend. Join us in our journey to democratize
+            independent cinema and let's celebrate this art of form together
           </div>
         </div>
+      </div>
+      <div class="col-10 offset-2">
         <bar-plus :rtl="true" />
-        <div class="q-mx-lg q-px-lg q-mt-lg q-pt-lg">
-          <img src="/img/7.png" width="100%" />
-        </div>
+      </div>
+      <div class="col-12 text-center q-mt-lg" style="padding-bottom: 0px">
+        <img src="/img/7.png" width="100%" style="max-width: 300px" />
       </div>
     </div>
   </div>
@@ -36,15 +35,6 @@ export default {
     return {};
   },
   computed: {},
-  mounted() {
-    this.$gsap.from(this.$refs.sidebar, {
-      xPercent: -110,
-      duration: 0.8,
-      scrollTrigger: {
-        trigger: this.$refs.sidebar,
-        start: "top 50%",
-      },
-    });
-  },
+  mounted() {},
 };
 </script>

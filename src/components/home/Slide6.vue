@@ -27,42 +27,42 @@ export default {
         {
           name: "Mihir Desai",
           title: "Filmmaker, Mizapur",
-          image: "/default_avatar.png",
+          image: "/img/judges/mihir.jpg",
         },
         {
           name: "Vipin Sharma",
           title: "Actor, Gangs of Wasseypur",
-          image: "/default_avatar.png",
+          image: "/img/judges/vipin.jpg",
         },
         {
           name: "Sindhu S. Murthy",
           title: "Actor, Brahman Naman",
-          image: "/default_avatar.png",
+          image: "/img/judges/sindhu.jpg",
         },
         {
           name: "Niharika L. Dutt",
           title: "Actor, Paatal Lok",
-          image: "/default_avatar.png",
+          image: "/img/judges/niharika.jpg",
         },
         {
           name: "Dar Gai",
           title: "Filmmaker, Namdev Bhau",
-          image: "/default_avatar.png",
+          image: "/img/judges/dar.jpg",
         },
         {
           name: "Shubham Gaur",
           title: "Casting Director, Ludo",
-          image: "/default_avatar.png",
+          image: "/img/judges/shubham.jpg",
         },
         {
           name: "Deeptesh Das",
           title: "Actor, Paatal Lok",
-          image: "/default_avatar.png",
+          image: "/img/judges/deeptesh.jpg",
         },
         {
           name: "Ashish Aryan",
           title: "Filmmaker, Kanpuriye",
-          image: "/default_avatar.png",
+          image: "/img/judges/ashish.jpg",
         },
       ],
     };
