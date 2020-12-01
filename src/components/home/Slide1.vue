@@ -1,5 +1,8 @@
 <template>
-  <div style="background-image: url('/img/1_bg.png')" class="text-center mp-bg">
+  <div
+    style="background-image: url('/img/1_bg.png')"
+    class="text-center mp-bg text-grey-3"
+  >
     <bar-plus />
     <img
       src="@/assets/icon_stripped.png"
@@ -13,15 +16,45 @@
     <div class="mp-subtitle text-primary q-mt-md">
       The First Social Content Discovery Platform
     </div>
-    <div class="q-mt-md mp-subtitle q-px-md text-grey-4">
-      Join our community of 170k+ members. Create, Curate & Recommend short
-      films and get a chance to win monthly cash rewards worth
+    <div class="q-mt-md mp-subtitle q-px-md">
+      Join us in our journey to create a film-first community thinking led by
     </div>
     <q-icon name="mdi-badge-outline"></q-icon>
-    <div class="q-mt-md mp-title-big text-weight-bolder">
-      <b>₹{{ animated_monthly_cash }}</b>
+    <div class="row q-mt-md">
+      <div class="col">
+        <q-btn
+          round
+          color="primary"
+          text-color="dark"
+          icon="mdi-movie-open-outline"
+          size="lg"
+        />
+        <div class="mp-subtitle q-mt-md">Creators</div>
+      </div>
+      <div class="col">
+        <q-btn
+          round
+          color="primary"
+          text-color="dark"
+          icon="mdi-bullhorn"
+          size="lg"
+        />
+
+        <div class="mp-subtitle q-mt-md">Curators</div>
+      </div>
+      <div class="col">
+        <q-btn
+          round
+          color="primary"
+          text-color="dark"
+          icon="mdi-star"
+          size="lg"
+        />
+
+        <div class="mp-subtitle q-mt-md">Celebrities</div>
+      </div>
     </div>
-    <div class="q-mt-md">
+    <div class="q-mt-lg">
       <transition
         appear
         name="custom-classes-transition"
@@ -56,27 +89,18 @@ export default {
   },
 
   data() {
-    return {
-      monthly_cash: {
-        val: 0,
-        total: 30000,
-      },
-    };
+    return {};
   },
-  computed: {
-    animated_monthly_cash() {
-      return new Intl.NumberFormat().format(this.monthly_cash.val.toFixed(0));
-    },
-  },
+  computed: {},
   mounted() {
     setTimeout(this.add_animation, 100);
   },
   methods: {
     add_animation() {
-      this.$gsap.to(this.monthly_cash, {
-        duration: 0.8,
-        val: this.monthly_cash.total,
-      });
+      // this.$gsap.to(this.monthly_cash, {
+      //   duration: 0.8,
+      //   val: this.monthly_cash.total,
+      // });
     },
   },
 };

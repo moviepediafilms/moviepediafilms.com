@@ -1,6 +1,7 @@
 <template>
   <base-layout>
     <div class="row" style="overflow-x: hidden">
+      <div ref="start"></div>
       <slide1></slide1>
       <slide2></slide2>
       <slide3></slide3>
@@ -11,6 +12,18 @@
       <slide8></slide8>
       <slide9></slide9>
       <slide10></slide10>
+      <q-page-sticky position="bottom-right" :offset="[18, 18]">
+        <q-btn
+          ref="fab"
+          fab
+          icon="mdi-plus"
+          color="primary"
+          text-color="dark"
+          label="Submit Now"
+          padding="12px"
+          :to="{ name: 'submit' }"
+        />
+      </q-page-sticky>
     </div>
   </base-layout>
 </template>
@@ -46,7 +59,23 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
+  mounted() {
+    setTimeout(this.add_animation, 10);
+  },
+  methods: {
+    add_animation() {
+      this.$gsap.from(this.$refs.fab.$el, {
+        xPercent: 120,
+        scale: 0,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: this.$refs.start,
+          start: "top 30px",
+          scrub: true,
+        },
+      });
+    },
+  },
 };
 </script>
 <style lang="scss">
