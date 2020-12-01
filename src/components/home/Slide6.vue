@@ -26,7 +26,7 @@ export default {
       celebs: [
         {
           name: "Mihir Desai",
-          title: "Filmmaker, Mizapur",
+          title: "Filmmaker, Mirzapur",
           image: "/img/judges/mihir.jpg",
         },
         {

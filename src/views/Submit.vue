@@ -413,7 +413,7 @@ export default {
           icon: "mdi-trophy",
           color: "amber",
           text:
-            "You stand a chance to win the ‘Filmmaker of the Month’ title, cash prize of over Rs. 15, 000 and an extended feature period on the platform.",
+            "You stand a chance to win the ‘Filmmaker of the Month’ title, cash prize of over Rs.15,000 and an extended feature period on the platform.",
         },
         {
           icon: "mdi-bullseye-arrow",
