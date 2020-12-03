@@ -11,7 +11,7 @@
         </div>
         <div class="row justify-center q-mt-xs">
           <profile-type-switch
-            :disabled="!this.profile_is_filmmaker"
+            :disabled="!profile_is_filmmaker"
             :filmmaker="false"
             @toggle="$emit('toggle')"
           />
@@ -89,6 +89,11 @@
           <q-tab name="curations" label="Curations" />
           <q-tab name="followers" :label="followers.length + ' Followers'" />
           <q-tab name="following" :label="following.length + ' Following'" />
+          <q-tab
+            name="filmography"
+            label="Filmography"
+            v-if="!profile_is_filmmaker"
+          />
         </q-tabs>
         <q-separator />
         <q-tab-panels v-model="tab" animated>
@@ -120,6 +125,13 @@
               @unfollow="on_unfollow_user"
             />
           </q-tab-panel>
+          <q-tab-panel
+            name="filmography"
+            class="q-px-none"
+            v-if="!profile_is_filmmaker"
+          >
+            <filmography-list :profile="profile" />
+          </q-tab-panel>
         </q-tab-panels>
       </q-card>
     </div>
@@ -131,6 +143,7 @@ import Watchlist from "@/components/Watchlist";
 import ProfilePicture from "@/components/ProfilePicture";
 import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
 import FollowUserList from "@/components/FollowUserList";
+import FilmographyList from "@/components/FilmographyList";
 import Lists from "@/components/Lists";
 import { recommend_service, follow_service, list_service } from "@/services";
 import {
@@ -156,6 +169,7 @@ export default {
     ProfileTypeSwitch,
     Lists,
     FollowUserList,
+    FilmographyList,
   },
   data() {
     return {
@@ -165,6 +179,7 @@ export default {
       lists: [],
       followers: [],
       following: [],
+      filmography: [],
     };
   },
   computed: {
@@ -183,7 +198,7 @@ export default {
       else return this.their_recommends;
     },
     profile_is_filmmaker() {
-      return true; //this.is_filmmaker(this.profile);
+      return this.is_filmmaker(this.profile);
     },
     is_viwers_profile() {
       return this.profile.id == this.my_profile.id;

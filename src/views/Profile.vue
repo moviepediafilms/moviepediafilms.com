@@ -109,7 +109,6 @@ export default {
   },
   data() {
     return {
-      show_filmmaker_profile: true,
       profile: null,
       recommends: [],
     };
@@ -118,6 +117,9 @@ export default {
     this.load_data();
   },
   computed: {
+    show_filmmaker_profile() {
+      return this.is_director;
+    },
     is_my_profile() {
       return this.profile_id == "me";
     },

@@ -87,6 +87,11 @@
           <q-tab name="followers" :label="followers.length + ' Followers'" />
           <q-tab name="following" :label="following.length + ' Following'" />
           <q-tab name="reviews" label="Reviews" />
+          <q-tab
+            name="filmography"
+            label="Filmography"
+            v-if="profile_is_filmmaker"
+          />
         </q-tabs>
         <q-separator />
         <q-tab-panels v-model="tab" animated>
@@ -108,6 +113,13 @@
           <q-tab-panel name="reviews" class="q-px-none"
             ><reviews :reviews="reviews"></reviews
           ></q-tab-panel>
+          <q-tab-panel
+            name="filmography"
+            class="q-px-none"
+            v-if="profile_is_filmmaker"
+          >
+            <filmography-list :profile="profile" />
+          </q-tab-panel>
         </q-tab-panels>
       </q-card>
     </div>
@@ -118,6 +130,7 @@ import ProfilePicture from "@/components/ProfilePicture";
 import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
 import Reviews from "@/components/Reviews";
 import FollowUserList from "@/components/FollowUserList";
+import FilmographyList from "@/components/FilmographyList";
 import { review_service, follow_service } from "@/services";
 import {
   FOLLOW_REQUEST,
@@ -139,6 +152,7 @@ export default {
     ProfileTypeSwitch,
     Reviews,
     FollowUserList,
+    FilmographyList,
   },
   data() {
     return {
@@ -163,6 +177,9 @@ export default {
     following() {
       if (this.is_viwers_profile) return this.$store.state.follow.following;
       else return this.new_following;
+    },
+    profile_is_filmmaker() {
+      return this.is_filmmaker(this.profile);
     },
     show_login_popup() {
       return !this.is_authenticated;

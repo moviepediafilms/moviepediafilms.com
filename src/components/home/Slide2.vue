@@ -42,7 +42,7 @@ export default {
         {
           icon: "mdi-youtube",
           title: "Drive Views",
-          desc: "to your TouTube channel",
+          desc: "to your YouTube channel",
         },
         {
           icon: "mdi-star",
@@ -57,7 +57,7 @@ export default {
         {
           icon: "mdi-cash-multiple",
           title: "Get Funded",
-          desc: "for yout upcoming projects",
+          desc: "for your upcoming projects",
         },
         {
           icon: "mdi-video-account",

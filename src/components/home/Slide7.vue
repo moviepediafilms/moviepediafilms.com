@@ -11,8 +11,8 @@
         <div class="q-my-md q-mx-lg">
           <div class="mp-title2 text-weight-bold">Our product</div>
           <div class="mp-subtitle q-mt-sm">
-            Create, CUrate, Recommend. Join us in our journey to democratize
-            independent cinema and let's celebrate this art of form together
+            Create, Curate, Recommend. Join us in our journey to democratize
+            independent cinema and let's celebrate this artform together
           </div>
         </div>
       </div>
