@@ -136,8 +136,8 @@
                 v-model="poster"
                 label="Poster"
                 accept=".jpg, image/*"
-                max-file-size="2000000"
-                hint="Portrait poster of the movie, less than 2MB"
+                max-file-size="6000000"
+                hint="Portrait poster of the movie, less than 6MB"
                 filled
                 clearable
                 @rejected="poster_rejected"
