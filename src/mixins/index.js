@@ -33,6 +33,7 @@ Vue.mixin({
             return error && error.response && error.response.status == 401 && error.response.data.detail == "Invalid token."
         },
         is_filmmaker(profile) {
+            // checking the cached roles
             return profile.roles && profile.roles.filter(role => role.name !== "Director").length == 1
         },
         first_of(arr) {

@@ -3,9 +3,19 @@
     <q-item v-for="review in reviews" :key="review.id">
       <q-item-section>
         <q-item-label align="left"> {{ review.content }}</q-item-label>
-        <q-item-label caption align="left">{{
-          review.movie.title
-        }}</q-item-label>
+        <q-item-label caption align="left">
+          <router-link
+            class="text-primary text-decoration-none"
+            :to="{
+              name: 'movie-detail',
+              params: {
+                id: review.movie.id,
+                slug: slugify(review.movie.title),
+              },
+            }"
+            >{{ review.movie.title }}</router-link
+          >
+        </q-item-label>
         <q-item-label caption align="right">
           <span><q-icon name="mdi-star" /> {{ review.rating }} / 10 </span>
           <q-icon name="mdi-circle-medium" class="q-mx-xs" color="grey-6" />

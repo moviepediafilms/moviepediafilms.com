@@ -17,6 +17,7 @@
         :users="users"
         :loading="loading"
         @page-change="on_page_change"
+        @click="on_user_click"
       />
     </div>
   </base-layout>
@@ -77,6 +78,9 @@ export default {
   methods: {
     on_page_change(page) {
       this.curr_page = page;
+    },
+    on_user_click(user) {
+      this.$router.push({ name: "profile", params: { id: user.id } });
     },
   },
 };

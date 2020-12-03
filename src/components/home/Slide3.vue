@@ -77,7 +77,7 @@ export default {
         {
           title: "Popularity Boost",
           desc:
-            "Be a standout creator and shoot up your popularity score by winning titles and recieving recommendations",
+            "Be a standout creator and shoot up your popularity score by winning titles and receiving recommendations",
           icon: "mdi-trending-up",
         },
       ],

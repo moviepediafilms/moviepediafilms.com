@@ -18,6 +18,7 @@
         :page_size="page_size"
         :users="users"
         :loading="loading"
+        @click="on_user_click"
         @page-change="on_page_change"
       />
     </div>
@@ -80,6 +81,9 @@ export default {
   methods: {
     on_page_change(page) {
       this.curr_page = page;
+    },
+    on_user_click(user) {
+      this.$router.push({ name: "profile", params: { id: user.id } });
     },
   },
 };
