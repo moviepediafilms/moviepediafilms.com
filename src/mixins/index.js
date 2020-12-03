@@ -17,8 +17,8 @@ Vue.mixin({
         ...mapGetters("auth", [
             "is_authenticated"
         ]),
-        is_director() {
-            return this.my_profile.roles && this.my_profile.roles.filter(role => role.name !== "Director").length == 1
+        am_i_director() {
+            return this.my_profile.roles && this.my_profile.roles.filter(role => role.name === "Director").length == 1
         }
     },
     methods: {
@@ -34,7 +34,7 @@ Vue.mixin({
         },
         is_filmmaker(profile) {
             // checking the cached roles
-            return profile.roles && profile.roles.filter(role => role.name !== "Director").length == 1
+            return profile.roles && profile.roles.filter(role => role.name === "Director").length == 1
         },
         first_of(arr) {
             if (arr && arr.length > 0)
