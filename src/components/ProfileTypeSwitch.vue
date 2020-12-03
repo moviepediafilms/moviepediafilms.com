@@ -9,8 +9,8 @@
       toggle-text-color="dark"
       @input="on_toggle"
       :options="[
-        { label: 'Creator', value: filmmaker },
-        { label: 'Curator', value: !filmmaker },
+        { label: 'Curator', value: filmmaker },
+        { label: 'Creator', value: !filmmaker },
       ]"
     /><br />
     <q-toggle
