@@ -4,20 +4,20 @@
       <h3 class="text-primary">Films Directed</h3>
       <small v-if="profile.name">by {{ profile.name }}</small>
       <div class="q-mt-md text-left">
-        <movie-list :movies="movies" @item-selected="on_select" />
+        <movies :movies="movies" @item-selected="on_select" />
       </div>
     </div>
   </base-layout>
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import MovieList from "@/components/MovieList";
+import Movies from "@/components/Movies";
 import { movies_by_service, profile_service } from "@/services/";
 export default {
   name: "my-movies-page",
   components: {
     BaseLayout,
-    MovieList,
+    Movies,
   },
   metaInfo: {
     title: "Films Directed",

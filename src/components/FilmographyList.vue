@@ -1,34 +1,48 @@
 <template>
   <div ref="container">
-    <q-list class="col" v-if="movies.length > 0">
-      <q-item
-        v-ripple
-        @click="on_movie_select"
+    <div class="row q-col-gutter-sm" v-if="movies.length > 0">
+      <div
+        class="col-4 col-sm-3 col-md-3"
         v-for="movie in movies"
         :key="movie.id"
       >
-        <q-item-section top thumbnail>
-          <img :src="movie.poster" />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label lines="2">{{ movie.title }}<br /></q-item-label>
-          <q-item-label>
-            <template v-if="is_viewers_profile">Your Roles: </template>
-            <template v-else>His Roles: </template>
-            {{ my_roles_txt(movie) }}
-          </q-item-label>
-          <q-item-label v-if="is_viewers_profile">
+        <q-card flat v-ripple @click="on_movie_select(movie)">
+          <q-img :ratio="9 / 16" :src="`${media_base}${movie.poster}`">
+            <div class="absolute-bottom text-center bg-transparent">
+              <div v-if="is_viewers_profile">
+                <q-badge
+                  text-color="dark"
+                  :color="get_status_color(movie.state)"
+                >
+                  {{ get_movie_status_txt(movie.state) }}
+                </q-badge>
+              </div>
+            </div>
+            <template v-slot:error>
+              <div class="absolute-full flex flex-center bg-primary text-dark">
+                <div class="text-h3">{{ movie.title }}</div>
+                <div class="text-caption">
+                  <q-icon name="mdi-close" color="negative" size="24px" />Cannot
+                  load image
+                </div>
+              </div>
+            </template>
+          </q-img>
+          <div class="q-my-sm">
             <q-badge
+              size="sm"
               class="q-mr-xs"
-              text-color="dark"
-              :color="get_status_color(movie.state)"
+              outline
+              text-color="primary"
+              v-for="role in my_roles(movie)"
+              :key="role.id"
             >
-              {{ get_movie_status_txt(movie.state) }}
+              {{ role.role }}
             </q-badge>
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
+          </div>
+        </q-card>
+      </div>
+    </div>
     <div class="text-grey-7 text-center" v-else>
       <q-icon name="mdi-emoticon-sad" size="80px" class="q-mb-md" />
       <div class="text-h4">Add yourself as crew member in movies</div>
@@ -40,7 +54,6 @@
 </template>
 <script>
 import { profile_service } from "@/services";
-// import FilmographyListItem from "@/components/FilmographyListItem";
 export default {
   components: {},
   props: {
@@ -69,6 +82,15 @@ export default {
     is_viewers_profile() {
       return this.profile.id == this.my_profile.id;
     },
+    all_my_roles() {
+      var my_roles = new Set();
+      this.movies.forEach((movie) => {
+        this.my_roles(movie).forEach((role) => {
+          my_roles.add(role.role);
+        });
+      });
+      return Array.from(my_roles);
+    },
   },
   methods: {
     my_roles_txt(movie) {
@@ -83,10 +105,17 @@ export default {
       return movie.crew.filter((item) => item.profile_id == this.profile.id);
     },
     on_movie_select(movie) {
-      console.log(movie);
+      this.$router.push({
+        name: "movie-detail",
+        params: {
+          id: movie.id,
+          slug: this.slugify(movie.title),
+        },
+      });
     },
     get_status_color(status) {
       return {
+        C: "red-4",
         S: "primary",
         P: "green-4",
         R: "red-4",
@@ -94,6 +123,7 @@ export default {
     },
     get_movie_status_txt(status) {
       return {
+        C: "Incomplete",
         S: "Pending",
         P: "Approved",
         R: "Rejected",

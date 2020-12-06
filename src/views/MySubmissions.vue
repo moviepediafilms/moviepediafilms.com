@@ -13,7 +13,7 @@
               :key="movie.id"
             >
               <q-card-section horizontal>
-                <q-img class="col-5" :src="media_path + movie.poster" />
+                <q-img class="col-5" :src="media_base + movie.poster" />
 
                 <q-card-section>
                   <div class="text-h4 text-primary">

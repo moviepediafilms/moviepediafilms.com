@@ -1,19 +1,36 @@
 <template>
   <div>
-    <q-list>
-      <q-item
+    <div class="row q-col-gutter-sm">
+      <div
+        class="col-4 col-sm-3 col-md-3"
         v-for="item in movies"
         :key="item.id"
-        clickable
-        v-ripple
-        class="q-ma-none"
       >
-        <q-item-section top thumbnail @click="on_item_click(item)">
-          <img :src="item.poster" />
-        </q-item-section>
-        <q-item-section @click="on_item_click(item)">
-          <q-item-label class="text-sm ellipsis">{{ item.title }}</q-item-label>
-          <q-item-label caption>
+        <q-card flat v-ripple @click="on_item_click(item)">
+          <q-img :ratio="9 / 16" :src="`${media_base}${item.poster}`">
+            <div class="absolute-top-right bg-transparent" style="padding: 0">
+              <q-btn
+                round
+                flat
+                icon="mdi-dots-vertical"
+                @click.stop="on_menu_click(item)"
+                v-if="options.length > 0"
+              />
+            </div>
+            <template v-slot:error>
+              <div class="absolute-full flex flex-center bg-primary text-dark">
+                <div class="text-h3">{{ item.title }}</div>
+                <div class="text-caption">
+                  <q-icon name="mdi-close" color="negative" size="24px" />Cannot
+                  load image
+                </div>
+              </div>
+            </template>
+          </q-img>
+          <div>
+            <div class="ellipsis">
+              {{ item.title }}
+            </div>
             <q-badge color="positive" v-if="item.is_live">Live</q-badge>
             <q-badge
               color="grey-5"
@@ -22,18 +39,10 @@
               v-if="item.contest"
               >{{ item.contest }}</q-badge
             >
-          </q-item-label>
-          <q-item-label caption>{{ item.about }}</q-item-label>
-        </q-item-section>
-        <q-item-section
-          side
-          @click.stop="on_menu_click(item)"
-          v-if="options.length > 0"
-        >
-          <q-btn round flat icon="mdi-dots-vertical" />
-        </q-item-section>
-      </q-item>
-    </q-list>
+          </div>
+        </q-card>
+      </div>
+    </div>
     <popup-menu
       :options="options"
       :show="show_menu"

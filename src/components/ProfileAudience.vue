@@ -4,12 +4,15 @@
       <div class="col text-center">
         <profile-picture
           :profile="profile"
-          :editable="is_viwers_profile"
+          :editable="is_viewers_profile"
         ></profile-picture>
         <div class="text-h2 q-mt-md">
           {{ profile.name }}
         </div>
-        <div class="row justify-center q-mt-xs">
+        <div
+          class="row justify-center q-mt-xs"
+          v-if="is_viewers_profile || profile_is_filmmaker"
+        >
           <profile-type-switch
             :disabled="!profile_is_filmmaker"
             :filmmaker="false"
@@ -48,7 +51,7 @@
         </div>
       </div>
     </div>
-    <div class="row justify-center q-mt-md" v-if="is_viwers_profile">
+    <div class="row justify-center q-mt-md" v-if="is_viewers_profile">
       <q-linear-progress
         size="5px"
         :value="engagement"
@@ -63,7 +66,7 @@
     </div>
     <div
       class="row justify-around q-mt-none q-pa-none"
-      v-if="is_viwers_profile"
+      v-if="is_viewers_profile"
     >
       <div
         class="text-overline text-uppercase"
@@ -84,23 +87,30 @@
           outside-arrows
           mobile-arrows
         >
-          <q-tab name="watchlist" label="Watchlist" v-if="is_viwers_profile" />
-          <q-tab name="recommends" label="Recommends" />
-          <q-tab name="curations" label="Curations" />
-          <q-tab name="followers" :label="followers.length + ' Followers'" />
-          <q-tab name="following" :label="following.length + ' Following'" />
           <q-tab
             name="filmography"
             label="Filmography"
             v-if="!profile_is_filmmaker"
           />
+          <q-tab name="watchlist" label="Watchlist" v-if="is_viewers_profile" />
+          <q-tab name="recommends" label="Recommends" />
+          <q-tab name="curations" label="Curations" />
+          <q-tab name="followers" :label="followers.length + ' Followers'" />
+          <q-tab name="following" :label="following.length + ' Following'" />
         </q-tabs>
         <q-separator />
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel
+            name="filmography"
+            class="q-px-none"
+            v-if="!profile_is_filmmaker"
+          >
+            <filmography-list :profile="profile" />
+          </q-tab-panel>
+          <q-tab-panel
             name="watchlist"
             class="q-px-none"
-            v-if="is_viwers_profile"
+            v-if="is_viewers_profile"
           >
             <watchlist :movies="watchlist"></watchlist>
           </q-tab-panel>
@@ -124,13 +134,6 @@
               @follow="on_follow_user"
               @unfollow="on_unfollow_user"
             />
-          </q-tab-panel>
-          <q-tab-panel
-            name="filmography"
-            class="q-px-none"
-            v-if="!profile_is_filmmaker"
-          >
-            <filmography-list :profile="profile" />
           </q-tab-panel>
         </q-tab-panels>
       </q-card>
@@ -173,8 +176,8 @@ export default {
   },
   data() {
     return {
-      tab: "watchlist",
-      // recommendation used when is_viwers_profile is false
+      tab: "filmography",
+      // recommendation used when is_viewers_profile is false
       their_recommends: [],
       lists: [],
       followers: [],
@@ -194,22 +197,22 @@ export default {
       return Math.round((score + Number.EPSILON) * 100) / 100;
     },
     recommends() {
-      if (this.is_viwers_profile) return this.my_recommends;
+      if (this.is_viewers_profile) return this.my_recommends;
       else return this.their_recommends;
     },
     profile_is_filmmaker() {
       return this.is_filmmaker(this.profile);
     },
-    is_viwers_profile() {
+    is_viewers_profile() {
       return this.profile.id == this.my_profile.id;
     },
     following_actions() {
-      if (this.is_viwers_profile)
+      if (this.is_viewers_profile)
         return [{ name: "Unfollow", emit: "unfollow" }];
       else return [];
     },
     follower_actions() {
-      if (this.is_viwers_profile)
+      if (this.is_viewers_profile)
         return [
           {
             name: "Follow Back",
@@ -243,7 +246,7 @@ export default {
       console.log("this.profile", this.profile);
       if (this.profile.id && this.is_authenticated) {
         this.get_recommends();
-        if (this.is_viwers_profile) this.get_watchlist();
+        if (this.is_viewers_profile) this.get_watchlist();
         this.get_followers();
         this.get_following();
         this.get_lists();

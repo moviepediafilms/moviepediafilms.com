@@ -8,7 +8,7 @@ Vue.mixin({
         return {
             google_api_key: 'AIzaSyD87LPfe433tiT7CDR_wdKnFIl4mc1sq24',
             website_title: "Moviepedia Films",
-            media_path: process.env.VUE_APP_MEDIA_PATH || ''
+            media_base: process.env.VUE_APP_MEDIA_BASE || ''
         }
     },
     computed: {
