@@ -90,12 +90,9 @@
               <q-select
                 filled
                 use-input
-                use-chips
                 v-model="submit_data.lang"
-                hide-dropdown-icon
                 :options="filtered_lang"
                 @filter="lang_filter_fn"
-                @new-value="add_lang"
                 option-label="name"
                 :hint="
                   submit_data.lang
@@ -154,6 +151,7 @@
               :rules="[
                 (val) =>
                   (val && val.length > 0) || 'Please select at-least one genre',
+                (val) => (val && val.length < 4) || 'You can select max of 3',
               ]"
               :error-message="submit_error.genre"
               :error="!!submit_error.genre"
@@ -340,23 +338,47 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="poster_crop_dialog">
+        <q-card style="width: 400px; max-width: 90vw">
+          <q-card-section class="text-center">
+            <div class="text-h6 q-mb-lg">Crop Poster</div>
+
+            <vue-cropper
+              ref="cropper"
+              :aspect-ratio="9 / 16"
+              :src="poster_image_url"
+              alt="Movie Poster"
+            >
+            </vue-cropper>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn flat label="Cancel" v-close-popup />
+            <q-btn flat color="primary" label="Done" @click="crop_poster" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </div>
   </base-layout>
 </template>
 
 <script>
+import VueCropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
+import langs from "@/extras/langs";
 import BaseLayout from "@/layouts/Base";
 import { submission_service, payment_service } from "@/services";
 export default {
   name: "submit-page",
   components: {
     BaseLayout,
+    VueCropper,
   },
   metaInfo: {
     title: "Submit",
   },
   data() {
     return {
+      poster_crop_dialog: false,
       step: 1,
       active_pack_id: 2,
       packs: [
@@ -366,10 +388,10 @@ export default {
           price: "INR 399 + INR 99",
           content: [
             { text: "Filmmaker of the Month", included: true },
-            { text: "Celebrity Recommendation", included: true },
-            { text: "Instagram Promotion", included: true },
             { text: "Facebook Marketing", included: true },
             { text: "E-mail Campaigns", included: true },
+            { text: "Celebrity Recommendation", included: true },
+            { text: "Instagram Promotion", included: true },
             { text: "Moviepedia Feature Review", included: true },
           ],
           active: false,
@@ -380,10 +402,10 @@ export default {
           price: "INR 399",
           content: [
             { text: "Filmmaker of the Month", included: true },
-            { text: "Celebrity Recommendation", included: true },
+            { text: "Facebook Marketing", included: true },
+            { text: "E-mail Campaigns", included: true },
+            { text: "Celebrity Recommendation", included: false },
             { text: "Instagram Promotion", included: false },
-            { text: "Facebook Marketing", included: false },
-            { text: "E-mail Campaigns", included: false },
             { text: "Moviepedia Feature Review", included: false },
           ],
           active: false,
@@ -428,15 +450,7 @@ export default {
             "We simplify the fundraising for your projects. We connect you with film enthusiasts to get your projects funded.",
         },
       ],
-      languages: [
-        { name: "English" },
-        { name: "Hindi" },
-        { name: "Tamil" },
-        { name: "Telugu" },
-        { name: "Malayalam" },
-        { name: "Bengali" },
-        { name: "Others (Please Specify)", disable: true },
-      ],
+      languages: Object.values(langs),
       filtered_lang: [],
       genres: [
         { name: "Action" },
@@ -521,11 +535,17 @@ export default {
       });
       return { name: selected.title };
     },
+    poster_image_url() {
+      if (this.submit_data.poster)
+        return URL.createObjectURL(this.submit_data.poster);
+      return this.submit_data.poster;
+    },
   },
   watch: {
     poster(poster_file) {
       this.submit_error.poster = "";
       this.submit_data.poster = poster_file;
+      this.poster_crop_dialog = true;
     },
     step() {
       var element = this.$refs[`step${this.step}`];
@@ -567,8 +587,12 @@ export default {
       delete data["is_director"];
 
       const form_data = new FormData();
-      form_data.append("poster", this.submit_data.poster);
-      if (data.director.name || data.director.email || data.director.contact) {
+      form_data.append("poster", this.submit_data.poster, "poster.png");
+      if (
+        data.director.name ||
+        data.director.email ||
+        data.director.contact.length > 2
+      ) {
         var name = data.director.name;
         if (name) {
           var name_segs = name.split(/[\s,]+/);
@@ -633,6 +657,13 @@ export default {
     },
     poster_rejected() {
       this.submit_error.poster = "size too big!! keep it under 2MB";
+    },
+    crop_poster() {
+      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
+        console.log("poster cropped", blob);
+        this.submit_data.poster = blob;
+        this.poster_crop_dialog = false;
+      }, "image/png");
     },
     add_lang(val, done) {
       if (val.length > 0) {

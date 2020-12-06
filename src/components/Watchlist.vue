@@ -1,17 +1,17 @@
 <template>
-  <movie-list
+  <movies
     :movies="movies"
     :options="menu_options"
     @remove="on_remove"
     @item-selected="on_movie_click"
-  ></movie-list>
+  ></movies>
 </template>
 <script>
-import MovieList from "@/components/MovieList";
+import Movies from "@/components/Movies";
 import { PROFILE_REMOVE_WATCHLIST } from "@/store/actions";
 export default {
   components: {
-    MovieList,
+    Movies,
   },
   props: {
     movies: {

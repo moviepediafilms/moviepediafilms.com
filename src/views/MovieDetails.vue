@@ -14,7 +14,7 @@
             </div>
             <div class="row">
               <q-badge
-                v-if="movie.contest.is_live"
+                v-if="movie.contest && movie.contest.is_live"
                 color="positive"
                 class="q-mr-xs"
                 >Live</q-badge
@@ -229,9 +229,32 @@
             <div class="row q-mt-md" v-if="movie.about">
               <div class="col text-center text-grey-5">
                 <div class="text-h4 text-primary">Moviepedia Critic</div>
-                <p class="q-mt-xs">
-                  {{ movie.about }}
-                </p>
+                <div class="q-mt-xs">
+                  <div
+                    class="text-body2"
+                    style="word-break: break-word; overflow-y: hidden"
+                    v-bind:style="{ 'max-height': critic_height }"
+                  >
+                    {{ movie.about }}
+                  </div>
+                  <div class="text-right q-mt-none">
+                    <q-btn
+                      size="sm"
+                      flat
+                      no-caps
+                      @click="
+                        critic_height =
+                          critic_height === '100px' ? '100%' : '100px'
+                      "
+                      :label="
+                        critic_height === '100px'
+                          ? 'Read more...'
+                          : 'Read less...'
+                      "
+                      color="primary"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row items-center q-mt-md">
@@ -659,6 +682,7 @@ export default {
   data() {
     return {
       // my_lists: [{ name: "", id: 1, like_count: 0, owner: 0, movies: [0, 1] }],
+      critic_height: "100px",
       recommend_loading: false,
       watchlist_loading: false,
       rating_loading: false,
@@ -826,10 +850,12 @@ export default {
   },
   methods: {
     scroll_handler() {
-      var list = this.$refs.reviews.$el;
-      var dimens = list.getClientRects()[0];
-      if (dimens.bottom < window.innerHeight) {
-        this.fetch_reviews();
+      if (this.$refs.reviews) {
+        var list = this.$refs.reviews.$el;
+        var dimens = list.getClientRects()[0];
+        if (dimens.bottom < window.innerHeight) {
+          this.fetch_reviews();
+        }
       }
     },
     load_data() {

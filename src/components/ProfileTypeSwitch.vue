@@ -1,28 +1,17 @@
 <template>
   <div>
     <q-btn-toggle
-      size="xs"
+      size="sm"
       rounded
       v-model="btn_value"
       toggle-color="primary"
-      class="text-white"
+      class="text-white q-mt-md"
       toggle-text-color="dark"
       @input="on_toggle"
       :options="[
         { label: 'Curator', value: filmmaker },
         { label: 'Creator', value: !filmmaker },
       ]"
-    /><br />
-    <q-toggle
-      flat
-      text
-      class="text-grey-6"
-      color="primary"
-      size="xs"
-      @input="on_toggle"
-      :value="filmmaker"
-      :label="filmmaker ? 'Creator' : 'Curator'"
-      v-if="false"
     />
   </div>
 </template>
@@ -60,7 +49,9 @@ export default {
           color: "negative",
           textColor: "white",
           timeout: 5000,
-          message: "Submit films to unlock Creator profile",
+          icon: "mdi-alert-circle",
+          message:
+            "Creator Profile will be unlocked 24 hours after you submit your movie on our platform.",
         });
       }
     },

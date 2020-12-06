@@ -3,7 +3,7 @@
     <div class="q-ma-md text-center">
       <h3 class="text-primary">{{ list.name }}</h3>
       <div class="q-mt-md text-left">
-        <movie-list
+        <movies
           :movies="movies"
           :options="menu_options"
           @remove="on_remove"
@@ -15,14 +15,14 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import MovieList from "@/components/MovieList";
+import Movies from "@/components/Movies";
 import { list_service } from "@/services/";
 import { LIST_TOGGLE_MOVIE_REQUEST } from "@/store/actions";
 export default {
   name: "list-detail-page",
   components: {
     BaseLayout,
-    MovieList,
+    Movies,
   },
   metaInfo: {
     title: "List",
