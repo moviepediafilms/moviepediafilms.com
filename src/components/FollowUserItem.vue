@@ -4,7 +4,7 @@
       <q-avatar>
         <img
           :src="user.image || '/default_avatar.png'"
-          @error="on_img_load_fail"
+          @error="on_user_img_error"
         />
       </q-avatar>
     </q-item-section>

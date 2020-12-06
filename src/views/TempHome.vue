@@ -3,11 +3,11 @@
     <div class="row" style="overflow-x: hidden">
       <div ref="start"></div>
       <slide1></slide1>
-      <slide2></slide2>
+      <slide2 id="creators"></slide2>
       <slide3></slide3>
-      <slide4></slide4>
+      <slide4 id="curators"></slide4>
       <slide5></slide5>
-      <slide6></slide6>
+      <slide6 id="celebrities"></slide6>
       <slide7></slide7>
       <slide8></slide8>
       <slide9></slide9>

@@ -20,18 +20,23 @@ const getters = {
 
 const actions = {
     [REQUEST_]: ({ commit, }, { profile_id, type }) => {
+
         return new Promise((resolve, reject) => {
-            commit(REQUEST_);
-            follow_service.get({}, `${profile_id}/${type}`).then(data => {
-                if (type === "followers")
-                    commit(SUCCESS_, { followers: data.results });
-                else
-                    commit(SUCCESS_, { following: data.results });
-                resolve(data.results)
-            }).catch(error => {
-                commit(ERROR_, error);
-                reject(error)
-            })
+            if (!profile_id)
+                reject(new Error("Invalid Profile ID"))
+            else {
+                commit(REQUEST_);
+                follow_service.get({}, `${profile_id}/${type}`).then(data => {
+                    if (type === "followers")
+                        commit(SUCCESS_, { followers: data.results });
+                    else
+                        commit(SUCCESS_, { following: data.results });
+                    resolve(data.results)
+                }).catch(error => {
+                    commit(ERROR_, error);
+                    reject(error)
+                })
+            }
         })
     },
 

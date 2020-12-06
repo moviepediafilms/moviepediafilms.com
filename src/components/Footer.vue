@@ -26,30 +26,27 @@
       </div>
       <div class="col-12 col-md-4 q-mt-md text-center">
         <p class="text-uppercase text-primary text-h4">Contact Us</p>
-        <div class="text-center social-links text-muted">
+        <div class="text-center social-links text-muted q-gutter-md">
           <a
             target="_blank"
             href="https://facebook.com/MoviepediaOfficial"
             class="social-link"
           >
-            <q-icon name="mdi-facebook" class="q-mr-sm" size="sm"></q-icon
-            >MoviepediaOfficial
+            <q-icon name="mdi-facebook" class="q-mr-sm" size="sm"></q-icon>
           </a>
           <a
             target="_blank"
             href="https://instagram.com/movie.pedia"
             class="text-reset social-link"
           >
-            <q-icon name="mdi-instagram" class="q-mr-sm" size="sm"></q-icon
-            >movie.pedia
+            <q-icon name="mdi-instagram" class="q-mr-sm" size="sm"></q-icon>
           </a>
           <a
             target="_blank"
             href="https://www.youtube.com/channel/UCBuP4H9TLLM13quoXQvJ3Ag"
             class="text-reset social-link"
           >
-            <q-icon name="mdi-youtube" class="q-mr-sm" size="sm"></q-icon
-            >Moviepedia Official
+            <q-icon name="mdi-youtube" class="q-mr-sm" size="sm"></q-icon>
           </a>
 
           <a
@@ -57,19 +54,17 @@
             href="tel:8400334876"
             class="text-reset social-link"
           >
-            <q-icon name="mdi-phone" class="q-mr-sm" size="sm"></q-icon>+91
-            8400334876
+            <q-icon name="mdi-phone" class="q-mr-sm" size="sm"></q-icon>
           </a>
           <a
             data-rel="external"
             href="mailto:contactus@moviepediafilms.com"
             class="social-link"
           >
-            <q-icon name="mdi-email" class="q-mr-sm" size="sm"></q-icon
-            >contactus@moviepediafilms.com
+            <q-icon name="mdi-email" class="q-mr-sm" size="sm"></q-icon>
           </a>
         </div>
-        <p class="text-uppercase text-primary q-mt-md text-h4">Other Links</p>
+        <p class="text-uppercase text-primary q-mt-lg text-h4">Other Links</p>
         <router-link :to="{ name: 'refund-policy' }" class="other-link">
           Refund Policy
         </router-link>
@@ -94,7 +89,9 @@ footer {
   padding: 5px 0;
   text-decoration: none;
   color: #afafaf;
-  display: block;
+  display: inline-block;
+  padding-right: 5px;
+  padding-left: 5px;
   &:hover {
     color: #f7cd23;
     font-weight: 800;
@@ -104,7 +101,7 @@ footer {
   padding: 5px 0;
   text-decoration: none;
   color: #afafaf;
-  display: block;
+  display: inline-block;
   &:hover {
     color: #f7cd23;
     font-weight: 800;

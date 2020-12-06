@@ -122,7 +122,7 @@
                   (val) =>
                     parseInt(val) > 0 || 'Please enter valid movie runtime',
                   (val) =>
-                    parseInt(val) < 30 || 'That\'s too long for a short film',
+                    parseInt(val) <= 60 || 'That\'s too long for a short film',
                 ]"
                 v-model="submit_data.runtime"
                 label="Runtime (in minutes)"
@@ -363,7 +363,7 @@ export default {
         {
           id: 2,
           title: "Premium Pack",
-          price: "INR 375 + INR 99",
+          price: "INR 399 + INR 99",
           content: [
             { text: "Filmmaker of the Month", included: true },
             { text: "Celebrity Recommendation", included: true },
@@ -377,7 +377,7 @@ export default {
         {
           id: 1,
           title: "Standard Pack",
-          price: "INR 375",
+          price: "INR 399",
           content: [
             { text: "Filmmaker of the Month", included: true },
             { text: "Celebrity Recommendation", included: true },
@@ -485,7 +485,7 @@ export default {
         director: {
           name: "",
           email: "",
-          contact: "",
+          contact: "91",
         },
       },
     };

@@ -7,7 +7,8 @@ Vue.mixin({
     data() {
         return {
             google_api_key: 'AIzaSyD87LPfe433tiT7CDR_wdKnFIl4mc1sq24',
-            website_title: "Moviepedia Films"
+            website_title: "Moviepedia Films",
+            media_path: process.env.VUE_APP_MEDIA_PATH || ''
         }
     },
     computed: {
@@ -20,11 +21,16 @@ Vue.mixin({
         am_i_director() {
             return this.my_profile.roles && this.my_profile.roles.filter(role => role.name === "Director").length == 1
         }
+
     },
     methods: {
-        on_img_load_fail(img) {
+        on_user_img_error(img) {
             console.log(`error loading image ${img.target.src}`)
             img.target.src = "/default_avatar.png";
+        },
+        on_movie_img_error(img) {
+            console.log(`error loading image ${img.target.src}`)
+            img.target.src = "/default_poster.jpg";
         },
         slugify(content) {
             return slugify(content)

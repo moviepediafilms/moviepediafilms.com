@@ -4,7 +4,7 @@
       <div class="col text-center">
         <profile-picture
           :profile="profile"
-          :editable="is_viwers_profile"
+          :editable="is_viewer_profile"
         ></profile-picture>
         <div class="text-h2 q-mt-md">
           {{ profile.name }}
@@ -48,7 +48,7 @@
         </div>
       </div>
     </div>
-    <div class="row justify-center q-mt-md" v-if="is_viwers_profile">
+    <div class="row justify-center q-mt-md" v-if="is_viewer_profile">
       <q-linear-progress
         size="5px"
         :value="fund_meter"
@@ -63,7 +63,7 @@
     </div>
     <div
       class="row justify-around q-mt-none q-pa-none"
-      v-if="is_viwers_profile"
+      v-if="is_viewer_profile"
     >
       <div
         class="text-overline text-uppercase"
@@ -171,11 +171,11 @@ export default {
       return Math.round((score + Number.EPSILON) * 100) / 100;
     },
     followers() {
-      if (this.is_viwers_profile) return this.$store.state.follow.followers;
+      if (this.is_viewer_profile) return this.$store.state.follow.followers;
       else return this.new_followers;
     },
     following() {
-      if (this.is_viwers_profile) return this.$store.state.follow.following;
+      if (this.is_viewer_profile) return this.$store.state.follow.following;
       else return this.new_following;
     },
     profile_is_filmmaker() {
@@ -184,19 +184,19 @@ export default {
     show_login_popup() {
       return !this.is_authenticated;
     },
-    is_viwers_profile() {
+    is_viewer_profile() {
       return this.profile.id == this.my_profile.id;
     },
     rank_txt() {
       return this.profile.rank == -1 ? "-" : this.profile.rank;
     },
     following_actions() {
-      if (this.is_viwers_profile)
+      if (this.is_viewer_profile)
         return [{ name: "Unfollow", emit: "unfollow" }];
       else return [];
     },
     follower_actions() {
-      if (this.is_viwers_profile)
+      if (this.is_viewer_profile)
         return [
           {
             name: "Follow Back",
@@ -217,15 +217,15 @@ export default {
   },
   watch: {
     profile() {
-      if (this.profile.id) this.load_data();
+      this.load_data();
     },
   },
   mounted() {
-    if (this.profile.id) this.load_data();
+    this.load_data();
   },
   methods: {
     load_data() {
-      if (this.is_authenticated) {
+      if (this.profile.id && this.is_authenticated) {
         this.get_reviews();
         this.get_followers();
         this.get_following();
@@ -261,7 +261,7 @@ export default {
         });
     },
     get_followers() {
-      if (this.is_viwers_profile) {
+      if (this.is_viewer_profile) {
         this.$store.dispatch(FOLLOW_REQUEST, {
           profile_id: this.profile.id,
           type: "followers",
@@ -273,7 +273,7 @@ export default {
       }
     },
     get_following() {
-      if (this.is_viwers_profile) {
+      if (this.is_viewer_profile) {
         this.$store.dispatch(FOLLOW_REQUEST, {
           profile_id: this.profile.id,
           type: "following",

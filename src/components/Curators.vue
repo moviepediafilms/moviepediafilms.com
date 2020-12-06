@@ -46,7 +46,7 @@
             <q-avatar>
               <img
                 :src="user.image || '/default_avatar.png'"
-                @error="on_img_load_fail"
+                @error="on_user_img_error"
               />
             </q-avatar>
           </q-item-section>
@@ -118,10 +118,6 @@ export default {
       this.$emit("page-change", this.curr_page);
     },
   },
-  methods: {
-    on_img_load_fail(img) {
-      img.target.src = "/default_avatar.png";
-    },
-  },
+  methods: {},
 };
 </script>
