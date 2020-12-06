@@ -46,18 +46,22 @@ const getters = {
 const actions = {
     [REQUEST_]: ({ commit, dispatch }, id) => {
         return new Promise((resolve, reject) => {
-            commit(REQUEST_);
-            profile_service.get({}, id)
-                .then(profile => {
-                    commit(SUCCESS_, profile);
-                    resolve(profile)
-                })
-                .catch((error) => {
-                    commit(ERROR_, error);
-                    // if resp is unauthorized, logout, to
-                    dispatch(AUTH_LOGOUT, null, { root: true });
-                    reject(error)
-                });
+            if (!id)
+                reject(new Error('Invalid profile ID'))
+            else {
+                commit(REQUEST_);
+                profile_service.get({}, id)
+                    .then(profile => {
+                        commit(SUCCESS_, profile);
+                        resolve(profile)
+                    })
+                    .catch((error) => {
+                        commit(ERROR_, error);
+                        // if resp is unauthorized, logout, to
+                        dispatch(AUTH_LOGOUT, null, { root: true });
+                        reject(error)
+                    });
+            }
         })
     },
     [PROFILE_FOLLOW_]: ({ commit, dispatch }, profile_to_follow) => {

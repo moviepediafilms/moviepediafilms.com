@@ -24,6 +24,7 @@
       <div class="col">
         <q-btn
           round
+          to="#creators"
           color="primary"
           text-color="dark"
           icon="mdi-movie-open-outline"
@@ -34,6 +35,7 @@
       <div class="col">
         <q-btn
           round
+          to="#curators"
           color="primary"
           text-color="dark"
           icon="mdi-bullhorn"
@@ -45,6 +47,7 @@
       <div class="col">
         <q-btn
           round
+          to="#celebrities"
           color="primary"
           text-color="dark"
           icon="mdi-star"

@@ -230,15 +230,18 @@ export default {
   },
   watch: {
     profile() {
-      if (this.profile.id) this.load_data();
+      console.log("on profile change");
+      this.load_data();
     },
   },
   mounted() {
+    console.log("on mounted");
     this.load_data();
   },
   methods: {
     load_data() {
-      if (this.is_authenticated) {
+      console.log("this.profile", this.profile);
+      if (this.profile.id && this.is_authenticated) {
         this.get_recommends();
         if (this.is_viwers_profile) this.get_watchlist();
         this.get_followers();
@@ -273,11 +276,13 @@ export default {
       this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
     },
     get_followers() {
+      console.log(`${this.profile.id}/followers`);
       follow_service.get({}, `${this.profile.id}/followers`).then((data) => {
         this.followers.push(...data.results);
       });
     },
     get_following() {
+      console.log(`${this.profile.id}/following`);
       follow_service.get({}, `${this.profile.id}/following`).then((data) => {
         this.following.push(...data.results);
       });

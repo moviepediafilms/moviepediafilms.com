@@ -100,6 +100,12 @@ const routes = [
             import ('../views/Submit.vue')
     },
     {
+        path: '/my-submissions',
+        name: 'my-submissions',
+        component: () =>
+            import ('../views/MySubmissions.vue')
+    },
+    {
         path: '/notification',
         name: 'notification',
         component: () =>
@@ -172,6 +178,9 @@ const router = new VueRouter({
     mode: 'history',
     routes,
     scrollBehavior(to, from, savedPosition) {
+        if (to.hash) {
+            return window.scrollTo({ top: document.querySelector(to.hash).offsetTop, behavior: 'smooth' });
+        }
         if (savedPosition) {
             return savedPosition
         } else {

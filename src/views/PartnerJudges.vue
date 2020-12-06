@@ -9,7 +9,7 @@
         <img :src="judge.image" />
 
         <q-card-section>
-          <div class="text-h6 text-primary">{{ judge.name }}</div>
+          <div class="text-h4 text-primary">{{ judge.name }}</div>
           <div class="q-mt-sm text-subtitle2">{{ judge.title }}</div>
         </q-card-section>
         <q-card-section class="q-pt-none judge-about">{{
