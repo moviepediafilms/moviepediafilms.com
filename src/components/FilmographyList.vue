@@ -43,19 +43,17 @@
         </q-card>
       </div>
     </div>
-    <div class="text-grey-7 text-center" v-else>
-      <q-icon name="mdi-emoticon-sad" size="80px" class="q-mb-md" />
-      <div class="text-h4">Add yourself as crew member in movies</div>
-      <div class="text-caption q-mt-sm">
-        Your don't have an association with any movie on our platform!
-      </div>
-    </div>
+    <empty-state
+      title="Nothing here!"
+      desc="Your don't have an association with any movie on our platform!"
+      icon="mdi-emoticon-sad"
+      v-else
+    />
   </div>
 </template>
 <script>
 import { profile_service } from "@/services";
 export default {
-  components: {},
   props: {
     profile: {
       type: Object,

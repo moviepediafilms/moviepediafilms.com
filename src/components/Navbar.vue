@@ -47,23 +47,17 @@
             />
           </template>
 
-          <q-btn flat round color="primary" class="q-mr-sm" icon="mdi-menu">
-            <q-menu auto-close content-class="negative">
-              <q-list style="min-width: 100px">
+          <q-btn flat round color="primary" class="" icon="mdi-menu">
+            <q-menu auto-close>
+              <q-list>
                 <q-item clickable :to="{ name: 'submit' }">
                   <q-item-section>Submit a Film</q-item-section>
                 </q-item>
-                <q-item clickable :to="{ name: 'filmmaker-of-the-month' }">
-                  <q-item-section>Filmmaker of the Month</q-item-section>
-                </q-item>
-                <q-item clickable :to="{ name: 'mdff-top' }">
-                  <q-item-section>MDFF Top 10</q-item-section>
-                </q-item>
-                <q-item clickable :to="{ name: 'partner-judges' }">
-                  <q-item-section>Partner Celebs</q-item-section>
-                </q-item>
                 <q-item clickable :to="{ name: 'my-submissions' }">
                   <q-item-section>My Submissions</q-item-section>
+                </q-item>
+                <q-item clickable :to="{ name: 'partner-judges' }">
+                  <q-item-section>Partner Celebrities</q-item-section>
                 </q-item>
                 <q-item clickable @click="auth_action">
                   <q-item-section>{{ auth_action_str }}</q-item-section>
