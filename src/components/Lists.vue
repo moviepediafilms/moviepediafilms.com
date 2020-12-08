@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-list>
+    <q-list v-if="lists.length > 0">
       <q-item
         class="q-ma-none"
         v-ripple
@@ -42,6 +42,12 @@
         </q-item-section>
       </q-item>
     </q-list>
+    <empty-state
+      title="No Curations"
+      desc="Start creating lists of films tell what you loved and how."
+      icon="mdi-emoticon-sad"
+      v-else
+    />
     <popup-menu
       :options="options"
       :show="show_menu"

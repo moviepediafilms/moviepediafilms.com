@@ -1,7 +1,7 @@
 <template>
   <base-layout>
     <div class="q-ma-md text-center q-pt-xs">
-      <h3 class="text-primary">My Reviews</h3>
+      <div class="text-primary text-h1">Reviews</div>
       <reviews :reviews="reviews" />
     </div>
   </base-layout>

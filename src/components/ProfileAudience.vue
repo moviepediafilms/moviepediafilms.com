@@ -125,6 +125,8 @@
               :users="following"
               :actions="following_actions"
               @unfollow="on_unfollow_user"
+              empty-title="No Followings"
+              empty-desc="You are not following anyone !"
             />
           </q-tab-panel>
           <q-tab-panel name="followers" class="q-px-none">
@@ -133,6 +135,8 @@
               :actions="follower_actions"
               @follow="on_follow_user"
               @unfollow="on_unfollow_user"
+              empty-title="No Followers"
+              empty-desc="No one follows you!"
             />
           </q-tab-panel>
         </q-tab-panels>

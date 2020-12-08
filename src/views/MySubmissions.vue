@@ -1,11 +1,12 @@
 <template>
   <base-layout>
     <div class="q-pa-md">
+      <div class="text-primary text-center q-mb-lg text-h1">My Submissions</div>
       <div class="text-center text-primary" v-if="loading">
         <q-spinner-dots size="48px" />
       </div>
       <div v-else>
-        <div class="row q-col-gutter-xl">
+        <div class="row q-col-gutter-xl" v-if="submissions.length > 0">
           <div class="col-12 col-md-6">
             <q-card
               class="q-ma-md"
@@ -50,6 +51,12 @@
             </q-card>
           </div>
         </div>
+        <empty-state
+          title="Nothing here to see"
+          desc="Submit movie now!"
+          icon="mdi-emoticon-sad"
+          v-else
+        />
       </div>
     </div>
   </base-layout>

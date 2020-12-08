@@ -1,18 +1,39 @@
 <template>
-  <q-list>
-    <follow-user-item
-      :user="user"
-      :actions="actions"
-      v-for="user in users"
-      :key="user.id"
-      @action="on_action"
+  <div>
+    <q-list v-if="users.length > 0">
+      <follow-user-item
+        :user="user"
+        :actions="actions"
+        v-for="user in users"
+        :key="user.id"
+        @action="on_action"
+      />
+    </q-list>
+    <empty-state
+      :title="emptyTitle"
+      :desc="emptyDesc"
+      :icon="emptyIcon"
+      :image="emptyImage"
+      v-else
     />
-  </q-list>
+  </div>
 </template>
 <script>
 import FollowUserItem from "@/components/FollowUserItem";
 export default {
   props: {
+    emptyTitle: {
+      type: String,
+    },
+    emptyDesc: {
+      type: String,
+    },
+    emptyIcon: {
+      type: String,
+    },
+    emptyImage: {
+      type: String,
+    },
     users: {
       type: Array,
       default() {

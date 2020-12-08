@@ -3,7 +3,11 @@ import slugify from '@/extras/slug'
 import decode_error_message from "@/extras/error"
 import { mapGetters, mapState } from "vuex";
 import moment from "moment";
+import EmptyState from "@/components/EmptyState"
 Vue.mixin({
+    components: {
+        EmptyState
+    },
     data() {
         return {
             google_api_key: 'AIzaSyD87LPfe433tiT7CDR_wdKnFIl4mc1sq24',

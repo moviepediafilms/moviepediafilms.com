@@ -1,10 +1,19 @@
 <template>
-  <movies
-    :movies="movies"
-    :options="menu_options"
-    @remove="on_remove"
-    @item-selected="on_movie_click"
-  ></movies>
+  <div>
+    <movies
+      :movies="movies"
+      :options="menu_options"
+      @remove="on_remove"
+      @item-selected="on_movie_click"
+      v-if="movies.length > 0"
+    ></movies>
+    <empty-state
+      title="No Recommendations"
+      desc="You have not recommended anything yet!"
+      icon="mdi-emoticon-sad"
+      v-else
+    />
+  </div>
 </template>
 <script>
 import Movies from "@/components/Movies";

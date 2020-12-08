@@ -10,14 +10,12 @@
       :highlight_top="10"
       v-if="creators.length > 0"
     />
-    <div class="text-grey-7" v-else>
-      <q-icon name="mdi-emoticon-wink" size="80px" class="q-mb-md" />
-      <div class="text-h4">Opportunity for you !</div>
-      <div class="text-caption q-mt-sm">
-        Submit your movie to get selected and get a change to complete with
-        other filmmakers
-      </div>
-    </div>
+    <empty-state
+      title="Opportunity for you !"
+      desc="Submit your movie to get selected and get a change to complete with other filmmakers"
+      icon="mdi-emoticon-wink"
+      v-else
+    />
   </div>
 </template>
 <script>
