@@ -549,7 +549,10 @@ export default {
       }
     },
     original_poster(value) {
-      if (value) this.poster_crop_dialog = true;
+      if (value) {
+        this.submit_data.poster = undefined;
+        this.poster_crop_dialog = true;
+      }
     },
     step() {
       var element = this.$refs[`step${this.step}`];
