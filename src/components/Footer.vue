@@ -77,6 +77,9 @@
         <router-link :to="{ name: 'about' }" class="other-link">
           About Us
         </router-link>
+        <router-link :to="{ name: 'rules-and-regulations' }" class="other-link">
+          Rules &amp; Regulations
+        </router-link>
       </div>
     </div>
   </footer>

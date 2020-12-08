@@ -167,6 +167,12 @@ const routes = [
             import ('../views/PrivacyPolicy.vue')
     },
     {
+        path: '/rules-and-regulations',
+        name: 'rules-and-regulations',
+        component: () =>
+            import ('../views/RulesAndRegulations.vue')
+    },
+    {
         path: '*',
         name: "not-found",
         component: () =>
