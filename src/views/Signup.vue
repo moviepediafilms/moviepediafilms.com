@@ -254,7 +254,7 @@ export default {
         name: "",
         email: "",
         city: "",
-        mobile: "",
+        mobile: "91",
         gender: "",
         dob: "",
         password: "",
