@@ -130,11 +130,11 @@
             </div>
             <div>
               <q-file
-                v-model="poster"
+                v-model="original_poster"
                 label="Poster"
                 accept=".jpg, image/*"
                 max-file-size="6000000"
-                hint="Portrait poster of the movie, less than 6MB"
+                hint="Portrait poster of the movie"
                 filled
                 clearable
                 @rejected="poster_rejected"
@@ -338,7 +338,7 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
-      <q-dialog v-model="poster_crop_dialog">
+      <q-dialog v-model="poster_crop_dialog" ref="crop_dialog">
         <q-card style="width: 400px; max-width: 90vw">
           <q-card-section class="text-center">
             <div class="text-h6 q-mb-lg">Crop Poster</div>
@@ -378,7 +378,6 @@ export default {
   },
   data() {
     return {
-      poster_crop_dialog: false,
       step: 1,
       active_pack_id: 2,
       packs: [
@@ -485,7 +484,9 @@ export default {
           contact: "",
         },
       },
+      original_poster: undefined,
       poster: undefined,
+      poster_crop_dialog: false,
       error_msg: "",
       success_msg: "",
       submit_data: {
@@ -536,16 +537,19 @@ export default {
       return { name: selected.title };
     },
     poster_image_url() {
-      if (this.submit_data.poster)
-        return URL.createObjectURL(this.submit_data.poster);
-      return this.submit_data.poster;
+      if (this.original_poster)
+        return URL.createObjectURL(this.original_poster);
+      return this.original_poster;
     },
   },
   watch: {
-    poster(poster_file) {
-      this.submit_error.poster = "";
-      this.submit_data.poster = poster_file;
-      this.poster_crop_dialog = true;
+    poster_crop_dialog(value) {
+      if (!value && !this.submit_data.poster) {
+        this.original_poster = undefined;
+      }
+    },
+    original_poster(value) {
+      if (value) this.poster_crop_dialog = true;
     },
     step() {
       var element = this.$refs[`step${this.step}`];
@@ -568,7 +572,7 @@ export default {
           has_errors1 = this.check_fields_for_error(
             error.response.data.payload,
             this.submit_error,
-            ["poster", "title", "link", "runtime", "is_director", "genres"]
+            ["poster", "title", "link", "runtime", "genres"]
           );
         if (error.response.data.payload.director) {
           this.submit_error.director = {};
@@ -581,32 +585,30 @@ export default {
       }
       return has_errors1 || has_errors2;
     },
+    build_director_data() {
+      var director = JSON.parse(JSON.stringify(this.submit_data.director));
+      if (director.name || director.email || director.contact.length > 2) {
+        var name = director.name;
+        if (name) {
+          var name_segs = name.split(/[\s,]+/);
+          director.last_name = "";
+          if (name_segs.length > 0) director.first_name = name_segs.shift();
+          if (name_segs.length > 0) director.last_name = name_segs.join(" ");
+          delete director["name"];
+        }
+        return director;
+      }
+    },
     build_form_data() {
+      //  copy the submit_data
       const data = JSON.parse(JSON.stringify(this.submit_data));
       delete data["poster"];
-      delete data["is_director"];
 
       const form_data = new FormData();
       form_data.append("poster", this.submit_data.poster, "poster.png");
-      if (
-        data.director.name ||
-        data.director.email ||
-        data.director.contact.length > 2
-      ) {
-        var name = data.director.name;
-        if (name) {
-          var name_segs = name.split(/[\s,]+/);
-          data.director.last_name = "";
-          if (name_segs.length > 0)
-            data.director.first_name = name_segs.shift();
-          if (name_segs.length > 0)
-            data.director.last_name = name_segs.join(" ");
-          delete data.director["name"];
-        }
-      } else {
-        delete data["director"];
-      }
 
+      data.director = this.build_director_data(data.director);
+      // undefined values are ommited by JSON.stringify, hence director key will be removed in value is undefined
       form_data.append("payload", JSON.stringify(data));
       return form_data;
     },
@@ -656,11 +658,10 @@ export default {
       });
     },
     poster_rejected() {
-      this.submit_error.poster = "size too big!! keep it under 2MB";
+      this.submit_error.poster = "size too big!! keep it under 6MB";
     },
     crop_poster() {
       this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
-        console.log("poster cropped", blob);
         this.submit_data.poster = blob;
         this.poster_crop_dialog = false;
       }, "image/png");
@@ -695,10 +696,14 @@ export default {
       }
       this.loading = true;
       var form_data = new FormData();
-      form_data.append(
-        "payload",
-        JSON.stringify({ package: this.selected_pack })
-      );
+      var payload = JSON.stringify({
+        package: this.selected_pack,
+        director: this.build_director_data(),
+      });
+      // while updating movie submission, if we ommit director field the server makes the assumption
+      //  that the logged in user is the director, to fix this we have to pass director in every update
+      form_data.append("payload", payload);
+      console.log(payload);
       submission_service
         .patch(form_data, this.submitted_movie.id)
         .then((res_data) => {
