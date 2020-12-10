@@ -13,3 +13,14 @@
 .text-h6 {
     font-family: 'Noto Sans', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
+.readmore {
+    a {
+        color: $primary;
+        margin-left: 5px
+    }
+    p,
+    span {
+        display: inline;
+    }
+}

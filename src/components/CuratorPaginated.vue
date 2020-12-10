@@ -11,9 +11,9 @@
       v-if="curators.length > 0"
     />
     <empty-state
-      title="Opportunity for you !"
-      desc="Grab the first position by recommending movies that celebrities on our platform might recommend"
-      icon="mdi-emoticon-wink"
+      title="Recommend Films & Win Big."
+      desc="Start recommending films that our partner celebrities might recommend and get to the top of our leaderboards."
+      icon="mdi-bullhorn"
       v-else
     />
   </div>

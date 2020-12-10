@@ -3,8 +3,7 @@
     <q-list padding separator v-if="reviews.length > 0">
       <q-item v-for="review in reviews" :key="review.id">
         <q-item-section>
-          <q-item-label align="left"> {{ review.content }}</q-item-label>
-          <q-item-label caption align="left">
+          <q-item-label caption align="left" v-if="showMovieLink">
             <router-link
               class="text-primary text-decoration-none"
               :to="{
@@ -17,10 +16,33 @@
               >{{ review.movie.title }}</router-link
             >
           </q-item-label>
+          <q-item-label align="left" style="word-break: break-word">
+            <read-more
+              class="readmore"
+              more-str="read more"
+              :text="review.content"
+              link="#"
+              less-str="read less"
+              :max-chars="200"
+            ></read-more>
+          </q-item-label>
+
           <q-item-label caption align="right">
-            <span><q-icon name="mdi-star" /> {{ review.rating }} / 10 </span>
+            <span v-if="review.rating > -1"
+              ><q-icon name="mdi-star" /> {{ review.rating }} / 10
+            </span>
+
             <q-icon name="mdi-circle-medium" class="q-mx-xs" color="grey-6" />
-            <span>{{ review.liked_by.length }} likes</span>
+            <q-btn
+              round
+              flat
+              icon="mdi-thumb-up"
+              @click="$emit('toggle-like', review)"
+              :color="get_like_btn_color(review.liked_by)"
+              size="xs"
+            ></q-btn>
+            <span>{{ get_like_txt(review.liked_by.length) }}</span>
+
             <q-icon name="mdi-circle-medium" class="q-mx-xs" color="grey-6" />
             <span>{{ date_to_txt(review.published_at) }}</span>
           </q-item-label>
@@ -28,9 +50,10 @@
       </q-item>
     </q-list>
     <empty-state
-      title="No Reviews"
-      desc="No reviews were found"
-      icon="mdi-emoticon-sad"
+      :title="emptyTitle"
+      :desc="emptyDesc"
+      :icon="emptyIcon"
+      :image="emptyImage"
       v-else
     />
   </div>
@@ -38,11 +61,53 @@
 <script>
 export default {
   props: {
+    showMovieLink: {
+      type: Boolean,
+      default: true,
+    },
     reviews: {
       type: Array,
       default() {
         return [];
       },
+    },
+    emptyTitle: {
+      type: String,
+      default: "Nothing to show here",
+    },
+    emptyDesc: {
+      type: String,
+      default: "No Reviews found!",
+    },
+    emptyIcon: {
+      type: String,
+      default: null,
+    },
+    emptyImage: {
+      type: String,
+      default: null,
+    },
+  },
+  mounted() {},
+  methods: {
+    get_like_txt(count) {
+      if (count == 0) return "no likes";
+      if (count == 1) return "1 like";
+      return `${count} likes`;
+    },
+    get_like_btn_color(liked_by) {
+      return this.if_i_liked(liked_by) ? "primary" : "default";
+    },
+    if_i_liked(liked_by) {
+      var liked = false;
+      if (!this.my_profile) return liked;
+
+      liked_by.forEach((user) => {
+        if (user.id == this.my_profile.id) {
+          liked = true;
+        }
+      });
+      return liked;
     },
   },
 };

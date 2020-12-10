@@ -84,14 +84,10 @@
           outside-arrows
           mobile-arrows
         >
+          <q-tab name="filmography" label="Filmography" />
           <q-tab name="followers" :label="followers.length + ' Followers'" />
           <q-tab name="following" :label="following.length + ' Following'" />
           <q-tab name="reviews" label="Reviews" />
-          <q-tab
-            name="filmography"
-            label="Filmography"
-            v-if="profile_is_filmmaker"
-          />
         </q-tabs>
         <q-separator />
         <q-tab-panels v-model="tab" animated>
@@ -113,11 +109,7 @@
           <q-tab-panel name="reviews" class="q-px-none"
             ><reviews :reviews="reviews"></reviews
           ></q-tab-panel>
-          <q-tab-panel
-            name="filmography"
-            class="q-px-none"
-            v-if="profile_is_filmmaker"
-          >
+          <q-tab-panel name="filmography" class="q-px-none">
             <filmography-list :profile="profile" />
           </q-tab-panel>
         </q-tab-panels>
