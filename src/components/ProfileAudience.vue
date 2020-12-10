@@ -247,12 +247,15 @@ export default {
   mounted() {
     console.log("on mounted");
     this.load_data();
+    // when user is not a filmmaker, filmography tab is not mounted and on_empty_filmography is never called to switch the tab,
+    // in such cases explicitly setting tab to next mounted tab
+    if (this.profile_is_filmmaker) this.tab = "watchlist";
   },
   methods: {
     on_empty_filmography() {
       console.log("on_empty_filmography");
       this.hide_filmography = true;
-      this.tab = "recommends";
+      this.tab = "watchlist";
     },
     load_data() {
       console.log("this.profile", this.profile);
