@@ -367,6 +367,7 @@ import "cropperjs/dist/cropper.css";
 import langs from "@/extras/langs";
 import BaseLayout from "@/layouts/Base";
 import { submission_service, payment_service } from "@/services";
+import { mapState } from "vuex";
 export default {
   name: "submit-page",
   components: {
@@ -462,13 +463,6 @@ export default {
         { name: "Thriller" },
         { name: "Others" },
       ],
-      roles: [
-        { name: "Actor" },
-        { name: "Director" },
-        { name: "Producer" },
-        { name: "Singer" },
-        { name: "Musician" },
-      ],
       loading: false,
       submit_error: {
         title: "",
@@ -512,6 +506,9 @@ export default {
     document.head.appendChild(script);
   },
   computed: {
+    ...mapState({
+      roles: (state) => state.role.roles,
+    }),
     show_sign_in() {
       return this.step > 1 && !this.is_authenticated;
     },
@@ -611,7 +608,8 @@ export default {
       delete data["poster"];
 
       const form_data = new FormData();
-      form_data.append("poster", this.submit_data.poster, "poster.png");
+      if (this.submit_data.poster)
+        form_data.append("poster", this.submit_data.poster, "poster.png");
 
       data.director = this.build_director_data(data.director);
       // undefined values are ommited by JSON.stringify, hence director key will be removed in value is undefined

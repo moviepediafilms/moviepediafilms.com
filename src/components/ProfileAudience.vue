@@ -253,12 +253,10 @@ export default {
   },
   methods: {
     on_empty_filmography() {
-      console.log("on_empty_filmography");
       this.hide_filmography = true;
       this.tab = "watchlist";
     },
     load_data() {
-      console.log("this.profile", this.profile);
       if (this.profile.id && this.is_authenticated) {
         this.get_recommends();
         if (this.is_viewers_profile) this.get_watchlist();

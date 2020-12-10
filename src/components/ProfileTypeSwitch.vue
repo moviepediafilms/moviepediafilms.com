@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     on_toggle() {
-      console.log("toglling");
       if (!this.disabled) this.$emit("toggle");
       else {
         // reverse the use action
