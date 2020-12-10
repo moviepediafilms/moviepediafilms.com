@@ -20,7 +20,7 @@
         <bar-plus :rtl="true" />
       </div>
       <div class="col-12 text-center q-mt-lg" style="padding-bottom: 0px">
-        <img src="/img/7.jpg" width="100%" style="max-width: 300px" />
+        <img src="/img/7.png" width="100%" style="max-width: 300px" />
       </div>
     </div>
   </div>
