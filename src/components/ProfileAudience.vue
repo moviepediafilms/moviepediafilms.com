@@ -90,7 +90,7 @@
           <q-tab
             name="filmography"
             label="Filmography"
-            v-if="!profile_is_filmmaker"
+            v-if="!profile_is_filmmaker && !hide_filmography"
           />
           <q-tab name="watchlist" label="Watchlist" v-if="is_viewers_profile" />
           <q-tab name="recommends" label="Recommends" />
@@ -103,9 +103,12 @@
           <q-tab-panel
             name="filmography"
             class="q-px-none"
-            v-if="!profile_is_filmmaker"
+            v-if="!profile_is_filmmaker && !hide_filmography"
           >
-            <filmography-list :profile="profile" />
+            <filmography-list
+              :profile="profile"
+              @empty="on_empty_filmography"
+            />
           </q-tab-panel>
           <q-tab-panel
             name="watchlist"
@@ -186,7 +189,7 @@ export default {
       lists: [],
       followers: [],
       following: [],
-      filmography: [],
+      hide_filmography: false,
     };
   },
   computed: {
@@ -246,6 +249,11 @@ export default {
     this.load_data();
   },
   methods: {
+    on_empty_filmography() {
+      console.log("on_empty_filmography");
+      this.hide_filmography = true;
+      this.tab = "recommends";
+    },
     load_data() {
       console.log("this.profile", this.profile);
       if (this.profile.id && this.is_authenticated) {

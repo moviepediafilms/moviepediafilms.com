@@ -1,7 +1,15 @@
 <template>
   <base-layout>
-    <div class="q-ma-md text-center q-pt-lg">
-      <h3 class="text-primary">Notifications</h3>
+    <div class="q-ma-md text-center q-pt-sm">
+      <div class="text-primary text-h1">Notifications</div>
+      <div v-if="notifications.length > 0"></div>
+      <empty-state
+        class="q-mt-lg"
+        icon="mdi-bell-check"
+        title="You're all caught up"
+        desc=""
+        v-else
+      />
     </div>
   </base-layout>
 </template>
@@ -16,7 +24,9 @@ export default {
     title: "Notifications",
   },
   data() {
-    return {};
+    return {
+      notifications: [],
+    };
   },
   mounted() {},
   methods: {},

@@ -53,7 +53,11 @@
                 <q-item clickable :to="{ name: 'submit' }">
                   <q-item-section>Submit a Film</q-item-section>
                 </q-item>
-                <q-item clickable :to="{ name: 'my-submissions' }">
+                <q-item
+                  clickable
+                  :to="{ name: 'my-submissions' }"
+                  v-if="is_authenticated"
+                >
                   <q-item-section>My Submissions</q-item-section>
                 </q-item>
                 <q-item clickable :to="{ name: 'partner-judges' }">

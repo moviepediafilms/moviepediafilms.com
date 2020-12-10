@@ -581,7 +581,7 @@ export default {
           this.submit_error.director = {};
           has_errors2 = this.check_fields_for_error(
             error.response.data.director,
-            this.submit_error.director,
+            this.submit_error.payload.director,
             ["name", "email", "contact"]
           );
         }
@@ -590,7 +590,10 @@ export default {
     },
     build_director_data() {
       var director = JSON.parse(JSON.stringify(this.submit_data.director));
-      if (director.name || director.email || director.contact.length > 2) {
+      // if only country prefix was there
+      director.contact =
+        director.contact.length == 2 ? undefined : director.contact.length;
+      if (director.name || director.email) {
         var name = director.name;
         if (name) {
           var name_segs = name.split(/[\s,]+/);
@@ -731,7 +734,12 @@ export default {
               // redirect user
               this.success_msg = "Payment Successful";
               setTimeout(() => {
-                this.$router.push({ name: "home" });
+                this.$router.push({
+                  name: "profile",
+                  params: {
+                    id: "me",
+                  },
+                });
               }, 500);
             } else {
               this.error_msg = "Fail to verify Payment";
@@ -777,7 +785,6 @@ export default {
         },
         offers: ["offer_Fkl0Kfpdx70wq8", "offer_Fkkx6hkOZTDRER"],
       };
-      console.log(options);
       //eslint-disable-next-line
       new Razorpay(options).open();
     },

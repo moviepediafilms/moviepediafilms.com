@@ -6,7 +6,7 @@ import moment from "moment";
 import EmptyState from "@/components/EmptyState"
 Vue.mixin({
     components: {
-        EmptyState
+        EmptyState,
     },
     data() {
         return {

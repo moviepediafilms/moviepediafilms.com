@@ -13,14 +13,11 @@
       <div class="col-12 col-md-4 q-mt-lg text-center align-middle">
         <p class="text-uppercase text-primary text-h4">About Us</p>
         <span class="text-muted">
-          Moviepedia, as a community of film-makers, film enthusiasts, actors,
-          scriptwriters, etc. is constantly growing. We already share similar
-          interests with over 160,000 people across the globe, spreading the
-          nuances of art. We take keen pleasure in curating and reviewing films
-          and provide independent filmmakers with a distinguished platform to
-          showcase their vision. This platform is home to the perseverance, hard
-          work and passion of independent filmmakers, budding artists, and
-          storytellers out there.
+          At Moviepedia Films, we observed that quality content is in abundance
+          but often gets buried and limits the recognition that filmmakers
+          deserve. We are designing a 'social film discovery' platform where
+          both creators and curators get rewarded for their skills - creation
+          and curation.
         </span>
         <br />
       </div>

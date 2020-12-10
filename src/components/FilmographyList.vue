@@ -1,11 +1,7 @@
 <template>
   <div ref="container">
     <div class="row q-col-gutter-sm" v-if="movies.length > 0">
-      <div
-        class="col-4 col-sm-3 col-md-3"
-        v-for="movie in movies"
-        :key="movie.id"
-      >
+      <div class="col-4 col-sm-3" v-for="movie in movies" :key="movie.id">
         <q-card flat v-ripple @click="on_movie_select(movie)">
           <q-img :ratio="9 / 16" :src="`${media_base}${movie.poster}`">
             <div class="absolute-bottom text-center bg-transparent">
@@ -29,16 +25,19 @@
             </template>
           </q-img>
           <div class="q-my-sm">
-            <q-badge
-              size="sm"
-              class="q-mr-xs"
-              outline
-              text-color="primary"
-              v-for="role in my_roles(movie)"
-              :key="role.id"
-            >
-              {{ role.role }}
-            </q-badge>
+            <div class="flex justify-around items-center">
+              <div class="">
+                <q-icon name="mdi-bullhorn" />
+                {{ movie.recommend_count }}
+              </div>
+              <div class="text-h2 text-primary text-weight-bolder">4.5</div>
+            </div>
+            <hr class="q-mx-sm" />
+            <div class="text-center">
+              <span>
+                {{ my_roles_txt(movie) }}
+              </span>
+            </div>
           </div>
         </q-card>
       </div>
@@ -90,6 +89,11 @@ export default {
       return Array.from(my_roles);
     },
   },
+  watch: {
+    count() {
+      if (this.count == 0) this.$emit("empty");
+    },
+  },
   methods: {
     my_roles_txt(movie) {
       var roles = this.my_roles(movie);
@@ -103,13 +107,23 @@ export default {
       return movie.crew.filter((item) => item.profile_id == this.profile.id);
     },
     on_movie_select(movie) {
-      this.$router.push({
-        name: "movie-detail",
-        params: {
-          id: movie.id,
-          slug: this.slugify(movie.title),
-        },
-      });
+      if (movie.state === "P") {
+        this.$router.push({
+          name: "movie-detail",
+          params: {
+            id: movie.id,
+            slug: this.slugify(movie.title),
+          },
+        });
+      } else {
+        this.$q.notify({
+          color: "primary",
+          textColor: "dark",
+          icon: "mdi-alert-circle-outline",
+          message:
+            "Movie is being screened and soon will be approved for audience",
+        });
+      }
     },
     get_status_color(status) {
       return {

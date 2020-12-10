@@ -11,9 +11,9 @@
       v-if="creators.length > 0"
     />
     <empty-state
-      title="Opportunity for you !"
-      desc="Submit your movie to get selected and get a change to complete with other filmmakers"
-      icon="mdi-emoticon-wink"
+      title="Create. Submit. Compete."
+      desc="Start submitting films and stand a chance to win the Filmmaker of the Month title."
+      icon="mdi-movie"
       v-else
     />
   </div>

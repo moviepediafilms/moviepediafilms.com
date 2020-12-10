@@ -1,15 +1,15 @@
 <template>
   <base-layout>
     <div v-swipe="swipe" ref="content">
-      <div class="q-pa-xs">
+      <div class="q-pa-xs" v-if="is_movie_live">
         <q-responsive :ratio="16 / 9" class="col">
           <iframe :src="movie.link" frameborder="0" allowfullscreen />
         </q-responsive>
       </div>
       <div class="q-px-md q-pb-md">
-        <div class="row">
+        <div class="row" v-if="is_movie_live">
           <div class="col-12">
-            <div class="text-body1 text-primary">
+            <div class="text-body1 text-primary q-mt-sm">
               {{ movie.title }}
             </div>
             <div class="row">
@@ -29,7 +29,11 @@
             </div>
             <div class="row justify-between no-wrap">
               <div class="ellipsis text-grey-6 text-caption">
-                <q-icon name="mdi-tag" class="q-mr-xs" />
+                <q-icon
+                  name="mdi-tag"
+                  class="q-mr-xs"
+                  v-if="top_movie_genres.length > 0"
+                />
                 <template v-for="(genre, index) in top_movie_genres">
                   <router-link
                     class="text-decoration-none text-grey-6"
@@ -198,8 +202,6 @@
                       >
                       <div class="text-caption text-grey-6">
                         {{ get_roles_str(crew.roles) }}
-                        &bull;
-                        {{ crew.profile.id + 6 }} Followers
                       </div>
                     </q-item-label>
                   </q-item-section>
@@ -231,28 +233,17 @@
                 <div class="text-h4 text-primary">Moviepedia Critic</div>
                 <div class="q-mt-xs">
                   <div
-                    class="text-body2"
-                    style="word-break: break-word; overflow-y: hidden"
-                    v-bind:style="{ 'max-height': critic_height }"
+                    class="text-body2 text-left"
+                    style="word-break: break-word"
                   >
-                    {{ movie.about }}
-                  </div>
-                  <div class="text-right q-mt-none">
-                    <q-btn
-                      size="sm"
-                      flat
-                      no-caps
-                      @click="
-                        critic_height =
-                          critic_height === '100px' ? '100%' : '100px'
-                      "
-                      :label="
-                        critic_height === '100px'
-                          ? 'Read more...'
-                          : 'Read less...'
-                      "
-                      color="primary"
-                    />
+                    <read-more
+                      class="readmore"
+                      more-str="read more"
+                      :text="movie.about"
+                      link="#"
+                      less-str="read less"
+                      :max-chars="200"
+                    ></read-more>
                   </div>
                 </div>
               </div>
@@ -341,49 +332,26 @@
                 >
                   Recent Reviews
                 </div>
-                <q-list separator light ref="reviews">
-                  <q-item v-for="review in reviews" :key="review.id">
-                    <q-item-section>
-                      <q-item-label>
-                        <div class="text-primary">
-                          {{ review.author.name }}
-                        </div>
-                      </q-item-label>
-                      <q-item-label caption>
-                        <div class="q-mt-xs">{{ review.content }}</div>
-                      </q-item-label>
-                      <q-item-label caption>
-                        <div class="text-right q-mt-xs">
-                          <span class="q-mr-md" v-if="review.rating">
-                            <q-icon name="mdi-star-outline" />
-                            {{ review.rating }}/10
-                          </span>
-                          <span class="q-mr-md">
-                            <q-btn
-                              round
-                              flat
-                              icon="mdi-thumb-up"
-                              @click="submit_like(review)"
-                              :color="get_like_btn_color(review.liked_by)"
-                              size="xs"
-                            ></q-btn>
-                            {{ get_like_txt(review.liked_by) }}
-                          </span>
-                          <span class="self-center">
-                            <q-icon name="mdi-clock-outline" />
-                            {{ from_now(review.published_at) }}
-                          </span>
-                        </div>
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
+                <div ref="reviews">
+                  <reviews
+                    :reviews="loaded_reviews"
+                    :show-movie-link="false"
+                    v-on:toggle-like="toggle_like"
+                  />
+                </div>
                 <div class="text-center text-primary">
                   <q-spinner-dots v-if="loading_reviews" size="48px" />
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        <div class="col" v-else>
+          <empty-state
+            title="This movie is not yet released"
+            desc=""
+            icon="mdi-movie"
+          />
         </div>
         <login-required-popup
           :message="login_required_msg"
@@ -606,6 +574,7 @@ import VueEasyPieChart from "vue-easy-pie-chart";
 import "vue-easy-pie-chart/dist/vue-easy-pie-chart.css";
 import BaseLayout from "@/layouts/Base";
 import LoginRequiredPopup from "@/components/LoginRequiredPopup";
+import Reviews from "@/components/Reviews";
 import {
   movie_service,
   review_service,
@@ -631,6 +600,7 @@ export default {
     BaseLayout,
     VueEasyPieChart,
     LoginRequiredPopup,
+    Reviews,
   },
   metaInfo() {
     return {
@@ -681,8 +651,8 @@ export default {
   },
   data() {
     return {
+      frame_error: false,
       // my_lists: [{ name: "", id: 1, like_count: 0, owner: 0, movies: [0, 1] }],
-      critic_height: "100px",
       recommend_loading: false,
       watchlist_loading: false,
       rating_loading: false,
@@ -773,6 +743,13 @@ export default {
     },
   },
   computed: {
+    is_movie_live() {
+      return this.movie.state === "p";
+    },
+    loaded_reviews() {
+      if (this.loading_reviews) return [];
+      return this.reviews;
+    },
     movie_publish_date() {
       if (this.movie.publish_on) return moment(this.movie.publish_on).fromNow();
       return "";
@@ -845,13 +822,12 @@ export default {
     // one dummy object were created in the list for future objects in list to become reactive
     // clearing those dummy items here
     this.reviews.splice(0);
-    // this.my_lists.splice(0);
     this.load_data();
   },
   methods: {
     scroll_handler() {
       if (this.$refs.reviews) {
-        var list = this.$refs.reviews.$el;
+        var list = this.$refs.reviews;
         var dimens = list.getClientRects()[0];
         if (dimens.bottom < window.innerHeight) {
           this.fetch_reviews();
@@ -869,9 +845,6 @@ export default {
     swipe(event) {
       // 0 = none, 2 = left, 4 = right, 8 = up, 16 = down
       console.log("someone swiped", event.direction);
-    },
-    from_now(datetime) {
-      return moment(datetime).fromNow();
     },
     fetch_movie(movie_id) {
       movie_service
@@ -1031,7 +1004,7 @@ export default {
           this.rating_loading = false;
         });
     },
-    submit_like(review) {
+    toggle_like(review) {
       if (!this.is_authenticated) {
         this.login_required = true;
         this.login_required_msg = "Login required to like reviews";
