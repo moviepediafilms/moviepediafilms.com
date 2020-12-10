@@ -178,6 +178,4 @@ export default {
 .q-linear-progress__model {
   background: linear-gradient(45deg, yellow, green);
 }
-.profile-options {
-}
 </style>

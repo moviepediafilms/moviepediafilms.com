@@ -9,7 +9,7 @@
       <div class="q-px-md q-pb-md">
         <div class="row" v-if="is_movie_live">
           <div class="col-12">
-            <div class="text-body1 text-primary q-mt-sm">
+            <div class="text-h3 text-primary q-mt-sm">
               {{ movie.title }}
             </div>
             <div class="row">
@@ -151,7 +151,7 @@
                     <q-item-label>
                       <router-link
                         class="text-primary text-decoration-none"
-                        :to="{ name: 'profile', id: director.id }"
+                        :to="{ name: 'profile', params: { id: director.id } }"
                         >{{ director.name }}</router-link
                       >
                       <template v-if="my_profile.id != director.id">
@@ -228,9 +228,9 @@
                 </q-item>
               </q-expansion-item>
             </div>
-            <div class="row q-mt-md" v-if="movie.about">
+            <div class="row q-mt-lg" v-if="movie.about">
               <div class="col text-center text-grey-5">
-                <div class="text-h4 text-primary">Moviepedia Critic</div>
+                <div class="text-h4 text-primary">Our Take</div>
                 <div class="q-mt-xs">
                   <div
                     class="text-body2 text-left"
@@ -248,7 +248,7 @@
                 </div>
               </div>
             </div>
-            <div class="row items-center q-mt-md">
+            <div class="row items-center q-mt-lg">
               <div clss="col">
                 <q-icon size="48px" color="primary" name="mdi-emoticon-dead" />
               </div>
@@ -702,6 +702,7 @@ export default {
       err_new_list_request: "",
       movie: {
         id: null,
+        state: null,
         contest: {},
         audience_rating: 0,
         jury_rating: 0,
@@ -744,7 +745,7 @@ export default {
   },
   computed: {
     is_movie_live() {
-      return this.movie.state === "p";
+      return this.movie.state === "P";
     },
     loaded_reviews() {
       if (this.loading_reviews) return [];
@@ -865,7 +866,7 @@ export default {
         // already loading
         return;
       }
-      // if max_reviews is not defined or its greater than the current fetched reviews
+      // don't do network call if there are no reviews to fetch, or all are fetched already.
       if (
         this.max_reviews == undefined ||
         this.reviews.length < this.max_reviews
@@ -965,6 +966,7 @@ export default {
         });
     },
     create_my_rate_review() {
+      // TODO: after the rating is created, add it to the top
       this.rating_loading = true;
       review_service
         .post({
@@ -984,6 +986,7 @@ export default {
         });
     },
     update_my_rate_review() {
+      // TODO: after the rating is update, remove it and insert it on top
       this.rating_loading = true;
       review_service
         .patch(

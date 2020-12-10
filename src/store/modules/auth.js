@@ -6,6 +6,7 @@ import {
     PROFILE_REQUEST,
     PROFILE_LOGOUT,
     LIST_REQUEST,
+    ROLE_REQUEST,
     LIST_LOGOUT,
     FOLLOW_LOGOUT
 } from "@/store/actions";
@@ -30,6 +31,7 @@ const actions = {
                     commit(SUCCESS_, data.token);
                     dispatch(PROFILE_REQUEST, data.user_id, { root: true });
                     dispatch(LIST_REQUEST, data.user_id, { root: true });
+                    dispatch(ROLE_REQUEST, null, { root: true });
                     resolve(data);
                 })
                 .catch(err => {

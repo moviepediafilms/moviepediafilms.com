@@ -3,34 +3,22 @@
     <div class="row q-col-gutter-sm" v-if="movies.length > 0">
       <div class="col-4 col-sm-3" v-for="movie in movies" :key="movie.id">
         <q-card flat v-ripple @click="on_movie_select(movie)">
-          <q-img :ratio="9 / 16" :src="`${media_base}${movie.poster}`">
-            <div class="absolute-bottom text-center bg-transparent">
-              <div v-if="is_viewers_profile">
-                <q-badge
-                  text-color="dark"
-                  :color="get_status_color(movie.state)"
-                >
-                  {{ get_movie_status_txt(movie.state) }}
-                </q-badge>
-              </div>
-            </div>
-            <template v-slot:error>
-              <div class="absolute-full flex flex-center bg-primary text-dark">
-                <div class="text-h3">{{ movie.title }}</div>
-                <div class="text-caption">
-                  <q-icon name="mdi-close" color="negative" size="24px" />Cannot
-                  load image
-                </div>
-              </div>
-            </template>
-          </q-img>
+          <movie-image
+            :title="movie.title"
+            :state="movie.state"
+            :poster="movie.poster"
+            :show-state="is_my_profile"
+          />
+
           <div class="q-my-sm">
             <div class="flex justify-around items-center">
               <div class="">
                 <q-icon name="mdi-bullhorn" />
                 {{ movie.recommend_count }}
               </div>
-              <div class="text-h2 text-primary text-weight-bolder">4.5</div>
+              <div class="text-h2 text-primary text-weight-bolder">
+                {{ movie.score }}
+              </div>
             </div>
             <hr class="q-mx-sm" />
             <div class="text-center">
@@ -52,7 +40,11 @@
 </template>
 <script>
 import { profile_service } from "@/services";
+import MovieImage from "@/components/MovieImage";
 export default {
+  components: {
+    MovieImage,
+  },
   props: {
     profile: {
       type: Object,
@@ -88,6 +80,9 @@ export default {
       });
       return Array.from(my_roles);
     },
+    is_my_profile() {
+      return this.profile && this.profile.id == this.my_profile.id;
+    },
   },
   watch: {
     count() {
@@ -116,30 +111,35 @@ export default {
           },
         });
       } else {
+        var messages = {
+          C:
+            "Your film submission is still pending. Complete your payment to proceed and successfully submit your film.",
+          S:
+            "Your film is pending for approval. We'll notify you as soon as it's approved for screening.",
+          R:
+            "Your film didn't get through. But don't worry, your next film submission is on us. :)",
+        };
+
+        var message = messages[movie.state];
+        var actions = [];
+        if (movie.state === "C")
+          actions.push({
+            label: "My Submissions",
+            color: "dark",
+            handler: () => {
+              this.$router.push({ name: "my-submissions" });
+            },
+          });
+
         this.$q.notify({
           color: "primary",
+          multiLine: true,
           textColor: "dark",
           icon: "mdi-alert-circle-outline",
-          message:
-            "Movie is being screened and soon will be approved for audience",
+          message: message,
+          actions: actions,
         });
       }
-    },
-    get_status_color(status) {
-      return {
-        C: "red-4",
-        S: "primary",
-        P: "green-4",
-        R: "red-4",
-      }[status];
-    },
-    get_movie_status_txt(status) {
-      return {
-        C: "Incomplete",
-        S: "Pending",
-        P: "Approved",
-        R: "Rejected",
-      }[status];
     },
     fetch_filmography() {
       if (this.count == -1 || this.count > this.movies.length) {

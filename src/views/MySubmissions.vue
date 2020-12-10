@@ -6,18 +6,25 @@
         <q-spinner-dots size="48px" />
       </div>
       <div v-else>
-        <div class="row q-col-gutter-xl" v-if="submissions.length > 0">
-          <div class="col-12 col-md-6">
-            <q-card
-              class="q-ma-md"
-              v-for="movie in submissions"
-              :key="movie.id"
-            >
-              <q-card-section horizontal>
-                <q-img class="col-5" :src="media_base + movie.poster" />
-
-                <q-card-section>
-                  <div class="text-h4 text-primary">
+        <div class="row q-col-gutter-md" v-if="submissions.length > 0">
+          <div
+            class="col-12 col-md-6"
+            v-for="movie in submissions"
+            :key="movie.id"
+          >
+            <div class="row">
+              <q-card class="col q-ma-md">
+                <movie-image
+                  class="col-6"
+                  :title="movie.title"
+                  :state="movie.state"
+                  :show-state="true"
+                  :poster="movie.poster"
+                />
+              </q-card>
+              <div class="col flex align-middle items-center">
+                <div>
+                  <div class="text-h2 text-primary">
                     {{ movie.title }}
                   </div>
                   <div class="q-mt-sm">
@@ -28,27 +35,24 @@
                       "Not Found"
                     }}
                   </div>
-                  <div></div>
-                  <q-card-actions>
-                    <q-btn
-                      size="sm"
-                      :label="`Complete Payment ${movie.order.amount / 100}`"
-                      color="primary"
-                      text-color="dark"
-                      v-if="movie.order.order_id && !movie.order.payment_id"
-                    />
-                    <q-btn
-                      size="sm"
-                      class="q-mt-sm"
-                      label="Select Package"
-                      color="primary"
-                      text-color="dark"
-                      v-if="!movie.order.order_id"
-                    />
-                  </q-card-actions>
-                </q-card-section>
-              </q-card-section>
-            </q-card>
+                  <q-btn
+                    size="sm"
+                    :label="`Complete Payment ${movie.order.amount / 100} INR`"
+                    color="primary"
+                    text-color="dark"
+                    v-if="movie.order.order_id && !movie.order.payment_id"
+                  />
+                  <q-btn
+                    size="sm"
+                    class="q-mt-sm"
+                    label="Select Package"
+                    color="primary"
+                    text-color="dark"
+                    v-if="!movie.order.order_id"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <empty-state
@@ -63,10 +67,12 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
+import MovieImage from "@/components/MovieImage";
 import { profile_service } from "@/services";
 export default {
   components: {
     BaseLayout,
+    MovieImage,
   },
   data() {
     return {
