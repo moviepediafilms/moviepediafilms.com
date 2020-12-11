@@ -7,6 +7,7 @@ import role from "./modules/role";
 import alb from "./modules/alb";
 import flb from "./modules/flb";
 import follow from "./modules/follow";
+import genre from "./modules/genre";
 Vue.use(Vuex);
 
 const debug = process.env.NODE_ENV !== "production";
@@ -19,7 +20,8 @@ export default new Vuex.Store({
         role,
         alb,
         flb,
-        follow
+        follow,
+        genre
     },
     strict: debug
 });

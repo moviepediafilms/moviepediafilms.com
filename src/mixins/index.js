@@ -28,6 +28,9 @@ Vue.mixin({
 
     },
     methods: {
+        in_rupees(amount) {
+            return (amount / 100.0).toFixed(2)
+        },
         on_user_img_error(img) {
             console.log(`error loading image ${img.target.src}`)
             img.target.src = "/default_avatar.png";

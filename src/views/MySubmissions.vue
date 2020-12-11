@@ -27,24 +27,35 @@
                   <div class="text-h2 text-primary">
                     {{ movie.title }}
                   </div>
+
+                  <div class="q-mt-sm" v-if="movie.package">
+                    {{ movie.package }}
+                  </div>
+                  <div class="q-mt-sm" v-if="movie.order && movie.order.amount">
+                    INR {{ in_rupees(movie.order.amount) }}
+                  </div>
                   <div class="q-mt-sm">
+                    Status: {{ status_txt(movie) }}
+                    <q-icon
+                      :name="status_icon(movie)"
+                      :color="status_color(movie)"
+                    />
+                  </div>
+                  <div class="q-mt-sm" v-if="movie.order.payment_id">
                     Payment ID:
-                    {{
-                      movie.order.payment_id ||
-                      movie.order.order_id ||
-                      "Not Found"
-                    }}
+                    {{ movie.order.payment_id }}
                   </div>
                   <q-btn
                     size="sm"
-                    :label="`Complete Payment ${movie.order.amount / 100} INR`"
+                    label="Proceed to Payment"
                     color="primary"
+                    class="q-mt-md"
                     text-color="dark"
                     v-if="movie.order.order_id && !movie.order.payment_id"
                   />
                   <q-btn
                     size="sm"
-                    class="q-mt-sm"
+                    class="q-mt-md"
                     label="Select Package"
                     color="primary"
                     text-color="dark"
@@ -80,10 +91,35 @@ export default {
       submissions: [],
     };
   },
+  computed: {},
   mounted() {
     this.get_submissions();
   },
   methods: {
+    status_color(submission) {
+      return {
+        P: "green",
+        C: "white",
+        R: "red",
+        S: "green",
+      }[submission.state];
+    },
+    status_icon(submission) {
+      return {
+        P: "mdi-check",
+        C: "mdi-hourglass",
+        R: "mdi-close",
+        S: "mdi-check",
+      }[submission.state];
+    },
+    status_txt(submission) {
+      return {
+        P: "Published",
+        C: "Pending Payment",
+        R: "Rejected",
+        S: "Submitted",
+      }[submission.state];
+    },
     get_submissions() {
       profile_service
         .get({}, `${this.my_profile.id}/submissions`)
