@@ -34,13 +34,7 @@
                   <div class="q-mt-sm" v-if="movie.order && movie.order.amount">
                     INR {{ in_rupees(movie.order.amount) }}
                   </div>
-                  <div class="q-mt-sm">
-                    Status: {{ status_txt(movie) }}
-                    <q-icon
-                      :name="status_icon(movie)"
-                      :color="status_color(movie)"
-                    />
-                  </div>
+
                   <div class="q-mt-sm" v-if="movie.order.payment_id">
                     Payment ID:
                     {{ movie.order.payment_id }}
@@ -51,6 +45,7 @@
                     color="primary"
                     class="q-mt-md"
                     text-color="dark"
+                    :to="{ name: 'submit', params: { movie_id: movie.id } }"
                     v-if="movie.order.order_id && !movie.order.payment_id"
                   />
                   <q-btn
@@ -59,6 +54,7 @@
                     label="Select Package"
                     color="primary"
                     text-color="dark"
+                    :to="{ name: 'submit', params: { movie_id: movie.id } }"
                     v-if="!movie.order.order_id"
                   />
                 </div>
@@ -96,30 +92,6 @@ export default {
     this.get_submissions();
   },
   methods: {
-    status_color(submission) {
-      return {
-        P: "green",
-        C: "white",
-        R: "red",
-        S: "green",
-      }[submission.state];
-    },
-    status_icon(submission) {
-      return {
-        P: "mdi-check",
-        C: "mdi-hourglass",
-        R: "mdi-close",
-        S: "mdi-check",
-      }[submission.state];
-    },
-    status_txt(submission) {
-      return {
-        P: "Published",
-        C: "Pending Payment",
-        R: "Rejected",
-        S: "Submitted",
-      }[submission.state];
-    },
     get_submissions() {
       profile_service
         .get({}, `${this.my_profile.id}/submissions`)

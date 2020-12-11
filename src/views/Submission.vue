@@ -58,6 +58,7 @@
               flat
               @click="navigate_back"
               color="primary"
+              :disable="forward_only"
               label="back"
               class="q-ml-sm"
             />
@@ -91,6 +92,7 @@
             <q-btn
               flat
               @click="navigate_back"
+              :disable="forward_only"
               color="primary"
               label="Back"
               class="q-ml-sm"
@@ -122,7 +124,7 @@
 
 <script>
 import BaseLayout from "@/layouts/Base";
-import { payment_service } from "@/services";
+import { payment_service, submission_service } from "@/services";
 import ValueProps from "@/components/submit/ValueProps.vue";
 import SubmitForm from "@/components/submit/SubmitForm.vue";
 import SelectPackage from "@/components/submit/SelectPackage.vue";
@@ -141,6 +143,7 @@ export default {
   data() {
     return {
       order: {},
+      forward_only: false,
       trigger_submit: 0,
       commit_package: 0,
       step: 1,
@@ -155,10 +158,14 @@ export default {
     let script = document.createElement("script");
     script.setAttribute("src", "https://checkout.razorpay.com/v1/checkout.js");
     document.head.appendChild(script);
+    this.fetch_submission();
   },
   computed: {
     show_sign_in() {
       return this.step > 1 && !this.is_authenticated;
+    },
+    movie_id() {
+      return this.$route.params.movie_id;
     },
   },
   watch: {
@@ -169,6 +176,24 @@ export default {
     },
   },
   methods: {
+    fetch_submission() {
+      if (this.movie_id) {
+        this.loading = true;
+        submission_service
+          .get({}, this.movie_id)
+          .then((movie) => {
+            this.submitted_movie = movie;
+            this.step = 3;
+            this.forward_only = true;
+            this.loading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.error_msg = "failed to load submission";
+            this.loading = false;
+          });
+      }
+    },
     navigate_forward() {
       this.step = this.step + 1;
     },
@@ -193,6 +218,7 @@ export default {
     rzp_response_handler(rzp_response) {
       if (rzp_response.error) {
         this.error_msg = `Payment failed! ${rzp_response.description}`;
+        this.loading = false;
       } else {
         payment_service
           .post(rzp_response)
@@ -228,7 +254,6 @@ export default {
       }
     },
     attempt_payment() {
-      this.loading = true;
       let options = {
         key: process.env.VUE_APP_RZP_API_KEY,
         currency: "INR",
