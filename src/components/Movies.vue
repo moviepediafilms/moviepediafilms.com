@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row q-col-gutter-sm">
+    <div class="row q-col-gutter-sm" v-if="movies.length > 0">
       <div
         class="col-4 col-sm-3 col-md-3"
         v-for="item in movies"
@@ -43,6 +43,13 @@
         </q-card>
       </div>
     </div>
+    <empty-state
+      v-else
+      :title="emptyTitle"
+      :desc="emptyDesc"
+      :icon="emptyIcon"
+      :image="emptyImage"
+    />
     <popup-menu
       :options="options"
       :show="show_menu"
@@ -58,6 +65,22 @@ export default {
     PopupMenu,
   },
   props: {
+    emptyTitle: {
+      type: String,
+      default: "Nothing to show here",
+    },
+    emptyDesc: {
+      type: String,
+      default: "No Reviews found!",
+    },
+    emptyIcon: {
+      type: String,
+      default: null,
+    },
+    emptyImage: {
+      type: String,
+      default: null,
+    },
     movies: {
       type: Array,
       default() {

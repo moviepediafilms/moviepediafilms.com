@@ -1,11 +1,9 @@
 <template>
   <div class="text-center text-grey-7">
-    <q-icon :name="icon" class="q-mb-md" size="80px" v-if="icon" />
-    <q-img :src="image" v-if="image" />
+    <q-icon :name="icon" class="q-mb-md" size="80px" v-if="icon && !image" />
+    <q-img :src="image" v-if="image" style="max-width: 300px" />
     <div class="q-mb-sm text-h3">{{ title }}</div>
-    <p v-if="desc">
-      {{ desc }}
-    </p>
+    <p v-if="desc" v-html="desc"></p>
   </div>
 </template>
 <script>

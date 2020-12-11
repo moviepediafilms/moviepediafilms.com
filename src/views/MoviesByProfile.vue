@@ -4,7 +4,13 @@
       <h3 class="text-primary">Films Directed</h3>
       <small v-if="profile.name">by {{ profile.name }}</small>
       <div class="q-mt-md text-left">
-        <movies :movies="movies" @item-selected="on_select" />
+        <movies
+          :movies="movies"
+          @item-selected="on_select"
+          empty-title="Nothing to show here"
+          empty-desc='<i>"No matter what people tell you, words and ideas can change the world."</i><br/>– Robin Williams'
+          empty-image="/img/empty/followers.png"
+        />
       </div>
     </div>
   </base-layout>

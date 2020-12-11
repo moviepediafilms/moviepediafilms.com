@@ -8,9 +8,10 @@
       v-if="movies.length > 0"
     ></movies>
     <empty-state
-      title="No Recommendations"
-      desc="You have not recommended anything yet!"
-      icon="mdi-emoticon-sad"
+      title="Nothing to show here."
+      desc="Recommend the best from our featured films by using the <span class='mdi mdi-bullhorn'></span>
+ button"
+      image="/img/empty/recommends.png"
       v-else
     />
   </div>

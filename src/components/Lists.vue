@@ -43,9 +43,9 @@
       </q-item>
     </q-list>
     <empty-state
-      title="No Curations"
-      desc="Start creating lists of films tell what you loved and how."
-      icon="mdi-emoticon-sad"
+      title="Nothing to show here."
+      desc="Curation is an art, use the <span class='mdi mdi-check-box-multiple-outline'></span> button wisely"
+      image="/img/empty/curate.png"
       v-else
     />
     <popup-menu

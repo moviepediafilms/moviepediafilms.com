@@ -8,9 +8,9 @@
       v-if="movies.length > 0"
     ></movies>
     <empty-state
-      title="You are all caught up!"
-      desc="Nothing to show!"
-      icon="mdi-emoticon-sad"
+      title="Nothing to show here."
+      desc="Browse now, watch later"
+      image="/img/empty/watchlist.png"
       v-else
     />
   </div>

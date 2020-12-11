@@ -13,7 +13,7 @@
     <empty-state
       title="Recommend Films & Win Big."
       desc="Start recommending films that our partner celebrities might recommend and get to the top of our leaderboards."
-      icon="mdi-bullhorn"
+      image="/img/empty/top_curators.png"
       v-else
     />
   </div>
