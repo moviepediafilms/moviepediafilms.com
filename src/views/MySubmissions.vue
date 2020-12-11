@@ -27,27 +27,34 @@
                   <div class="text-h2 text-primary">
                     {{ movie.title }}
                   </div>
-                  <div class="q-mt-sm">
+
+                  <div class="q-mt-sm" v-if="movie.package">
+                    {{ movie.package }}
+                  </div>
+                  <div class="q-mt-sm" v-if="movie.order && movie.order.amount">
+                    INR {{ in_rupees(movie.order.amount) }}
+                  </div>
+
+                  <div class="q-mt-sm" v-if="movie.order.payment_id">
                     Payment ID:
-                    {{
-                      movie.order.payment_id ||
-                      movie.order.order_id ||
-                      "Not Found"
-                    }}
+                    {{ movie.order.payment_id }}
                   </div>
                   <q-btn
                     size="sm"
-                    :label="`Complete Payment ${movie.order.amount / 100} INR`"
+                    label="Proceed to Payment"
                     color="primary"
+                    class="q-mt-md"
                     text-color="dark"
+                    :to="{ name: 'submit', params: { movie_id: movie.id } }"
                     v-if="movie.order.order_id && !movie.order.payment_id"
                   />
                   <q-btn
                     size="sm"
-                    class="q-mt-sm"
+                    class="q-mt-md"
                     label="Select Package"
                     color="primary"
                     text-color="dark"
+                    :to="{ name: 'submit', params: { movie_id: movie.id } }"
                     v-if="!movie.order.order_id"
                   />
                 </div>
@@ -80,6 +87,7 @@ export default {
       submissions: [],
     };
   },
+  computed: {},
   mounted() {
     this.get_submissions();
   },

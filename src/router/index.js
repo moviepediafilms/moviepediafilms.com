@@ -94,10 +94,10 @@ const routes = [
             import ('../views/TopCurator.vue')
     },
     {
-        path: '/submit',
+        path: '/submit/:movie_id?',
         name: 'submit',
         component: () =>
-            import ('../views/Submit.vue')
+            import ('../views/Submission.vue')
     },
     {
         path: '/my-submissions',
