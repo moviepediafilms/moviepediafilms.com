@@ -312,7 +312,7 @@ export default {
       var director = JSON.parse(JSON.stringify(this.submit_data.director));
       // if only country prefix was there
       director.contact =
-        director.contact.length == 2 ? undefined : director.contact.length;
+        director.contact.length == 2 ? undefined : director.contact;
       if (director.name || director.email) {
         var name = director.name;
         if (name) {
