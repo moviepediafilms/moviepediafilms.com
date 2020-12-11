@@ -108,6 +108,9 @@
             <filmography-list
               :profile="profile"
               @empty="on_empty_filmography"
+              empty-title="No association with any film on our platform"
+              empty-desc="Add yourself as a crew member to films you've worked on"
+              empty-image="/img/empty/filmography.png"
             />
           </q-tab-panel>
           <q-tab-panel
@@ -128,8 +131,9 @@
               :users="following"
               :actions="following_actions"
               @unfollow="on_unfollow_user"
-              empty-title="No Followings"
-              empty-desc="You are not following anyone !"
+              empty-title="Nobody’s following"
+              empty-desc="Keep updated, stay engaged and get noticed to grow your network"
+              empty-image="/img/empty/following.png"
             />
           </q-tab-panel>
           <q-tab-panel name="followers" class="q-px-none">
@@ -139,7 +143,8 @@
               @follow="on_follow_user"
               @unfollow="on_unfollow_user"
               empty-title="No Followers"
-              empty-desc="No one follows you!"
+              empty-desc="Start connecting and spread your love for cinema"
+              empty-image="/img/empty/followers.png"
             />
           </q-tab-panel>
         </q-tab-panels>
@@ -266,12 +271,12 @@ export default {
       }
     },
     get_level_name() {
-      // TODO: update level names
       var level_map = {
         1: "Cinephile",
-        2: "Level2",
-        3: "Level3",
-        4: "Level4",
+        2: "Curator",
+        3: "Influencer",
+        4: "Connoisseur",
+        5: "Patron",
       };
       return level_map[this.profile.level];
     },

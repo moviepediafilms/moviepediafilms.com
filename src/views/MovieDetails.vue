@@ -119,12 +119,11 @@
                   :color="is_added_to_any_list ? 'primary' : 'default'"
                 >
                   <div>
-                    <q-icon
-                      :name="
-                        is_added_to_any_list
+                    <!-- is_added_to_any_list
                           ? 'mdi-checkbox-multiple-marked'
-                          : 'mdi-check-box-multiple-outline'
-                      "
+                          : 'mdi-check-box-multiple-outline' -->
+                    <q-icon
+                      name="mdi-lock"
                     />
                     <div
                       class="text-muted text-grey-6 q-mt-xs"
@@ -1116,6 +1115,13 @@ export default {
       this.show_share_dialog = true;
     },
     on_add_to_list() {
+      // disable this feature
+      this.$q.notify({
+        message:
+          "This feature will get unlocked once you reach the “Curator” level on our platform",
+      });
+      return;
+      //eslint-disable-next-line
       if (!this.is_authenticated) {
         this.login_required = true;
         this.login_required_msg = "Login is required to save a movie";

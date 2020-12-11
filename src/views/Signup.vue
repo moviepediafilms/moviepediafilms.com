@@ -1,8 +1,8 @@
 <template>
   <base-layout>
     <div class="q-ma-md text-center q-pt-lg">
-      <h3 class="text-primary">Sign Up</h3>
-      <p class="q-mt-sm">Join us to get enaged with likes of you!</p>
+      <h3 class="text-primary">Love films?</h3>
+      <p class="q-mt-md">Join Us and get connected with the likes of you</p>
       <div class="row justify-center q-mt-lg">
         <div class="col-12 col-sm-6 col-sm-offset-3 q-col-gutter-md">
           <q-form

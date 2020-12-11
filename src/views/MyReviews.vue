@@ -2,7 +2,12 @@
   <base-layout>
     <div class="q-ma-md text-center q-pt-xs">
       <div class="text-primary text-h1">Reviews</div>
-      <reviews :reviews="reviews" />
+      <reviews
+        :reviews="reviews"
+        empty-title="Nothing to show here"
+        empty-desc="Express and appreciate what you watch, who knows you might be our next featured critic"
+        empty-image="/img/empty/reviews.png"
+      />
     </div>
   </base-layout>
 </template>

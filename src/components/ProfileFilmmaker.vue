@@ -97,6 +97,9 @@
               :actions="follower_actions"
               @follow="on_follow_user"
               @unfollow="on_unfollow_user"
+              empty-title="No Followers"
+              empty-desc="Start connecting and spread your love for cinema"
+              empty-image="/img/empty/followers.png"
             />
           </q-tab-panel>
           <q-tab-panel name="following" class="q-px-none">
@@ -104,13 +107,26 @@
               :users="following"
               :actions="following_actions"
               @unfollow="on_unfollow_user"
+              empty-title="Nobody’s following"
+              empty-desc="Keep updated, stay engaged and get noticed to grow your network"
+              empty-image="/img/empty/following.png"
             />
           </q-tab-panel>
           <q-tab-panel name="reviews" class="q-px-none"
-            ><reviews :reviews="reviews"></reviews
+            ><reviews
+              :reviews="reviews"
+              empty-title="Nothing to show here."
+              empty-desc="<i>“Examine what is said and not who speaks.”</i><br/> – African proverb"
+              empty-image="/img/empty/creator_reviews.png"
+            ></reviews
           ></q-tab-panel>
           <q-tab-panel name="filmography" class="q-px-none">
-            <filmography-list :profile="profile" />
+            <filmography-list
+              :profile="profile"
+              empty-title="Nothing to show here."
+              empty-desc="<i>“Create your own visual style… let it be unique for yourself and yet identifiable to others.”</i><br/> – Orson Welles"
+              empty-image="/img/empty/creator_filmography.png"
+            />
           </q-tab-panel>
         </q-tab-panels>
       </q-card>

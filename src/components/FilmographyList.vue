@@ -31,9 +31,10 @@
       </div>
     </div>
     <empty-state
-      title="Nothing here!"
-      desc="Your don't have an association with any movie on our platform!"
-      icon="mdi-emoticon-sad"
+      :title="emptyTitle"
+      :desc="emptyDesc"
+      :icon="emptyIcon"
+      :image="emptyImage"
       v-else
     />
   </div>
@@ -55,6 +56,22 @@ export default {
     page_size: {
       type: Number,
       default: 20,
+    },
+    emptyTitle: {
+      type: String,
+      default: "Nothing to show here",
+    },
+    emptyDesc: {
+      type: String,
+      default: "No Reviews found!",
+    },
+    emptyIcon: {
+      type: String,
+      default: null,
+    },
+    emptyImage: {
+      type: String,
+      default: null,
     },
   },
   data() {
