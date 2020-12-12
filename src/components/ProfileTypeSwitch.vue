@@ -50,7 +50,7 @@ export default {
           timeout: 5000,
           icon: "mdi-alert-circle",
           message:
-            "Creator Profile will be unlocked 24 hours after you submit your movie on our platform.",
+            "Creator Profile will be unlocked 24 hours after you submit a movie as director on our platform.",
         });
       }
     },
