@@ -5,12 +5,7 @@
       <p class="q-mt-md">Join Us and get connected with the likes of you</p>
       <div class="row justify-center q-mt-lg">
         <div class="col-12 col-sm-6 col-sm-offset-3 q-col-gutter-md">
-          <q-form
-            ref="submitForm"
-            @submit="attempt_submit"
-            class="q-gutter-md"
-            v-if="!signup_success"
-          >
+          <q-form ref="submitForm" @submit="attempt_submit" class="q-gutter-md">
             <q-input
               v-model="signup_data.name"
               type="text"
@@ -194,20 +189,6 @@
               >
             </div>
           </q-form>
-          <q-slide-transition>
-            <div v-if="signup_success">
-              <q-icon name="mdi-check-circle" color="green-5" size="190px" />
-
-              <p class="q-mt-md">You have successfully signed up!</p>
-              <q-btn
-                :to="{ name: 'login', query: { next: 'home' } }"
-                color="primary"
-                text-color="dark"
-              >
-                Proceed to Login
-              </q-btn>
-            </div>
-          </q-slide-transition>
         </div>
       </div>
     </div>
@@ -228,7 +209,6 @@ export default {
   data() {
     return {
       error_msg: "",
-      signup_success: false,
       loading: false,
       location_support: true,
       getting_location: false,
@@ -344,10 +324,18 @@ export default {
         profile_service
           .post(this.signup_payload)
           .then(() => {
-            this.scroll_top();
-            // flash a success message then route to login
-            this.signup_success = true;
+            // flash a success message then redirect to login
             this.loading = false;
+            this.$q.notify({
+              duration: 5000,
+              message:
+                "You have successfully signed up! verify your account by click the link sent on your email before login",
+              multiLine: true,
+              icon: "mdi-check",
+              color: "green",
+              textColor: "white",
+            });
+            this.$router.push({ name: "login", query: { next: "home" } });
           })
           .catch((error) => {
             var found_field_error = false;
