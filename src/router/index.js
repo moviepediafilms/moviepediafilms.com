@@ -28,6 +28,12 @@ const routes = [
             import ('../views/Login.vue')
     },
     {
+        path: '/account/verify/:token',
+        name: 'account-verify',
+        component: () =>
+            import ('../views/AccountVerify.vue')
+    },
+    {
         path: '/sign-up',
         name: 'signup',
         component: () =>
