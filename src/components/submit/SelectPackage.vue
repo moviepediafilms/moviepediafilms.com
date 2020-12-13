@@ -161,7 +161,7 @@ export default {
       else {
         this.$q.notify({
           message:
-            "You cannot change your package now! please contact support if you are facing issue with payment",
+            "You cannot change your package now! Please contact support if you are facing issues with payment.",
           color: "negative",
           textColor: "white",
           icon: "mdi-alert-circle-outline",

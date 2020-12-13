@@ -285,7 +285,7 @@ export default {
       else return "-";
     },
     get_review_count() {
-      //TODO: get it somehow
+      //TODO: fetch top reviews that I have given to movies
       return "-";
     },
     get_recommends() {

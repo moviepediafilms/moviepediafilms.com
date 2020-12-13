@@ -34,6 +34,7 @@
       <div>
         <q-select
           filled
+          use-chips
           use-input
           v-model="submit_data.lang"
           :options="filtered_lang"
