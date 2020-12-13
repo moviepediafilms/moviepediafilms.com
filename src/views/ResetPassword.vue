@@ -10,6 +10,8 @@
             v-model="reset_data.password"
             :rules="[
               (val) => (val && val.length > 0) || 'Please enter password',
+              (val) =>
+                val.length > 6 || 'Password must be at least 6 characters',
             ]"
             :error="!!reset_error.password"
             :error-message="reset_error.password"
@@ -72,7 +74,7 @@ export default {
         .then((data) => {
           console.log(data);
           this.$q.notify({
-            message: "Your password has been reset successfully!",
+            message: "Your password has been changed successfully!",
             color: "positive",
             icon: "mdi-check",
             textColor: "white",
@@ -89,7 +91,7 @@ export default {
                 ["password", "cnf_password"]
               )
             ) {
-              this.error_msg = "Please fix above errors";
+              this.error_msg = "Please fix the error(s) above to continue";
             }
           }
           if (!this.error_msg)

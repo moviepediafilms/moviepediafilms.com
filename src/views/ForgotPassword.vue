@@ -26,7 +26,9 @@
                   :error="!!reset_error.recaptcha"
                   :error-message="reset_error.recaptcha"
                   :rules="[
-                    (val) => (val && val.length > 0) || 'Please check this',
+                    (val) =>
+                      (val && val.length > 0) ||
+                      'Please verify that you are not a robot',
                   ]"
                 >
                   <vue-recaptcha
@@ -94,7 +96,7 @@ export default {
       this.$refs.submit_form.validate().then((result) => {
         if (result) {
           account_service
-            .post(this.reset_data, 'forgot')
+            .post(this.reset_data, "forgot")
             .then((data) => {
               console.log(data);
               this.$q.notify({
@@ -103,7 +105,7 @@ export default {
                 color: "positive",
                 textColor: "white",
                 message:
-                  "If your account exist with this email address, you will recieve a link to reset your password",
+                  "If your account exists with this email address, you will recieve a link to reset your password.",
               });
               this.$router.push({ name: "login", query: { next: "home" } });
             })
@@ -119,7 +121,7 @@ export default {
                     ["email", "recaptcha"]
                   )
                 ) {
-                  this.error_msg = "Please fix above errors";
+                  this.error_msg = "Please fix the error(s) above to continue";
                 } else {
                   this.error_msg = this.decode_error_message(error);
                 }

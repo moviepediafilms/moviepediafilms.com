@@ -23,13 +23,13 @@
         />
         <div class="q-mt-md" v-else>
           Click <a class="text-primary" @click="resend = true">here</a> to
-          re-send activation email
+          resend activation email.
         </div>
       </div>
       <q-dialog v-model="resend">
         <q-card style="width: 400px; max-width: 70vw" class="text-center">
           <q-card-section>
-            <h3 class="text-primary">Resend Activation link</h3>
+            <h3 class="text-primary">Resend Activation Link</h3>
           </q-card-section>
           <q-card-section>
             <q-input
@@ -45,7 +45,7 @@
             <q-btn flat label="Cancel" color="default" v-close-popup />
             <q-btn
               flat
-              label="Re-Send"
+              label="Send"
               color="primary"
               :disable="!email"
               @click="resend_activation"
@@ -97,7 +97,7 @@ export default {
             duration: 5000,
             textColor: "white",
             message:
-              "If your account exist on our system, you will receive an email with activation link.",
+              "If your account exists on our system, you will receive an email with an activation link.",
           });
         })
         .catch((error) => {
@@ -121,9 +121,10 @@ export default {
           this.loading = false;
 
           if (data.success) {
-            this.message = "Account verified! please proceed to login";
+            this.message = "Account verified! please login to proceed.";
           } else {
-            this.message = "Account verification failed! link has expired.";
+            this.message =
+              "Account verification failed! Your activation link has expired.";
           }
         })
         .catch((error) => {
