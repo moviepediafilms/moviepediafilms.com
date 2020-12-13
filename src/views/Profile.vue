@@ -142,11 +142,9 @@ export default {
       }
     },
     load_self_data() {
-      this.$store
-        .dispatch(PROFILE_REQUEST, this.my_profile.profile_id)
-        .then(() => {
-          this.profile = this.my_profile;
-        });
+      this.$store.dispatch(PROFILE_REQUEST, this.my_profile.id).then(() => {
+        this.profile = this.my_profile;
+      });
       this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
       this.$store.dispatch(PROFILE_RECOMMENDS_REQUEST);
       this.$store.dispatch(FOLLOW_REQUEST, {
