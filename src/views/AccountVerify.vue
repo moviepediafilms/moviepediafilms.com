@@ -115,7 +115,7 @@ export default {
     },
     verify_account() {
       account_service
-        .get({}, `${this.token}/verify/`)
+        .get({}, `${this.token}/verify`)
         .then((data) => {
           this.success = data.success;
           this.loading = false;

@@ -77,6 +77,7 @@ export default {
             icon: "mdi-check",
             textColor: "white",
           });
+          this.$router.push({ name: "login", query: { next: "home" } });
         })
         .catch((error) => {
           console.log(error);
