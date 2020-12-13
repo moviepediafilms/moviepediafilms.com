@@ -329,7 +329,7 @@ export default {
             this.$q.notify({
               duration: 5000,
               message:
-                "You have successfully signed up! verify your account by click the link sent on your email before login",
+                "You have successfully signed up. An activation link has been sent to your email for verification.",
               multiLine: true,
               icon: "mdi-check",
               color: "green",
