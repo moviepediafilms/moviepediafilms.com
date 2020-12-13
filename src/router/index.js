@@ -46,6 +46,12 @@ const routes = [
             import ('../views/ForgotPassword.vue')
     },
     {
+        path: '/account/reset/:token',
+        name: 'reset-password',
+        component: () =>
+            import ('../views/ResetPassword.vue')
+    },
+    {
         path: '/movie/:id/:slug/',
         name: 'movie-detail',
         component: () =>

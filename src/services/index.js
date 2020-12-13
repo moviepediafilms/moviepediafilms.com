@@ -37,8 +37,9 @@ class BaseService {
             return Promise.reject(error)
         })
     }
-    post(payload) {
-        return backend.post(this.url, payload).then(response => {
+    post(payload, url_suffix) {
+        url_suffix = url_suffix ? `${url_suffix}/` : ''
+        return backend.post(this.url + url_suffix, payload).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
             this._handle_token_error(error)
@@ -99,4 +100,4 @@ export const flb_service = new BaseService("v1/filmmaker-leaderboard/")
 export const contest_service = new BaseService("v1/contest/")
 export const movies_by_service = new BaseService("v1/movies-by/")
 export const genre_service = new BaseService("v1/genre/")
-export const account_verify_service = new BaseService("v1/account/verify/")
+export const account_service = new BaseService("v1/account/")
