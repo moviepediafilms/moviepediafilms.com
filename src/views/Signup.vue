@@ -1,8 +1,13 @@
 <template>
   <base-layout>
-    <div class="q-ma-md text-center q-pt-lg">
-      <h3 class="text-primary">Love films?</h3>
-      <p class="q-mt-md">Join us and get connected with the likes of you!</p>
+    <div class="q-mx-md q-mb-md text-center q-pt-lg">
+      <h1 class="text-primary">Love films?</h1>
+      <div class="q-mt-md">
+        <p v-if="is_update">
+          Complete your profile to finish the approval process.
+        </p>
+        <p v-else>Join us and get connected with the likes of you!</p>
+      </div>
       <div class="row justify-center q-mt-lg">
         <div class="col-12 col-sm-6 col-sm-offset-3 q-col-gutter-md">
           <q-form ref="submitForm" @submit="attempt_submit" class="q-gutter-md">
@@ -24,7 +29,7 @@
               required
               filled
               label="City"
-              hint="To get your current location, click on the icon"
+              hint="To get your current location, click on the location icon"
               :rules="[
                 (val) => (val && val.length > 0) || 'Please fill your city',
               ]"
@@ -48,6 +53,7 @@
               type="email"
               required
               filled
+              :disable="!!is_update"
               autocomplete="email"
               label="Your Email"
               :rules="[
@@ -244,6 +250,18 @@ export default {
     };
   },
   computed: {
+    is_update() {
+      return this.token && this.email;
+    },
+    token() {
+      return this.$route.query.token;
+    },
+    email() {
+      return this.$route.query.email;
+    },
+    profile_id() {
+      return this.$route.query.id;
+    },
     minus_18_yrs() {
       var tmp_date = new Date();
       var year = tmp_date.getFullYear() - 13;
@@ -256,23 +274,30 @@ export default {
       var last_name = "";
       if (name_segs.length > 0) first_name = name_segs.shift();
       if (name_segs.length > 0) last_name = name_segs.join(" ");
-      return {
+      var data = {
         user: {
           first_name: first_name,
           last_name: last_name,
           email: this.signup_data.email,
           password: this.signup_data.password,
-          username: this.signup_data.email,
         },
         city: this.signup_data.city,
         dob: this.signup_data.dob,
         gender: this.signup_data.gender,
         mobile: this.signup_data.mobile,
       };
+      if (this.is_update) {
+        delete data["user"]["email"];
+        data.onboarded = true;
+      }
+      return data;
     },
   },
   mounted() {
     this.set_initial_dob();
+    if (this.is_update) {
+      this.signup_data.email = this.email;
+    }
   },
   methods: {
     is_valid_date(date_str) {
@@ -320,9 +345,12 @@ export default {
           return;
         }
         this.loading = true;
-        console.log(this.signup_payload);
-        profile_service
-          .post(this.signup_payload)
+        var payload = Object.assign({ token: this.token }, this.signup_payload);
+        var action = this.profile_id ? "patch" : "post";
+        var args = this.profile_id
+          ? [payload, `${this.profile_id}`]
+          : [payload];
+        profile_service[action](...args)
           .then(() => {
             // flash a success message then redirect to login
             this.loading = false;
@@ -353,7 +381,7 @@ export default {
                 );
             }
             if (found_field_error) {
-              this.error_msg = "Please resolve above errors";
+              this.error_msg = "Please fix the error(s) above to continue";
             } else this.error_msg = this.decode_error_message(error);
             this.loading = false;
           });

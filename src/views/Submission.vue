@@ -1,7 +1,7 @@
 <template>
   <base-layout>
-    <div class="q-ma-md text-center q-pt-lg">
-      <h3 class="text-primary">Submission</h3>
+    <div class="q-mx-md q-mb-md text-center q-pt-md">
+      <h1 class="text-primary">Submission</h1>
       <q-stepper
         v-model="step"
         color="primary"
@@ -9,7 +9,7 @@
         dense
         animated
         flat
-        class="q-pa-none q-ma-none"
+        class="q-pa-none q-ma-none q-mt-md"
       >
         <q-step
           :name="1"
