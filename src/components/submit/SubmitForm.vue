@@ -5,9 +5,9 @@
         <q-input
           type="text"
           v-model="submit_data.title"
-          label="Movie Title"
+          label="Film Title"
           :rules="[
-            (val) => (val && val.length > 0) || 'Please enter movie title',
+            (val) => (val && val.length > 0) || 'Please enter film title',
             (val) =>
               (val && val.match(/^[\x00-\x7F]*$/)) ||
               'Please use alpha numeric characters only',
@@ -22,7 +22,7 @@
           type="url"
           v-model="submit_data.link"
           :rules="[
-            (val) => (val && val.length > 0) || 'Please provide movie link',
+            (val) => (val && val.length > 0) || 'Please provide film link',
           ]"
           hint="should be publicly accessible"
           label="Link"
@@ -48,7 +48,7 @@
               : ''
           "
           label="Language"
-          :rules="[(val) => val || 'Please select language used in movie']"
+          :rules="[(val) => val || 'Please select the language used in film']"
           :error-message="submit_error.lang"
           :error="!!submit_error.lang"
         />
@@ -58,8 +58,8 @@
         <q-input
           type="number"
           :rules="[
-            (val) => (val && val.length > 0) || 'Please enter movie runtime',
-            (val) => parseInt(val) > 0 || 'Please enter valid movie runtime',
+            (val) => (val && val.length > 0) || 'Please enter film runtime',
+            (val) => parseInt(val) > 0 || 'Please enter valid film runtime',
             (val) => parseInt(val) <= 60 || 'That\'s too long for a short film',
           ]"
           v-model="submit_data.runtime"
@@ -75,7 +75,7 @@
           label="Poster"
           accept=".jpg, image/*"
           max-file-size="6000000"
-          hint="Portrait poster of the movie"
+          hint="Portrait poster of the film"
           filled
           clearable
           @rejected="poster_rejected"
@@ -171,7 +171,7 @@
             ref="cropper"
             :aspect-ratio="9 / 16"
             :src="poster_image_url"
-            alt="Movie Poster"
+            alt="Film Poster"
           >
           </vue-cropper>
         </q-card-section>
@@ -407,7 +407,7 @@ export default {
             this.loading = false;
             var found_field_error = this.map_error_fields(err);
             if (found_field_error) {
-              this.error_msg = "Please resolve above errors";
+              this.error_msg = "Please fix the error(s) above to continue";
             } else
               this.error_msg =
                 this.decode_error_message(err) || "There was an error !";
