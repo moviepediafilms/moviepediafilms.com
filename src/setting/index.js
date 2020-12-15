@@ -1,7 +1,7 @@
 export default {
     debug: true,
     data: {
-        action_btns: [{ icon: "mdi-bell-outline", to: "notification", type: "path", auth: true }]
+        action_btns: [{ icon: "mdi-bell-outline", to: { name: "notification" }, type: "path", auth: true }]
     },
     addActionBtn(newBtn) {
         if (this.debug) console.log('addActionBtn triggered with', newBtn)
