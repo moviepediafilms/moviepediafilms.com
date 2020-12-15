@@ -288,7 +288,6 @@ export default {
       };
       if (this.is_update) {
         delete data["user"]["email"];
-        data.onboarded = true;
       }
       return data;
     },

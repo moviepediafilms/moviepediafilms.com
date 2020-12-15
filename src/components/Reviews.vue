@@ -18,7 +18,7 @@
           </q-item-label>
           <q-item-label align="left" style="word-break: break-word">
             <read-more
-              class="readmore"
+              class="readmore readmore-primary"
               more-str="read more"
               :text="review.content"
               link="#"

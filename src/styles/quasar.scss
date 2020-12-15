@@ -15,12 +15,27 @@
 }
 
 .readmore {
+    p {
+        word-break: break-all
+    }
     a {
-        color: $primary;
+        color: inherit;
         margin-left: 5px
     }
     p,
     span {
         display: inline;
+    }
+}
+
+.readmore-primary {
+    a {
+        color: $primary;
+    }
+}
+
+.readmore-dark {
+    a {
+        color: $dark;
     }
 }

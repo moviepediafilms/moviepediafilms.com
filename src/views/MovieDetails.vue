@@ -122,9 +122,7 @@
                     <!-- is_added_to_any_list
                           ? 'mdi-checkbox-multiple-marked'
                           : 'mdi-check-box-multiple-outline' -->
-                    <q-icon
-                      name="mdi-lock"
-                    />
+                    <q-icon name="mdi-lock" />
                     <div
                       class="text-muted text-grey-6 q-mt-xs"
                       style="font-size: 8px"
@@ -236,7 +234,7 @@
                     style="word-break: break-word"
                   >
                     <read-more
-                      class="readmore"
+                      class="readmore readmore-primary"
                       more-str="read more"
                       :text="movie.about"
                       link="#"
