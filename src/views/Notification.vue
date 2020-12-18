@@ -144,9 +144,21 @@ export default {
       });
     },
     leave(el, done) {
-      console.log(el.dataset.index, "leave");
       this.$gsap.to(el, {
         x: -300,
+        opacity: 0,
+        onComplete: done,
+      });
+    },
+    enter_container(el, done) {
+      this.$gsap.from(el, {
+        opacity: 0,
+        ease: "back",
+        onComplete: done,
+      });
+    },
+    leave_container(el, done) {
+      this.$gsap.to(el, {
         opacity: 0,
         onComplete: done,
       });
@@ -193,7 +205,7 @@ export default {
           });
       });
     },
-    get_message(){},
+    get_message() {},
     on_movie_update(movie_id, action, approved, index) {
       this.loading = `movie_${action}_${movie_id}`;
       movie_service.patch({ approved: approved }, movie_id).then((data) => {
@@ -201,11 +213,11 @@ export default {
         if (success) {
           this.all_items.splice(index, 1);
         }
-        var success_action = action === "Approve" ? "Approved" : "Declined";
-        var error_action = action === "Approve" ? "Approval" : "Decline";
+        var success_action = action === "Approve" ? "approved" : "declined";
+        var error_action = action === "Approve" ? "approval" : "decline";
         var message = success
-          ? `${success_action} successfully`
-          : `${error_action} was unsuccessful`;
+          ? `Film ${success_action} successfully`
+          : `Film ${error_action} was unsuccessful`;
         this.$q.notify({
           message: message,
           color: success ? "positive" : "negative",
@@ -222,11 +234,11 @@ export default {
         if (success) {
           this.all_items.splice(index, 1);
         }
-        var success_action = action === "Approve" ? "Approved" : "Declined";
-        var error_action = action === "Approve" ? "Approval" : "Decline";
+        var success_action = action === "Approve" ? "approved" : "declined";
+        var error_action = action === "Approve" ? "approval" : "decline";
         var message = success
-          ? `${success_action} successfully`
-          : `${error_action} was unsuccessful`;
+          ? `Crew request ${success_action} successfully`
+          : `Crew request ${error_action} was unsuccessful`;
         this.$q.notify({
           message: message,
           color: success ? "positive" : "negative",
