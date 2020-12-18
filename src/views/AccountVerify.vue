@@ -121,10 +121,10 @@ export default {
           this.loading = false;
 
           if (data.success) {
-            this.message = "Account verified! please login to proceed.";
+            this.message = "Account Activated! please login to proceed.";
           } else {
             this.message =
-              "Account verification failed! Your activation link has expired.";
+              "Account activation failed! Your activation link has expired.";
           }
         })
         .catch((error) => {

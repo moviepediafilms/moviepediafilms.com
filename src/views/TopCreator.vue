@@ -1,9 +1,9 @@
 <template>
   <base-layout>
-    <div class="q-ma-md text-center">
+    <div class="q-ma-sm text-center">
       <h3 class="text-primary text-weight-light q-mb-xs">Top Creators</h3>
 
-      <q-card flat class="q-mt-md">
+      <q-card flat class="q-mt-md" v-if="contests.length > 0">
         <q-tabs
           v-model="tab"
           dense
@@ -34,6 +34,12 @@
           </q-tab-panel>
         </q-tab-panels>
       </q-card>
+      <empty-state
+        title="Nothing to show here."
+        desc="Check this space later to find out who's on top of our leaderboards"
+        image="/img/empty/15.svg"
+        v-else
+      />
     </div>
   </base-layout>
 </template>
