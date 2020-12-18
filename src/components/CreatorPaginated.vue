@@ -13,7 +13,7 @@
     <empty-state
       title="Create. Submit. Compete."
       desc="Start submitting films and stand a chance to win the Filmmaker of the Month title."
-      icon="mdi-movie"
+      image="/img/empty/13.svg"
       v-else
     />
   </div>

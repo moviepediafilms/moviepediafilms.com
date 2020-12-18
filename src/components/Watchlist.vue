@@ -10,7 +10,7 @@
     <empty-state
       title="Nothing to show here."
       desc="Browse now, watch later"
-      image="/img/empty/watchlist.png"
+      image="/img/empty/1.svg"
       v-else
     />
   </div>

@@ -9,7 +9,7 @@
           @item-selected="on_select"
           empty-title="Nothing to show here"
           empty-desc='<i>"No matter what people tell you, words and ideas can change the world."</i><br/>– Robin Williams'
-          empty-image="/img/empty/followers.png"
+          empty-image="/img/empty/11.svg"
         />
       </div>
     </div>

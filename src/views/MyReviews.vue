@@ -6,7 +6,7 @@
         :reviews="reviews"
         empty-title="Nothing to show here"
         empty-desc="Express and appreciate what you watch, who knows you might be our next featured critic"
-        empty-image="/img/empty/reviews.png"
+        empty-image="/img/empty/7.svg"
       />
     </div>
   </base-layout>
