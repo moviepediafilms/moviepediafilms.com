@@ -11,7 +11,7 @@
             :rules="[
               (val) => (val && val.length > 0) || 'Please enter password',
               (val) =>
-                val.length > 6 || 'Password must be at least 6 characters',
+                val.length >= 6 || 'Password must be at least 6 characters',
             ]"
             :error="!!reset_error.password"
             :error-message="reset_error.password"

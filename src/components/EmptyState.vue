@@ -1,7 +1,21 @@
 <template>
   <div class="text-center text-grey-7">
     <q-icon :name="icon" class="q-mb-md" size="80px" v-if="icon && !image" />
-    <q-img :src="image" v-if="image" style="max-width: 300px" />
+    <div
+      style="
+        display: flex;
+        align-item: center;
+        justify-content: center;
+        height: 310px;
+      "
+      v-if="image"
+    >
+      <img
+        :src="image"
+        class="q-my-md"
+        style="height: 90%; object-fit: scale"
+      />
+    </div>
     <div class="q-mb-sm text-h3">{{ title }}</div>
     <p v-if="desc" v-html="desc"></p>
   </div>

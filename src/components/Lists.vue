@@ -45,7 +45,7 @@
     <empty-state
       title="Nothing to show here."
       desc="Curation is an art, use the <span class='mdi mdi-check-box-multiple-outline'></span> button wisely"
-      image="/img/empty/curate.png"
+      image="/img/empty/3.svg"
       v-else
     />
     <popup-menu

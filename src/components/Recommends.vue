@@ -11,7 +11,7 @@
       title="Nothing to show here."
       desc="Recommend the best from our featured films by using the <span class='mdi mdi-bullhorn'></span>
  button"
-      image="/img/empty/recommends.png"
+      image="/img/empty/2.svg"
       v-else
     />
   </div>

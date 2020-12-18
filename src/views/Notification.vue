@@ -2,59 +2,74 @@
   <base-layout>
     <div class="q-ma-md text-center q-pt-sm">
       <div class="text-primary text-h1">Notifications</div>
-      <div class="q-mt-md" v-if="notification_count > 0">
-        <transition-group
-          appear
-          v-on:enter="enter"
-          v-on:leave="leave"
-          tag="div"
-          v-for="(item, index) in all_items"
-          :key="index"
-        >
-          <template v-if="item.movie">
-            <movie-request
-              v-bind:key="index"
-              v-bind:data-index="index"
-              :id="item.movie.id"
-              :poster="item.movie.poster"
-              :title="item.movie.title"
-              :loadingApproved="loading === `movie_Approve_${item.movie.id}`"
-              :loadingDeclined="loading === `movie_Decline_${item.movie.id}`"
-              @approve="on_movie_update(item.movie.id, 'Approve', true, index)"
-              @decline="on_movie_update(item.movie, 'Decline', false, index)"
-            ></movie-request>
-          </template>
-          <template v-if="item.crew">
-            <crew-request
-              v-bind:key="index"
-              v-bind:data-index="index"
-              :id="item.crew.id"
-              :role="item.crew.role"
-              :user="item.crew.user"
-              :movie-title="item.crew.movie_title"
-              @approve="on_crew_update(item.crew.id, 'Approve', 'A', index)"
-              @decline="on_crew_update(item.crew.id, 'Decline', 'D', index)"
-              :approve-loading="loading === `crew_Approve_${item.crew.id}`"
-              :decline-loading="loading === `crew_Decline_${item.crew.id}`"
-            ></crew-request>
-          </template>
-          <template v-if="item.info">
-            <info-item
-              v-bind:key="index"
-              v-bind:data-index="index"
-              :title="item.info.title"
-              :content="item.info.content"
-            ></info-item>
-          </template>
-        </transition-group>
+      <transition
+        appear
+        v-on:enter="enter"
+        v-on:leave="leave"
+        tag="div"
+        v-show="notification_count > 0"
+      >
+        <div class="q-mt-md">
+          <transition-group
+            appear
+            v-on:enter="enter"
+            v-on:leave="leave"
+            tag="div"
+            v-for="(item, index) in all_items"
+            :key="index"
+          >
+            <template v-if="item.movie">
+              <movie-request
+                v-bind:key="index"
+                v-bind:data-index="index"
+                :id="item.movie.id"
+                :poster="item.movie.poster"
+                :title="item.movie.title"
+                :loadingApproved="loading === `movie_Approve_${item.movie.id}`"
+                :loadingDeclined="loading === `movie_Decline_${item.movie.id}`"
+                @approve="
+                  on_movie_update(item.movie.id, 'Approve', true, index)
+                "
+                @decline="
+                  on_movie_update(item.movie.id, 'Decline', false, index)
+                "
+              ></movie-request>
+            </template>
+            <template v-if="item.crew">
+              <crew-request
+                v-bind:key="index"
+                v-bind:data-index="index"
+                :id="item.crew.id"
+                :role="item.crew.role"
+                :user="item.crew.user"
+                :movie-title="item.crew.movie_title"
+                @approve="on_crew_update(item.crew.id, 'Approve', 'A', index)"
+                @decline="on_crew_update(item.crew.id, 'Decline', 'D', index)"
+                :approve-loading="loading === `crew_Approve_${item.crew.id}`"
+                :decline-loading="loading === `crew_Decline_${item.crew.id}`"
+              ></crew-request>
+            </template>
+            <template v-if="item.info">
+              <info-item
+                v-bind:key="index"
+                v-bind:data-index="index"
+                :title="item.info.title"
+                :content="item.info.content"
+              ></info-item>
+            </template>
+          </transition-group>
+        </div>
+      </transition>
+      <div v-show="notification_count == 0">
+        <transition v-on:enter="enter" tag="div" v-on:leave="leave">
+          <empty-state
+            class="q-mt-lg"
+            icon="mdi-bell-check"
+            title="You're all caught up"
+            desc=""
+          />
+        </transition>
       </div>
-      <empty-state
-        class="q-mt-lg"
-        icon="mdi-bell-check"
-        title="You're all caught up"
-        desc=""
-        v-else
-      />
     </div>
   </base-layout>
 </template>
@@ -92,11 +107,7 @@ export default {
   },
   computed: {
     notification_count() {
-      return (
-        this.notifications.length +
-        this.crew_approvals.length +
-        this.movie_approvals.length
-      );
+      return this.all_items.length;
     },
   },
   watch: {
@@ -133,9 +144,21 @@ export default {
       });
     },
     leave(el, done) {
-      console.log(el.dataset.index, "leave");
       this.$gsap.to(el, {
         x: -300,
+        opacity: 0,
+        onComplete: done,
+      });
+    },
+    enter_container(el, done) {
+      this.$gsap.from(el, {
+        opacity: 0,
+        ease: "back",
+        onComplete: done,
+      });
+    },
+    leave_container(el, done) {
+      this.$gsap.to(el, {
         opacity: 0,
         onComplete: done,
       });
@@ -182,6 +205,7 @@ export default {
           });
       });
     },
+    get_message() {},
     on_movie_update(movie_id, action, approved, index) {
       this.loading = `movie_${action}_${movie_id}`;
       movie_service.patch({ approved: approved }, movie_id).then((data) => {
@@ -189,10 +213,13 @@ export default {
         if (success) {
           this.all_items.splice(index, 1);
         }
+        var success_action = action === "Approve" ? "approved" : "declined";
+        var error_action = action === "Approve" ? "approval" : "decline";
+        var message = success
+          ? `Film ${success_action} successfully`
+          : `Film ${error_action} was unsuccessful`;
         this.$q.notify({
-          message: success
-            ? `${action} was successful!`
-            : `${action} was unsuccessful!`,
+          message: message,
           color: success ? "positive" : "negative",
           icon: success ? "mdi-check" : "mdi-close",
           textColor: "white",
@@ -207,10 +234,13 @@ export default {
         if (success) {
           this.all_items.splice(index, 1);
         }
+        var success_action = action === "Approve" ? "approved" : "declined";
+        var error_action = action === "Approve" ? "approval" : "decline";
+        var message = success
+          ? `Crew request ${success_action} successfully`
+          : `Crew request ${error_action} was unsuccessful`;
         this.$q.notify({
-          message: success
-            ? `${action} was successful!`
-            : `${action} was unsuccessful!`,
+          message: message,
           color: success ? "positive" : "negative",
           icon: success ? "mdi-check" : "mdi-close",
           textColor: "white",
