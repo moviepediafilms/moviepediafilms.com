@@ -132,7 +132,7 @@ export default {
           C:
             "Your film submission is still pending. Complete your payment to proceed and successfully submit your film.",
           S:
-            "Your film is pending for approval. We'll notify you as soon as it's approved for screening.",
+            "Your film is pending for approval from our end. We'll notify you as soon as it's approved for screening.",
           R:
             "Your film didn't get through. But don't worry, your next film submission is on us. :)",
         };

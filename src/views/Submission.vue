@@ -223,8 +223,10 @@ export default {
         payment_service
           .post(rzp_response)
           .then((data) => {
-            var message = "Payment Successful! your submission is complete";
+            var message =
+              "Your payment was successful. Your film is pending for approval and we'll email you as soon as it's ready for screening.";
             var icon = "mdi-check";
+            var color = "positive";
             if (data.success) {
               this.$router.push({
                 name: "profile",
@@ -234,15 +236,16 @@ export default {
               });
             } else {
               message =
-                "Fail to verify Payment! please reach out to us if balance was deducted!";
+                "Payment Failed. Any amount if debited will be refunded in 5-7 business days.";
               icon = "mdi-close";
+              color = "negative";
             }
             this.$q.notify({
               icon: icon,
               message: message,
               multiLine: true,
-              color: "primary",
-              textColor: "dark",
+              color: color,
+              textColor: "white",
             });
             this.loading = false;
           })
