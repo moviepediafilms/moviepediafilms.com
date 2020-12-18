@@ -193,6 +193,7 @@ export default {
           });
       });
     },
+    get_message(){},
     on_movie_update(movie_id, action, approved, index) {
       this.loading = `movie_${action}_${movie_id}`;
       movie_service.patch({ approved: approved }, movie_id).then((data) => {
@@ -221,10 +222,13 @@ export default {
         if (success) {
           this.all_items.splice(index, 1);
         }
+        var success_action = action === "Approve" ? "Approved" : "Declined";
+        var error_action = action === "Approve" ? "Approval" : "Decline";
+        var message = success
+          ? `${success_action} successfully`
+          : `${error_action} was unsuccessful`;
         this.$q.notify({
-          message: success
-            ? `${action} was successful!`
-            : `${action} was unsuccessful!`,
+          message: message,
           color: success ? "positive" : "negative",
           icon: success ? "mdi-check" : "mdi-close",
           textColor: "white",
