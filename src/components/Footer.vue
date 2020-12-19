@@ -33,7 +33,7 @@
           </a>
           <a
             target="_blank"
-            href="https://instagram.com/movie.pedia"
+            href="https://instagram.com/moviepedia.films"
             class="text-reset social-link"
           >
             <q-icon name="mdi-instagram" class="q-mr-sm" size="sm"></q-icon>

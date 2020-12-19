@@ -54,6 +54,7 @@
       :desc="emptyDesc"
       :icon="emptyIcon"
       :image="emptyImage"
+      :top-padded="emptyTopPadded"
       v-else
     />
   </div>
@@ -86,6 +87,10 @@ export default {
     emptyImage: {
       type: String,
       default: null,
+    },
+    emptyTopPadded: {
+      type: Boolean,
+      default: false,
     },
   },
   mounted() {},

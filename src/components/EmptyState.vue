@@ -1,13 +1,9 @@
 <template>
-  <div class="text-center text-grey-7">
+  <div class="text-center text-grey-7" :class="{ 'q-mt-md': topPadded }">
     <q-icon :name="icon" class="q-mb-md" size="80px" v-if="icon && !image" />
     <div
-      style="
-        display: flex;
-        align-item: center;
-        justify-content: center;
-        height: 150px;
-      "
+      style="display: flex; align-item: center; justify-content: center"
+      :style="{ height: height }"
       v-if="image"
     >
       <img
@@ -23,6 +19,14 @@
 <script>
 export default {
   props: {
+    height: {
+      type: String,
+      default: "150px",
+    },
+    topPadded: {
+      type: Boolean,
+      default: false,
+    },
     title: {
       type: String,
       default: "Nothing in here!",

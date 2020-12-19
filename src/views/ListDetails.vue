@@ -87,7 +87,10 @@ export default {
         });
     },
     on_select(movie) {
-      this.$router.push({ name: "movie-detail", id: movie.id });
+      this.$router.push({
+        name: "movie-detail",
+        params: { id: movie.id, slug: this.slugify(movie.title) },
+      });
     },
   },
 };
