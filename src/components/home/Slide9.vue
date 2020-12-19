@@ -11,7 +11,7 @@
         <div class="q-my-md q-mx-lg">
           <div class="mp-title2 text-weight-bold">Curator Profile</div>
           <div class="mp-subtitle q-mt-sm">
-            Put on the critic hats, recommend films and share your great taste
+            Put on the critic's hat, recommend films and share your great taste
             of films with celebrities and fellow cinephiles.
           </div>
         </div>

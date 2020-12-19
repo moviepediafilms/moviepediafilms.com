@@ -99,23 +99,25 @@
       <h3 class="text-primary">USER REPRESENTATIONS</h3>
       <p>By using the Site, you represent and warrant that:</p>
       <p>
-        [(1) all registration information you submit will be true, accurate,
-        current, and complete;(2) you will maintain the accuracy of such
-        information and promptly update such registration information as
-        necessary;]
+        (1) all registration information you submit will be true, accurate,
+        current, and complete
+      </p>
+      <p>
+        (2) you will maintain the accuracy of such information and promptly
+        update such registration information as necessary
       </p>
       <p>
         (3) you have the legal capacity and you agree to comply with these Terms
-        of Service;
+        of Service
       </p>
-      <p>[(4) you are not under the age of 13;]</p>
+      <p>(4) you are not under the age of 1</p>
       <p>
-        (5) not a minor in the jurisdiction in which you reside[, or if a minor,
-        you have received parental permission to use the Site];
+        (5) not a minor in the jurisdiction in which you reside, or if a minor,
+        you have received parental permission to use the Site
       </p>
       <p>
         (6) you will not access the Site through automated or non-human means,
-        whether through a bot, script, or otherwise;
+        whether through a bot, script, or otherwise
       </p>
       <p>
         (7) you will not use the Site for any illegal or unauthorized purpose;
@@ -304,7 +306,7 @@
           </p>
         </li>
         <li>
-          <p>[other]</p>
+          <p>other</p>
         </li>
       </ol>
       <p>
@@ -804,9 +806,10 @@
       <h3 class="text-primary">PRIVACY POLICY</h3>
       <p>
         We care about data privacy and security. Please review our Privacy
-        Policy [CLICK HERE]/posted on the Site]. By using the Site, you agree to
-        be bound by our Privacy Policy, which is incorporated into these Terms
-        of Service. Please be advised the Site is hosted in the United States.
+        Policy <a href="/privacy-policy">CLICK HERE</a>/posted on the Site]. By
+        using the Site, you agree to be bound by our Privacy Policy, which is
+        incorporated into these Terms of Service. Please be advised the Site is
+        hosted in the United States.
       </p>
       <p>
         If you access the Site from the European Union, Asia, or any other
@@ -929,12 +932,7 @@
         liable for damages, including costs and attorney's fees. Filing a false
         Counter Notification constitutes perjury.
       </p>
-      <p>Designated Copyright Agent</p>
-      <p>[Name]</p>
-      <p>Attn: Copyright Agent</p>
-      <p>[Address]</p>
-      <p>[City, State Zip]</p>
-      <p>[email]</p>
+
       <h3 class="text-primary">COPYRIGHT INFRINGEMENTS</h3>
       <p>
         We respect the intellectual property rights of others. If you believe
@@ -961,7 +959,7 @@
         REASON, INCLUDING WITHOUT LIMITATION FOR BREACH OF ANY REPRESENTATION,
         WARRANTY, OR COVENANT CONTAINED IN THESE TERMS OF SERVICE OR OF ANY
         APPLICABLE LAW OR REGULATION. WE MAY TERMINATE YOUR USE OR PARTICIPATION
-        IN THE SITE OR DELETE [YOUR ACCOUNT AND] ANY CONTENT OR INFORMATION THAT
+        IN THE SITE OR DELETE YOUR ACCOUNT AND ANY CONTENT OR INFORMATION THAT
         YOU POSTED AT ANY TIME, WITHOUT WARNING, IN OUR SOLE DISCRETION.
       </p>
       <p>

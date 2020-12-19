@@ -121,7 +121,7 @@ export default {
           this.loading = false;
 
           if (data.success) {
-            this.message = "Account Activated! please login to proceed.";
+            this.message = "Account Activated! Please login to proceed.";
           } else {
             this.message =
               "Account activation failed! Your activation link has expired.";
