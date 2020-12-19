@@ -2,11 +2,14 @@
   <base-layout>
     <div class="q-pa-md text-grey-4">
       <div class="col">
+        <div class="text-h5 text-overline">Recommended by</div>
         <div class="text-h1 text-primary">{{ judge.name }}</div>
         <div class="q-mt-sm text-subtitle1">{{ judge.title }}</div>
       </div>
-      <div class="q-mt-md text-uppercase text-primary">Recommends</div>
-      <div class="row q-mt-md q-col-gutter-md">
+      <div class="q-mt-md text-uppercase text-primary" v-if="movies.length > 0">
+        Recommends
+      </div>
+      <div class="row q-mt-md q-col-gutter-md" v-if="movies.length > 0">
         <div
           class="col-6 col-md-4 col-lg-3"
           v-for="movie in movies"
@@ -33,6 +36,12 @@
           </q-card>
         </div>
       </div>
+      <empty-state
+        title="Nothing to show here"
+        desc="This celebrity hasn't recommended any film yet."
+        image="/img/empty/17.svg"
+        height="200px"
+      ></empty-state>
     </div>
   </base-layout>
 </template>

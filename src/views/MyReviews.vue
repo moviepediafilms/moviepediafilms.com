@@ -4,9 +4,10 @@
       <div class="text-primary text-h1">Reviews</div>
       <reviews
         :reviews="reviews"
+        :empty-top-padded="true"
         empty-title="Nothing to show here"
         empty-desc="Express and appreciate what you watch, who knows you might be our next featured critic"
-        empty-image="/img/empty/7.svg"
+        empty-image="/img/empty/16.svg"
       />
     </div>
   </base-layout>

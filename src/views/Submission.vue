@@ -23,10 +23,11 @@
 
           <q-stepper-navigation>
             <q-btn
+              :disable="!has_released"
               @click="navigate_forward"
               color="primary"
               text-color="dark"
-              label="get started"
+              :label="get_started_btn_txt"
             />
           </q-stepper-navigation>
         </q-step>
@@ -123,6 +124,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import BaseLayout from "@/layouts/Base";
 import { payment_service, submission_service } from "@/services";
 import ValueProps from "@/components/submit/ValueProps.vue";
@@ -142,6 +144,8 @@ export default {
   },
   data() {
     return {
+      get_started_btn_txt: "submissions begin in 00:00:00",
+      release_datetime: moment("2020-12-20T16:00:00+05:30"),
       order: {},
       forward_only: false,
       trigger_submit: 0,
@@ -159,6 +163,7 @@ export default {
     script.setAttribute("src", "https://checkout.razorpay.com/v1/checkout.js");
     document.head.appendChild(script);
     this.fetch_submission();
+    this.start_countdown();
   },
   computed: {
     show_sign_in() {
@@ -166,6 +171,9 @@ export default {
     },
     movie_id() {
       return this.$route.params.movie_id;
+    },
+    has_released() {
+      return moment().isAfter(this.release_datetime);
     },
   },
   watch: {
@@ -176,6 +184,23 @@ export default {
     },
   },
   methods: {
+    start_countdown() {
+      if (this.has_released) {
+        this.get_started_btn_txt = "get started";
+      } else {
+        setTimeout(() => {
+          var now = moment();
+          var sec = this.release_datetime.diff(now, "seconds");
+          var hrs = parseInt(sec / 3600);
+          sec = sec - hrs * 3600;
+          var min = parseInt(sec / 60);
+          sec = sec - min * 60;
+
+          this.get_started_btn_txt = `submissions begin in ${hrs}:${min}:${sec}`;
+          this.start_countdown();
+        }, 1000);
+      }
+    },
     fetch_submission() {
       if (this.movie_id) {
         this.loading = true;
