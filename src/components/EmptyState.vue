@@ -6,7 +6,7 @@
         display: flex;
         align-item: center;
         justify-content: center;
-        height: 310px;
+        height: 150px;
       "
       v-if="image"
     >
@@ -16,7 +16,7 @@
         style="height: 90%; object-fit: scale"
       />
     </div>
-    <div class="q-mb-sm text-h3">{{ title }}</div>
+    <div class="q-mt-sm q-mb-sm text-h3">{{ title }}</div>
     <p v-if="desc" v-html="desc"></p>
   </div>
 </template>

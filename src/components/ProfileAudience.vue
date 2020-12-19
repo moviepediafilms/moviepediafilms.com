@@ -160,7 +160,7 @@ import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
 import FollowUserList from "@/components/FollowUserList";
 import FilmographyList from "@/components/FilmographyList";
 import Lists from "@/components/Lists";
-import { recommend_service, follow_service, list_service } from "@/services";
+import { profile_service, follow_service, list_service } from "@/services";
 import {
   PROFILE_WATCHLIST_REQUEST,
   PROFILE_FOLLOW,
@@ -289,8 +289,8 @@ export default {
       return "-";
     },
     get_recommends() {
-      recommend_service.get({}, `${this.profile.id}/movies`).then((data) => {
-        this.their_recommends.push(...data);
+      profile_service.get({}, `${this.profile.id}/recommends`).then((data) => {
+        this.their_recommends.push(...data.results);
       });
     },
     get_watchlist() {

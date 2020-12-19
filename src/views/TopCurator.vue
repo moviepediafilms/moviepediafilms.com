@@ -1,7 +1,7 @@
 <template>
   <base-layout>
     <div class="q-ma-sm text-center">
-      <h3 class="text-primary text-weight-light q-mb-xs">Top Curators</h3>
+      <h1 class="text-primary text-weight-light q-mb-xs">Top Curators</h1>
 
       <q-card flat class="q-mt-md" v-if="contests.length > 0">
         <q-tabs
