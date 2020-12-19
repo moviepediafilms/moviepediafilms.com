@@ -1,6 +1,6 @@
 <template>
   <div
-    style="background-image: url('/img/7_bg.png')"
+    style="background-image: url('/img/8_bg.png')"
     class="q-mt-md mp-bg q-mb-none"
   >
     <div class="row items-stretch q-mt-md" style="display: relative">
@@ -19,7 +19,7 @@
       <div class="col-10 offset-2">
         <bar-plus :rtl="true" />
       </div>
-      <div class="col-12 text-center q-mt-lg" style="padding-bottom: 0px">
+      <div class="col-12 text-center q-mt-lg" style="margin-bottom: -7px">
         <img src="/img/7.png" width="100%" style="max-width: 300px" />
       </div>
     </div>
