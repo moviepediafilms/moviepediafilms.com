@@ -345,8 +345,8 @@
         </div>
         <div class="col" v-else>
           <empty-state
-            title="This movie is not yet released"
-            desc=""
+            title="This film is yet to be screened."
+            desc="You can watch other films screening on our platform here."
             icon="mdi-movie"
           />
         </div>

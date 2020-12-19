@@ -1,5 +1,9 @@
 <template>
-  <q-img :ratio="9 / 16" :src="`${media_base}${poster}`">
+  <q-img
+    :ratio="9 / 16"
+    :src="`${media_base}${poster}`"
+    @click="$emit('click')"
+  >
     <div
       class="absolute-top-left text-center bg-primary q-pa-none"
       style="padding: 0px"

@@ -15,8 +15,7 @@
       <q-list padding v-else>
         <q-item dense class="q-ma-none q-pa-none">
           <q-item-section avatar> </q-item-section>
-          <q-item-section class="q-ml-lg text-caption text-left text-grey-5"
-            >Name
+          <q-item-section class="q-ml-lg text-caption text-left text-grey-5">
           </q-item-section>
           <q-item-section
             side
