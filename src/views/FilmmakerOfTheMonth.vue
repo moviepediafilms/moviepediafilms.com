@@ -1,7 +1,7 @@
 <template>
   <base-layout>
     <div class="q-ma-md text-center q-pt-lg">
-      <h3 class="text-primary">Filmmaker Of The Month</h3>
+      <h3 class="text-primary">Creator of the Month</h3>
     </div>
   </base-layout>
 </template>
@@ -13,7 +13,7 @@ export default {
     BaseLayout,
   },
   metaInfo: {
-    title: "Filmmaker of the Month",
+    title: "Creator of the Month",
   },
   data() {
     return {};

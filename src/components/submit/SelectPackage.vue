@@ -81,7 +81,7 @@ export default {
           title: "Premium Pack",
           price: "INR 399 + INR 99",
           content: [
-            { text: "Filmmaker of the Month", included: true },
+            { text: "Creator of the Month", included: true },
             { text: "Facebook Marketing", included: true },
             { text: "E-mail Campaigns", included: true },
             { text: "Celebrity Recommendation", included: true },
@@ -95,7 +95,7 @@ export default {
           title: "Standard Pack",
           price: "INR 399",
           content: [
-            { text: "Filmmaker of the Month", included: true },
+            { text: "Creator of the Month", included: true },
             { text: "Facebook Marketing", included: true },
             { text: "E-mail Campaigns", included: true },
             { text: "Celebrity Recommendation", included: false },

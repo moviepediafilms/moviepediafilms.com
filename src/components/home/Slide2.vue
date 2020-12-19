@@ -37,7 +37,7 @@ export default {
         {
           icon: "mdi-trophy",
           title: "₹ 15,000",
-          desc: "Filmmaker of the Month Title",
+          desc: "Creator of the Month Title",
         },
         {
           icon: "mdi-youtube",
