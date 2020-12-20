@@ -94,8 +94,8 @@
             (val && val.length > 0) || 'Please select at-least one genre',
           (val) => (val && val.length < 4) || 'You can select max of 3',
         ]"
-        :error-message="submit_error.genre"
-        :error="!!submit_error.genre"
+        :error-message="submit_error.genres"
+        :error="!!submit_error.genres"
       >
         <div class="q-gutter-xs text-left q-ma-none">
           <q-checkbox
