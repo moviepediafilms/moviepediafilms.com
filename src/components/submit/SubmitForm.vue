@@ -189,6 +189,7 @@ import { mapState } from "vuex";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import { submission_service } from "@/services";
+import { GENRE_REQUEST } from "@/store/actions";
 export default {
   props: {
     initData: {
@@ -283,6 +284,7 @@ export default {
     },
   },
   mounted() {
+    this.$store.dispatch(GENRE_REQUEST);
     this.filtered_lang = this.languages;
     Object.assign(this.submit_data, this.initData);
     this.original_poster = this.initData.original_poster;
