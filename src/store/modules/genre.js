@@ -8,72 +8,72 @@ const state = {
     error: "",
     last_updated: null,
     genres: JSON.parse(localStorage.getItem("genres")) || [{
-            "id": 7,
-            "name": "Animation"
+            id: 7,
+            name: "Animation"
         },
         {
-            "id": 2,
-            "name": "Crime"
+            id: 2,
+            name: "Crime"
         },
         {
-            "id": 6,
-            "name": "Documentary"
+            id: 6,
+            name: "Documentary"
         },
         {
-            "id": 1,
-            "name": "Drama"
+            id: 1,
+            name: "Drama"
         },
         {
-            "id": 13,
-            "name": "Experimental"
+            id: 13,
+            name: "Experimental"
         },
         {
-            "id": 16,
-            "name": "Fantasy"
+            id: 16,
+            name: "Fantasy"
         },
         {
-            "id": 4,
-            "name": "Horror"
+            id: 4,
+            name: "Horror"
         },
         {
-            "id": 11,
-            "name": "Musical"
+            id: 11,
+            name: "Musical"
         },
         {
-            "id": 12,
-            "name": "Mystery"
+            id: 12,
+            name: "Mystery"
         },
         {
-            "id": 8,
-            "name": "Noir"
+            id: 8,
+            name: "Noir"
         },
         {
-            "id": 17,
-            "name": "Others"
+            id: 17,
+            name: "Others"
         },
         {
-            "id": 10,
-            "name": "Psychological Thriller"
+            id: 10,
+            name: "Psychological Thriller"
         },
         {
-            "id": 9,
-            "name": "Romance"
+            id: 9,
+            name: "Romance"
         },
         {
-            "id": 5,
-            "name": "Science Fiction"
+            id: 5,
+            name: "Science Fiction"
         },
         {
-            "id": 15,
-            "name": "Silent"
+            id: 15,
+            name: "Silent"
         },
         {
-            "id": 14,
-            "name": "Sports"
+            id: 14,
+            name: "Sports"
         },
         {
-            "id": 3,
-            "name": "Thriller"
+            id: 3,
+            name: "Thriller"
         }
     ],
 };
