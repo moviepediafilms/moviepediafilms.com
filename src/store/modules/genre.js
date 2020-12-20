@@ -7,15 +7,74 @@ const state = {
     loading: "",
     error: "",
     last_updated: null,
-    genres: JSON.parse(localStorage.getItem("genres")) || [{ name: "Action" },
-        { name: "Crime", id: 1 },
-        { name: "Comedy", id: 2 },
-        { name: "Romance", id: 3 },
-        { name: "Drama", id: 4 },
-        { name: "Horror", id: 5 },
-        { name: "Mystery", id: 6 },
-        { name: "Thriller", id: 7 },
-        { name: "Others", id: 8 }
+    genres: JSON.parse(localStorage.getItem("genres")) || [{
+            "id": 7,
+            "name": "Animation"
+        },
+        {
+            "id": 2,
+            "name": "Crime"
+        },
+        {
+            "id": 6,
+            "name": "Documentary"
+        },
+        {
+            "id": 1,
+            "name": "Drama"
+        },
+        {
+            "id": 13,
+            "name": "Experimental"
+        },
+        {
+            "id": 16,
+            "name": "Fantasy"
+        },
+        {
+            "id": 4,
+            "name": "Horror"
+        },
+        {
+            "id": 11,
+            "name": "Musical"
+        },
+        {
+            "id": 12,
+            "name": "Mystery"
+        },
+        {
+            "id": 8,
+            "name": "Noir"
+        },
+        {
+            "id": 17,
+            "name": "Others"
+        },
+        {
+            "id": 10,
+            "name": "Psychological Thriller"
+        },
+        {
+            "id": 9,
+            "name": "Romance"
+        },
+        {
+            "id": 5,
+            "name": "Science Fiction"
+        },
+        {
+            "id": 15,
+            "name": "Silent"
+        },
+        {
+            "id": 14,
+            "name": "Sports"
+        },
+        {
+            "id": 3,
+            "name": "Thriller"
+        }
     ],
 };
 
