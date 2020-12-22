@@ -25,7 +25,7 @@
       </div>
       <empty-state
         title="Nothing to show here."
-        desc="Check this space later to find out who's on top of our leaderboards"
+        desc="Check this space later to know the standings of the curators on our platform"
         image="/img/empty/15.svg"
         v-else
       />
