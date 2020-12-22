@@ -74,7 +74,6 @@
           v-model="original_poster"
           label="Poster"
           accept=".jpg, image/*"
-          max-file-size="6000000"
           hint="Portrait poster of the film"
           filled
           clearable
@@ -176,8 +175,19 @@
           </vue-cropper>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat color="primary" label="Done" @click="crop_poster" />
+          <q-btn
+            flat
+            label="Cancel"
+            v-close-popup
+            :disabled="cropping_in_progress"
+          />
+          <q-btn
+            flat
+            color="primary"
+            label="Done"
+            @click="crop_poster"
+            :loading="cropping_in_progress"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -208,6 +218,7 @@ export default {
   },
   data() {
     return {
+      cropping_in_progress: false,
       loading: false,
       error_msg: "",
       languages: Object.values(langs),
@@ -360,13 +371,21 @@ export default {
       this.error_msg = "";
     },
     poster_rejected() {
-      this.submit_error.poster = "size too big!! keep it under 6MB";
+      this.submit_error.poster = "Only image files are supported";
     },
     crop_poster() {
-      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
-        this.submit_data.poster = blob;
-        this.poster_crop_dialog = false;
-      }, "image/png");
+      this.cropping_in_progress = true;
+      this.$refs.cropper
+        .getCroppedCanvas({
+          width: 1824,
+          height: 1026,
+          fillColor: "#fff",
+        })
+        .toBlob((blob) => {
+          this.cropping_in_progress = false;
+          this.submit_data.poster = blob;
+          this.poster_crop_dialog = false;
+        }, "image/png");
     },
     lang_filter_fn(val, update) {
       update(() => {
