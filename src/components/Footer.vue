@@ -42,6 +42,7 @@
             target="_blank"
             href="https://www.youtube.com/channel/UCBuP4H9TLLM13quoXQvJ3Ag"
             class="text-reset social-link"
+            v-if="false"
           >
             <q-icon name="mdi-youtube" class="q-mr-sm" size="sm"></q-icon>
           </a>

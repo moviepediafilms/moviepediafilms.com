@@ -4,22 +4,30 @@
       <div class="q-ma-md text-center">
         <h1 class="text-primary">Curators Leaderboard</h1>
       </div>
-      <div class="row justify-start q-ml-md q-mt-md">
-        <div class="text-caption text-grey-5">
-          <q-icon
-            name="mdi-information-variant"
-            size="16px"
-            class="q-mr-xs"
-          />{{ last_updated_txt }}
+      <div v-if="false">
+        <div class="row justify-start q-ml-md q-mt-md">
+          <div class="text-caption text-grey-5">
+            <q-icon
+              name="mdi-information-variant"
+              size="16px"
+              class="q-mr-xs"
+            />{{ last_updated_txt }}
+          </div>
         </div>
+        <leaderboard
+          :pages="pages"
+          :page_size="page_size"
+          :users="users"
+          :loading="loading"
+          @click="on_user_click"
+          @page-change="on_page_change"
+        />
       </div>
-      <leaderboard
-        :pages="pages"
-        :page_size="page_size"
-        :users="users"
-        :loading="loading"
-        @click="on_user_click"
-        @page-change="on_page_change"
+      <empty-state
+        title="Nothing to show here."
+        desc="Check this space later to find out who's on top of our leaderboards"
+        image="/img/empty/15.svg"
+        v-else
       />
     </div>
   </base-layout>
