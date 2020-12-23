@@ -1,18 +1,30 @@
 <template>
-  <q-list padding>
-    <template v-for="(prop, idx) in items">
-      <q-item :key="`${idx}_item`" class="q-px-none">
-        <q-item-section side top>
-          <q-icon :name="prop.icon" size="28px" color="white" />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label class="text-left text-grey-5">
-            {{ prop.text }}
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-    </template>
-  </q-list>
+  <div>
+    <q-list padding>
+      <template v-for="(prop, idx) in items">
+        <q-item :key="`${idx}_item`" class="q-px-none">
+          <q-item-section side top>
+            <q-icon :name="prop.icon" size="28px" color="white" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-left text-grey-5">
+              {{ prop.text }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+    </q-list>
+    <div class="text-body1 q-my-sm">
+      <div>
+        <span class="text-primary q-mr-sm">Standard</span> {{ rs }} 399 per
+        submision
+      </div>
+      <div class="q-mt-sm">
+        <span class="text-primary q-mr-sm"> Premium</span> {{ rs }} 498 per
+        submision
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
