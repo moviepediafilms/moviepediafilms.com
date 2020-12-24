@@ -14,14 +14,12 @@
         </q-item>
       </template>
     </q-list>
-    <div class="text-body1 q-my-sm">
-      <div>
-        <span class="text-primary q-mr-sm">Standard</span> {{ rs }} 399 per
-        submision
+    <div class="text-body1 q-my-sm text-grey-5">
+      <div class="text-title text-grey-4 text-weight-bold">
+        {{ rs }} 399 per Standard Submision
       </div>
-      <div class="q-mt-sm">
-        <span class="text-primary q-mr-sm"> Premium</span> {{ rs }} 498 per
-        submision
+      <div class="q-mt-sm text-body2">
+        (if this one doesn't get featured, your next film submission is on us)
       </div>
     </div>
   </div>
