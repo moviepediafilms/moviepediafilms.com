@@ -53,7 +53,7 @@
             {{ my_profile.score }}
           </q-item-section>
           <q-item-section side style="min-width: 55px">
-            #{{ my_profile.rank }}
+            #{{ my_profile.creator_rank || my_profile.curator_rank }}
           </q-item-section>
         </q-item>
         <q-item
@@ -80,9 +80,7 @@
           <q-item-section side style="min-width: 55px">
             {{ user.score }}
           </q-item-section>
-          <q-item-section side style="min-width: 55px">
-            {{ user.rank == -1 ? "--" : `#${user.rank}` }}
-          </q-item-section>
+          <q-item-section side style="min-width: 55px"> -- </q-item-section>
         </q-item>
       </q-list>
     </transition>

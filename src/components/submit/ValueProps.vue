@@ -15,7 +15,7 @@
       </template>
     </q-list>
     <div class="text-body1 q-my-sm text-grey-5">
-      <div class="text-title text-grey-4 text-weight-bold">
+      <div class="text-title text-grey-4">
         {{ rs }} 399 per Standard Submision
       </div>
       <div class="q-mt-sm text-body2">

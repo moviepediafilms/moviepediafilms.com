@@ -35,7 +35,7 @@
           <div class="col-4 text-center">
             <q-btn flat stack @click="on_rank_clicked">
               <div class="text-uppercase text-h5 text-weight-bolder">
-                {{ get_rank() }}
+                {{ rank_txt }}
               </div>
               <div class="q-mt-xs text-uppercase text-sm">rank</div>
             </q-btn>
@@ -202,6 +202,12 @@ export default {
       watchlist: (state) => state.watchlist,
       my_recommends: (state) => state.recommends,
     }),
+    rank_txt() {
+      return "-";
+      // TODO: add it back when screening starts
+      //eslint-disable-next-line
+      return this.profile.curator_rank == -1 ? "-" : this.profile.curator_rank;
+    },
     engagement() {
       // 6000 is the max score we are aiming at, as of now
       var score = this.my_profile.engagement_score / 6000;
@@ -279,10 +285,6 @@ export default {
         5: "Patron",
       };
       return level_map[this.profile.level];
-    },
-    get_rank() {
-      if (this.profile.rank != -1) return this.profile.rank;
-      else return "-";
     },
     get_review_count() {
       //TODO: fetch top reviews that I have given to movies
