@@ -196,7 +196,10 @@ export default {
       return this.profile.id == this.my_profile.id;
     },
     rank_txt() {
-      return this.profile.rank == -1 ? "-" : this.profile.rank;
+      return "-";
+      // TODO: add it back when screening starts
+      //eslint-disable-next-line
+      return this.profile.creator_rank == -1 ? "-" : this.profile.creator_rank;
     },
     following_actions() {
       if (this.is_viewer_profile)
