@@ -412,7 +412,7 @@ export default {
         "nativeName": "te reo Māori"
     },
     "mr": {
-        "name": "Marathi (Marāṭhī)",
+        "name": "Marathi",
         "nativeName": "मराठी"
     },
     "mh": {
