@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
-    - run: npm run build
+    - run: npm run build-uat
     - run: |
         cd $GITHUB_WORKSPACE/dist
         tar -zcvf $GITHUB_WORKSPACE/dist.tar.gz .
