@@ -32,8 +32,8 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSHKEY }}
         debug: ${{ secrets.DEBUG }}
-        source: $GITHUB_WORKSPACE/$TAR_FILE
-        target: $TMP_FOLDER
+        source: "$GITHUB_WORKSPACE/$TAR_FILE"
+        target: "$TMP_FOLDER"
     - name: Extract tar on server
       uses: appleboy/ssh-action@v0.1.4
       with:
