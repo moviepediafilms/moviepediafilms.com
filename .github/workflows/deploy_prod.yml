@@ -5,10 +5,6 @@ on:
   workflow_dispatch:
 jobs:
   deploy:
-    env:
-      TMP_FOLDER: /tmp
-      DEST_DIR: /var/www/moviepediafilms.com
-      TAR_FILE: dist.tar.gz
     environment: prod
     runs-on: ubuntu-latest
     strategy:
@@ -24,7 +20,8 @@ jobs:
     - run: npm run build
     - run: |
         cd $GITHUB_WORKSPACE/dist
-        tar -zcvf $GITHUB_WORKSPACE/$TAR_FILE .
+        tar -zcvf $GITHUB_WORKSPACE/dist.tar.gz .
+    - run: ls -al $GITHUB_WORKSPACE
     - name: Copy tar to server
       uses: appleboy/scp-action@master
       with:
@@ -32,8 +29,8 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSHKEY }}
         debug: ${{ secrets.DEBUG }}
-        source: "$GITHUB_WORKSPACE/$TAR_FILE"
-        target: "$TMP_FOLDER"
+        source: "dist.tar.gz"
+        target: "/tmp/"
     - name: Extract tar on server
       uses: appleboy/ssh-action@v0.1.4
       with:
@@ -42,5 +39,7 @@ jobs:
         KEY: ${{ secrets.SSHKEY }}
         debug: ${{ secrets.DEBUG }}
         script: |
-          tar -zxvf $TMP_FOLDER/$TAR_FILE -C $DEST_DIR
+          ls -al /tmp
+          tar -zxvf /tmp/dist.tar.gz -C /var/www/moviepediafilms.com
+          rm /tmp/dist.tar.gz
         
