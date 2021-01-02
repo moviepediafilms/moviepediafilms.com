@@ -1,0 +1,45 @@
+name: Deploy On Production
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+jobs:
+  deploy:
+    env:
+      TMP_FOLDER: /tmp
+      DEST_DIR: /var/www/moviepediafilms.com
+      TAR_FILE: dist.tar.gz
+    environment: prod
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.11.0]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm run build
+    - run: |
+        cd $GITHUB_WORKSPACE/dist
+        tar -zcvf $GITHUB_WORKSPACE/$TAR_FILE .
+    - name: Copy tar to server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSHKEY }}
+        debug: ${{ secrets.DEBUG }}
+        source: $GITHUB_WORKSPACE/$TAR_FILE
+        target: $TMP_FOLDER
+    - name: Extract tar on server
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        KEY: ${{ secrets.SSHKEY }}
+        debug: ${{ secrets.DEBUG }}
+        script: |
+          tar -zxvf $TMP_FOLDER/$TAR_FILE -C $DEST_DIR
+        
