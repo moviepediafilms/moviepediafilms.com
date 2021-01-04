@@ -13,7 +13,8 @@ Vue.mixin({
             rs: '₹',
             google_api_key: 'AIzaSyD87LPfe433tiT7CDR_wdKnFIl4mc1sq24',
             website_title: "Moviepedia Films",
-            media_base: process.env.VUE_APP_MEDIA_BASE || ''
+            media_base: process.env.VUE_APP_MEDIA_BASE || '',
+            base_url: process.env.VUE_APP_BASE_URL || ''
         }
     },
     computed: {
