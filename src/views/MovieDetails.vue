@@ -28,7 +28,11 @@
               >
             </div>
             <div class="row justify-between no-wrap">
-              <div class="ellipsis text-grey-6 text-caption">
+              <div class="ellipsis text-grey-6 text-caption q-mt-xs">
+                <span class="q-mr-sm">
+                  <q-icon name="mdi-translate" class="q-mr-xs" />
+                  {{ movie.lang.name }}
+                </span>
                 <q-icon
                   name="mdi-tag"
                   class="q-mr-xs"
@@ -50,9 +54,10 @@
                   >
                 </template>
               </div>
-              <div class="text-grey-6 text-caption" v-if="movie_publish_date">
-                <q-icon name="mdi-projector-screen" />
-                {{ movie_publish_date }}
+
+              <div class="text-grey-6 text-caption">
+                <q-icon name="mdi-bullhorn" />
+                {{ movie.recommend_count }}
               </div>
             </div>
           </div>
@@ -392,7 +397,8 @@
                 <a
                   target="_blank"
                   :href="
-                    'https://facebook.com/sharer/sharer.php?u=https://moviepediafilms.com/%23' +
+                    'https://facebook.com/sharer/sharer.php?u=' +
+                    base_url +
                     $route.fullPath
                   "
                   class="text-decoration-off color-facebook q-mx-md"
@@ -402,7 +408,8 @@
                 <a
                   target="_blank"
                   :href="
-                    'https://twitter.com/intent/tweet?url=https://moviepediafilms.com/%23' +
+                    'https://twitter.com/intent/tweet?url=' +
+                    base_url +
                     $route.fullPath +
                     ' Check out this film I watched on Moviepedia. Absolutely loved it! 😍'
                   "
@@ -413,7 +420,8 @@
                 <a
                   target="_blank"
                   :href="
-                    'https://api.whatsapp.com/send?text=https://moviepediafilms.com/%23' +
+                    'https://api.whatsapp.com/send?text=' +
+                    base_url +
                     $route.fullPath +
                     ' Check out this film I watched on Moviepedia. Absolutely loved it! 😍'
                   "
@@ -601,7 +609,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "Home",
+      title: this.movie.title,
       meta: [
         {
           property: "og:title",
@@ -610,7 +618,7 @@ export default {
         },
         {
           property: "og:url",
-          content: "https://moviepediafilms.com/#" + this.$route.fullPath,
+          content: this.base_url + this.$route.fullPath,
           class: "next-head",
         },
         { property: "og:type", content: "video.movie", class: "next-head" },
@@ -648,6 +656,7 @@ export default {
   },
   data() {
     return {
+      meta_url: "laddu",
       frame_error: false,
       // my_lists: [{ name: "", id: 1, like_count: 0, owner: 0, movies: [0, 1] }],
       recommend_loading: false,

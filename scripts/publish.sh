@@ -35,7 +35,7 @@ merge() {
 }
 
 raise_pr() {
-    DATA="{\"base\": \"master\",
+    DATA="{\"base\": \"uat\",
        \"head\":\"${CURR_BRANCH}\",
        \"title\":\"${CURR_BRANCH}\",
        \"body\":\"PR raised by publish.sh\"}"
@@ -50,7 +50,7 @@ raise_pr() {
     else
         /usr/bin/jshon -e html_url -u <$TMP_RES
         echo 'PR Created successfully'
-        merge
+        # merge
     fi
 }
 
