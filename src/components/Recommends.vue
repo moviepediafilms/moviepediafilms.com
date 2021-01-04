@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="row">
-      <div class="col flex items-center justify-between">
+      <div
+        class="col flex items-center justify-between"
+        v-if="movies.length > 0"
+      >
         <q-btn-dropdown
           split
           rounded
