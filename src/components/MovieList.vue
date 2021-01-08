@@ -10,7 +10,7 @@
     </div>
     <div
       class="col flex items-center justify-between q-mt-md"
-      v-if="info.movies > 0"
+      v-if="info.movies_count > 0"
     >
       <q-btn-dropdown
         split
