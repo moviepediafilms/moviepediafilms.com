@@ -64,10 +64,17 @@
         @item-selected="on_select"
       />
     </div>
+    <q-dialog v-model="show_share_dialog">
+      <share-card
+        :url="base_url + `/list/${list_id}/${list_slug}`"
+        content="Check out these films I absolutely loved on Moviepedia Films ♥"
+      ></share-card>
+    </q-dialog>
   </div>
 </template>
 <script>
 import Movies from "@/components/Movies";
+import ShareCard from "@/components/ShareCard";
 import { list_service } from "@/services/";
 import _ from "lodash";
 import { LIST_TOGGLE_MOVIE_REQUEST } from "@/store/actions";
@@ -83,6 +90,7 @@ export default {
     },
   },
   components: {
+    ShareCard,
     Movies,
   },
   metaInfo: {
@@ -90,6 +98,7 @@ export default {
   },
   data() {
     return {
+      show_share_dialog: false,
       movies_per_fetch: 20,
       info: {
         liked_count: 0,
@@ -108,6 +117,9 @@ export default {
     };
   },
   computed: {
+    list_slug() {
+      return this.slugify(this.info.name);
+    },
     throttled_scroll_handler() {
       return _.throttle(this.scroll_handler, 300);
     },
@@ -208,8 +220,19 @@ export default {
     on_page_selected(page) {
       this.selected_page = page;
     },
-    on_liked() {},
-    on_share() {},
+    on_liked() {
+      list_service
+        .patch({}, this.list_id)
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    on_share() {
+      this.show_share_dialog = true;
+    },
   },
 };
 </script>
