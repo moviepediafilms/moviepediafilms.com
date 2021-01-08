@@ -71,7 +71,7 @@ export default {
     },
     emptyDesc: {
       type: String,
-      default: "No Reviews found!",
+      default: "No movies found!",
     },
     emptyIcon: {
       type: String,

@@ -121,7 +121,7 @@
             <watchlist :movies="watchlist"></watchlist>
           </q-tab-panel>
           <q-tab-panel name="recommends" class="q-px-none">
-            <recommends :movies="recommends"></recommends>
+            <movie-list :list_id="recommend_meta.id" :header="false" />
           </q-tab-panel>
           <q-tab-panel name="curations" class="q-px-none">
             <lists :lists="lists" @select="on_list_select" />
@@ -153,7 +153,7 @@
   </div>
 </template>
 <script>
-import Recommends from "@/components/Recommends";
+import MovieList from "@/components/MovieList";
 import Watchlist from "@/components/Watchlist";
 import ProfilePicture from "@/components/ProfilePicture";
 import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
@@ -178,7 +178,7 @@ export default {
     },
   },
   components: {
-    Recommends,
+    MovieList,
     Watchlist,
     ProfilePicture,
     ProfileTypeSwitch,
@@ -189,8 +189,7 @@ export default {
   data() {
     return {
       tab: "filmography",
-      // recommendation used when is_viewers_profile is false
-      their_recommends: [],
+      recommend_meta: {},
       lists: [],
       followers: [],
       following: [],
@@ -200,7 +199,6 @@ export default {
   computed: {
     ...mapState("profile", {
       watchlist: (state) => state.watchlist,
-      my_recommends: (state) => state.recommends,
     }),
     rank_txt() {
       return "-";
@@ -213,10 +211,6 @@ export default {
       var score = this.my_profile.engagement_score / 6000;
       // round up to 2 decimal places
       return Math.round((score + Number.EPSILON) * 100) / 100;
-    },
-    recommends() {
-      if (this.is_viewers_profile) return this.my_recommends;
-      else return this.their_recommends;
     },
     profile_is_filmmaker() {
       return this.is_filmmaker(this.profile);
@@ -291,9 +285,11 @@ export default {
       return "-";
     },
     get_recommends() {
-      profile_service.get({}, `${this.profile.id}/recommends`).then((data) => {
-        this.their_recommends.push(...data.results);
-      });
+      profile_service
+        .get({}, `${this.profile.id}/recommend-details`)
+        .then((data) => {
+          this.recommend_meta = data;
+        });
     },
     get_watchlist() {
       this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);

@@ -55,7 +55,6 @@ export default {
     },
   },
   created() {
-    console.log("created paginated creator");
     window.addEventListener("scroll", this.throttled_scroll_handler);
   },
   destroyed() {
