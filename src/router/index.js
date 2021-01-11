@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
-import Home from '../views/TempHome.vue'
+import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 Vue.use(VueMeta)
@@ -20,6 +20,11 @@ const routes = [
         path: '/',
         name: 'home',
         component: Home
+    }, {
+        path: '/welcome',
+        name: 'welcome',
+        component: () =>
+            import ('../views/Welcome.vue')
     },
     {
         path: '/login',
