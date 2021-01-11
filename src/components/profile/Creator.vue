@@ -121,7 +121,7 @@
             ></reviews
           ></q-tab-panel>
           <q-tab-panel name="filmography" class="q-px-none">
-            <filmography-list
+            <filmography
               :profile="profile"
               empty-title="Nothing to show here."
               empty-desc="<i>“Create your own visual style… let it be unique for yourself and yet identifiable to others.”</i><br/> – Orson Welles"
@@ -134,11 +134,11 @@
   </div>
 </template>
 <script>
-import ProfilePicture from "@/components/ProfilePicture";
-import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
+import ProfilePicture from "@/components/profile/Image";
+import ProfileTypeSwitch from "@/components/profile/Switch";
 import Reviews from "@/components/Reviews";
-import FollowUserList from "@/components/FollowUserList";
-import FilmographyList from "@/components/FilmographyList";
+import FollowUserList from "@/components/profile/follow/List";
+import Filmography from "@/components/profile/tabs/Filmography";
 import { review_service, follow_service } from "@/services";
 import {
   FOLLOW_REQUEST,
@@ -160,7 +160,7 @@ export default {
     ProfileTypeSwitch,
     Reviews,
     FollowUserList,
-    FilmographyList,
+    Filmography,
   },
   data() {
     return {

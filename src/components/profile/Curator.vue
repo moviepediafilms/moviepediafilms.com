@@ -105,7 +105,7 @@
             class="q-px-none"
             v-if="!profile_is_filmmaker && !hide_filmography"
           >
-            <filmography-list
+            <filmography
               :profile="profile"
               @empty="on_empty_filmography"
               empty-title="No association with any film on our platform"
@@ -121,10 +121,10 @@
             <watchlist :movies="watchlist"></watchlist>
           </q-tab-panel>
           <q-tab-panel name="recommends" class="q-px-none">
-            <movie-list :list_id="recommend_meta.id" :header="false" />
+            <curation-list :list_id="recommend_meta.id" :header="false" />
           </q-tab-panel>
           <q-tab-panel name="curations" class="q-px-none">
-            <lists :lists="lists" @select="on_list_select" />
+            <curations :lists="curations" @select="on_list_select" />
           </q-tab-panel>
           <q-tab-panel name="following" class="q-px-none">
             <follow-user-list
@@ -153,14 +153,14 @@
   </div>
 </template>
 <script>
-import MovieList from "@/components/MovieList";
-import Watchlist from "@/components/Watchlist";
-import ProfilePicture from "@/components/ProfilePicture";
-import ProfileTypeSwitch from "@/components/ProfileTypeSwitch";
-import FollowUserList from "@/components/FollowUserList";
-import FilmographyList from "@/components/FilmographyList";
-import Lists from "@/components/Lists";
-import { profile_service, follow_service, list_service } from "@/services";
+import CurationList from "@/components/CurationList";
+import Watchlist from "@/components/profile/tabs/Watchlist";
+import ProfilePicture from "@/components/profile/Image";
+import ProfileTypeSwitch from "@/components/profile/Switch";
+import FollowUserList from "@/components/profile/follow/List";
+import Filmography from "@/components/profile/tabs/Filmography";
+import Curations from "@/components/profile/tabs/Curations";
+import { profile_service, follow_service, curation_service } from "@/services";
 import {
   PROFILE_WATCHLIST_REQUEST,
   PROFILE_FOLLOW,
@@ -178,19 +178,19 @@ export default {
     },
   },
   components: {
-    MovieList,
+    CurationList,
     Watchlist,
     ProfilePicture,
     ProfileTypeSwitch,
-    Lists,
+    Curations,
     FollowUserList,
-    FilmographyList,
+    Filmography,
   },
   data() {
     return {
       tab: "filmography",
       recommend_meta: {},
-      lists: [],
+      curations: [],
       followers: [],
       following: [],
       hide_filmography: false,
@@ -267,7 +267,7 @@ export default {
         if (this.is_viewers_profile) this.get_watchlist();
         this.get_followers();
         this.get_following();
-        this.get_lists();
+        this.get_curations();
       }
     },
     get_level_name() {
@@ -306,9 +306,9 @@ export default {
         this.following.push(...data.results);
       });
     },
-    get_lists() {
-      list_service.get({ owner__id: this.profile.id }).then((data) => {
-        this.lists.push(...data.results);
+    get_curations() {
+      curation_service.get({ owner__id: this.profile.id }).then((data) => {
+        this.curations.push(...data.results);
       });
     },
     on_list_select(list) {
@@ -330,7 +330,12 @@ export default {
       this.$router.push({ name: "audience-leaderboard" });
     },
     on_reviews_clicked() {
-      this.$router.push({ name: "my-reviews" });
+      this.$router.push({
+        name: "reviews",
+        params: {
+          id: this.profile.id,
+        },
+      });
     },
   },
 };

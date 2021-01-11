@@ -48,10 +48,15 @@ export default {
     this.reviews.splice(0, 1);
     this.get_reviews();
   },
+  computed: {
+    profile_id() {
+      return this.$route.params.id;
+    },
+  },
   methods: {
     get_reviews() {
       review_service
-        .get({ author__id: this.my_profile.id })
+        .get({ author__id: this.profile_id })
         .then((res) => {
           this.reviews = res.results;
         })

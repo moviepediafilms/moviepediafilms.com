@@ -61,13 +61,13 @@ const routes = [
         path: '/list/:id/:slug/',
         name: 'list-detail',
         component: () =>
-            import ('../views/ListDetails.vue')
+            import ('../views/CurationListDetail.vue')
     },
     {
-        path: '/my-reviews/',
-        name: 'my-reviews',
+        path: '/reviews/:id/',
+        name: 'reviews',
         component: () =>
-            import ('../views/MyReviews.vue')
+            import ('../views/Reviews.vue')
     },
     {
         path: '/movies/:profile_id',

@@ -2,7 +2,7 @@
   <q-img
     :ratio="9 / 16"
     :src="`${media_base}${poster}`"
-    @click="$emit('click')"
+    @click.prevent="$emit('click')"
   >
     <div
       class="absolute-top-left text-center bg-primary q-pa-none"
@@ -13,6 +13,18 @@
           {{ state_txt }}
         </q-badge>
       </div>
+    </div>
+    <div
+      class="absolute-top-right bg-transparent"
+      style="padding: 0"
+      v-if="enableOptions"
+    >
+      <q-btn
+        round
+        flat
+        icon="mdi-dots-vertical"
+        @click.stop="$emit('showOptions')"
+      />
     </div>
     <template v-slot:error>
       <div
@@ -56,6 +68,10 @@ export default {
       default: "",
     },
     showState: {
+      type: Boolean,
+      default: false,
+    },
+    enableOptions: {
       type: Boolean,
       default: false,
     },

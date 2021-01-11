@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-import BarPlus from "@/components/style/BarPlus";
+import BarPlus from "@/components/animated/BarPlus";
 export default {
   components: {
     BarPlus,

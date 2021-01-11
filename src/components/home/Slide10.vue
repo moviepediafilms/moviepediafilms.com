@@ -47,8 +47,8 @@
   </div>
 </template>
 <script>
-import BarHammer from "@/components/style/BarHammer";
-import PlayX3Bar from "@/components/style/PlayX3Bar";
+import BarHammer from "@/components/animated/BarHammer";
+import PlayX3Bar from "@/components/animated/PlayX3Bar";
 export default {
   components: { BarHammer, PlayX3Bar },
   data() {

@@ -86,9 +86,9 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import ProfileAudience from "@/components/ProfileAudience";
-import ProfileFilmmaker from "@/components/ProfileFilmmaker";
-import ProfilePicture from "@/components/ProfilePicture";
+import ProfileAudience from "@/components/profile/Curator";
+import ProfileFilmmaker from "@/components/profile/Creator";
+import ProfilePicture from "@/components/profile/Image";
 import {
   PROFILE_WATCHLIST_REQUEST,
   PROFILE_RECOMMENDS_REQUEST,

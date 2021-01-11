@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import BarHammer from "@/components/style/BarHammer";
+import BarHammer from "@/components/animated/BarHammer";
 export default {
   components: {
     BarHammer,
