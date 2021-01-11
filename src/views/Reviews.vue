@@ -17,13 +17,13 @@ import BaseLayout from "@/layouts/Base";
 import Reviews from "@/components/Reviews";
 import { review_service } from "@/services";
 export default {
-  name: "my-review-page",
+  name: "reviews-page",
   components: {
     BaseLayout,
     Reviews,
   },
   metaInfo: {
-    title: "My Reviews",
+    title: "Reviews",
   },
   data() {
     return {
