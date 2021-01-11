@@ -10,7 +10,7 @@ import {
     LIST_TOGGLE_MOVIE_SUCCESS_,
     LIST_TOGGLE_MOVIE_ERROR_
 } from "@/store/actions";
-import { list_service } from "@/services";
+import { curation_service } from "@/services";
 import { Promise } from "core-js";
 const state = {
     loading: "",
@@ -26,7 +26,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             if (!state.loading) {
                 commit(REQUEST_);
-                list_service.get({ owner__id: user_id }).then(data => {
+                curation_service.get({ owner__id: user_id }).then(data => {
                     commit(SUCCESS_, data.results);
                     resolve(data.results)
                 }).catch(error => {
@@ -40,7 +40,7 @@ const actions = {
     },
     [CREATE_]: ({ commit }, new_list_data) => {
         return new Promise((resolve, reject) => {
-            list_service
+            curation_service
                 .post(new_list_data)
                 .then((new_list) => {
                     commit(CREATE_, new_list);
@@ -53,7 +53,7 @@ const actions = {
     },
     [DELETE_]: ({ commit }, list) => {
         return new Promise((resolve, reject) => {
-            list_service
+            curation_service
                 .delete(list.id)
                 .then(() => {
                     commit(DELETE_, list);
@@ -74,7 +74,7 @@ const actions = {
             else {
                 movies.splice(idx, 1)
             }
-            list_service.patch({ movies: movies }, list.id).then(data => {
+            curation_service.patch({ movies: movies }, list.id).then(data => {
                 commit(LIST_TOGGLE_MOVIE_SUCCESS_, data)
                 resolve(data)
             }).catch(error => {

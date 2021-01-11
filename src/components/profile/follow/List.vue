@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-list v-if="users.length > 0">
-      <follow-user-item
+      <follow-item
         :user="user"
         :actions="actions"
         v-for="user in users"
@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import FollowUserItem from "@/components/FollowUserItem";
+import FollowItem from "@/components/profile/follow/Item";
 export default {
   props: {
     emptyTitle: {
@@ -47,7 +47,7 @@ export default {
       },
     },
   },
-  components: { FollowUserItem },
+  components: { FollowItem },
   methods: {
     on_action(val) {
       this.$emit(val.action.emit, val.user);

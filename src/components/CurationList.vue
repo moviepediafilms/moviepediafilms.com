@@ -75,7 +75,7 @@
 <script>
 import Movies from "@/components/Movies";
 import ShareCard from "@/components/ShareCard";
-import { list_service } from "@/services/";
+import { curation_service } from "@/services/";
 import _ from "lodash";
 import { LIST_TOGGLE_MOVIE_REQUEST } from "@/store/actions";
 export default {
@@ -158,7 +158,7 @@ export default {
       }
     },
     fetch_list_info() {
-      list_service
+      curation_service
         .get({}, this.list_id)
         .then((data) => {
           this.info = data;
@@ -180,7 +180,7 @@ export default {
           offset: this.movies.length,
         };
         console.log(query_params);
-        list_service
+        curation_service
           .get(query_params, `${this.list_id}/movies`)
           .then((data) => {
             this.movies.push(...data.results);
@@ -221,7 +221,7 @@ export default {
       this.selected_page = page;
     },
     on_liked() {
-      list_service
+      curation_service
         .patch({}, this.list_id)
         .then((data) => {
           console.log(data);

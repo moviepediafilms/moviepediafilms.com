@@ -1,19 +1,18 @@
 <template>
   <base-layout>
     <div class="q-ma-md text-center">
-      <movie-list :list_id="list_id" />
+      <curation-list :list_id="list_id" />
     </div>
   </base-layout>
 </template>
 <script>
-// import momemt from "moment";
 import BaseLayout from "@/layouts/Base";
-import MovieList from "@/components/MovieList";
+import CurationList from "@/components/CurationList";
 export default {
   name: "list-detail-page",
   components: {
     BaseLayout,
-    MovieList,
+    CurationList,
   },
   computed: {
     list_id() {

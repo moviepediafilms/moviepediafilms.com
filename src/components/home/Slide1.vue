@@ -83,8 +83,8 @@
   </div>
 </template>
 <script>
-import BarPlus from "@/components/style/BarPlus";
-import PlayX3Bar from "@/components/style/PlayX3Bar";
+import BarPlus from "@/components/animated/BarPlus";
+import PlayX3Bar from "@/components/animated/PlayX3Bar";
 export default {
   components: {
     BarPlus,
