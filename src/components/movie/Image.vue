@@ -17,7 +17,7 @@
     <div
       class="absolute-top-right bg-transparent"
       style="padding: 0"
-      v-if="enableOptions"
+      v-if="menuBtn"
     >
       <q-btn
         round
@@ -71,7 +71,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    enableOptions: {
+    menuBtn: {
       type: Boolean,
       default: false,
     },

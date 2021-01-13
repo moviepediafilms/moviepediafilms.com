@@ -62,7 +62,6 @@
         :showMyRoles="false"
         :options="menu_options"
         @remove="on_remove"
-        @item-selected="on_select"
       />
     </div>
     <q-dialog v-model="show_share_dialog">
@@ -159,15 +158,17 @@ export default {
       }
     },
     fetch_list_info() {
-      curation_service
-        .get({}, this.list_id)
-        .then((data) => {
-          this.info = data;
-          this.selected_page = data.pages[0];
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (this.list_id)
+        curation_service
+          .get({}, this.list_id)
+          .then((data) => {
+            console.log(data);
+            this.info = data;
+            this.selected_page = data.pages[0];
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
     fetch_movies() {
       if (
@@ -211,12 +212,6 @@ export default {
             this.list.movies.splice(index, 1);
           });
         });
-    },
-    on_select(movie) {
-      this.$router.push({
-        name: "movie-detail",
-        params: { id: movie.id, slug: this.slugify(movie.title) },
-      });
     },
     on_page_selected(page) {
       this.selected_page = page;

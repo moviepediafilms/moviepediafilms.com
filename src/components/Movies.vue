@@ -7,9 +7,12 @@
         :key="movie.id"
       >
         <movie
+          :menuBtn="options.length >= 0"
+          :emitSelection="emitSelection"
           :showMyRoles="showMyRoles"
           :movie="movie"
-          :enableOptions="options.length >= 0"
+          @select="on_select(movie)"
+          @showOptions="on_show_options(movie)"
         />
       </div>
     </div>
@@ -37,6 +40,10 @@ export default {
     Movie,
   },
   props: {
+    emitSelection: {
+      type: Boolean,
+      default: false,
+    },
     showMyRoles: {
       type: Boolean,
       default: true,
@@ -77,15 +84,15 @@ export default {
     };
   },
   methods: {
-    on_item_click(item) {
-      this.$emit("item-selected", item);
-    },
-    on_menu_click(movie) {
-      this.active_movie = movie;
-      this.show_menu = true;
-    },
     on_option_select(option) {
       this.$emit(option.emit, this.active_movie);
+    },
+    on_select(movie) {
+      this.$emit("select", movie);
+    },
+    on_show_options(movie) {
+      this.active_movie = movie;
+      this.show_menu = true;
     },
   },
 };
