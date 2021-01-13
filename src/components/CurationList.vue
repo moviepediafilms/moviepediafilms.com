@@ -60,8 +60,7 @@
         ref="list"
         :movies="movies"
         :showMyRoles="false"
-        :options="menu_options"
-        @remove="on_remove"
+        :options="options"
       />
     </div>
     <q-dialog v-model="show_share_dialog">
@@ -77,10 +76,15 @@ import Movies from "@/components/Movies";
 import ShareCard from "@/components/ShareCard";
 import { curation_service } from "@/services/";
 import _ from "lodash";
-import { LIST_TOGGLE_MOVIE_REQUEST } from "@/store/actions";
 export default {
   name: "list-detail",
   props: {
+    options: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
     list_id: {
       type: Number,
     },
@@ -113,7 +117,6 @@ export default {
       selected_page: {},
       movies: [],
       max_movies_for_page: undefined,
-      menu_options: [{ name: "Remove", icon: "mdi-trash-can", emit: "remove" }],
     };
   },
   computed: {
@@ -192,26 +195,6 @@ export default {
             console.log(error);
           });
       }
-    },
-    on_remove(movie) {
-      this.$store
-        .dispatch(LIST_TOGGLE_MOVIE_REQUEST, {
-          list: { id: this.list.id, movies: this.movie_ids },
-          movie_id: movie.id,
-        })
-        .then((data) => {
-          // remove the movie from this.lists.movies
-          // Addition is handled automatically
-          var movies_to_remove = [];
-          this.list.movies.forEach((movie, index) => {
-            if (data.movies.indexOf(movie.id) == -1) {
-              movies_to_remove.push(index);
-            }
-          });
-          movies_to_remove.forEach((index) => {
-            this.list.movies.splice(index, 1);
-          });
-        });
     },
     on_page_selected(page) {
       this.selected_page = page;

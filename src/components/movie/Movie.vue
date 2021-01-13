@@ -6,6 +6,7 @@
       :state="movie.state"
       :poster="movie.poster"
       :show-state="is_my_profile"
+      :runtime="movie.runtime"
       @click="on_movie_select"
       @showOptions="$emit('showOptions')"
     />

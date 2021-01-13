@@ -7,7 +7,7 @@
         :key="movie.id"
       >
         <movie
-          :menuBtn="options.length >= 0"
+          :menuBtn="options.length > 0"
           :emitSelection="emitSelection"
           :showMyRoles="showMyRoles"
           :movie="movie"
