@@ -75,6 +75,8 @@
 import Movies from "@/components/Movies";
 import ShareCard from "@/components/ShareCard";
 import { curation_service } from "@/services/";
+import { PROFILE_TOGGLE_CURATION_LIKE } from "@/store/actions";
+import store from "@/store";
 import _ from "lodash";
 export default {
   name: "list-detail",
@@ -200,10 +202,11 @@ export default {
       this.selected_page = page;
     },
     on_liked() {
-      curation_service
-        .patch({}, this.list_id)
+      store
+        .dispatch(PROFILE_TOGGLE_CURATION_LIKE, this.list_id)
         .then((data) => {
           console.log(data);
+          this.info.like_count = data.like_count;
         })
         .catch((error) => {
           console.log(error);
