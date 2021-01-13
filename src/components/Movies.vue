@@ -3,13 +3,12 @@
     <div class="row q-col-gutter-sm" v-if="movies.length > 0">
       <div
         class="col-4 col-sm-3 col-md-3"
-        v-for="item in movies"
-        :key="item.id"
+        v-for="movie in movies"
+        :key="movie.id"
       >
         <movie
+          :showMyRoles="showMyRoles"
           :movie="movie"
-          v-for="movie in movies"
-          :key="movie.id"
           :enableOptions="options.length >= 0"
         />
       </div>
@@ -38,6 +37,10 @@ export default {
     Movie,
   },
   props: {
+    showMyRoles: {
+      type: Boolean,
+      default: true,
+    },
     emptyTitle: {
       type: String,
       default: "Nothing to show here",

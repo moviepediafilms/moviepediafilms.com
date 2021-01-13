@@ -59,6 +59,7 @@
       <movies
         ref="list"
         :movies="movies"
+        :showMyRoles="false"
         :options="menu_options"
         @remove="on_remove"
         @item-selected="on_select"
