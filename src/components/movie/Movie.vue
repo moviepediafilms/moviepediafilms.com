@@ -1,12 +1,12 @@
 <template>
   <q-card flat v-ripple>
     <movie-image
-      :enableOptions="enableOptions"
+      :menuBtn="menuBtn"
       :title="movie.title"
       :state="movie.state"
       :poster="movie.poster"
       :show-state="is_my_profile"
-      @click="$emit('click')"
+      @click="on_movie_select"
       @showOptions="$emit('showOptions')"
     />
 
@@ -36,11 +36,15 @@ export default {
     MovieImage,
   },
   props: {
+    emitSelection: {
+      type: Boolean,
+      default: false,
+    },
     showMyRoles: {
       type: Boolean,
       default: true,
     },
-    enableOptions: {
+    menuBtn: {
       type: Boolean,
       default: false,
     },
@@ -72,6 +76,18 @@ export default {
       return this.movie.crew.filter(
         (item) => item.profile_id == this.profile.id
       );
+    },
+  },
+  methods: {
+    on_movie_select() {
+      if (this.emitSelection) this.$emit("select");
+      else
+        this.$router.push({
+          name: "movie-detail",
+          params: {
+            id: this.movie.id,
+          },
+        });
     },
   },
 };

@@ -124,7 +124,7 @@
             <watchlist :movies="watchlist"></watchlist>
           </q-tab-panel>
           <q-tab-panel name="recommends" class="q-px-none">
-            <curation-list :list_id="recommend_meta.id" :header="false" />
+            <recommends :list_id="recommend_meta.id" />
           </q-tab-panel>
           <q-tab-panel name="curations" class="q-px-none">
             <curations :lists="curations" @select="on_list_select" />
@@ -156,7 +156,7 @@
   </div>
 </template>
 <script>
-import CurationList from "@/components/CurationList";
+import Recommends from "@/components/profile/tabs/Recommends";
 import Watchlist from "@/components/profile/tabs/Watchlist";
 import ProfilePicture from "@/components/profile/Image";
 import ProfileTypeSwitch from "@/components/profile/Switch";
@@ -182,7 +182,6 @@ export default {
     },
   },
   components: {
-    CurationList,
     Watchlist,
     ProfilePicture,
     ProfileTypeSwitch,
@@ -190,6 +189,7 @@ export default {
     FollowUserList,
     Filmography,
     FollowBtn,
+    Recommends,
   },
   data() {
     return {
