@@ -16,6 +16,9 @@
             @toggle="$emit('toggle')"
           />
         </div>
+        <div class="row justify-center q-mt-sm">
+          <follow-btn :profileId="profile.id"></follow-btn>
+        </div>
       </div>
     </div>
     <div class="row q-mt-md">
@@ -69,7 +72,7 @@
         class="text-overline text-uppercase"
         style="font-size: 9px; line-height: 1em"
       >
-        fund-ready meter
+        Fund-Ready Meter
       </div>
     </div>
     <div class="q-mt-md">
@@ -85,6 +88,7 @@
           mobile-arrows
         >
           <q-tab name="filmography" label="Filmography" />
+          <q-tab name="crew" label="Crew" />
           <q-tab name="followers" :label="followers.length + ' Followers'" />
           <q-tab name="following" :label="following.length + ' Following'" />
           <q-tab name="reviews" label="Reviews" />
@@ -101,6 +105,9 @@
               empty-desc="Start connecting and spread your love for cinema"
               empty-image="/img/empty/10.svg"
             />
+          </q-tab-panel>
+          <q-tab-panel name="followers" class="q-px-none">
+            <crew></crew>
           </q-tab-panel>
           <q-tab-panel name="following" class="q-px-none">
             <follow-user-list
@@ -139,6 +146,8 @@ import ProfileTypeSwitch from "@/components/profile/Switch";
 import Reviews from "@/components/Reviews";
 import FollowUserList from "@/components/profile/follow/List";
 import Filmography from "@/components/profile/tabs/Filmography";
+import Crew from "@/components/profile/tabs/Crew";
+import FollowBtn from "@/components/profile/FollowBtn";
 import { review_service, follow_service } from "@/services";
 import {
   FOLLOW_REQUEST,
@@ -161,6 +170,8 @@ export default {
     Reviews,
     FollowUserList,
     Filmography,
+    Crew,
+    FollowBtn,
   },
   data() {
     return {
@@ -196,9 +207,6 @@ export default {
       return this.profile.id == this.my_profile.id;
     },
     rank_txt() {
-      return "-";
-      // TODO: add it back when screening starts
-      //eslint-disable-next-line
       return this.profile.creator_rank == -1 ? "-" : this.profile.creator_rank;
     },
     following_actions() {
