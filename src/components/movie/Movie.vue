@@ -20,8 +20,8 @@
           {{ movie.score }}
         </div>
       </div>
-      <hr class="q-mx-sm" />
-      <div class="text-center">
+      <hr class="q-mx-sm" v-if="showMyRoles" />
+      <div class="text-center" v-if="showMyRoles && my_roles_txt">
         <span>
           {{ my_roles_txt }}
         </span>
@@ -36,6 +36,10 @@ export default {
     MovieImage,
   },
   props: {
+    showMyRoles: {
+      type: Boolean,
+      default: true,
+    },
     enableOptions: {
       type: Boolean,
       default: false,
