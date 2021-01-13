@@ -26,6 +26,13 @@
         @click.stop="$emit('showOptions')"
       />
     </div>
+    <div
+      class="absolute-bottom-right bg-transparent text-grey-4 q-mr-xs"
+      style="padding: 2px"
+      v-if="runtime_txt"
+    >
+      <q-icon name="mdi-play-circle-outline" class="q-mr-xs" />{{ runtime_txt }}
+    </div>
     <template v-slot:error>
       <div
         class="absolute-full column bg-primary text-dark"
@@ -75,8 +82,24 @@ export default {
       type: Boolean,
       default: false,
     },
+    runtime: {
+      type: [Number, String],
+      default: 0,
+    },
   },
   computed: {
+    runtime_txt() {
+      var hours = parseInt(this.runtime / 60);
+      var minutes = parseInt(this.runtime - hours * 60);
+
+      if (hours || minutes) {
+        if (hours < 10) hours = "0" + hours;
+        if (minutes < 10) minutes = "0" + minutes;
+        return `${hours}:${minutes}`;
+      }
+
+      return "";
+    },
     state_color() {
       return {
         C: "red-4",

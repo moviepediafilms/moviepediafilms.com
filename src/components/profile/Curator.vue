@@ -124,7 +124,7 @@
             <watchlist :movies="watchlist"></watchlist>
           </q-tab-panel>
           <q-tab-panel name="recommends" class="q-px-none">
-            <recommends :list_id="recommend_meta.id" />
+            <recommends :profile="profile" :list_id="recommend_meta.id" />
           </q-tab-panel>
           <q-tab-panel name="curations" class="q-px-none">
             <curations :lists="curations" @select="on_list_select" />
