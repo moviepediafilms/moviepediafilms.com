@@ -19,6 +19,9 @@
             @toggle="$emit('toggle')"
           />
         </div>
+        <div class="row justify-center q-mt-sm">
+          <follow-btn :profileId="profile.id"></follow-btn>
+        </div>
       </div>
     </div>
     <div class="row q-mt-md">
@@ -72,7 +75,7 @@
         class="text-overline text-uppercase"
         style="font-size: 9px; line-height: 1em"
       >
-        Engagement meter
+        Engagement Meter
       </div>
     </div>
     <div class="q-mt-md">
@@ -159,6 +162,7 @@ import ProfilePicture from "@/components/profile/Image";
 import ProfileTypeSwitch from "@/components/profile/Switch";
 import FollowUserList from "@/components/profile/follow/List";
 import Filmography from "@/components/profile/tabs/Filmography";
+import FollowBtn from "@/components/profile/FollowBtn";
 import Curations from "@/components/profile/tabs/Curations";
 import { profile_service, follow_service, curation_service } from "@/services";
 import {
@@ -185,6 +189,7 @@ export default {
     Curations,
     FollowUserList,
     Filmography,
+    FollowBtn,
   },
   data() {
     return {
@@ -201,9 +206,6 @@ export default {
       watchlist: (state) => state.watchlist,
     }),
     rank_txt() {
-      return "-";
-      // TODO: add it back when screening starts
-      //eslint-disable-next-line
       return this.profile.curator_rank == -1 ? "-" : this.profile.curator_rank;
     },
     engagement() {

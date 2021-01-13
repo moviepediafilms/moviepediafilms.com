@@ -47,7 +47,7 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import MovieImage from "@/components/movie/MovieImage";
+import MovieImage from "@/components/movie/Image";
 import { profile_service } from "@/services";
 export default {
   name: "judge-recommendations",

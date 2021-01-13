@@ -30,7 +30,7 @@
   </q-card>
 </template>
 <script>
-import MovieImage from "@/components/movie/MovieImage";
+import MovieImage from "@/components/movie/Image";
 export default {
   components: {
     MovieImage,
