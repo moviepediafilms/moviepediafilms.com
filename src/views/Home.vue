@@ -58,6 +58,25 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+      <div>
+        <q-input
+          outlined
+          bottom-slots
+          v-model="search_text"
+          label="Search"
+          :dense="true"
+        >
+          <template v-slot:append>
+            <q-icon
+              v-if="search_text !== ''"
+              name="mdi-close"
+              @click="search_text = ''"
+              class="cursor-pointer"
+            />
+            <q-icon name="mdi-magnify" />
+          </template>
+        </q-input>
+      </div>
       <div v-for="cat in categories" :key="cat.name">
         <div class="q-pb-sm row">
           <div class="text-lg">{{ cat.name }}</div>
@@ -88,6 +107,7 @@
 <script>
 import setting from "@/setting";
 import BaseLayout from "@/layouts/Base";
+import _ from "lodash";
 export default {
   name: "home-page",
   components: {
@@ -98,6 +118,7 @@ export default {
   },
   data() {
     return {
+      search_text: "",
       selected_filters: { time: [], genre: [], lang: [] },
       filters: {
         lang: [
@@ -149,7 +170,20 @@ export default {
       setting.removeActionBtn(btn);
     });
   },
+  computed: {
+    decounced_search() {
+      return _.debounce(this.do_search, 300);
+    },
+  },
+  watch: {
+    search_text() {
+      this.decounced_search();
+    },
+  },
   methods: {
+    do_search() {
+      console.log(this.search_text);
+    },
     detail_page(movie) {
       var movie_id = movie.id;
       movie_id = 1;
