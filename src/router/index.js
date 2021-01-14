@@ -135,12 +135,6 @@ const routes = [
             import ('../views/FilmmakerOfTheMonth.vue')
     },
     {
-        path: '/mdff-top',
-        name: 'mdff-top',
-        component: () =>
-            import ('../views/MDFFTop.vue')
-    },
-    {
         path: '/audience-leaderboard',
         name: 'audience-leaderboard',
         component: () =>
