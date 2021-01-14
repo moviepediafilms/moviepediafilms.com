@@ -117,22 +117,22 @@
                     </div>
                   </div>
                 </q-btn>
-                <q-btn
-                  size="sm"
-                  flat
-                  @click="on_add_to_list"
-                  :color="is_added_to_any_list ? 'primary' : 'default'"
-                >
+                <q-btn size="sm" flat :color="'default'">
+                  <!-- disabled feature -->
+                  <!-- @click="on_add_to_list" :color="is_added_to_any_list ? 'primary' : 'default'" -->
                   <div>
-                    <!-- is_added_to_any_list
-                          ? 'mdi-checkbox-multiple-marked'
-                          : 'mdi-check-box-multiple-outline' -->
                     <q-icon name="mdi-lock" />
+                    <!-- disabled feature -->
+                    <!-- name="is_added_to_any_list
+                          ? 'mdi-checkbox-multiple-marked'
+                          : 'mdi-check-box-multiple-outline'"" -->
                     <div
                       class="text-muted text-grey-6 q-mt-xs"
                       style="font-size: 8px"
                     >
-                      Curate<template v-if="is_added_to_any_list">d</template>
+                      Curate
+                      <!-- disabled feature -->
+                      <!-- <template v-if="is_added_to_any_list">d</template> -->
                     </div>
                   </div>
                 </q-btn>
@@ -250,7 +250,7 @@
                 </div>
               </div>
             </div>
-            <div class="row items-center q-mt-lg">
+            <div class="row items-center q-mt-lg" v-if="!has_rating_fixed">
               <div clss="col">
                 <q-icon size="48px" color="primary" name="mdi-emoticon-dead" />
               </div>
@@ -263,7 +263,7 @@
                   :step="1"
                   @input="change_rating"
                   @change="save_rate_review"
-                  :disabled="rating_loading"
+                  :disable="rating_loading"
                   snap
                   label-text-color="black"
                   label
@@ -615,7 +615,7 @@ export default {
   },
   data() {
     return {
-      meta_url: "laddu",
+      now: moment(),
       frame_error: false,
       // my_lists: [{ name: "", id: 1, like_count: 0, owner: 0, movies: [0, 1] }],
       recommend_loading: false,
@@ -625,6 +625,7 @@ export default {
         id: null,
         content: null,
         rating: null,
+        rated_at: null,
       },
       old_review_content: "",
       old_rating: null,
@@ -703,12 +704,26 @@ export default {
     is_authenticated() {
       // watch authentication state and reload the page if it changes
       if (!this.is_authenticated) {
-        this.my_rate_review = { id: null, content: null, rating: null };
+        this.my_rate_review = {
+          id: null,
+          content: null,
+          rating: null,
+          rated_at: null,
+        };
         this.load_data();
       }
     },
   },
   computed: {
+    has_rating_fixed() {
+      if (this.my_rate_review.rating) {
+        var freezet_at = moment(this.my_rate_review.rated_at).add(9, "seconds");
+        var res = this.now.isAfter(freezet_at);
+        if (res) clearInterval(this.update_now);
+        return res;
+      }
+      return false;
+    },
     is_movie_live() {
       return this.movie.state === "P";
     },
@@ -780,9 +795,11 @@ export default {
   },
   created() {
     window.addEventListener("scroll", this.throttled_scroll_handler);
+    setInterval(this.update_now, 2000);
   },
   destroyed() {
     window.removeEventListener("scroll", this.throttled_scroll_handler);
+    clearInterval(this.update_now);
   },
   mounted() {
     // one dummy object were created in the list for future objects in list to become reactive
@@ -791,6 +808,9 @@ export default {
     this.load_data();
   },
   methods: {
+    update_now() {
+      this.now = moment();
+    },
     scroll_handler() {
       if (this.$refs.reviews) {
         var list = this.$refs.reviews;
@@ -941,9 +961,12 @@ export default {
         })
         .then((data) => {
           this.rating_loading = false;
+          this.show_review_dialog = false;
           this.my_rate_review.id = data.id;
           this.my_rate_review.content = data.content;
           this.my_rate_review.rating = data.rating;
+          this.my_rate_review.rated_at = data.rated_at;
+          if (data.content) this.reviews.splice(0,0, data);
         })
         .catch((error) => {
           console.log(error);
@@ -965,7 +988,18 @@ export default {
           this.rating_loading = false;
           this.my_rate_review.content = data.content;
           this.my_rate_review.rating = data.rating;
-          this.$refs.review_dialog.hide();
+          this.my_rate_review.rated_at = data.rated_at;
+          this.show_review_dialog = false;
+          if (data.content) {
+            // if content has some text replace/ add it to the reviews
+            var index_to_replace = -1;
+            this.reviews.forEach((review, index) => {
+              if (data.id == review.id) index_to_replace = index;
+            });
+            if (index_to_replace != -1)
+              this.$set(this.reviews, index_to_replace, data);
+            else this.reviews.splice(0, 0, data);
+          }
         })
         .catch((error) => {
           console.log(error);
