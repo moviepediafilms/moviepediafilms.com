@@ -278,7 +278,7 @@
                 />
               </div>
             </div>
-            <div class="text-center text-grey-6">
+            <div class="text-center text-grey-6 q-mt-md">
               <template v-if="my_rate_review.rating != null">
                 You rated {{ my_rate_review.rating }} / 10
               </template>
