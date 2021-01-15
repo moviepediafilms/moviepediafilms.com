@@ -140,7 +140,7 @@ export default {
     SelectPackage,
   },
   metaInfo: {
-    title: "Submit",
+    title: "Submit Movie",
   },
   data() {
     return {

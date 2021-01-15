@@ -114,7 +114,7 @@ const routes = [
         path: '/submit/:movie_id?',
         name: 'submit',
         component: () =>
-            import ('../views/Submission.vue')
+            import ('../views/SubmitMovie.vue')
     },
     {
         path: '/my-submissions',

@@ -43,6 +43,9 @@
 import { account_service } from "@/services";
 import BaseLayout from "@/layouts/Base";
 export default {
+  metaInfo: {
+    title: "Reset Password",
+  },
   components: { BaseLayout },
   data() {
     return {

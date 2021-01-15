@@ -7,6 +7,9 @@
 <script>
 import BaseLayout from "@/layouts/Base";
 export default {
+  metaInfo: {
+    title: "Movies",
+  },
   components: {
     BaseLayout,
   },

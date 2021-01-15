@@ -42,7 +42,7 @@ export default {
     Leaderboard,
   },
   metaInfo: {
-    title: "Audience Leaderboard",
+    title: "Creators Leaderboard",
   },
   data() {
     return {

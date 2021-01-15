@@ -191,6 +191,9 @@
 <script>
 import BaseLayout from "@/layouts/Base";
 export default {
+  metaInfo: {
+    title: "Rules & Regulations",
+  },
   components: {
     BaseLayout,
   },

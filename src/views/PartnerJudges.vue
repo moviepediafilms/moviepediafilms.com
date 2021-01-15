@@ -54,6 +54,9 @@ import { profile_service } from "@/services";
 
 export default {
   name: "partner-judges",
+  metaInfo: {
+    title: "Partner Judges",
+  },
   components: {
     BaseLayout,
   },
