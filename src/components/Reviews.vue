@@ -2,7 +2,29 @@
   <div>
     <q-list padding separator v-if="reviews.length > 0">
       <q-item v-for="review in reviews" :key="review.id">
+        <q-item-section
+          avatar
+          top
+          v-if="showUser"
+          @click="
+            $router.push({ name: 'profile', params: { id: review.author.id } })
+          "
+        >
+          <q-avatar>
+            <img
+              :src="review.author.image || '/default_avatar.png'"
+              @error="on_user_img_error"
+            />
+          </q-avatar>
+        </q-item-section>
         <q-item-section>
+          <q-item-label v-if="showUser">
+            <router-link
+              class="text-primary text-decoration-none"
+              :to="{ name: 'profile', params: { id: review.author.id } }"
+              >{{ review.author.name }}</router-link
+            >
+          </q-item-label>
           <q-item-label caption align="left" v-if="showMovieLink">
             <router-link
               class="text-primary text-decoration-none"
@@ -62,6 +84,10 @@
 <script>
 export default {
   props: {
+    showUser: {
+      type: Boolean,
+      default: false,
+    },
     showMovieLink: {
       type: Boolean,
       default: true,
