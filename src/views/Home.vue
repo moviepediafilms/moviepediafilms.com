@@ -240,13 +240,13 @@ export default {
 
       this.categories = [
         {
-          name: "Today's Releases",
+          name: "New Releases",
           height: 150,
           width: 100,
           items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
         },
         {
-          name: "Celeb Recommends",
+          name: "Celebrity Curators",
           height: 100,
           width: 150,
           items: [
@@ -269,13 +269,25 @@ export default {
           ],
         },
         {
-          name: "Trending This Week",
+          name: "January Releases",
           height: 150,
           width: 100,
           items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
         },
         {
-          name: "Award Winning Shorts",
+          name: "More Recomended Films",
+          height: 150,
+          width: 100,
+          items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
+        },
+        {
+          name: "Thrill Films",
+          height: 150,
+          width: 100,
+          items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
+        },
+        {
+          name: "Drama Films",
           height: 150,
           width: 100,
           items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
