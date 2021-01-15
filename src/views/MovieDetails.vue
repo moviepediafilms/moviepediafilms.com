@@ -336,6 +336,7 @@
                 </div>
                 <div ref="reviews">
                   <reviews
+                    :show-user="true"
                     :reviews="loaded_reviews"
                     :show-movie-link="false"
                     v-on:toggle-like="toggle_like"
@@ -966,7 +967,7 @@ export default {
           this.my_rate_review.content = data.content;
           this.my_rate_review.rating = data.rating;
           this.my_rate_review.rated_at = data.rated_at;
-          if (data.content) this.reviews.splice(0,0, data);
+          if (data.content) this.reviews.splice(0, 0, data);
         })
         .catch((error) => {
           console.log(error);
