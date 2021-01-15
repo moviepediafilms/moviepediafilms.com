@@ -51,6 +51,9 @@ import MovieImage from "@/components/movie/Image";
 import { profile_service } from "@/services";
 export default {
   name: "judge-recommendations",
+  metaInfo: {
+    title: "Recommended Movies",
+  },
   components: {
     BaseLayout,
     MovieImage,
