@@ -1,3 +1,4 @@
+// List all movies under a curation (MovieList)
 <template>
   <div>
     <div v-if="header">
@@ -8,35 +9,11 @@
         <small class="text-grey-4">by {{ info.owner.name }}</small>
       </h3>
     </div>
-    <div
-      class="col flex items-center justify-between q-mt-md"
-      v-if="info.movies_count > 0"
-    >
-      <q-btn-dropdown
-        split
-        rounded
-        size="sm"
-        padding="sm"
-        color="primary"
-        text-color="dark"
-        :label="selected_page_txt"
-      >
-        <q-list>
-          <q-item
-            clickable
-            v-close-popup
-            v-for="(page, index) in info.pages"
-            :key="index"
-            @click="on_page_selected(page)"
-          >
-            <q-item-section>
-              <q-item-label>{{
-                `${page.pub_year}-${page.pub_month}`
-              }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-btn-dropdown>
+    <div class="col flex items-center justify-between q-mt-md">
+      <!-- pages are added to use them from the parent component as contests, to keep the actions on same line -->
+      <slot>
+        <div></div>
+      </slot>
       <div class="text-right">
         <div style="display: inline-block" class="q-mx-md text-grey-5">
           {{ info.like_count }}
@@ -114,9 +91,7 @@ export default {
           image: "",
         },
         name: "",
-        pages: [],
       },
-      selected_page: {},
       movies: [],
       max_movies_for_page: undefined,
     };
@@ -128,18 +103,12 @@ export default {
     throttled_scroll_handler() {
       return _.throttle(this.scroll_handler, 300);
     },
-    selected_page_txt() {
-      return `${this.selected_page.pub_year}-${this.selected_page.pub_month}`;
-    },
   },
   watch: {
     list_id() {
-      this.fetch_list_info();
-    },
-    selected_page() {
-      this.max_movies_for_page = undefined;
       this.movies.splice(0, this.movies.length);
-      this.fetch_movies();
+      this.max_movies_for_page = undefined;
+      this.fetch_list_info();
     },
   },
   mounted() {
@@ -167,9 +136,8 @@ export default {
         curation_service
           .get({}, this.list_id)
           .then((data) => {
-            console.log(data);
             this.info = data;
-            this.selected_page = data.pages[0];
+            this.fetch_movies();
           })
           .catch((error) => {
             console.log(error);
@@ -181,12 +149,9 @@ export default {
         this.movies.length < this.max_movies_for_page
       ) {
         var query_params = {
-          year: this.selected_page.pub_year,
-          month: this.selected_page.pub_month,
           limit: this.movies_per_fetch,
           offset: this.movies.length,
         };
-        console.log(query_params);
         curation_service
           .get(query_params, `${this.list_id}/movies`)
           .then((data) => {
@@ -197,9 +162,6 @@ export default {
             console.log(error);
           });
       }
-    },
-    on_page_selected(page) {
-      this.selected_page = page;
     },
     on_liked() {
       store
