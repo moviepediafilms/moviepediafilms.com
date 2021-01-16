@@ -87,6 +87,7 @@ export default {
           name: "movie-detail",
           params: {
             id: this.movie.id,
+            slug: this.slugify(this.movie.title),
           },
         });
     },

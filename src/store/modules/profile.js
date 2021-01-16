@@ -194,9 +194,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             var liked = state.curations_liked.indexOf(list_id) != -1
             var verb = liked ? 'delete' : 'post'
-            var args = liked ? [] : [{}]
-            args.push(`${list_id}/like`)
-            curation_service[verb](...args).then(data => {
+            curation_service[verb]({}, `${list_id}/like`).then(data => {
                 if (data.success) {
                     commit(PROFILE_TOGGLE_CURATION_LIKE_, list_id)
                     resolve(data)
