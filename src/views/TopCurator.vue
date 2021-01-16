@@ -68,7 +68,7 @@ export default {
   methods: {
     load_live_monthly_contests() {
       contest_service
-        .get({ ordering: "start", is_live: "true", type__name: "Monthly" })
+        .get({ ordering: "start", live: "true", type__name: "Monthly" })
         .then((data) => {
           console.log(data);
           this.contests.push(...data.results);

@@ -64,9 +64,9 @@ class BaseService {
             return Promise.reject(error)
         })
     }
-    delete(url_suffix) {
+    delete(payload, url_suffix) {
         url_suffix = url_suffix ? `${url_suffix}/` : ''
-        return backend.delete(this.url + url_suffix).then(response => {
+        return backend.delete(this.url + url_suffix, { data: payload }).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
             this._handle_token_error(error)

@@ -1,31 +1,31 @@
 <template>
   <base-layout>
     <div v-swipe="swipe" ref="content">
-      <div class="q-pa-xs" v-if="is_movie_live">
+      <div class="q-pa-xs" v-if="is_movie_published">
         <q-responsive :ratio="16 / 9" class="col">
           <iframe :src="movie.link" frameborder="0" allowfullscreen />
         </q-responsive>
       </div>
       <div class="q-px-md q-pb-md">
-        <div class="row" v-if="is_movie_live">
+        <div class="row" v-if="is_movie_published">
           <div class="col-12">
             <div class="text-h3 text-primary q-mt-sm">
               {{ movie.title }}
             </div>
             <div class="row">
-              <q-badge
-                v-if="movie.contest && movie.contest.is_live"
-                color="positive"
-                class="q-mr-xs"
+              <q-badge v-if="movie.is_live" color="positive" class="q-mr-xs"
                 >Live</q-badge
               >
-              <q-badge
-                v-if="movie.contest"
-                color="grey-5"
-                text-color="dark"
-                class="q-mr-xs"
-                >{{ movie.contest.name }}</q-badge
-              >
+              <div v-if="movie.contests.length > 0" class="q-my-xs">
+                <q-badge
+                  v-for="(contest, index) in movie.contests"
+                  :key="index"
+                  color="grey-5"
+                  text-color="dark"
+                  class="q-mr-xs"
+                  >{{ contest.name }}</q-badge
+                >
+              </div>
             </div>
             <div class="row justify-between no-wrap">
               <div class="ellipsis text-grey-6 text-caption q-mt-xs">
@@ -512,9 +512,7 @@
         </q-dialog>
         <q-dialog v-model="show_request_created_dialog">
           <q-card style="width: 700px; max-width: 80vw">
-            <q-card-section class="text-center text-h6 text-primary">
-              Request Successfully Created</q-card-section
-            >
+            <q-card-section title>Request Successfully Created</q-card-section>
             <q-card-section class="q-pt-none text-center">
               <q-icon name="mdi-check" class="text-positive" size="30px" />
               <div class="text-body">
@@ -524,6 +522,63 @@
 
             <q-card-actions align="right" class="text-primary">
               <q-btn flat label="OK" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+        <q-dialog v-model="show_recommend_for_dialog">
+          <q-card style="width: 700px; max-width: 80vw">
+            <q-card-section title class="text-primary text-h4"
+              >Recommend this Film for</q-card-section
+            >
+            <q-card-section class="">
+              <q-list bordered separator class="rounded-borders text-primary">
+                <q-item v-for="(contest, index) in movie.contests" :key="index">
+                  <q-item-section>
+                    <q-item-label lines="1" class="text-primary">{{
+                      contest.name
+                    }}</q-item-label>
+                    <q-item-label caption
+                      >ends {{ get_relative_time(contest.end) }}</q-item-label
+                    >
+                  </q-item-section>
+                  <q-item-section side class="text-center">
+                    <q-btn
+                      icon="mdi-bullhorn"
+                      :color="
+                        is_recommended_in(contest) ? 'primary' : 'default'
+                      "
+                      flat
+                      text-primary
+                      size="sm"
+                      @click="recommend_in_contest(contest)"
+                    />
+                  </q-item-section>
+                </q-item>
+                <q-item>
+                  <q-item-section>
+                    <q-item-label lines="1" class="text-primary"
+                      >My Recommendations</q-item-label
+                    >
+                    <q-item-label caption
+                      >Your personal recommend list</q-item-label
+                    >
+                  </q-item-section>
+                  <q-item-section side class="text-center">
+                    <q-btn
+                      icon="mdi-bullhorn"
+                      :color="movie.is_recommended ? 'primary' : 'default'"
+                      flat
+                      text-primary
+                      size="sm"
+                      @click="recommend_in_personal"
+                    />
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-card-actions align="right" class="text-primary">
+              <q-btn flat label="close" v-close-popup />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -544,6 +599,7 @@ import {
   review_service,
   review_like_service,
   crew_request_service,
+  contest_service,
 } from "@/services";
 import {
   LIST_CREATE,
@@ -616,7 +672,9 @@ export default {
   },
   data() {
     return {
+      interval: undefined,
       now: moment(),
+
       frame_error: false,
       // my_lists: [{ name: "", id: 1, like_count: 0, owner: 0, movies: [0, 1] }],
       recommend_loading: false,
@@ -635,6 +693,7 @@ export default {
       show_list_dialog: false,
       show_crew_dialog: false,
       show_add_list_dialog: false,
+      show_recommend_for_dialog: false,
       show_request_created_dialog: false,
       show_request_created_message:
         "Your request is sent to the director for approval.",
@@ -670,7 +729,11 @@ export default {
       movie: {
         id: null,
         state: null,
-        contest: {},
+        contests: [
+          {
+            recommended_movies: [{ id: undefined }],
+          },
+        ],
         audience_rating: 0,
         jury_rating: 0,
         genre: [],
@@ -680,6 +743,7 @@ export default {
         link: "",
         poster: "",
         published_at: "",
+        // is the movie is present in requestor's personal recommend list
         is_recommended: false,
         is_watchlisted: false,
       },
@@ -720,12 +784,17 @@ export default {
       if (this.my_rate_review.rating) {
         var freezet_at = moment(this.my_rate_review.rated_at).add(9, "seconds");
         var res = this.now.isAfter(freezet_at);
-        if (res) clearInterval(this.update_now);
+        if (res) clearInterval(this.interval);
         return res;
       }
       return false;
     },
-    is_movie_live() {
+    has_live_contest() {
+      // backend only returns live contests
+      return this.movie.contests.length > 0;
+    },
+    is_movie_published() {
+      // A movie can be live even without being part of any contest
       return this.movie.state === "P";
     },
     loaded_reviews() {
@@ -767,7 +836,13 @@ export default {
       return this.movie.is_watchlisted;
     },
     recommended() {
-      return this.movie.is_recommended;
+      var recommended = false;
+      this.movie.contests.forEach((contest) => {
+        contest.recommended_movies.forEach((movie) => {
+          if (this.movie.id === movie.id) recommended = true;
+        });
+      });
+      return recommended || this.movie.is_recommended;
     },
     review_page_size() {
       return parseInt(process.env.VUE_APP_REVIEW_PAGE_SIZE);
@@ -796,11 +871,13 @@ export default {
   },
   created() {
     window.addEventListener("scroll", this.throttled_scroll_handler);
-    setInterval(this.update_now, 2000);
+    this.interval = setInterval(() => {
+      this.update_now();
+    }, 2000);
   },
   destroyed() {
     window.removeEventListener("scroll", this.throttled_scroll_handler);
-    clearInterval(this.update_now);
+    clearInterval(this.interval);
   },
   mounted() {
     // one dummy object were created in the list for future objects in list to become reactive
@@ -809,6 +886,16 @@ export default {
     this.load_data();
   },
   methods: {
+    is_recommended_in(contest) {
+      var has_recommended = false;
+      contest.recommended_movies.forEach((movie) => {
+        if (this.movie.id == movie.id) has_recommended = true;
+      });
+      return has_recommended;
+    },
+    get_relative_time(date) {
+      return moment(date).fromNow();
+    },
     update_now() {
       this.now = moment();
     },
@@ -1014,7 +1101,7 @@ export default {
         return;
       }
       if (this.if_i_liked(review.liked_by)) {
-        review_like_service.delete(review.id).then((data) => {
+        review_like_service.delete({}, review.id).then((data) => {
           if (data.success) {
             var to_remove = null;
             review.liked_by.forEach((item, index) => {
@@ -1098,13 +1185,53 @@ export default {
         this.login_required_msg = "Login required to recommend a movie";
         return;
       }
+      if (this.movie.contests.length > 0) {
+        this.show_recommend_for_dialog = true;
+      } else {
+        this.recommend_in_personal();
+      }
+    },
+    recommend_in_contest(contest) {
+      var action = this.is_recommended_in(contest) ? "delete" : "post";
+      contest_service[action](
+        { movie: this.movie.id },
+        `${contest.id}/recommend`
+      )
+        .then((data) => {
+          this.$q.notify({
+            icon: "mdi-check",
+            message:
+              action == "post"
+                ? "Recommendation done "
+                : "Recommendation undone",
+            color: "positive",
+            caption: `You have recommended ${data.recommended}/${data.max_recommends} Films for ${data.name}`,
+          });
+
+          var index = -1;
+          contest.recommended_movies.forEach((movie, idx) => {
+            if (this.movie.id == movie.id) {
+              index = idx;
+            }
+          });
+          if (index == -1) {
+            // add
+            contest.recommended_movies.push({ id: this.movie.id });
+          } else {
+            // remove
+            contest.recommended_movies.splice(index, 1);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    recommend_in_personal() {
       this.recommend_loading = true;
       this.$store
         .dispatch(PROFILE_TOGGLE_RECOMMEND, this.movie)
-        .then((data) => {
-          if (data.success) {
-            this.movie.is_recommended = !this.movie.is_recommended;
-          }
+        .then(() => {
+          this.movie.is_recommended = !this.movie.is_recommended;
           this.recommend_loading = false;
         })
         .catch((error) => {

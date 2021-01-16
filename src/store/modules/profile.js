@@ -26,7 +26,6 @@ import {
     my_watchlist_service,
     my_recommends_service,
     watchlist_service,
-    recommend_service,
     curation_service
 } from "@/services";
 
@@ -122,7 +121,7 @@ const actions = {
     },
     [PROFILE_REMOVE_WATCHLIST_]: ({ commit }, movie) => {
         return new Promise((resolve, reject) => {
-            watchlist_service.delete(movie.id)
+            watchlist_service.delete({}, movie.id)
                 .then((data) => {
                     if (data.success)
                         commit(PROFILE_TOGGLE_WATCHLIST_, movie)
@@ -150,10 +149,9 @@ const actions = {
     },
     [PROFILE_REMOVE_RECOMMEND_]: ({ commit }, movie) => {
         return new Promise((resolve, reject) => {
-            recommend_service.delete(movie.id)
+            profile_service.delete({ movie: movie.id }, `${state.profile.id}/recommends`)
                 .then((data) => {
-                    if (data.success)
-                        commit(PROFILE_TOGGLE_RECOMMEND_, movie)
+                    commit(PROFILE_TOGGLE_RECOMMEND_, movie)
                     resolve(data)
                 })
                 .catch((error) => {
@@ -163,12 +161,11 @@ const actions = {
     },
     [PROFILE_TOGGLE_RECOMMEND_]: ({ commit }, movie) => {
         return new Promise((resolve, reject) => {
-            var fn_name = movie.is_recommended ? "delete" : "patch"
-            var params = movie.is_recommended ? [movie.id] : [{}, movie.id]
-            recommend_service[fn_name](...params)
+            var fn_name = movie.is_recommended ? "delete" : "post"
+            profile_service[fn_name]({ movie: movie.id }, `${state.profile.id}/recommends`)
                 .then((data) => {
-                    if (data.success)
-                        commit(PROFILE_TOGGLE_RECOMMEND_, movie)
+                    console.log(data)
+                    commit(PROFILE_TOGGLE_RECOMMEND_, movie)
                     resolve(data)
                 })
                 .catch((error) => {
