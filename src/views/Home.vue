@@ -77,47 +77,57 @@
           </template>
         </q-input>
       </div>
-      <div v-for="cat in categories" :key="cat.name">
-        <div class="q-pb-sm row">
-          <div class="text-lg">{{ cat.name }}</div>
-        </div>
-        <q-scroll-area
-          :thumb-style="thumbStyle"
-          horizontal
-          visible
-          :style="`height: ${cat.height + 10}px`"
-          class="q-mb-md"
-        >
-          <div class="q-pr-md row no-wrap">
-            <q-card
-              class="my-card q-mr-sm"
-              :style="`width: ${cat.width}px`"
-              v-for="item in cat.items"
-              :key="item.id"
-              @click.prevent="detail_page(item)"
-            >
-              <img :src="item.image" />
-            </q-card>
-          </div>
-        </q-scroll-area>
-      </div>
+      <new-releases />
+      <celebrity-curators />
+
+      <template v-for="(contest, index) in live_contests">
+        <contest-releases :contest="contest" :key="`contest_${index}`" />
+      </template>
+
+      <most-recommended />
+
+      <template v-for="(mp_genre, index) in live_mp_genres">
+        <mp-genre-movies :mp-genre="mp_genre" :key="`mpgenre_${index}`" />
+      </template>
     </div>
   </base-layout>
 </template>
 <script>
 import setting from "@/setting";
 import BaseLayout from "@/layouts/Base";
+import CelebrityCurators from "@/components/home/CelebrityCurators";
+import NewReleases from "@/components/home/NewReleases";
+import ContestReleases from "@/components/home/ContestReleases";
+import MpGenreMovies from "@/components/home/MpGenreMovies";
+import MostRecommended from "@/components/home/MostRecommended";
+
 import _ from "lodash";
 export default {
   name: "home-page",
   components: {
     BaseLayout,
+    NewReleases,
+    ContestReleases,
+    CelebrityCurators,
+    MpGenreMovies,
+    MostRecommended,
   },
   metaInfo: {
     title: "Home",
   },
   data() {
     return {
+      thumbStyle: {
+        right: "2px",
+        borderRadius: "1px",
+        backgroundColor: "#f7cd23",
+        opacity: 0.75,
+        height: "2px",
+      },
+      dimen: {
+        height: 225,
+        width: 110,
+      },
       search_text: "",
       selected_filters: { time: [], genre: [], lang: [] },
       filters: {
@@ -149,21 +159,41 @@ export default {
         },
       ],
       slide: "",
-      thumbStyle: {
-        right: "2px",
-        borderRadius: "1px",
-        backgroundColor: "#f7cd23",
-        opacity: 0.75,
-        height: "2px",
-      },
       categories: [],
+
+      live_contests: [],
+      live_mp_genres: [],
     };
   },
   mounted() {
     this.action_btns.forEach((btn) => {
       setting.addActionBtn(btn);
     });
-    this.initial_fetch_categories();
+    this.live_contests = [
+      {
+        name: "January",
+        id: 1,
+      },
+      {
+        name: "February",
+        id: 2,
+      },
+    ];
+    this.most_recommended_movies = this.get_rand_movie_items(
+      10,
+      "port",
+      "w_200,h_300"
+    );
+    this.live_mp_genres = [
+      {
+        id: 1,
+        name: "Mind Bending",
+      },
+      {
+        id: 2,
+        name: "Time Travel",
+      },
+    ];
   },
   beforeDestroy() {
     this.action_btns.forEach((btn) => {
@@ -200,6 +230,8 @@ export default {
       this.selected_filters.genre.splice(0, this.selected_filters.genre.length);
       this.selected_filters.lang.splice(0, this.selected_filters.lang.length);
     },
+
+    // random movie generator methods
     get_rand_poster(num, orientation, trans_query) {
       // num => int: 5, 10
       // orientation => string: 'port' or 'land'
@@ -229,70 +261,10 @@ export default {
         items.push({
           id: i,
           title: "30 Days of Existence | A Moviepedia Short Film on Depression",
-          image: url,
+          poster: url,
         });
       });
       return items;
-    },
-    initial_fetch_categories() {
-      var cel_thumb_dimen = "w_260,h_180";
-      // var thumb_dimen = "w_200,h_300";
-
-      this.categories = [
-        {
-          name: "New Releases",
-          height: 150,
-          width: 100,
-          items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
-        },
-        {
-          name: "Celebrity Curators",
-          height: 100,
-          width: 150,
-          items: [
-            {
-              id: 1,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${cel_thumb_dimen}/v1600785908/judges_thumbs/20200922_201207_0000_t2rtbd.png`,
-            },
-            {
-              id: 2,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${cel_thumb_dimen}/v1600784097/judges_thumbs/20200922_182607_0000_dwlpn2.png`,
-            },
-            {
-              id: 3,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${cel_thumb_dimen}/v1600784095/judges_thumbs/20200922_182642_0000_ispwzr.png`,
-            },
-            {
-              id: 4,
-              image: `https://res.cloudinary.com/moviepedia/image/upload/${cel_thumb_dimen}/v1600784095/judges_thumbs/20200922_182626_0000_osijza.png`,
-            },
-          ],
-        },
-        {
-          name: "January Releases",
-          height: 150,
-          width: 100,
-          items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
-        },
-        {
-          name: "More Recomended Films",
-          height: 150,
-          width: 100,
-          items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
-        },
-        {
-          name: "Thrill Films",
-          height: 150,
-          width: 100,
-          items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
-        },
-        {
-          name: "Drama Films",
-          height: 150,
-          width: 100,
-          items: this.get_rand_movie_items(10, "port", "w_200,h_300"),
-        },
-      ];
     },
   },
 };

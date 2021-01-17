@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import CelebItem from "@/components/home/CelebItem";
+import CelebItem from "@/components/welcome/CelebItem";
 export default {
   components: {
     CelebItem,

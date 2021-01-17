@@ -1,5 +1,5 @@
 <template>
-  <q-card flat v-ripple>
+  <q-card flat v-ripple :style="cardStyle">
     <movie-image
       :menuBtn="menuBtn"
       :title="movie.title"
@@ -37,6 +37,12 @@ export default {
     MovieImage,
   },
   props: {
+    cardStyle: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
     emitSelection: {
       type: Boolean,
       default: false,

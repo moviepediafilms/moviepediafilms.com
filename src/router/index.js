@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
-import HomeSimple from '../views/HomeSimple.vue'
+import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 Vue.use(VueMeta)
@@ -19,7 +19,7 @@ const routes = [
     {
         path: '/',
         name: 'home',
-        component: HomeSimple
+        component: Home
     }, {
         path: '/welcome',
         name: 'welcome',
