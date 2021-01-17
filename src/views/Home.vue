@@ -176,7 +176,7 @@ export default {
   methods: {
     fetch_live_contests() {
       contest_service
-        .get()
+        .get({ live: true })
         .then((data) => {
           this.live_contests.push(...data.results);
         })

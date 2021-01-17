@@ -4,6 +4,7 @@
       <div class="text-lg">Celebrity Curators</div>
     </div>
     <q-scroll-area
+      @scroll="on_scroll_decounced"
       :thumb-style="thumbStyle"
       horizontal
       visible
@@ -24,6 +25,7 @@
 </template>
 <script>
 import { profile_service } from "@/services";
+import _ from "lodash";
 export default {
   props: {
     height: {
@@ -50,10 +52,20 @@ export default {
       },
     };
   },
+  computed: {
+    on_scroll_decounced() {
+      return _.debounce(this.on_scroll, 300);
+    },
+  },
   mounted() {
     this.fetch_celebrities();
   },
   methods: {
+    on_scroll(info) {
+      if (info.horizontalPercent < 0.8) return;
+      console.log(info);
+      this.fetch_celebrities();
+    },
     fetch_celebrities() {
       if (this.loading) return;
       if (this.celebrities.length >= this.count) return;

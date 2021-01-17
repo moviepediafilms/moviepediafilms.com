@@ -3,11 +3,16 @@
     <div class="q-pb-sm row">
       <div class="text-lg">New Releases</div>
     </div>
-    <horizontal-movie-list :movies="movies" :height="height" :width="width" />
+    <horizontal-movie-list
+      :movies="movies"
+      :height="height"
+      :width="width"
+      @onLoadMore="fetch_movies"
+    />
   </div>
 </template>
 <script>
-import HorizontalMovieList from "@/components/HorizontalMovieList";
+import HorizontalMovieList from "@/components/home/HorizontalMovieList";
 import { movie_service } from "@/services";
 
 export default {
