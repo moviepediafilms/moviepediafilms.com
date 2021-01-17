@@ -1,5 +1,6 @@
 <template>
   <q-scroll-area
+    @scroll="on_scroll_decounced"
     :thumb-style="thumbStyle"
     horizontal
     visible
@@ -20,6 +21,7 @@
 </template>
 <script>
 import Movie from "@/components/movie/Movie";
+import _ from "lodash";
 export default {
   props: {
     movies: {
@@ -49,6 +51,17 @@ export default {
         height: "2px",
       },
     };
+  },
+  computed: {
+    on_scroll_decounced() {
+      return _.debounce(this.on_scroll, 300);
+    },
+  },
+  methods: {
+    on_scroll(info) {
+      if (info.horizontalPercent < 0.8) return;
+      this.$emit("onLoadMore");
+    },
   },
 };
 </script>

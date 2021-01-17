@@ -3,12 +3,17 @@
     <div class="q-pb-sm row">
       <div class="text-lg">{{ contest.name }} Releases</div>
     </div>
-    <horizontal-movie-list :movies="movies" :height="height" :width="width" />
+    <horizontal-movie-list
+      :movies="movies"
+      :height="height"
+      :width="width"
+      @onLoadMore="fetch_movies"
+    />
   </div>
 </template>
 <script>
 import { contest_service } from "@/services";
-import HorizontalMovieList from "@/components/HorizontalMovieList";
+import HorizontalMovieList from "@/components/home/HorizontalMovieList";
 export default {
   components: {
     HorizontalMovieList,
