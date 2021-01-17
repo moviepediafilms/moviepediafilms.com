@@ -29,16 +29,16 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import Slide1 from "@/components/home/Slide1";
-import Slide2 from "@/components/home/Slide2";
-import Slide3 from "@/components/home/Slide3";
-import Slide4 from "@/components/home/Slide4";
-import Slide5 from "@/components/home/Slide5";
-import Slide6 from "@/components/home/Slide6";
-import Slide7 from "@/components/home/Slide7";
-import Slide8 from "@/components/home/Slide8";
-import Slide9 from "@/components/home/Slide9";
-import Slide10 from "@/components/home/Slide10";
+import Slide1 from "@/components/welcome/Slide1";
+import Slide2 from "@/components/welcome/Slide2";
+import Slide3 from "@/components/welcome/Slide3";
+import Slide4 from "@/components/welcome/Slide4";
+import Slide5 from "@/components/welcome/Slide5";
+import Slide6 from "@/components/welcome/Slide6";
+import Slide7 from "@/components/welcome/Slide7";
+import Slide8 from "@/components/welcome/Slide8";
+import Slide9 from "@/components/welcome/Slide9";
+import Slide10 from "@/components/welcome/Slide10";
 export default {
   metaInfo: {
     title: "Welcome",

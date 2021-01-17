@@ -82,6 +82,7 @@ export const location_service = new BaseService("https://revgeocode.search.herea
 export const token_service = new BaseService("v1/auth/")
 export const profile_service = new BaseService("v1/profile/")
 export const movie_service = new BaseService("v1/movie/")
+export const mp_genre_service = new BaseService("v1/mpgenre/")
 export const review_service = new BaseService("v1/review/")
 export const submission_service = new BaseService("v1/submit/")
 export const payment_service = new BaseService("v1/payment/verify/")

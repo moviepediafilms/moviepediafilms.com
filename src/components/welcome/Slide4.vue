@@ -27,7 +27,7 @@
 </template>
 <script>
 import Bar from "@/components/animated/Bar";
-import CircularItem from "@/components/home/CircularItem";
+import CircularItem from "@/components/welcome/CircularItem";
 export default {
   components: {
     Bar,

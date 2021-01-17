@@ -49,7 +49,7 @@
           class="col flex text-center justify-center items-center"
           style="padding: 16px"
         >
-          <div class="text-h3">{{ title }}</div>
+          <div class="text-h4">{{ title }}</div>
           <div class="text-caption">
             <q-icon name="mdi-close" color="negative" size="24px" />Cannot load
             image
