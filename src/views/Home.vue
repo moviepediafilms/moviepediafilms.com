@@ -100,7 +100,7 @@ import NewReleases from "@/components/home/NewReleases";
 import ContestReleases from "@/components/home/ContestReleases";
 import MpGenreMovies from "@/components/home/MpGenreMovies";
 import MostRecommended from "@/components/home/MostRecommended";
-
+import { contest_service, mp_genre_service } from "@/services";
 import _ from "lodash";
 export default {
   name: "home-page",
@@ -117,17 +117,6 @@ export default {
   },
   data() {
     return {
-      thumbStyle: {
-        right: "2px",
-        borderRadius: "1px",
-        backgroundColor: "#f7cd23",
-        opacity: 0.75,
-        height: "2px",
-      },
-      dimen: {
-        height: 225,
-        width: 110,
-      },
       search_text: "",
       selected_filters: { time: [], genre: [], lang: [] },
       filters: {
@@ -158,9 +147,6 @@ export default {
           auth: false,
         },
       ],
-      slide: "",
-      categories: [],
-
       live_contests: [],
       live_mp_genres: [],
     };
@@ -169,31 +155,8 @@ export default {
     this.action_btns.forEach((btn) => {
       setting.addActionBtn(btn);
     });
-    this.live_contests = [
-      {
-        name: "January",
-        id: 1,
-      },
-      {
-        name: "February",
-        id: 2,
-      },
-    ];
-    this.most_recommended_movies = this.get_rand_movie_items(
-      10,
-      "port",
-      "w_200,h_300"
-    );
-    this.live_mp_genres = [
-      {
-        id: 1,
-        name: "Mind Bending",
-      },
-      {
-        id: 2,
-        name: "Time Travel",
-      },
-    ];
+    this.fetch_live_contests();
+    this.fetch_live_mp_genres();
   },
   beforeDestroy() {
     this.action_btns.forEach((btn) => {
@@ -211,6 +174,26 @@ export default {
     },
   },
   methods: {
+    fetch_live_contests() {
+      contest_service
+        .get()
+        .then((data) => {
+          this.live_contests.push(...data.results);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    fetch_live_mp_genres() {
+      mp_genre_service
+        .get()
+        .then((data) => {
+          this.live_mp_genres.push(...data.results);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     do_search() {
       console.log(this.search_text);
     },
@@ -230,51 +213,6 @@ export default {
       this.selected_filters.genre.splice(0, this.selected_filters.genre.length);
       this.selected_filters.lang.splice(0, this.selected_filters.lang.length);
     },
-
-    // random movie generator methods
-    get_rand_poster(num, orientation, trans_query) {
-      // num => int: 5, 10
-      // orientation => string: 'port' or 'land'
-      // trans_query => string: cloudinary resize query "w_250,h_200"
-      const MAX_MOVIE_ID = 51;
-      var urls = [];
-      var rand_id = 0;
-      var generated_ids = [];
-      while (generated_ids.length < num) {
-        rand_id = Math.floor(Math.random() * MAX_MOVIE_ID + 1);
-        if (generated_ids.indexOf(rand_id) == -1) {
-          generated_ids.push(rand_id);
-          urls.push(
-            `https://res.cloudinary.com/moviepedia/image/upload/${trans_query}/v1601209839/movie_thumbs/${orientation}/movie${rand_id}.jpg`
-          );
-        }
-      }
-      return urls;
-    },
-    get_rand_movie_items(num, orientation, trans_query) {
-      // num => int: 5, 10
-      // orientation => string: 'port' or 'land'
-      // trans_query => string: cloudinary resize query "w_250,h_200"
-      var items = [];
-      var urls = this.get_rand_poster(num, orientation, trans_query);
-      urls.forEach((url, i) => {
-        items.push({
-          id: i,
-          title: "30 Days of Existence | A Moviepedia Short Film on Depression",
-          poster: url,
-        });
-      });
-      return items;
-    },
   },
 };
 </script>
-<style lang="scss" scoped>
-.my-card {
-  width: 100%;
-  max-width: 300px;
-  :hover {
-    background-color: blue;
-  }
-}
-</style>
