@@ -15,6 +15,7 @@
         :key="index"
         :card-style="{ width: `${width}px` }"
         :show-my-roles="false"
+        :show-state="false"
       ></movie>
     </div>
   </q-scroll-area>

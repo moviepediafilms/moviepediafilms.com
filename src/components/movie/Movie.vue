@@ -5,7 +5,7 @@
       :title="movie.title"
       :state="movie.state"
       :poster="movie.poster"
-      :show-state="is_my_profile"
+      :show-state="showState"
       :runtime="movie.runtime"
       @click="on_movie_select"
       @showOptions="$emit('showOptions')"
@@ -37,6 +37,10 @@ export default {
     MovieImage,
   },
   props: {
+    showState: {
+      type: Boolean,
+      default: false,
+    },
     cardStyle: {
       type: Object,
       default() {
@@ -69,9 +73,6 @@ export default {
     },
   },
   computed: {
-    is_my_profile() {
-      return this.profile && this.profile.id == this.my_profile.id;
-    },
     my_roles_txt() {
       var txt = "";
       this.my_roles.forEach((role) => {
