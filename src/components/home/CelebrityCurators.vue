@@ -13,11 +13,20 @@
     >
       <div class="q-pr-md row no-wrap">
         <q-img
+          v-ripple
           class="q-mr-xs"
           v-for="(celeb, index) in celebrities"
           :key="index"
           :width="`${width}px`"
           :src="celeb.image || '/default_avatar.png'"
+          @click="
+            $router.push({
+              name: 'judge-recommendation',
+              params: {
+                id: celeb.id,
+              },
+            })
+          "
         />
       </div>
     </q-scroll-area>
@@ -30,7 +39,7 @@ export default {
   props: {
     height: {
       type: Number,
-      default: 130,
+      default: 135,
     },
     width: {
       type: Number,
