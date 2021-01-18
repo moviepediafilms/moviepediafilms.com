@@ -32,11 +32,11 @@ export default {
     },
     width: {
       type: Number,
-      default: 100,
+      default: 230,
     },
     height: {
       type: Number,
-      default: 150,
+      default: 110,
     },
   },
   components: { Movie },
