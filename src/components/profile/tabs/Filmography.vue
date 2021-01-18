@@ -5,6 +5,7 @@
         <movie
           :profile="profile"
           :movie="movie"
+          :show-state="is_viewers_profile"
           @click="on_movie_select(movie)"
         ></movie>
       </div>

@@ -89,15 +89,12 @@ export default {
   },
   computed: {
     runtime_txt() {
-      var hours = parseInt(this.runtime / 60);
-      var minutes = parseInt(this.runtime - hours * 60);
-
-      if (hours || minutes) {
-        if (hours < 10) hours = "0" + hours;
+      // runtime cannot exeed 60 minutes
+      var minutes = this.runtime;
+      if (minutes) {
         if (minutes < 10) minutes = "0" + minutes;
-        return `${hours}:${minutes}`;
+        return `${minutes}:00`;
       }
-
       return "";
     },
     state_color() {
