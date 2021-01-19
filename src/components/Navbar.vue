@@ -37,10 +37,9 @@
             >
               <q-badge
                 color="primary"
+                text-color="dark"
                 floating
                 transparent
-                text-color="dark"
-                align="bottom"
                 v-if="action.count > 0"
                 >{{ action.count }}</q-badge
               >
@@ -59,7 +58,6 @@
                 color="primary"
                 text-color="dark"
                 floating
-                align="bottom"
                 transparent
                 v-if="action.count > 0"
                 >{{ action.count }}</q-badge

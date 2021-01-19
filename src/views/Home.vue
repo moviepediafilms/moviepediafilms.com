@@ -77,6 +77,52 @@
           </template>
         </q-input>
       </div>
+      <div
+        class="q-pb-md truncate-chip-labels"
+        v-if="
+          selected_genres.length +
+            selected_langs.length +
+            selected_time.length >
+          0
+        "
+      >
+        <small>Active filters</small><br />
+
+        <q-chip
+          size="sm"
+          removable
+          @remove="selected_genres.pop(name)"
+          color="primary"
+          text-color="dark"
+          :label="name"
+          :title="name"
+          v-for="name in selected_genres"
+          :key="'genre_' + name"
+        />
+
+        <q-chip
+          size="sm"
+          removable
+          @remove="selected_langs.pop(name)"
+          color="primary"
+          text-color="dark"
+          :label="name"
+          :title="name"
+          v-for="name in selected_langs"
+          :key="'lan_' + name"
+        />
+        <q-chip
+          size="sm"
+          removable
+          @remove="selected_time.pop(name)"
+          color="primary"
+          text-color="dark"
+          :label="name"
+          :title="name"
+          v-for="name in selected_time"
+          :key="'lan_' + name"
+        />
+      </div>
       <search-and-or-filtered
         :search-text="search_text"
         :langs="selected_langs"
