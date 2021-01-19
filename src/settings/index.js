@@ -1,5 +1,6 @@
 export default {
-    debug: true,
+    PAGE_SIZE: 20,
+    debug: process.env.VUE_APP_DEBUG === "true",
     data: {
         action_btns: [{ icon: "mdi-bell-outline", to: { name: "notification" }, type: "path", auth: true }]
     },
