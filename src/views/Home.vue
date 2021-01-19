@@ -8,7 +8,7 @@
           </q-card-section>
           <q-card-section>
             <div class="row">
-              <div class="col">
+              <div class="col-12">
                 <div class="text-center text-primary">Genre</div>
                 <div class="q-mt-sm">
                   <q-checkbox
@@ -20,7 +20,7 @@
                   />
                 </div>
               </div>
-              <div class="col">
+              <div class="col-12">
                 <div class="text-center text-primary">Langugage</div>
                 <div class="q-mt-sm">
                   <q-checkbox
@@ -32,7 +32,7 @@
                   />
                 </div>
               </div>
-              <div class="col">
+              <div class="col-12">
                 <div class="text-center text-primary">Time</div>
                 <div class="q-mt-sm">
                   <q-checkbox
