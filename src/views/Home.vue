@@ -13,7 +13,7 @@
                 <div class="q-mt-sm">
                   <q-checkbox
                     :val="genre.val"
-                    v-model="selected_filters.genre"
+                    v-model="selected_genres"
                     :label="genre.label"
                     v-for="genre in filters.genre"
                     :key="genre.val"
@@ -25,7 +25,7 @@
                 <div class="q-mt-sm">
                   <q-checkbox
                     :val="lang.val"
-                    v-model="selected_filters.lang"
+                    v-model="selected_langs"
                     :label="lang.label"
                     v-for="lang in filters.lang"
                     :key="lang.val"
@@ -37,7 +37,7 @@
                 <div class="q-mt-sm">
                   <q-checkbox
                     :val="time.val"
-                    v-model="selected_filters.time"
+                    v-model="selected_time"
                     :label="time.label"
                     v-for="time in filters.time"
                     :key="time.val"
@@ -77,31 +77,44 @@
           </template>
         </q-input>
       </div>
-      <new-releases />
-      <celebrity-curators />
-
-      <template v-for="(contest, index) in live_contests">
-        <contest-releases :contest="contest" :key="`contest_${index}`" />
-      </template>
-
-      <most-recommended />
-
-      <template v-for="(mp_genre, index) in live_mp_genres">
-        <mp-genre-movies :mp-genre="mp_genre" :key="`mpgenre_${index}`" />
-      </template>
+      <search-and-or-filtered
+        :search-text="search_text"
+        :langs="selected_langs"
+        :genres="selected_genres"
+        :time="selected_time"
+        v-if="
+          search_text ||
+          selected_langs.length > 0 ||
+          selected_genres.length > 0 ||
+          selected_time.length > 0
+        "
+      />
+      <div v-else>
+        <new-releases />
+        <celebrity-curators />
+        <template v-for="(contest, index) in live_contests">
+          <contest-releases :contest="contest" :key="`contest_${index}`" />
+        </template>
+        <most-recommended />
+        <template v-for="(mp_genre, index) in live_mp_genres">
+          <mp-genre-movies :mp-genre="mp_genre" :key="`mpgenre_${index}`" />
+        </template>
+      </div>
     </div>
   </base-layout>
 </template>
 <script>
-import setting from "@/setting";
+import settings from "@/settings";
 import BaseLayout from "@/layouts/Base";
 import CelebrityCurators from "@/components/home/CelebrityCurators";
 import NewReleases from "@/components/home/NewReleases";
 import ContestReleases from "@/components/home/ContestReleases";
 import MpGenreMovies from "@/components/home/MpGenreMovies";
 import MostRecommended from "@/components/home/MostRecommended";
+import SearchAndOrFiltered from "@/components/SearchAndOrFiltered";
 import { contest_service, mp_genre_service } from "@/services";
-import _ from "lodash";
+import { mapState } from "vuex";
+import { LANG_REQUEST } from "@/store/actions";
 export default {
   name: "home-page",
   components: {
@@ -111,6 +124,7 @@ export default {
     CelebrityCurators,
     MpGenreMovies,
     MostRecommended,
+    SearchAndOrFiltered,
   },
   metaInfo: {
     title: "Home",
@@ -118,62 +132,85 @@ export default {
   data() {
     return {
       search_text: "",
-      selected_filters: { time: [], genre: [], lang: [] },
-      filters: {
-        lang: [
-          { label: "English", val: "eng" },
-          { label: "Hindi", val: "hin" },
-          { label: "Tamil", val: "tamil" },
-          { label: "Bengali", val: "ban" },
-        ],
+      selected_genres: [],
+      selected_langs: [],
+      selected_time: [],
+      show_filter: false,
+      filter_action_btn: {
+        icon: "mdi-filter-outline",
+        active_icon: "mdi-filter",
+        count: 0,
+        to: this.show_filters,
+        type: "dialog",
+        auth: false,
+      },
+      live_contests: [],
+      live_mp_genres: [],
+    };
+  },
+  created() {
+    this.$store.dispatch(LANG_REQUEST);
+  },
+  mounted() {
+    settings.addActionBtn(this.filter_action_btn);
+    this.fetch_live_contests();
+    this.fetch_live_mp_genres();
+  },
+  beforeDestroy() {
+    settings.removeActionBtn(this.filter_action_btn);
+  },
+  computed: {
+    ...mapState("genre", {
+      genres: (state) => state.genres,
+    }),
+    ...mapState("lang", {
+      langs: (state) => state.langs,
+    }),
+    filter_langs() {
+      var langs = [];
+      this.langs.forEach((lang) => {
+        langs.push({ label: lang.name, val: lang.name });
+      });
+      return langs;
+    },
+    filter_genres() {
+      var genres = [];
+      this.genres.forEach((genre) => {
+        genres.push({ label: genre.name, val: genre.name });
+      });
+      return genres;
+    },
+    filters() {
+      return {
+        lang: this.filter_langs,
         time: [
           { label: "Live", val: "live" },
           { label: "Last Week", val: "week" },
           { label: "Last Month", val: "month" },
         ],
-        genre: [
-          { label: "Crime", val: "crime" },
-          { label: "Drama", val: "drama" },
-          { label: "Romance", val: "romance" },
-          { label: "Comedy", val: "comedy" },
-        ],
-      },
-      show_filter: false,
-      action_btns: [
-        {
-          icon: "mdi-filter-outline",
-          to: this.show_filters,
-          type: "dialog",
-          auth: false,
-        },
-      ],
-      live_contests: [],
-      live_mp_genres: [],
-    };
-  },
-  mounted() {
-    this.action_btns.forEach((btn) => {
-      setting.addActionBtn(btn);
-    });
-    this.fetch_live_contests();
-    this.fetch_live_mp_genres();
-  },
-  beforeDestroy() {
-    this.action_btns.forEach((btn) => {
-      setting.removeActionBtn(btn);
-    });
-  },
-  computed: {
-    decounced_search() {
-      return _.debounce(this.do_search, 300);
+        genre: this.filter_genres,
+      };
     },
   },
   watch: {
-    search_text() {
-      this.decounced_search();
+    selected_genres() {
+      this.filter_action_btn.count = this.get_filter_type_count();
+    },
+    selected_time() {
+      this.filter_action_btn.count = this.get_filter_type_count();
+    },
+    selected_langs() {
+      this.filter_action_btn.count = this.get_filter_type_count();
     },
   },
   methods: {
+    get_filter_type_count() {
+      var res = 0;
+      if (this.selected_genres.length > 0) res += 1;
+      if (this.selected_time.length > 0) res += 1;
+      if (this.selected_langs.length > 0) res += 1;
+      return res;
+    },
     fetch_live_contests() {
       contest_service
         .get({ live: true })
@@ -193,9 +230,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    },
-    do_search() {
-      console.log(this.search_text);
     },
     detail_page(movie) {
       var movie_id = movie.id;

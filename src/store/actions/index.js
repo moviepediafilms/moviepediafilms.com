@@ -67,3 +67,4 @@ export const FLB_ERROR = `flb/${ERROR_}`;
 export const FOLLOW_REQUEST = `follow/${REQUEST_}`;
 export const FOLLOW_LOGOUT = `follow/${LOGOUT_}`;
 export const GENRE_REQUEST = `genre/${REQUEST_}`;
+export const LANG_REQUEST = `lang/${REQUEST_}`;

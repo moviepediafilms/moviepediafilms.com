@@ -17,7 +17,7 @@
           <q-icon name="mdi-bullhorn" />
           {{ movie.recommend_count }}
         </div>
-        <div class="text-h2 text-primary text-weight-bolder">
+        <div class="text-h3 text-primary text-weight-bolder">
           {{ movie.score }}
         </div>
       </div>
