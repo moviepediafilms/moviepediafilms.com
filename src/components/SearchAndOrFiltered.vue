@@ -64,19 +64,19 @@ export default {
     filter_genre_text() {
       return this.genres.join(",");
     },
+    throttled_search() {
+      return _.debounce(this.search_and_filter, 400);
+    },
   },
   watch: {
     searchText() {
-      console.log("search changed", this.searchText);
-      this.search_and_filter();
+      this.throttled_search();
     },
     filter_genre_text() {
-      console.log("filter changed");
-      this.search_and_filter();
+      this.throttled_search();
     },
     filter_lang_text() {
-      console.log("filter changed");
-      this.search_and_filter();
+      this.throttled_search();
     },
   },
   mounted() {
