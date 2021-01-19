@@ -160,7 +160,7 @@ import MostRecommended from "@/components/home/MostRecommended";
 import SearchAndOrFiltered from "@/components/SearchAndOrFiltered";
 import { contest_service, mp_genre_service } from "@/services";
 import { mapState } from "vuex";
-import { LANG_REQUEST } from "@/store/actions";
+import { LANG_REQUEST, GENRE_REQUEST } from "@/store/actions";
 export default {
   name: "home-page",
   components: {
@@ -196,6 +196,7 @@ export default {
   },
   created() {
     this.$store.dispatch(LANG_REQUEST);
+    this.$store.dispatch(GENRE_REQUEST);
   },
   mounted() {
     settings.addActionBtn(this.filter_action_btn);
