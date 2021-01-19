@@ -4,7 +4,7 @@
       <not-found />
     </div>
     <div v-else>
-      <div class="q-pa-md" v-if="!is_authenticated || loading">
+      <div class="q-pa-md" v-if="!is_authenticated">
         <template v-if="is_my_profile">
           <div class="row justify-center">
             <q-skeleton class="q-mx-sm" type="QAvatar" size="100px" />
