@@ -4,27 +4,58 @@
       <q-dialog v-model="show_filter">
         <q-card>
           <q-card-section>
-            <div class="text-h5 text-center">Filters</div>
+            <div class="text-title text-h3 text-center text-primary">
+              Filters
+            </div>
           </q-card-section>
           <q-card-section>
             <div class="row">
               <div class="col-12">
+                <q-select
+                  filled
+                  multiple
+                  use-chips
+                  label="Genre"
+                  emit-value
+                  option-value="val"
+                  v-model="selected_genres"
+                  :options="filters.genre"
+                />
+                <q-select
+                  class="q-mt-md"
+                  filled
+                  multiple
+                  use-chips
+                  label="Language"
+                  option-value="val"
+                  emit-value
+                  v-model="selected_langs"
+                  :options="filters.lang"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12" v-if="false">
                 <div class="text-center text-primary">Genre</div>
-                <div class="q-mt-sm">
+                <div class="q-mt-sm row justify-around content-start">
                   <q-checkbox
+                    v-for="genre in filters.genre"
+                    :key="genre.val"
+                    class="ellipsis"
+                    style="width: 90px"
                     :val="genre.val"
                     v-model="selected_genres"
                     :label="genre.label"
-                    v-for="genre in filters.genre"
-                    :key="genre.val"
                   />
                 </div>
               </div>
-              <div class="col-12">
+              <div class="col-12" v-if="false">
                 <div class="text-center text-primary">Langugage</div>
-                <div class="q-mt-sm">
+                <div class="q-mt-sm row justify-around content-start">
                   <q-checkbox
                     :val="lang.val"
+                    class="ellipsis"
+                    style="width: 90px"
                     v-model="selected_langs"
                     :label="lang.label"
                     v-for="lang in filters.lang"
@@ -32,7 +63,7 @@
                   />
                 </div>
               </div>
-              <div class="col-12">
+              <div class="col-12 q-mt-md">
                 <div class="text-center text-primary">Time</div>
                 <div class="q-mt-sm">
                   <q-checkbox
