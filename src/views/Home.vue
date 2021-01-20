@@ -84,6 +84,7 @@
               flat
               label="Clear"
               color="primary"
+              v-close-popup
               @click.prevent="clear_filters"
             />
           </q-card-actions>
@@ -153,6 +154,17 @@
           v-for="name in selected_time"
           :key="'lan_' + name"
         />
+        <q-chip
+          style="float: right"
+          clickable
+          size="sm"
+          @click="clear_filters"
+          color="negative"
+          class="self-right"
+          text-color="white"
+          label="Clear All"
+          title="Clear All"
+        />
       </div>
       <search-and-or-filtered
         :search-text="search_text"
@@ -188,7 +200,7 @@ import NewReleases from "@/components/home/NewReleases";
 import ContestReleases from "@/components/home/ContestReleases";
 import MpGenreMovies from "@/components/home/MpGenreMovies";
 import MostRecommended from "@/components/home/MostRecommended";
-import SearchAndOrFiltered from "@/components/SearchAndOrFiltered";
+import SearchAndOrFiltered from "@/components/home/search/SearchAndOrFiltered";
 import { contest_service, mp_genre_service } from "@/services";
 import { mapState } from "vuex";
 import { LANG_REQUEST, GENRE_REQUEST } from "@/store/actions";
@@ -321,9 +333,10 @@ export default {
       this.show_filter = !this.show_filter;
     },
     clear_filters() {
-      this.selected_filters.time.splice(0, this.selected_filters.time.length);
-      this.selected_filters.genre.splice(0, this.selected_filters.genre.length);
-      this.selected_filters.lang.splice(0, this.selected_filters.lang.length);
+      this.selected_genres.splice(0, this.selected_genres.length);
+      this.selected_langs.splice(0, this.selected_langs.length);
+      this.selected_time.splice(0, this.selected_time.length);
+      this.search_text = "";
     },
   },
 };

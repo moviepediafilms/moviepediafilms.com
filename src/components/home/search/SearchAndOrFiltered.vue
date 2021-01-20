@@ -1,17 +1,44 @@
 <template>
   <div ref="list">
-    <div class="row wrap justify-start content-start">
-      <div
-        class="col-3 q-pa-xs"
-        style="overflow: auto; display: inline-block"
-        v-for="(movie, index) in movies"
-        :key="index"
-      >
-        <movie
-          :movie="movie"
-          :show-my-roles="false"
-          :show-state="false"
-        ></movie>
+    <div class="row">
+      <div class="col-12" v-if="people.length > 0">
+        <h3>People</h3>
+        <horizontal-items :height="130" :width="100">
+          <div
+            class="text-center q-my-md"
+            v-for="(person, index) in people"
+            :key="index"
+            v-ripple
+            @click="
+              $router.push({
+                name: 'profile',
+                params: { id: person.id },
+              })
+            "
+          >
+            <q-avatar size="80px">
+              <q-img src="/default_avatar.png" />
+            </q-avatar>
+            <div class="q-mt-xs">{{ person.name }}</div>
+          </div>
+        </horizontal-items>
+      </div>
+      <div class="col-12">
+        <h3>Films</h3>
+        <div class="row wrap justify-start content-start">
+          <div
+            class="col-3 q-pa-xs"
+            style="overflow: auto; display: inline-block"
+            v-for="(movie, index) in movies"
+            :key="index"
+          >
+            <movie
+              :movie="movie"
+              :show-my-roles="false"
+              :show-state="false"
+            ></movie>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -19,10 +46,11 @@
 <script>
 import Movie from "@/components/movie/Movie";
 import _ from "lodash";
-import { movie_service } from "@/services";
+import { movie_service, profile_service } from "@/services";
 import settings from "@/settings";
+import HorizontalItems from "@/components/HorizontalItems.vue";
 export default {
-  components: { Movie },
+  components: { Movie, HorizontalItems },
   props: {
     searchText: {
       type: String,
@@ -49,9 +77,12 @@ export default {
   data() {
     return {
       loading: false,
+      ppl_loading: false,
       count: undefined,
+      count_pp: undefined,
       fetch_size: settings.PAGE_SIZE,
       movies: [],
+      people: [],
     };
   },
   computed: {
@@ -87,6 +118,9 @@ export default {
       this.movies.splice(0, this.movies.length);
       this.count = undefined;
       this.fetch_movies();
+      this.people.splice(0, this.people.length);
+      this.pp_count = undefined;
+      this.fetch_people();
     },
     scroll_handler() {
       if (this.$refs.list) {
@@ -117,6 +151,28 @@ export default {
         .catch((error) => {
           console.log(error);
           this.loading = false;
+        });
+    },
+    fetch_people() {
+      if (this.ppl_loading) return;
+      if (this.people.length >= this.pp_count) return;
+      if (!this.searchText) return;
+      this.ppl_loading = true;
+      var params = {
+        search: this.searchText,
+        limit: this.fetch_size,
+        offset: this.people.length,
+      };
+      profile_service
+        .get(params)
+        .then((data) => {
+          this.people.push(...data.results);
+          this.pp_count = data.count;
+          this.ppl_loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.ppl_loading = false;
         });
     },
   },
