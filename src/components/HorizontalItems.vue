@@ -1,45 +1,29 @@
 <template>
-  <horizontal-items
-    :width="width"
-    :height="height"
-    @onLoadMore="$emit('onLoadMore')"
+  <q-scroll-area
+    @scroll="on_scroll_decounced"
+    :thumb-style="thumbStyle"
+    horizontal
+    visible
+    :style="`height: ${height + 10}px`"
+    class="q-mb-md"
   >
-    <movie
-      class="q-mr-sm"
-      v-for="(movie, index) in movies"
-      :movie="movie"
-      :key="index"
-      :card-style="{ width: `${width}px` }"
-      :show-my-roles="false"
-      :show-state="false"
-    ></movie>
-  </horizontal-items>
+    <div class="q-pr-md row no-wrap">
+      <slot></slot>
+    </div>
+  </q-scroll-area>
 </template>
 <script>
-import HorizontalItems from "@/components/HorizontalItems";
-import Movie from "@/components/movie/Movie";
 import _ from "lodash";
 export default {
   props: {
-    movies: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-    width: {
-      type: Number,
-      default: 230,
-    },
     height: {
       type: Number,
       default: 110,
     },
   },
-  components: { Movie, HorizontalItems },
+
   data() {
     return {
-      //   movies: [],
       thumbStyle: {
         right: "2px",
         borderRadius: "1px",
