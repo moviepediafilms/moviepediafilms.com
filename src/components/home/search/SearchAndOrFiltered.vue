@@ -3,27 +3,22 @@
     <div class="row">
       <div class="col-12" v-if="people.length > 0">
         <h3>People</h3>
-        <horizontal-items :height="130" :width="100">
+        <horizontal-items :height="90" :width="100">
           <div
-            class="text-center q-my-md"
+            class="text-center q-my-md q-mr-md"
             v-for="(person, index) in people"
             :key="index"
             v-ripple
-            @click="
-              $router.push({
-                name: 'profile',
-                params: { id: person.id },
-              })
-            "
+            @click="on_profile_click(person)"
           >
-            <q-avatar size="80px">
-              <q-img src="/default_avatar.png" />
+            <q-avatar size="60px">
+              <q-img :src="person.image || '/default_avatar.png'" />
             </q-avatar>
-            <div class="q-mt-xs">{{ person.name }}</div>
+            <div class="q-mt-xs text-title">{{ person.name }}</div>
           </div>
         </horizontal-items>
       </div>
-      <div class="col-12">
+      <div class="col-12 q-mt-md">
         <h3>Films</h3>
         <div class="row wrap justify-start content-start">
           <div
@@ -114,6 +109,22 @@ export default {
     this.search_and_filter();
   },
   methods: {
+    on_profile_click(profile) {
+      if (profile.is_celeb) {
+        console.log("celeb recommends page");
+        this.$router.push({
+          name: "judge-recommendation",
+          params: {
+            id: profile.id,
+          },
+        });
+      } else {
+        this.$router.push({
+          name: "profile",
+          params: { id: profile.id },
+        });
+      }
+    },
     search_and_filter() {
       this.movies.splice(0, this.movies.length);
       this.count = undefined;
