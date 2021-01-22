@@ -4,7 +4,7 @@
       <div class="q-ma-md text-center">
         <h1 class="text-primary">Creators Leaderboard</h1>
       </div>
-      <div v-if="users.length">
+      <div v-if="users.length > 0">
         <div class="row justify-start q-ml-md q-mt-md">
           <div class="text-caption text-grey-5">
             <q-icon
@@ -17,8 +17,10 @@
         <leaderboard
           :users="users"
           :loading="loading"
-          @page-change="on_page_change"
+          @page-change="fetch_users"
           @click="on_user_click"
+          point-from="pop_score"
+          rank-from="creator_rank"
         />
       </div>
       <empty-state
@@ -33,8 +35,8 @@
 <script>
 import BaseLayout from "@/layouts/Base";
 import Leaderboard from "@/components/Leaderboard";
-import { FLB_REQUEST } from "@/store/actions";
-import { mapState } from "vuex";
+import settings from "@/settings";
+import { flb_service } from "@/services";
 export default {
   name: "audience-leaderboard-page",
   components: {
@@ -46,8 +48,9 @@ export default {
   },
   data() {
     return {
-      curr_page: 0,
-      page_size: 10,
+      count: undefined,
+      users: [],
+      fetch_size: settings.PAGE_SIZE,
       loading: false,
     };
   },
@@ -55,37 +58,26 @@ export default {
     last_updated_txt() {
       return "Ranks are calculated daily";
     },
-    pages() {
-      var pages = Math.ceil(this.total_count / this.page_size);
-      return pages == 0 ? 1 : pages;
-    },
-    ...mapState("flb", {
-      users: (state) => state.users,
-      total_count: (state) => state.count,
-    }),
   },
-  watch: {
-    curr_page() {
-      this.loading = true;
-      this.$store
-        .dispatch(FLB_REQUEST, {
-          offset: (this.curr_page - 1) * this.page_size,
-          limit: this.page_size,
+  mounted() {
+    this.fetch_users();
+  },
+  methods: {
+    fetch_users() {
+      if (this.loading) return;
+      if (this.users.length >= this.count) this.loading = true;
+      flb_service
+        .get({
+          offset: this.users.length,
+          limit: this.fetch_size,
         })
-        .then(() => {
+        .then((data) => {
+          this.users.push(...data.results);
           this.loading = false;
         })
         .catch(() => {
           this.loading = false;
         });
-    },
-  },
-  mounted() {
-    this.on_page_change(1);
-  },
-  methods: {
-    on_page_change(page) {
-      this.curr_page = page;
     },
     on_user_click(user) {
       this.$router.push({ name: "profile", params: { id: user.id } });

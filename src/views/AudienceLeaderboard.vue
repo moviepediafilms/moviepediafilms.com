@@ -15,12 +15,12 @@
           </div>
         </div>
         <leaderboard
-          :pages="pages"
-          :page_size="page_size"
           :users="users"
           :loading="loading"
           @click="on_user_click"
-          @page-change="on_page_change"
+          @page-change="load_users"
+          point-from="engagement_score"
+          rank-from="curator_rank"
         />
       </div>
       <empty-state
@@ -35,8 +35,8 @@
 <script>
 import BaseLayout from "@/layouts/Base";
 import Leaderboard from "@/components/Leaderboard";
-import { ALB_REQUEST } from "@/store/actions";
-import { mapState } from "vuex";
+import { alb_service } from "@/services";
+import settings from "@/settings";
 export default {
   name: "audience-leaderboard-page",
   components: {
@@ -48,47 +48,38 @@ export default {
   },
   data() {
     return {
-      // get the count from api
-      curr_page: 0,
-      page_size: 10,
+      users: [],
+      fetch_size: settings.PAGE_SIZE,
       loading: false,
+      count: undefined,
     };
   },
   computed: {
     last_updated_txt() {
       return "Ranks are calculated daily";
     },
-    pages() {
-      var pages = Math.ceil(this.total_count / this.page_size);
-      return pages == 0 ? 1 : pages;
-    },
-    ...mapState("alb", {
-      users: (state) => state.users,
-      total_count: (state) => state.count,
-    }),
   },
-  watch: {
-    curr_page() {
+  mounted() {
+    this.load_users();
+  },
+  methods: {
+    load_users() {
+      if (this.loading) return;
+      if (this.users.length >= this.count) return;
       this.loading = true;
-      this.$store
-        .dispatch(ALB_REQUEST, {
-          offset: (this.curr_page - 1) * this.page_size,
-          limit: this.page_size,
+      alb_service
+        .get({
+          offset: this.users.length,
+          limit: this.fetch_size,
         })
-        .then(() => {
+        .then((data) => {
+          this.users.push(...data.results);
           this.loading = false;
+          this.count = data.count;
         })
         .catch(() => {
           this.loading = false;
         });
-    },
-  },
-  mounted() {
-    this.on_page_change(1);
-  },
-  methods: {
-    on_page_change(page) {
-      this.curr_page = page;
     },
     on_user_click(user) {
       this.$router.push({ name: "profile", params: { id: user.id } });
