@@ -1,19 +1,20 @@
 <template>
-  <div>
+  <div style="display: inline-block">
     <template v-if="!should_hide">
       <q-btn
-        size="sm"
-        flat
-        label="Follow"
+        round
+        size="xs"
+        color="primary"
+        text-color="dark"
+        icon="mdi-plus"
         v-if="!is_following"
         @click="on_follow"
       />
       <q-btn
+        round
         icon="mdi-check"
-        size="sm"
-        flat
+        size="xs"
         color="blue"
-        label="Following"
         @click="on_unfollow"
         v-else
       />
