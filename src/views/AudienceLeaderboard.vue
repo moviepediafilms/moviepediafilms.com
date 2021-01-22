@@ -4,7 +4,7 @@
       <div class="q-ma-md text-center">
         <h1 class="text-primary">Curators Leaderboard</h1>
       </div>
-      <div v-if="false">
+      <div>
         <div class="row justify-start q-ml-md q-mt-md">
           <div class="text-caption text-grey-5">
             <q-icon
