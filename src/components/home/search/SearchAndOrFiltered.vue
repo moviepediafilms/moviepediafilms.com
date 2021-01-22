@@ -3,18 +3,28 @@
     <div class="row">
       <div class="col-12" v-if="people.length > 0">
         <h3>People</h3>
-        <horizontal-items :height="90" :width="100">
+        <horizontal-items :height="100" :width="100">
           <div
-            class="text-center q-my-md q-mr-md"
+            style="max-width: 100px"
+            class="text-center q-mt-md q-mr-md"
             v-for="(person, index) in people"
             :key="index"
             v-ripple
             @click="on_profile_click(person)"
           >
             <q-avatar size="60px">
+              <q-badge
+                v-if="person.is_celeb"
+                color="red"
+                class="q-m-none q-p-none"
+                floating
+                style="z-index: 100"
+              >
+                <q-icon name="mdi-star" />
+              </q-badge>
               <q-img :src="person.image || '/default_avatar.png'" />
             </q-avatar>
-            <div class="q-mt-xs text-title">{{ person.name }}</div>
+            <div class="q-mt-xs text-caption ellipsis">{{ person.name }}</div>
           </div>
         </horizontal-items>
       </div>
