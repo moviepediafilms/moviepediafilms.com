@@ -8,7 +8,7 @@
       mode="out-in"
       :duration="200"
     >
-      <q-list padding ref="list" v-if="user.length > 0">
+      <q-list padding ref="list" v-if="users.length > 0">
         <q-item dense class="q-ma-none q-pa-none">
           <q-item-section avatar> </q-item-section>
           <q-item-section class="q-ml-lg text-caption text-left text-grey-5">
