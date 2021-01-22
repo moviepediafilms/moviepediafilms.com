@@ -8,11 +8,7 @@
       mode="out-in"
       :duration="200"
     >
-      <div class="text-center q-my-lg" v-if="loading">
-        <q-spinner-hourglass color="grey-6" size="2em" />
-      </div>
-
-      <q-list padding v-else>
+      <q-list padding ref="list" v-if="!loading">
         <q-item dense class="q-ma-none q-pa-none">
           <q-item-section avatar> </q-item-section>
           <q-item-section class="q-ml-lg text-caption text-left text-grey-5">
@@ -50,10 +46,10 @@
             <span class="text-caption">{{ my_profile.city }}</span>
           </q-item-section>
           <q-item-section side style="min-width: 55px">
-            {{ my_profile.score }}
+            {{ my_profile[pointFrom] }}
           </q-item-section>
           <q-item-section side style="min-width: 55px">
-            #{{ my_profile.creator_rank || my_profile.curator_rank }}
+            #{{ my_profile[rankFrom] }}
           </q-item-section>
         </q-item>
         <q-item
@@ -78,11 +74,16 @@
             <span class="text-grey-6 text-caption">{{ user.city }}</span>
           </q-item-section>
           <q-item-section side style="min-width: 55px">
-            {{ user.score }}
+            {{ user[pointFrom] }}
           </q-item-section>
-          <q-item-section side style="min-width: 55px"> -- </q-item-section>
+          <q-item-section side style="min-width: 55px">
+            {{ user[rankFrom] }}
+          </q-item-section>
         </q-item>
       </q-list>
+      <div class="text-center q-my-lg" v-else>
+        <q-spinner-hourglass color="grey-6" size="2em" />
+      </div>
     </transition>
     <div class="row justify-center q-mt-md" v-if="show_page_indicator">
       <q-pagination
@@ -99,6 +100,7 @@
   </div>
 </template>
 <script>
+import _ from "lodash";
 export default {
   props: {
     users: {
@@ -123,9 +125,11 @@ export default {
       type: Boolean,
       dafault: true,
     },
-    highlight_top: {
-      type: Number,
-      dafault: 0,
+    pointFrom: {
+      type: String,
+    },
+    rankFrom: {
+      type: String,
     },
   },
 
@@ -134,11 +138,32 @@ export default {
       curr_page: 1,
     };
   },
+  computed: {
+    throttled_scroll_handler() {
+      return _.throttle(this.scroll_handler, 300);
+    },
+  },
+  created() {
+    window.addEventListener("scroll", this.throttled_scroll_handler);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.throttled_scroll_handler);
+  },
   watch: {
     curr_page() {
       this.$emit("page-change", this.curr_page);
     },
   },
-  methods: {},
+  methods: {
+    scroll_handler() {
+      if (this.$refs.list) {
+        var list = this.$refs.list.$el;
+        var dimens = list.getClientRects()[0];
+        if (dimens.bottom < window.innerHeight) {
+          this.curr_page += 1;
+        }
+      }
+    },
+  },
 };
 </script>
