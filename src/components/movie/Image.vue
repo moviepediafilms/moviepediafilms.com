@@ -45,14 +45,13 @@
             </q-badge>
           </div>
         </div>
-        <div
-          class="col flex text-center justify-center items-center"
-          style="padding: 16px"
-        >
-          <div class="text-h4">{{ title }}</div>
-          <div class="text-caption">
-            <q-icon name="mdi-close" color="negative" size="24px" />Cannot load
-            image
+        <div class="col flex justify-center items-center q-pa-xs">
+          <div class="text-caption ellipsis-3-lines text-center">
+            {{ title }}
+          </div>
+          <div class="text-caption text-center" style="font-size: 9px">
+            <q-icon name="mdi-close" color="negative" size="13px" /><br />
+            <span style="display: block-inline">Cannot load image</span>
           </div>
         </div>
       </div>
