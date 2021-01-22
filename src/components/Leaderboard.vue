@@ -103,6 +103,10 @@
 import _ from "lodash";
 export default {
   props: {
+    highlight_top: {
+      type: Number,
+      default: 0,
+    },
     users: {
       type: Array,
       default() {
