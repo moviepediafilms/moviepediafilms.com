@@ -8,6 +8,7 @@
         ></profile-picture>
         <div class="text-h2 q-mt-md">
           {{ profile.name }}
+          <follow-btn :profileId="profile.id"></follow-btn>
         </div>
         <div
           class="row justify-center q-mt-xs"
@@ -18,9 +19,6 @@
             :filmmaker="false"
             @toggle="$emit('toggle')"
           />
-        </div>
-        <div class="row justify-center q-mt-sm">
-          <follow-btn :profileId="profile.id"></follow-btn>
         </div>
       </div>
     </div>
