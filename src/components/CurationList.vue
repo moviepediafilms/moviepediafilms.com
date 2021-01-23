@@ -5,8 +5,9 @@
       <h1 class="text-primary">
         {{ info.name }}
       </h1>
+      <!-- TODO: add photo -->
       <h3>
-        <small class="text-grey-4">by {{ info.owner.name }}</small>
+        <small class="text-grey-4">{{ info.owner.name }} Recommends</small>
       </h3>
     </div>
     <div class="col flex items-center justify-between q-mt-md">

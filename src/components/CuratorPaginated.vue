@@ -7,6 +7,7 @@
       :show_page_indicator="false"
       @click="on_profile_select"
       :pin_self_top="false"
+      :viewer="viewer"
       :highlight_top="10"
       v-if="curators.length > 0 || loading"
     />
@@ -45,6 +46,7 @@ export default {
   },
   data() {
     return {
+      viewer: {},
       curators: [],
       loading: false,
       max_curators: undefined,
@@ -63,6 +65,7 @@ export default {
   },
   mounted() {
     this.new_page_load();
+    this.load_viewer_position();
   },
   methods: {
     scroll_handler() {
@@ -73,6 +76,16 @@ export default {
           this.new_page_load();
         }
       }
+    },
+    load_viewer_position() {
+      contest_service
+        .get({}, `${this.contest.id}/my_curator_position`)
+        .then((data) => {
+          this.viewer = Object.assign({}, this.viewer, data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     new_page_load() {
       if (this.loading) return;
