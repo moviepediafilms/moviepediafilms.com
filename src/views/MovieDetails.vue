@@ -1,10 +1,16 @@
 <template>
   <base-layout>
     <div v-swipe="swipe" ref="content">
-      <div class="q-pa-xs" v-if="is_movie_published">
-        <q-responsive :ratio="16 / 9" class="col">
+      <div class="q-pa-xs">
+        <q-responsive :ratio="16 / 9" class="col" v-if="is_movie_published">
           <iframe :src="movie.link" frameborder="0" allowfullscreen />
         </q-responsive>
+        <q-skeleton
+          height="230px"
+          type="rect"
+          class="full-width"
+          v-if="loading"
+        />
       </div>
       <div class="q-px-md q-pb-md">
         <div class="row" v-if="is_movie_published">
@@ -349,7 +355,37 @@
             </div>
           </div>
         </div>
-        <div class="col" v-else>
+        <div class="row" v-if="loading">
+          <div class="col">
+            <q-skeleton type="rect" width="70%" class="text-subtitle1" />
+            <q-skeleton type="text" width="10%" />
+            <q-skeleton type="text" width="100%" />
+            <div class="row q-col-gutter-sm">
+              <div class="col"><q-skeleton type="QBtn" /></div>
+              <div class="col"><q-skeleton type="QBtn" /></div>
+              <div class="col"><q-skeleton type="QBtn" /></div>
+              <div class="col"><q-skeleton type="QBtn" /></div>
+            </div>
+
+            <q-list>
+              <q-item>
+                <q-item-section avatar>
+                  <q-skeleton type="QAvatar" />
+                </q-item-section>
+
+                <q-item-section>
+                  <q-item-label>
+                    <q-skeleton type="text" width="35%" />
+                  </q-item-label>
+                  <q-item-label caption>
+                    <q-skeleton type="text" />
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </div>
+        </div>
+        <div class="col" v-if="!loading && !is_movie_published">
           <empty-state
             title="This film is yet to be screened."
             desc="You can watch other films screening on our platform here."
@@ -722,6 +758,7 @@ export default {
         },
       ],
       max_reviews: undefined,
+      loading: false,
       loading_reviews: false,
       loading_new_list_request: false,
       loading_new_crew: false,
@@ -921,6 +958,7 @@ export default {
       console.log("someone swiped", event.direction);
     },
     fetch_movie(movie_id) {
+      this.loading = true;
       movie_service
         .get({}, movie_id)
         .then((movie) => {
@@ -928,10 +966,12 @@ export default {
             this.my_rate_review = movie.requestor_rating;
           delete movie["requestor_rating"];
           Object.assign(this.movie, movie);
+          this.loading = false;
         })
         .catch((error) => {
           if (error.response.status == 404) console.log("show 404 page");
           console.log(error);
+          this.loading = false;
         });
     },
     fetch_reviews() {
