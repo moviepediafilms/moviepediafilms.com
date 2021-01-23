@@ -13,14 +13,22 @@
       :show-my-roles="false"
       :show-state="false"
     ></movie>
+    <template v-if="loading">
+      <movie-skeleton v-for="i in 5" :key="'movie_skeleton_' + i" />
+    </template>
   </horizontal-items>
 </template>
 <script>
 import HorizontalItems from "@/components/HorizontalItems";
 import Movie from "@/components/movie/Movie";
+import MovieSkeleton from "@/components/movie/Skeleton";
 import _ from "lodash";
 export default {
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     movies: {
       type: Array,
       default() {
@@ -36,7 +44,7 @@ export default {
       default: 110,
     },
   },
-  components: { Movie, HorizontalItems },
+  components: { Movie, HorizontalItems, MovieSkeleton },
   data() {
     return {
       //   movies: [],

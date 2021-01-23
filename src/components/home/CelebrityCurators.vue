@@ -15,6 +15,9 @@
         <q-img
           v-ripple
           class="q-mr-xs"
+          transition="fade"
+          spinner-color="primary"
+          spinner-size="24px"
           v-for="(celeb, index) in celebrities"
           :key="index"
           :width="`${width}px`"
@@ -28,6 +31,16 @@
             })
           "
         />
+        <template v-if="loading">
+          <q-skeleton
+            class="q-ma-xs"
+            v-for="i in 3"
+            :key="'img_skeleton_' + i"
+            type="rect"
+            :width="width - 10 + 'px'"
+            :height="height + 'px'"
+          />
+        </template>
       </div>
     </q-scroll-area>
   </div>

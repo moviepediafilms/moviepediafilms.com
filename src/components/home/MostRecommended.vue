@@ -6,6 +6,7 @@
     <horizontal-movie-list
       :movies="movies"
       :height="height"
+      :loading="loading"
       :width="width"
       @onLoadMore="fetch_movies"
     />
@@ -14,7 +15,7 @@
 <script>
 import HorizontalMovieList from "@/components/home/HorizontalMovieList";
 import { movie_service } from "@/services";
-
+import settings from "@/settings";
 export default {
   components: {
     HorizontalMovieList,
@@ -31,8 +32,9 @@ export default {
   },
   data() {
     return {
-      fetch_size: 4,
+      fetch_size: settings.PAGE_SIZE,
       count: undefined,
+      loading: false,
       movies: [],
     };
   },
