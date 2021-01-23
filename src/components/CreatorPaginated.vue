@@ -22,6 +22,7 @@
 import Creators from "@/components/Creators";
 import { contest_service } from "@/services";
 import _ from "lodash";
+import settings from "@/settings";
 export default {
   components: {
     Creators,
@@ -33,7 +34,7 @@ export default {
     },
     page_size: {
       type: Number,
-      default: 20,
+      default: settings.PAGE_SIZE,
     },
     contest: {
       type: Object,
@@ -86,7 +87,6 @@ export default {
             `${this.contest.id}/top-creators`
           )
           .then((data) => {
-            console.log(data);
             this.creators.push(...data.results);
             this.max_creators = data.count;
             this.loading = false;

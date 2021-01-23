@@ -8,7 +8,7 @@
       @click="on_profile_select"
       :pin_self_top="false"
       :highlight_top="10"
-      v-if="curators.length > 0"
+      v-if="curators.length > 0 || loading"
     />
     <empty-state
       title="Recommend Films & Win Big."
@@ -22,6 +22,7 @@
 import Curators from "@/components/Curators";
 import { contest_service } from "@/services";
 import _ from "lodash";
+import settings from "@/settings";
 export default {
   components: {
     Curators,
@@ -33,7 +34,7 @@ export default {
     },
     page_size: {
       type: Number,
-      default: 20,
+      default: settings.PAGE_SIZE,
     },
     contest: {
       type: Object,
@@ -55,7 +56,6 @@ export default {
     },
   },
   created() {
-    console.log("created paginated curator");
     window.addEventListener("scroll", this.throttled_scroll_handler);
   },
   destroyed() {
@@ -87,7 +87,6 @@ export default {
             `${this.contest.id}/top-curators`
           )
           .then((data) => {
-            console.log(data);
             this.curators.push(...data.results);
             this.max_curators = data.count;
             this.loading = false;
