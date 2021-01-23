@@ -23,7 +23,7 @@
             class="text-caption text-grey-5"
             style="min-width: 50px"
           >
-            Recommends
+            Likes
           </q-item-section>
           <q-item-section
             side
@@ -55,7 +55,7 @@
             <span class="text-grey-6 text-caption">{{ user.city }}</span>
           </q-item-section>
           <q-item-section side style="min-width: 55px">
-            {{ user.recommend_count }}
+            {{ user.likes_on_recommend }}
           </q-item-section>
           <q-item-section side style="min-width: 55px">
             {{ user.match }}
