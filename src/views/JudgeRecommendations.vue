@@ -2,6 +2,7 @@
   <base-layout>
     <div class="q-pa-md text-grey-4">
       <div class="col">
+        <!-- TODO: add photo -->
         <div class="text-h5 text-overline">Recommended by</div>
         <div class="text-h1 text-primary">{{ judge.name }}</div>
         <div class="q-mt-sm text-subtitle1">{{ judge.title }}</div>

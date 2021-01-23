@@ -24,12 +24,43 @@
       <q-item
         clickable
         v-ripple
+        style="border-radius: 10px"
+        class="bg-primary q-mb-xs text-dark"
+        @click="$emit('click', viewer)"
+        v-if="viewer.id"
+      >
+        <q-item-section side class="text-dark">
+          #{{ viewer.pos }}
+        </q-item-section>
+        <q-item-section avatar>
+          <q-avatar>
+            <img
+              :src="viewer.image || '/default_avatar.png'"
+              @error="on_user_img_error"
+            />
+          </q-avatar>
+        </q-item-section>
+        <q-item-section class="ellipsis text-left">
+          {{ viewer.name }}
+          <span class="text-caption">{{ viewer.city }}</span>
+        </q-item-section>
+        <q-item-section class="text-dark" side style="min-width: 55px">
+          {{ viewer.recommend_count }}
+        </q-item-section>
+        <q-item-section class="text-dark" side style="min-width: 55px">
+          {{ viewer.score }}
+        </q-item-section>
+      </q-item>
+      <q-item
+        clickable
+        v-ripple
         v-for="(user, index) in users"
         :key="index"
         style="border-radius: 10px"
         :class="{ 'bg-light-green-10 q-mb-xs': index < highlight_top }"
         @click="$emit('click', user)"
       >
+        <q-item-section side> #{{ user.pos }} </q-item-section>
         <q-item-section avatar>
           <q-avatar>
             <img
@@ -104,6 +135,12 @@ export default {
     highlight_top: {
       type: Number,
       dafault: 0,
+    },
+    viewer: {
+      type: Object,
+      dafault() {
+        return {};
+      },
     },
   },
 
