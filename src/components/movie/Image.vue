@@ -1,6 +1,9 @@
 <template>
   <q-img
     :ratio="9 / 16"
+    spinner-color="primary"
+    spinner-size="24px"
+    transition="fade"
     :src="`${media_base}${poster}`"
     @click.prevent="$emit('click')"
   >
