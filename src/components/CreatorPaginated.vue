@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-col-gutter-md justify-center">
+  <div class="justify-center">
     <creators
       ref="list"
       :users="creators"
@@ -8,7 +8,7 @@
       @click="on_profile_select"
       :pin_self_top="false"
       :highlight_top="10"
-      v-if="creators.length > 0"
+      v-if="creators.length > 0 || loading"
     />
     <empty-state
       title="Create. Submit. Compete."
