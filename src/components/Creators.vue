@@ -1,5 +1,55 @@
 <template>
-  <div>
+  <div class="">
+    <q-list padding v-if="users.length > 0">
+      <q-item dense class="q-ma-none q-pa-none">
+        <q-item-section avatar> </q-item-section>
+        <q-item-section class="q-ml-lg text-caption text-left text-grey-5"
+          >Name
+        </q-item-section>
+        <q-item-section
+          side
+          class="text-caption text-grey-5"
+          style="min-width: 50px"
+        >
+          Recommends
+        </q-item-section>
+        <q-item-section
+          side
+          class="text-caption text-grey-5"
+          style="min-width: 50px"
+        >
+          Score
+        </q-item-section>
+      </q-item>
+      <q-item
+        clickable
+        v-ripple
+        v-for="(user, index) in users"
+        :key="index"
+        style="border-radius: 10px"
+        :class="{ 'bg-light-green-10 q-mb-xs': index < highlight_top }"
+        @click="$emit('click', user)"
+      >
+        <q-item-section avatar>
+          <q-avatar>
+            <img
+              :src="user.image || '/default_avatar.png'"
+              @error="on_user_img_error"
+            />
+          </q-avatar>
+        </q-item-section>
+        <q-item-section class="ellipsis text-left">
+          {{ user.name }}
+          <span class="text-grey-6 text-caption">{{ user.city }}</span>
+        </q-item-section>
+        <q-item-section side style="min-width: 55px">
+          {{ user.recommend_count }}
+        </q-item-section>
+        <q-item-section side style="min-width: 55px">
+          {{ user.score }}
+        </q-item-section>
+      </q-item>
+    </q-list>
     <transition
       appear
       name="custom-classes-transition"
@@ -11,57 +61,6 @@
       <div class="text-center q-my-lg" v-if="loading">
         <q-spinner-hourglass color="grey-6" size="2em" />
       </div>
-
-      <q-list padding v-else>
-        <q-item dense class="q-ma-none q-pa-none">
-          <q-item-section avatar> </q-item-section>
-          <q-item-section class="q-ml-lg text-caption text-left text-grey-5"
-            >Name
-          </q-item-section>
-          <q-item-section
-            side
-            class="text-caption text-grey-5"
-            style="min-width: 50px"
-          >
-            Recommends
-          </q-item-section>
-          <q-item-section
-            side
-            class="text-caption text-grey-5"
-            style="min-width: 50px"
-          >
-            Score
-          </q-item-section>
-        </q-item>
-        <q-item
-          clickable
-          v-ripple
-          v-for="(user, index) in users"
-          :key="user.id"
-          style="border-radius: 10px"
-          :class="{ 'bg-light-green-10 q-mb-xs': index < highlight_top }"
-          @click="$emit('click', user)"
-        >
-          <q-item-section avatar>
-            <q-avatar>
-              <img
-                :src="user.image || '/default_avatar.png'"
-                @error="on_user_img_error"
-              />
-            </q-avatar>
-          </q-item-section>
-          <q-item-section no-wrap class="ellipsis text-left">
-            {{ user.name }}
-            <span class="text-grey-6 text-caption">{{ user.city }}</span>
-          </q-item-section>
-          <q-item-section side style="min-width: 55px">
-            {{ user.recommend_count }}
-          </q-item-section>
-          <q-item-section side style="min-width: 55px">
-            {{ user.score }}
-          </q-item-section>
-        </q-item>
-      </q-list>
     </transition>
     <div class="row justify-center q-mt-md" v-if="show_page_indicator">
       <q-pagination
