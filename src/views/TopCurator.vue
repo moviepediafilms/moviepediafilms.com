@@ -72,7 +72,8 @@ export default {
         .then((data) => {
           console.log(data);
           this.contests.push(...data.results);
-          this.tab = this.contests[this.contests.length - 1].name;
+          if (this.contests.length > 0)
+            this.tab = this.contests[this.contests.length - 1].name;
         })
         .catch((error) => {
           console.log(error);
