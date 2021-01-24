@@ -3,22 +3,21 @@
     <q-list padding v-if="users.length > 0">
       <q-item dense class="q-ma-none q-pa-none">
         <q-item-section avatar> </q-item-section>
-        <q-item-section class="q-ml-lg text-caption text-left text-grey-5"
-          >Name
+        <q-item-section class="q-ml-lg text-caption text-left text-grey-5">
         </q-item-section>
         <q-item-section
           side
           class="text-caption text-grey-5"
           style="min-width: 50px"
         >
-          Likes
+          <q-icon name="mdi-heart" size="xs" />
         </q-item-section>
         <q-item-section
           side
-          class="text-caption text-grey-5"
+          class="text-caption text-grey-5 q-mr-md"
           style="min-width: 50px"
         >
-          Match
+          <q-icon name="mdi-account-star" size="sm" />
         </q-item-section>
       </q-item>
       <q-item
