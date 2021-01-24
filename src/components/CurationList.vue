@@ -58,11 +58,8 @@
 <script>
 import Movies from "@/components/Movies";
 import ShareCard from "@/components/ShareCard";
-import { curation_service } from "@/services/";
-import {
-  LIST_TOGGLE_MOVIE_REQUEST,
-  PROFILE_TOGGLE_CURATION_LIKE,
-} from "@/store/actions";
+import { curation_service, contest_service } from "@/services/";
+import { PROFILE_TOGGLE_CURATION_LIKE } from "@/store/actions";
 import store from "@/store";
 import _ from "lodash";
 export default {
@@ -96,7 +93,8 @@ export default {
       loading: false,
       info: {
         liked_count: 0,
-        movies: 0,
+        movies: [],
+        contest: undefined,
         owner: {
           name: "",
           image: "",
@@ -147,7 +145,7 @@ export default {
         curation_service
           .get({}, this.list_id)
           .then((data) => {
-            this.info = data;
+            this.info = Object.assign({}, this.info, data);
             this.fetch_movies();
           })
           .catch((error) => {
@@ -192,24 +190,18 @@ export default {
       this.show_share_dialog = true;
     },
     on_remove(movie) {
-      this.$store
-        .dispatch(LIST_TOGGLE_MOVIE_REQUEST, {
-          list: { id: this.list.id, movies: this.movie_ids },
-          movie_id: movie.id,
-        })
-        .then((data) => {
-          // remove the movie from this.lists.movies
-          // Addition is handled automatically
-          var movies_to_remove = [];
-          this.list.movies.forEach((movie, index) => {
-            if (data.movies.indexOf(movie.id) == -1) {
-              movies_to_remove.push(index);
-            }
-          });
-          movies_to_remove.forEach((index) => {
-            this.list.movies.splice(index, 1);
-          });
-        });
+      var action = this.info.movies.indexOf(movie.id) == -1 ? "post" : "delete";
+      contest_service[action](
+        { movie: movie.id },
+        `${this.info.contest}/recommend`
+      ).then(() => {
+        // remove the movie from this.lists.movies
+        // Addition cannot happen here
+        if (action === "delete") {
+          var inx = this.movies.indexOf(movie);
+          this.movies.splice(inx, 1);
+        }
+      });
     },
   },
 };
