@@ -1,5 +1,16 @@
 <template>
-  <q-item v-ripple>
+  <q-item
+    v-ripple
+    clickable
+    @click="
+      $router.push({
+        name: 'profile',
+        params: {
+          id: user.id,
+        },
+      })
+    "
+  >
     <q-item-section avatar>
       <q-avatar>
         <img
@@ -22,7 +33,7 @@
         padding="sm"
         size="xs"
         :label="action.name"
-        @click="$emit('action', { action: action, user: user })"
+        @click.stop="$emit('action', { action: action, user: user })"
       />
     </q-item-section>
   </q-item>
