@@ -14,7 +14,7 @@
         round
         icon="mdi-check"
         size="xs"
-        color="blue"
+        color="primary"
         @click="on_unfollow"
         v-else
       />
