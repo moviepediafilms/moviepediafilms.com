@@ -16,12 +16,12 @@
               <q-avatar size="60px">
                 <q-badge
                   v-if="person.is_celeb"
-                  color="red"
+                  color="primary"
                   class="q-m-none q-p-none"
                   floating
                   style="z-index: 100"
                 >
-                  <q-icon name="mdi-star" />
+                  <q-icon name="mdi-star" color="dark" />
                 </q-badge>
                 <q-img :src="person.image || '/default_avatar.png'" />
               </q-avatar>
