@@ -48,6 +48,14 @@
             </q-badge>
           </div>
         </div>
+        <q-btn
+          v-if="menuBtn"
+          style="margin-left: auto"
+          round
+          flat
+          icon="mdi-dots-vertical"
+          @click.stop="$emit('showOptions')"
+        />
         <div class="col flex justify-center items-center q-pa-xs">
           <div class="text-caption ellipsis-3-lines text-center">
             {{ title }}

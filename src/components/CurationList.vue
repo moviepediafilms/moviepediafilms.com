@@ -44,6 +44,7 @@
         :movies="movies"
         :showMyRoles="false"
         :options="options"
+        @remove="on_remove"
       />
     </div>
     <q-dialog v-model="show_share_dialog">
@@ -57,7 +58,7 @@
 <script>
 import Movies from "@/components/Movies";
 import ShareCard from "@/components/ShareCard";
-import { curation_service } from "@/services/";
+import { curation_service, contest_service } from "@/services/";
 import { PROFILE_TOGGLE_CURATION_LIKE } from "@/store/actions";
 import store from "@/store";
 import _ from "lodash";
@@ -92,7 +93,8 @@ export default {
       loading: false,
       info: {
         liked_count: 0,
-        movies: 0,
+        movies: [],
+        contest: undefined,
         owner: {
           name: "",
           image: "",
@@ -143,7 +145,7 @@ export default {
         curation_service
           .get({}, this.list_id)
           .then((data) => {
-            this.info = data;
+            this.info = Object.assign({}, this.info, data);
             this.fetch_movies();
           })
           .catch((error) => {
@@ -186,6 +188,20 @@ export default {
     },
     on_share() {
       this.show_share_dialog = true;
+    },
+    on_remove(movie) {
+      var action = this.info.movies.indexOf(movie.id) == -1 ? "post" : "delete";
+      contest_service[action](
+        { movie: movie.id },
+        `${this.info.contest}/recommend`
+      ).then(() => {
+        // remove the movie from this.lists.movies
+        // Addition cannot happen here
+        if (action === "delete") {
+          var inx = this.movies.indexOf(movie);
+          this.movies.splice(inx, 1);
+        }
+      });
     },
   },
 };
