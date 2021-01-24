@@ -89,6 +89,7 @@ export default {
     return {
       show_share_dialog: false,
       movies_per_fetch: 20,
+      loading: false,
       info: {
         liked_count: 0,
         movies: 0,
@@ -150,10 +151,12 @@ export default {
           });
     },
     fetch_movies() {
+      if (this.loading) return;
       if (
         this.max_movies_for_page == undefined ||
         this.movies.length < this.max_movies_for_page
       ) {
+        this.loading = true;
         var query_params = {
           limit: this.movies_per_fetch,
           offset: this.movies.length,
@@ -163,9 +166,11 @@ export default {
           .then((data) => {
             this.movies.push(...data.results);
             this.max_movies_for_page = data.count;
+            this.loading = false;
           })
           .catch((error) => {
             console.log(error);
+            this.loading = false;
           });
       }
     },

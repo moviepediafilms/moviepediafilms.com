@@ -44,9 +44,6 @@ export default {
         return {};
       },
     },
-    list_id: {
-      type: Number,
-    },
   },
   components: {
     CurationList,
@@ -68,6 +65,11 @@ export default {
       return this.profile.id == this.my_profile.id;
     },
   },
+  watch: {
+    profile() {
+      this.fetch_contest_recommend_lists();
+    },
+  },
   created() {
     this.fetch_contest_recommend_lists();
   },
@@ -76,15 +78,16 @@ export default {
       this.selected_recommend_list = recommend_list;
     },
     fetch_contest_recommend_lists() {
-      curation_service
-        .get({ owner__id: this.profile.id, contest__isnull: false })
-        .then((data) => {
-          this.recommend_lists = data.results;
-          this.selected_recommend_list = this.recommend_lists[0];
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (this.profile.id)
+        curation_service
+          .get({ owner__id: this.profile.id, contest__isnull: "false" })
+          .then((data) => {
+            this.recommend_lists = data.results;
+            this.selected_recommend_list = this.recommend_lists[0];
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
     on_remove(movie) {
       this.$store
