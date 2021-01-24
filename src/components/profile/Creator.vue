@@ -233,6 +233,9 @@ export default {
   },
   watch: {
     profile() {
+      this.reviews.splice(0, this.reviews.length);
+      this.new_followers.splice(0, this.new_followers.length);
+      this.new_following.splice(0, this.new_following.length);
       this.load_data();
     },
   },

@@ -245,6 +245,10 @@ export default {
   },
   watch: {
     profile() {
+      this.recommend_meta = {};
+      this.curations.splice(0, this.curations.length);
+      this.following.splice(0, this.following.length);
+      this.followers.splice(0, this.followers.length);
       this.load_data();
     },
     profile_is_filmmaker() {

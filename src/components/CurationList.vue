@@ -2,10 +2,15 @@
 <template>
   <div>
     <div v-if="header">
+      <q-avatar size="72px">
+        <img
+          :src="info.owner.image || '/default_avatar.png'"
+          @error="on_user_img_error"
+        />
+      </q-avatar>
       <h1 class="text-primary">
         {{ info.name }}
       </h1>
-      <!-- TODO: add photo -->
       <h3>
         <small class="text-grey-4">{{ info.owner.name }} Recommends</small>
       </h3>
