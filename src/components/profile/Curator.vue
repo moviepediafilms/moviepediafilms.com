@@ -122,7 +122,7 @@
             <watchlist :movies="watchlist"></watchlist>
           </q-tab-panel>
           <q-tab-panel name="recommends" class="q-px-none">
-            <recommends :profile="profile" :list_id="recommend_meta.id" />
+            <recommends :profile="profile" />
           </q-tab-panel>
           <q-tab-panel name="curations" class="q-px-none">
             <curations :lists="curations" @select="on_list_select" />
@@ -162,7 +162,7 @@ import FollowUserList from "@/components/profile/follow/List";
 import Filmography from "@/components/profile/tabs/Filmography";
 import FollowBtn from "@/components/profile/FollowBtn";
 import Curations from "@/components/profile/tabs/Curations";
-import { profile_service, follow_service, curation_service } from "@/services";
+import { follow_service, curation_service } from "@/services";
 import {
   PROFILE_WATCHLIST_REQUEST,
   PROFILE_FOLLOW,
@@ -192,7 +192,6 @@ export default {
   data() {
     return {
       tab: "recommends",
-      recommend_meta: {},
       curations: [],
       followers: [],
       following: [],
@@ -245,7 +244,6 @@ export default {
   },
   watch: {
     profile() {
-      this.recommend_meta = {};
       this.curations.splice(0, this.curations.length);
       this.following.splice(0, this.following.length);
       this.followers.splice(0, this.followers.length);
@@ -274,7 +272,6 @@ export default {
     },
     load_data() {
       if (this.profile.id && this.is_authenticated) {
-        this.get_recommends();
         if (this.is_viewers_profile) this.get_watchlist();
         this.get_followers();
         this.get_following();
@@ -295,13 +292,7 @@ export default {
       //TODO: fetch top reviews that I have given to movies
       return "-";
     },
-    get_recommends() {
-      profile_service
-        .get({}, `${this.profile.id}/recommend-details`)
-        .then((data) => {
-          this.recommend_meta = data;
-        });
-    },
+
     get_watchlist() {
       this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
     },
