@@ -4,7 +4,7 @@
       <div class="q-ma-md text-center">
         <h1 class="text-primary">Creators Leaderboard</h1>
       </div>
-      <div v-if="users.length > 0">
+      <div v-if="loading || users.length > 0">
         <div class="row justify-start q-ml-md q-mt-md">
           <div class="text-caption text-grey-5">
             <q-icon
@@ -27,7 +27,7 @@
         title="Nothing to show here."
         desc="Check this space later to know the standings of the creators on our platform"
         image="/img/empty/15.svg"
-        v-else
+        v-if="!loading && user.length == 0"
       />
     </div>
   </base-layout>
@@ -65,7 +65,8 @@ export default {
   methods: {
     fetch_users() {
       if (this.loading) return;
-      if (this.users.length >= this.count) this.loading = true;
+      if (this.users.length >= this.count) return;
+      this.loading = true;
       flb_service
         .get({
           offset: this.users.length,
@@ -73,6 +74,7 @@ export default {
         })
         .then((data) => {
           this.users.push(...data.results);
+          this.count = data.count;
           this.loading = false;
         })
         .catch(() => {

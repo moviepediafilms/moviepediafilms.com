@@ -4,7 +4,7 @@
       <div class="q-ma-md text-center">
         <h1 class="text-primary">Curators Leaderboard</h1>
       </div>
-      <div v-if="users.length > 0">
+      <div v-if="loading || users.length > 0">
         <div class="row justify-start q-ml-md q-mt-md">
           <div class="text-caption text-grey-5">
             <q-icon
@@ -27,7 +27,7 @@
         title="Nothing to show here."
         desc="Check this space later to know the standings of the curators on our platform"
         image="/img/empty/15.svg"
-        v-else
+        v-if="!loading && user.length == 0"
       />
     </div>
   </base-layout>

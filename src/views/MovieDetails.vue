@@ -242,7 +242,7 @@
                 <div class="q-mt-xs">
                   <div
                     class="text-body2 text-left"
-                    style="word-break: break-word"
+                    style="word-break: break-all"
                   >
                     <read-more
                       class="readmore readmore-primary"
@@ -630,6 +630,7 @@ import BaseLayout from "@/layouts/Base";
 import LoginRequiredPopup from "@/components/LoginRequiredPopup";
 import Reviews from "@/components/Reviews";
 import ShareCard from "@/components/ShareCard";
+import settings from "@/settings"
 import {
   movie_service,
   review_service,
@@ -835,7 +836,6 @@ export default {
       return this.movie.state === "P";
     },
     loaded_reviews() {
-      if (this.loading_reviews) return [];
       return this.reviews;
     },
     movie_publish_date() {
@@ -882,7 +882,7 @@ export default {
       return recommended || this.movie.is_recommended;
     },
     review_page_size() {
-      return parseInt(process.env.VUE_APP_REVIEW_PAGE_SIZE);
+      return settings.PAGE_SIZE;
     },
     director() {
       var director = {};
