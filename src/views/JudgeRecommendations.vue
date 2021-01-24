@@ -1,10 +1,17 @@
 <template>
   <base-layout>
     <div class="q-pa-md text-grey-4">
-      <div class="col">
-        <!-- TODO: add photo -->
+      <div class="col text-center">
         <div class="text-h5 text-overline">Recommended by</div>
-        <div class="text-h1 text-primary">{{ judge.name }}</div>
+        <q-avatar size="96px">
+          <img
+            :src="judge.image || '/default_avatar.png'"
+            @error="on_user_img_error"
+          />
+        </q-avatar>
+        <div class="text-h1 text-primary q-mt-sm">
+          {{ judge.name }}
+        </div>
         <div class="q-mt-sm text-subtitle1">{{ judge.title }}</div>
       </div>
       <div class="q-mt-md text-uppercase text-primary" v-if="movies.length > 0">
