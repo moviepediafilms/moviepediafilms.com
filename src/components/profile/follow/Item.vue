@@ -1,5 +1,5 @@
 <template>
-  <q-item>
+  <q-item v-ripple>
     <q-item-section avatar>
       <q-avatar>
         <img
