@@ -85,7 +85,6 @@ export default {
   methods: {
     on_scroll(info) {
       if (info.horizontalPercent < 0.8) return;
-      console.log(info);
       this.fetch_celebrities();
     },
     fetch_celebrities() {

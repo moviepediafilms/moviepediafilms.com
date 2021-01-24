@@ -68,7 +68,6 @@ export default {
       movie_service
         .get(params)
         .then((data) => {
-          console.log(data);
           this.movies.push(...data.results);
           this.loading = false;
           this.all_movie_count = data.count;

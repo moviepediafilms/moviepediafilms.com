@@ -55,7 +55,6 @@ export default {
         });
     },
     fetch_my_movies() {
-      console.log(this.profile_id);
       movies_by_service
         .get({}, this.profile_id)
         .then((data) => {

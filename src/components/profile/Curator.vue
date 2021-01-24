@@ -245,16 +245,14 @@ export default {
   },
   watch: {
     profile() {
-      console.log("on profile change");
       this.load_data();
     },
   },
   mounted() {
-    console.log("on mounted");
     this.load_data();
     // when user is not a filmmaker, filmography tab is not mounted and on_empty_filmography is never called to switch the tab,
     // in such cases explicitly setting tab to next mounted tab
-    if (this.profile_is_filmmaker) this.tab = "watchlist";
+    if (!this.profile_is_filmmaker) this.tab = "watchlist";
   },
   methods: {
     on_empty_filmography() {
@@ -295,13 +293,11 @@ export default {
       this.$store.dispatch(PROFILE_WATCHLIST_REQUEST);
     },
     get_followers() {
-      console.log(`${this.profile.id}/followers`);
       follow_service.get({}, `${this.profile.id}/followers`).then((data) => {
         this.followers.push(...data.results);
       });
     },
     get_following() {
-      console.log(`${this.profile.id}/following`);
       follow_service.get({}, `${this.profile.id}/following`).then((data) => {
         this.following.push(...data.results);
       });
@@ -323,9 +319,7 @@ export default {
     on_unfollow_user(user) {
       this.$store.dispatch(PROFILE_UNFOLLOW, user);
     },
-    on_level_clicked() {
-      console.log("level clicked");
-    },
+    on_level_clicked() {},
     on_rank_clicked() {
       this.$router.push({ name: "audience-leaderboard" });
     },

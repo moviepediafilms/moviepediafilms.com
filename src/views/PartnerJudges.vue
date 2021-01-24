@@ -86,8 +86,6 @@ export default {
         });
     },
     set_to_show_alt(event) {
-      console.log(event.target);
-      console.log(event.target.dataset);
       this.show_alt_images[event.target.dataset.id] = true;
     },
   },

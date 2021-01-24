@@ -176,7 +176,7 @@ export default {
       new_followers: [],
       new_following: [],
       reviews: [],
-      tab: "followers",
+      tab: "filmography",
       xp_info_dialog: false,
     };
   },
@@ -267,7 +267,6 @@ export default {
       this.$store.dispatch(PROFILE_UNFOLLOW, user);
     },
     get_reviews() {
-      console.log("calling");
       review_service
         .get({ author__id: this.profile.id })
         .then((res) => {

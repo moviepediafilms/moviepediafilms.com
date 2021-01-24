@@ -43,7 +43,6 @@ export default {
     },
     should_hide() {
       // hide when viewer's profile
-      console.log(this.profileId, this.my_profile.id);
       return this.profileId === this.my_profile.id;
     },
   },
