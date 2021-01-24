@@ -44,6 +44,7 @@
         :movies="movies"
         :showMyRoles="false"
         :options="options"
+        @remove="on_remove"
       />
     </div>
     <q-dialog v-model="show_share_dialog">
@@ -186,6 +187,9 @@ export default {
     },
     on_share() {
       this.show_share_dialog = true;
+    },
+    on_remove(movie) {
+      this.$emit("remove", movie);
     },
   },
 };
