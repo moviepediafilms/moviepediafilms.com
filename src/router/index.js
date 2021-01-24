@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
-import Home from '../views/TempHome.vue'
+import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 Vue.use(VueMeta)
@@ -20,6 +20,11 @@ const routes = [
         path: '/',
         name: 'home',
         component: Home
+    }, {
+        path: '/welcome',
+        name: 'welcome',
+        component: () =>
+            import ('../views/Welcome.vue')
     },
     {
         path: '/login',
@@ -61,13 +66,13 @@ const routes = [
         path: '/list/:id/:slug/',
         name: 'list-detail',
         component: () =>
-            import ('../views/ListDetails.vue')
+            import ('../views/CurationListDetail.vue')
     },
     {
-        path: '/my-reviews/',
-        name: 'my-reviews',
+        path: '/reviews/:id/',
+        name: 'reviews',
         component: () =>
-            import ('../views/MyReviews.vue')
+            import ('../views/Reviews.vue')
     },
     {
         path: '/movies/:profile_id',
@@ -109,7 +114,7 @@ const routes = [
         path: '/submit/:movie_id?',
         name: 'submit',
         component: () =>
-            import ('../views/Submission.vue')
+            import ('../views/SubmitMovie.vue')
     },
     {
         path: '/my-submissions',
@@ -128,12 +133,6 @@ const routes = [
         name: 'filmmaker-of-the-month',
         component: () =>
             import ('../views/FilmmakerOfTheMonth.vue')
-    },
-    {
-        path: '/mdff-top',
-        name: 'mdff-top',
-        component: () =>
-            import ('../views/MDFFTop.vue')
     },
     {
         path: '/audience-leaderboard',

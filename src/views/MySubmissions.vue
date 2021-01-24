@@ -74,9 +74,12 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import MovieImage from "@/components/MovieImage";
+import MovieImage from "@/components/movie/Image";
 import { profile_service } from "@/services";
 export default {
+  metaInfo: {
+    title: "Submissions",
+  },
   components: {
     BaseLayout,
     MovieImage,

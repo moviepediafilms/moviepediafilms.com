@@ -54,6 +54,9 @@ import { profile_service } from "@/services";
 
 export default {
   name: "partner-judges",
+  metaInfo: {
+    title: "Partner Judges",
+  },
   components: {
     BaseLayout,
   },
@@ -83,8 +86,6 @@ export default {
         });
     },
     set_to_show_alt(event) {
-      console.log(event.target);
-      console.log(event.target.dataset);
       this.show_alt_images[event.target.dataset.id] = true;
     },
   },

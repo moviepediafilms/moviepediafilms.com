@@ -3,44 +3,17 @@
     <div class="row q-col-gutter-sm" v-if="movies.length > 0">
       <div
         class="col-4 col-sm-3 col-md-3"
-        v-for="item in movies"
-        :key="item.id"
+        v-for="movie in movies"
+        :key="movie.id"
       >
-        <q-card flat v-ripple @click="on_item_click(item)">
-          <q-img :ratio="9 / 16" :src="`${media_base}${item.poster}`">
-            <div class="absolute-top-right bg-transparent" style="padding: 0">
-              <q-btn
-                round
-                flat
-                icon="mdi-dots-vertical"
-                @click.stop="on_menu_click(item)"
-                v-if="options.length > 0"
-              />
-            </div>
-            <template v-slot:error>
-              <div class="absolute-full flex flex-center bg-primary text-dark">
-                <div class="text-h3">{{ item.title }}</div>
-                <div class="text-caption">
-                  <q-icon name="mdi-close" color="negative" size="24px" />Cannot
-                  load image
-                </div>
-              </div>
-            </template>
-          </q-img>
-          <div>
-            <div class="ellipsis">
-              {{ item.title }}
-            </div>
-            <q-badge color="positive" v-if="item.is_live">Live</q-badge>
-            <q-badge
-              color="grey-5"
-              class="q-ml-xs"
-              text-color="dark"
-              v-if="item.contest"
-              >{{ item.contest }}</q-badge
-            >
-          </div>
-        </q-card>
+        <movie
+          :menuBtn="options.length > 0"
+          :emitSelection="emitSelection"
+          :showMyRoles="showMyRoles"
+          :movie="movie"
+          @select="on_select(movie)"
+          @showOptions="on_show_options(movie)"
+        />
       </div>
     </div>
     <empty-state
@@ -59,19 +32,29 @@
   </div>
 </template>
 <script>
+import Movie from "@/components/movie/Movie";
 import PopupMenu from "@/components/PopupMenu";
 export default {
   components: {
     PopupMenu,
+    Movie,
   },
   props: {
+    emitSelection: {
+      type: Boolean,
+      default: false,
+    },
+    showMyRoles: {
+      type: Boolean,
+      default: true,
+    },
     emptyTitle: {
       type: String,
       default: "Nothing to show here",
     },
     emptyDesc: {
       type: String,
-      default: "No Reviews found!",
+      default: "No movies found!",
     },
     emptyIcon: {
       type: String,
@@ -101,15 +84,15 @@ export default {
     };
   },
   methods: {
-    on_item_click(item) {
-      this.$emit("item-selected", item);
-    },
-    on_menu_click(movie) {
-      this.active_movie = movie;
-      this.show_menu = true;
-    },
     on_option_select(option) {
       this.$emit(option.emit, this.active_movie);
+    },
+    on_select(movie) {
+      this.$emit("select", movie);
+    },
+    on_show_options(movie) {
+      this.active_movie = movie;
+      this.show_menu = true;
     },
   },
 };

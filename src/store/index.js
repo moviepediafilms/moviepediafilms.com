@@ -8,6 +8,7 @@ import alb from "./modules/alb";
 import flb from "./modules/flb";
 import follow from "./modules/follow";
 import genre from "./modules/genre";
+import lang from "./modules/lang";
 Vue.use(Vuex);
 
 const debug = process.env.NODE_ENV !== "production";
@@ -21,7 +22,8 @@ export default new Vuex.Store({
         alb,
         flb,
         follow,
-        genre
+        genre,
+        lang
     },
     strict: debug
 });

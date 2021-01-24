@@ -69,11 +69,11 @@ export default {
   methods: {
     load_live_monthly_contests() {
       contest_service
-        .get({ ordering: "start", is_live: "true", type__name: "Monthly" })
+        .get({ ordering: "start", live: "true", type__name: "Monthly" })
         .then((data) => {
-          console.log(data);
           this.contests.push(...data.results);
-          this.tab = this.contests[this.contests.length - 1].name;
+          if (this.contests.length > 0)
+            this.tab = this.contests[this.contests.length - 1].name;
         })
         .catch((error) => {
           console.log(error);

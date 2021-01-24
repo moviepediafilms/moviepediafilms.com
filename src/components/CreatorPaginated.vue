@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-col-gutter-md justify-center">
+  <div class="justify-center">
     <creators
       ref="list"
       :users="creators"
@@ -7,8 +7,9 @@
       :show_page_indicator="false"
       @click="on_profile_select"
       :pin_self_top="false"
+      :viewer="viewer"
       :highlight_top="10"
-      v-if="creators.length > 0"
+      v-if="creators.length > 0 || loading"
     />
     <empty-state
       title="Create. Submit. Compete."
@@ -22,6 +23,7 @@
 import Creators from "@/components/Creators";
 import { contest_service } from "@/services";
 import _ from "lodash";
+import settings from "@/settings";
 export default {
   components: {
     Creators,
@@ -33,7 +35,7 @@ export default {
     },
     page_size: {
       type: Number,
-      default: 20,
+      default: settings.PAGE_SIZE,
     },
     contest: {
       type: Object,
@@ -44,6 +46,7 @@ export default {
   },
   data() {
     return {
+      viewer: {},
       creators: [],
       loading: false,
       max_creators: undefined,
@@ -55,7 +58,6 @@ export default {
     },
   },
   created() {
-    console.log("created paginated creator");
     window.addEventListener("scroll", this.throttled_scroll_handler);
   },
   destroyed() {
@@ -63,6 +65,7 @@ export default {
   },
   mounted() {
     this.new_page_load();
+    this.load_viewer_position();
   },
   methods: {
     scroll_handler() {
@@ -73,6 +76,16 @@ export default {
           this.new_page_load();
         }
       }
+    },
+    load_viewer_position() {
+      contest_service
+        .get({}, `${this.contest.id}/my_creator_position`)
+        .then((data) => {
+          this.viewer = Object.assign({}, this.viewer, data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     new_page_load() {
       if (this.loading) return;
@@ -87,7 +100,6 @@ export default {
             `${this.contest.id}/top-creators`
           )
           .then((data) => {
-            console.log(data);
             this.creators.push(...data.results);
             this.max_creators = data.count;
             this.loading = false;

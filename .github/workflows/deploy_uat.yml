@@ -1,0 +1,45 @@
+name: Deploy On UAT
+on:
+  push:
+    branches: [ uat ]
+  workflow_dispatch:
+jobs:
+  deploy:
+    environment: uat
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.11.0]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npm run build-uat
+    - run: |
+        cd $GITHUB_WORKSPACE/dist
+        tar -zcvf $GITHUB_WORKSPACE/dist.tar.gz .
+    - run: ls -al $GITHUB_WORKSPACE
+    - name: Copy tar to server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSHKEY }}
+        debug: ${{ secrets.DEBUG }}
+        source: "dist.tar.gz"
+        target: "/tmp/"
+    - name: Extract tar on server
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        KEY: ${{ secrets.SSHKEY }}
+        debug: ${{ secrets.DEBUG }}
+        script: |
+          ls -al /tmp
+          tar -zxvf /tmp/dist.tar.gz -C /var/www/moviepediafilms.com
+          rm /tmp/dist.tar.gz
+        

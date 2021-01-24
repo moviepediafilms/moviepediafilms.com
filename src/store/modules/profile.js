@@ -16,6 +16,7 @@ import {
     PROFILE_REMOVE_RECOMMEND_,
     PROFILE_IMAGE_UPDATE_,
     PROFILE_VIEW_TOGGLE_,
+    PROFILE_TOGGLE_CURATION_LIKE_,
     FOLLOW_REQUEST
 } from "@/store/actions";
 import {
@@ -25,7 +26,7 @@ import {
     my_watchlist_service,
     my_recommends_service,
     watchlist_service,
-    recommend_service
+    curation_service
 } from "@/services";
 
 const state = {
@@ -34,7 +35,8 @@ const state = {
     watchlist: JSON.parse(localStorage.getItem("watchlist")) || [],
     recommends: JSON.parse(localStorage.getItem("recommends")) || [],
     profile: JSON.parse(localStorage.getItem("profile")) || {},
-    show_filmmaker_profile: JSON.parse(localStorage.getItem("show_filmmaker_profile", 'true'))
+    show_filmmaker_profile: JSON.parse(localStorage.getItem("show_filmmaker_profile", 'true')),
+    curations_liked: JSON.parse(localStorage.getItem("curations_liked")) || []
 };
 
 const getters = {
@@ -119,7 +121,7 @@ const actions = {
     },
     [PROFILE_REMOVE_WATCHLIST_]: ({ commit }, movie) => {
         return new Promise((resolve, reject) => {
-            watchlist_service.delete(movie.id)
+            watchlist_service.delete({}, movie.id)
                 .then((data) => {
                     if (data.success)
                         commit(PROFILE_TOGGLE_WATCHLIST_, movie)
@@ -147,10 +149,9 @@ const actions = {
     },
     [PROFILE_REMOVE_RECOMMEND_]: ({ commit }, movie) => {
         return new Promise((resolve, reject) => {
-            recommend_service.delete(movie.id)
+            profile_service.delete({ movie: movie.id }, `${state.profile.id}/recommends`)
                 .then((data) => {
-                    if (data.success)
-                        commit(PROFILE_TOGGLE_RECOMMEND_, movie)
+                    commit(PROFILE_TOGGLE_RECOMMEND_, movie)
                     resolve(data)
                 })
                 .catch((error) => {
@@ -160,12 +161,11 @@ const actions = {
     },
     [PROFILE_TOGGLE_RECOMMEND_]: ({ commit }, movie) => {
         return new Promise((resolve, reject) => {
-            var fn_name = movie.is_recommended ? "delete" : "patch"
-            var params = movie.is_recommended ? [movie.id] : [{}, movie.id]
-            recommend_service[fn_name](...params)
+            var fn_name = movie.is_recommended ? "delete" : "post"
+            profile_service[fn_name]({ movie: movie.id }, `${state.profile.id}/recommends`)
                 .then((data) => {
-                    if (data.success)
-                        commit(PROFILE_TOGGLE_RECOMMEND_, movie)
+                    console.log(data)
+                    commit(PROFILE_TOGGLE_RECOMMEND_, movie)
                     resolve(data)
                 })
                 .catch((error) => {
@@ -189,6 +189,22 @@ const actions = {
     },
     [PROFILE_VIEW_TOGGLE_]: ({ commit }) => {
         commit(PROFILE_VIEW_TOGGLE_)
+    },
+    [PROFILE_TOGGLE_CURATION_LIKE_]: ({ commit }, list_id) => {
+        return new Promise((resolve, reject) => {
+            var liked = state.curations_liked.indexOf(list_id) != -1
+            var verb = liked ? 'delete' : 'post'
+            curation_service[verb]({}, `${list_id}/like`).then(data => {
+                if (data.success) {
+                    commit(PROFILE_TOGGLE_CURATION_LIKE_, list_id)
+                    resolve(data)
+                } else {
+                    reject(data)
+                }
+            }).catch(error => {
+                reject(error)
+            })
+        })
     }
 };
 
@@ -257,6 +273,14 @@ const mutations = {
     [PROFILE_VIEW_TOGGLE_]: (state) => {
         state.show_filmmaker_profile = !state.show_filmmaker_profile
         localStorage.setItem("show_filmmaker_profile", state.show_filmmaker_profile)
+    },
+    [PROFILE_TOGGLE_CURATION_LIKE_]: (state, list_id) => {
+        var index = state.curations_liked.indexOf(list_id)
+        if (index == -1)
+            state.curations_liked.push(list_id)
+        else
+            state.curations_liked.splice(index, 1)
+        localStorage.setItem("curations_liked", JSON.stringify(state.curations_liked))
     }
 };
 

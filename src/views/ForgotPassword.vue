@@ -130,7 +130,6 @@ export default {
       });
     },
     verify_recaptcha(response) {
-      console.log(response);
       if (response) {
         this.reset_data.recaptcha = response;
       }

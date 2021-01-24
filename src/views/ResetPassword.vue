@@ -43,6 +43,9 @@
 import { account_service } from "@/services";
 import BaseLayout from "@/layouts/Base";
 export default {
+  metaInfo: {
+    title: "Reset Password",
+  },
   components: { BaseLayout },
   data() {
     return {
@@ -71,8 +74,7 @@ export default {
       this.clear_error();
       account_service
         .post(this.reset_data, `${this.token}/reset`)
-        .then((data) => {
-          console.log(data);
+        .then(() => {
           this.$q.notify({
             message: "Your password has been changed successfully!",
             color: "positive",

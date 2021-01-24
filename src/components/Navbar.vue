@@ -30,21 +30,39 @@
               round
               color="primary"
               class="q-mr-sm"
-              :icon="action.icon"
+              :icon="action.count > 0 ? action.active_icon : action.icon"
               :to="action.to"
               :key="action.icon"
               v-if="action.type === 'path'"
-            />
+            >
+              <q-badge
+                color="primary"
+                text-color="dark"
+                floating
+                transparent
+                v-if="action.count > 0"
+                >{{ action.count }}</q-badge
+              >
+            </q-btn>
             <q-btn
               flat
               round
               color="primary"
               class="q-mr-sm"
               :key="action.icon"
-              :icon="action.icon"
+              :icon="action.count > 0 ? action.active_icon : action.icon"
               @click.prevent="action.to"
               v-else
-            />
+            >
+              <q-badge
+                color="primary"
+                text-color="dark"
+                floating
+                transparent
+                v-if="action.count > 0"
+                >{{ action.count }}</q-badge
+              >
+            </q-btn>
           </template>
 
           <q-btn flat round color="primary" class="" icon="mdi-menu">
@@ -75,12 +93,12 @@
   </q-header>
 </template>
 <script>
-import setting from "@/setting";
+import settings from "@/settings";
 import { AUTH_LOGOUT } from "@/store/actions";
 export default {
   data() {
     return {
-      action_btns: setting.data.action_btns,
+      action_btns: settings.data.action_btns,
     };
   },
   methods: {

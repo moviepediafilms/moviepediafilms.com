@@ -64,9 +64,9 @@ class BaseService {
             return Promise.reject(error)
         })
     }
-    delete(url_suffix) {
+    delete(payload, url_suffix) {
         url_suffix = url_suffix ? `${url_suffix}/` : ''
-        return backend.delete(this.url + url_suffix).then(response => {
+        return backend.delete(this.url + url_suffix, { data: payload }).then(response => {
             return Promise.resolve(response.data)
         }).catch(error => {
             this._handle_token_error(error)
@@ -82,13 +82,14 @@ export const location_service = new BaseService("https://revgeocode.search.herea
 export const token_service = new BaseService("v1/auth/")
 export const profile_service = new BaseService("v1/profile/")
 export const movie_service = new BaseService("v1/movie/")
+export const mp_genre_service = new BaseService("v1/mpgenre/")
 export const review_service = new BaseService("v1/review/")
 export const submission_service = new BaseService("v1/submit/")
 export const payment_service = new BaseService("v1/payment/verify/")
 export const review_like_service = new BaseService("v1/review-like/")
 export const recommend_service = new BaseService("v1/recommend/")
 export const watchlist_service = new BaseService("v1/watchlist/")
-export const list_service = new BaseService("v1/movie-list/")
+export const curation_service = new BaseService("v1/movie-list/")
 export const role_service = new BaseService("v1/role/")
 export const crew_request_service = new BaseService("v1/crew-member-request/")
 export const follow_service = new BaseService("v1/follow/")
@@ -100,4 +101,5 @@ export const flb_service = new BaseService("v1/filmmaker-leaderboard/")
 export const contest_service = new BaseService("v1/contest/")
 export const movies_by_service = new BaseService("v1/movies-by/")
 export const genre_service = new BaseService("v1/genre/")
+export const lang_service = new BaseService("v1/lang/")
 export const account_service = new BaseService("v1/account/")

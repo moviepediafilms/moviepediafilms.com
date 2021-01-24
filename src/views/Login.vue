@@ -88,9 +88,6 @@ export default {
       },
     };
   },
-  mounted() {
-    console.log();
-  },
   computed: {
     has_history() {
       return window.history.length > 2;
