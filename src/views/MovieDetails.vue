@@ -596,7 +596,7 @@
                       >My Recommendations</q-item-label
                     >
                     <q-item-label caption
-                      >Your personal recommend list</q-item-label
+                      >Your All-Time Recommendations List</q-item-label
                     >
                   </q-item-section>
                   <q-item-section side class="text-center">
@@ -630,7 +630,7 @@ import BaseLayout from "@/layouts/Base";
 import LoginRequiredPopup from "@/components/LoginRequiredPopup";
 import Reviews from "@/components/Reviews";
 import ShareCard from "@/components/ShareCard";
-import settings from "@/settings"
+import settings from "@/settings";
 import {
   movie_service,
   review_service,
@@ -1241,8 +1241,8 @@ export default {
             icon: "mdi-check",
             message:
               action == "post"
-                ? "Recommendation done "
-                : "Recommendation undone",
+                ? "Recommendation Successful"
+                : "Recommendation Undone",
             color: "positive",
             caption: `You have recommended ${data.recommended}/${data.max_recommends} Films for ${data.name}`,
           });
