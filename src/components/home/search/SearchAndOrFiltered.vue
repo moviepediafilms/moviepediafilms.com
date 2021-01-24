@@ -1,35 +1,48 @@
 <template>
   <div ref="list">
     <div class="row">
-      <div class="col-12" v-if="people.length > 0">
+      <div class="col-12" v-if="ppl_loading || people.length > 0">
         <h3>People</h3>
         <horizontal-items :height="100" :width="100">
-          <div
-            style="max-width: 100px"
-            class="text-center q-mt-md q-mr-md"
-            v-for="(person, index) in people"
-            :key="index"
-            v-ripple
-            @click="on_profile_click(person)"
-          >
-            <q-avatar size="60px">
-              <q-badge
-                v-if="person.is_celeb"
-                color="red"
-                class="q-m-none q-p-none"
-                floating
-                style="z-index: 100"
-              >
-                <q-icon name="mdi-star" />
-              </q-badge>
-              <q-img :src="person.image || '/default_avatar.png'" />
-            </q-avatar>
-            <div class="q-mt-xs text-caption ellipsis">{{ person.name }}</div>
-          </div>
+          <template v-if="people.length > 0">
+            <div
+              style="max-width: 100px"
+              class="text-center q-mt-md q-mr-md"
+              v-for="(person, index) in people"
+              :key="index"
+              v-ripple
+              @click="on_profile_click(person)"
+            >
+              <q-avatar size="60px">
+                <q-badge
+                  v-if="person.is_celeb"
+                  color="red"
+                  class="q-m-none q-p-none"
+                  floating
+                  style="z-index: 100"
+                >
+                  <q-icon name="mdi-star" />
+                </q-badge>
+                <q-img :src="person.image || '/default_avatar.png'" />
+              </q-avatar>
+              <div class="q-mt-xs text-caption ellipsis">{{ person.name }}</div>
+            </div>
+          </template>
+          <template v-if="ppl_loading">
+            <div
+              style="max-width: 100px"
+              class="text-center q-mr-sm q-mt-sm"
+              v-for="i in 5"
+              :key="'ppl_' + i"
+            >
+              <q-skeleton type="circle" size="60px" />
+              <q-skeleton type="text" class="q-mt-sm" />
+            </div>
+          </template>
         </horizontal-items>
       </div>
       <div class="col-12 q-mt-md">
-        <h3>Films</h3>
+        <h3 v-if="loading || movies.length > 0">Films</h3>
         <div class="row wrap justify-start content-start">
           <div
             class="col-3 q-pa-xs"
@@ -43,19 +56,30 @@
               :show-state="false"
             ></movie>
           </div>
+          <template v-if="loading">
+            <movie-skeleton v-for="i in 5" :key="'movie_' + i" />
+          </template>
         </div>
+        <empty-state
+          v-if="!loading && movies.length == 0"
+          icon="mdi-magnify"
+          title="Noting to show here!"
+          desc="Try fewers words"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
 import Movie from "@/components/movie/Movie";
+import MovieSkeleton from "@/components/movie/Skeleton";
 import _ from "lodash";
 import { movie_service, profile_service } from "@/services";
 import settings from "@/settings";
 import HorizontalItems from "@/components/HorizontalItems.vue";
+
 export default {
-  components: { Movie, HorizontalItems },
+  components: { Movie, MovieSkeleton, HorizontalItems },
   props: {
     searchText: {
       type: String,
@@ -138,9 +162,11 @@ export default {
     search_and_filter() {
       this.movies.splice(0, this.movies.length);
       this.count = undefined;
+      this.loading = false;
       this.fetch_movies();
       this.people.splice(0, this.people.length);
       this.pp_count = undefined;
+      this.ppl_loading = false;
       this.fetch_people();
     },
     scroll_handler() {
