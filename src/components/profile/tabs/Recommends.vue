@@ -4,7 +4,6 @@
       :list_id="selected_recommend_list.id"
       :header="false"
       :options="menu_options"
-      @remove="on_remove"
     >
       <q-btn-dropdown
         split
@@ -34,7 +33,6 @@
 </template>
 <script>
 import CurationList from "@/components/CurationList";
-import { LIST_TOGGLE_MOVIE_REQUEST } from "@/store/actions";
 import { curation_service } from "@/services";
 export default {
   props: {
@@ -88,26 +86,6 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-    },
-    on_remove(movie) {
-      this.$store
-        .dispatch(LIST_TOGGLE_MOVIE_REQUEST, {
-          list: { id: this.list.id, movies: this.movie_ids },
-          movie_id: movie.id,
-        })
-        .then((data) => {
-          // remove the movie from this.lists.movies
-          // Addition is handled automatically
-          var movies_to_remove = [];
-          this.list.movies.forEach((movie, index) => {
-            if (data.movies.indexOf(movie.id) == -1) {
-              movies_to_remove.push(index);
-            }
-          });
-          movies_to_remove.forEach((index) => {
-            this.list.movies.splice(index, 1);
-          });
-        });
     },
   },
 };

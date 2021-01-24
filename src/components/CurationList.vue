@@ -59,7 +59,10 @@
 import Movies from "@/components/Movies";
 import ShareCard from "@/components/ShareCard";
 import { curation_service } from "@/services/";
-import { PROFILE_TOGGLE_CURATION_LIKE } from "@/store/actions";
+import {
+  LIST_TOGGLE_MOVIE_REQUEST,
+  PROFILE_TOGGLE_CURATION_LIKE,
+} from "@/store/actions";
 import store from "@/store";
 import _ from "lodash";
 export default {
@@ -189,7 +192,24 @@ export default {
       this.show_share_dialog = true;
     },
     on_remove(movie) {
-      this.$emit("remove", movie);
+      this.$store
+        .dispatch(LIST_TOGGLE_MOVIE_REQUEST, {
+          list: { id: this.list.id, movies: this.movie_ids },
+          movie_id: movie.id,
+        })
+        .then((data) => {
+          // remove the movie from this.lists.movies
+          // Addition is handled automatically
+          var movies_to_remove = [];
+          this.list.movies.forEach((movie, index) => {
+            if (data.movies.indexOf(movie.id) == -1) {
+              movies_to_remove.push(index);
+            }
+          });
+          movies_to_remove.forEach((index) => {
+            this.list.movies.splice(index, 1);
+          });
+        });
     },
   },
 };
