@@ -191,7 +191,7 @@ export default {
   },
   data() {
     return {
-      tab: "filmography",
+      tab: "recommends",
       recommend_meta: {},
       curations: [],
       followers: [],
@@ -247,12 +247,21 @@ export default {
     profile() {
       this.load_data();
     },
+    profile_is_filmmaker() {
+      // when user is not a filmmaker, filmography tab is not mounted and on_empty_filmography is never called to switch the tab,
+      // in such cases explicitly setting tab to next mounted tab
+
+      if (this.is_viewers_profile) {
+        this.tab = "watchlist";
+        console.log("watchlist");
+      } else {
+        this.tab = "recommends";
+        console.log("recommends");
+      }
+    },
   },
   mounted() {
     this.load_data();
-    // when user is not a filmmaker, filmography tab is not mounted and on_empty_filmography is never called to switch the tab,
-    // in such cases explicitly setting tab to next mounted tab
-    if (!this.profile_is_filmmaker) this.tab = "watchlist";
   },
   methods: {
     on_empty_filmography() {

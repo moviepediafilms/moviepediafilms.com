@@ -86,7 +86,6 @@
           mobile-arrows
         >
           <q-tab name="filmography" label="Filmography" />
-          <q-tab name="crew" label="Crew" />
           <q-tab name="followers" :label="followers.length + ' Followers'" />
           <q-tab name="following" :label="following.length + ' Following'" />
           <q-tab name="reviews" label="Reviews" />
