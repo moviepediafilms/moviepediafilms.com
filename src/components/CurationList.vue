@@ -168,7 +168,6 @@ export default {
       store
         .dispatch(PROFILE_TOGGLE_CURATION_LIKE, this.list_id)
         .then((data) => {
-          console.log(data);
           this.info.like_count = data.like_count;
         })
         .catch((error) => {

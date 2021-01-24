@@ -232,7 +232,6 @@ export default {
       this.navigate_forward();
     },
     on_loading(loading) {
-      console.log("loading in submit ", loading);
       this.loading = loading;
     },
     on_package_select_complete(data) {

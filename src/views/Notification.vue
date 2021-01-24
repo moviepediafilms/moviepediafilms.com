@@ -110,11 +110,6 @@ export default {
       return this.all_items.length;
     },
   },
-  watch: {
-    loading() {
-      console.log(this.loading);
-    },
-  },
   mounted() {
     Promise.all([
       this.fetch_notifications(),

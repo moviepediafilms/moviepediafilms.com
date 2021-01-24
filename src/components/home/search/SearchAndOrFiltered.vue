@@ -145,7 +145,6 @@ export default {
   methods: {
     on_profile_click(profile) {
       if (profile.is_celeb) {
-        console.log("celeb recommends page");
         this.$router.push({
           name: "judge-recommendation",
           params: {

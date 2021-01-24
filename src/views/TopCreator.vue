@@ -71,7 +71,6 @@ export default {
       contest_service
         .get({ ordering: "start", live: "true", type__name: "Monthly" })
         .then((data) => {
-          console.log(data);
           this.contests.push(...data.results);
           if (this.contests.length > 0)
             this.tab = this.contests[this.contests.length - 1].name;

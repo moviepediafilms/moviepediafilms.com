@@ -953,9 +953,9 @@ export default {
         this.$store.dispatch(LIST_REQUEST, this.my_profile.id);
       }
     },
-    swipe(event) {
+    swipe() {
       // 0 = none, 2 = left, 4 = right, 8 = up, 16 = down
-      console.log("someone swiped", event.direction);
+      // console.log("someone swiped", event.direction);
     },
     fetch_movie(movie_id) {
       this.loading = true;
@@ -970,7 +970,7 @@ export default {
         })
         .catch((error) => {
           if (error.response.status == 404) console.log("show 404 page");
-          console.log(error);
+
           this.loading = false;
         });
     },
@@ -1208,7 +1208,6 @@ export default {
       this.$store
         .dispatch(PROFILE_TOGGLE_WATCHLIST, this.movie)
         .then((data) => {
-          console.log(data);
           if (data.success) {
             this.movie.is_watchlisted = !this.movie.is_watchlisted;
           }

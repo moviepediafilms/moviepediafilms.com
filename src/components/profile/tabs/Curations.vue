@@ -91,12 +91,9 @@ export default {
       this.show_menu = true;
     },
     on_delete() {
-      console.log("delete", this.active_list);
       this.$store.dispatch(LIST_DELETE, this.active_list);
     },
-    on_rename() {
-      console.log("rename", this.active_list);
-    },
+    on_rename() {},
   },
 };
 </script>
