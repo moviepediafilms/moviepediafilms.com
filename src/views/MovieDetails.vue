@@ -47,10 +47,6 @@
                 <template v-for="(genre, index) in top_movie_genres">
                   <router-link
                     class="text-decoration-none text-grey-6"
-                    :to="{
-                      name: 'movies-by-genre',
-                      params: { genre: genre.name },
-                    }"
                     :key="genre.id"
                   >
                     {{ genre.name }}
