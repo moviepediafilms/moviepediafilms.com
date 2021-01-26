@@ -119,7 +119,12 @@
                     </div>
                   </div>
                 </q-btn>
-                <q-btn size="sm" flat :color="'default'">
+                <q-btn
+                  size="sm"
+                  flat
+                  :color="'default'"
+                  @click="curate_info_dialog = true"
+                >
                   <!-- disabled feature -->
                   <!-- @click="on_add_to_list" :color="is_added_to_any_list ? 'primary' : 'default'" -->
                   <div>
@@ -284,7 +289,10 @@
               <template v-if="my_rate_review.rating != null">
                 You rated {{ my_rate_review.rating }} / 10
               </template>
-              <template v-else><q-icon name="mdi-chevron-double-right"/> Slide to rate the film <q-icon name="mdi-chevron-double-right"/></template>
+              <template v-else
+                ><q-icon name="mdi-chevron-double-right" /> Slide to rate the
+                film <q-icon name="mdi-chevron-double-right"
+              /></template>
             </div>
 
             <div class="row q-mt-lg">
@@ -614,6 +622,23 @@
             </q-card-actions>
           </q-card>
         </q-dialog>
+        <q-dialog v-model="curate_info_dialog">
+          <q-card>
+            <q-card-section>
+              <div class="text-h3 text-primary">Curate</div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              Lets you curate and create customised lists based on your own
+              cinematic taste. Gets unlocked after you reach
+              <span class="text-bold">'Curator'</span> level.
+            </q-card-section>
+
+            <q-card-actions align="right">
+              <q-btn flat label="OK" color="primary" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
       </div>
     </div>
   </base-layout>
@@ -726,6 +751,7 @@ export default {
       show_list_dialog: false,
       show_crew_dialog: false,
       show_add_list_dialog: false,
+      curate_info_dialog: false,
       show_recommend_for_dialog: false,
       show_request_created_dialog: false,
       show_request_created_message:
