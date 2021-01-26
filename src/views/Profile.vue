@@ -7,11 +7,16 @@
       <div class="q-pa-md" v-if="!is_authenticated">
         <template v-if="is_my_profile">
           <div class="row justify-center">
-            <q-skeleton class="q-mx-sm" type="QAvatar" size="100px" />
+            <q-skeleton
+              class="q-mx-sm"
+              type="QAvatar"
+              size="100px"
+              animation="none"
+            />
           </div>
           <div class="row q-mt-md justify-center">
             <div class="col-8 text-center">
-              <q-skeleton type="rect" />
+              <q-skeleton type="rect" animation="none" />
             </div>
           </div>
         </template>
@@ -29,18 +34,18 @@
           <div class="col-8 offset-2">
             <div class="row">
               <div class="col-4 text-center">
-                <q-skeleton class="q-mx-sm" type="text" />
+                <q-skeleton class="q-mx-sm" type="text" animation="none" />
               </div>
               <div class="col-4 text-center">
-                <q-skeleton class="q-mx-sm" type="text" />
+                <q-skeleton class="q-mx-sm" type="text" animation="none" />
               </div>
               <div class="col-4 text-center">
-                <q-skeleton class="q-mx-sm" type="text" />
+                <q-skeleton class="q-mx-sm" type="text" animation="none" />
               </div>
             </div>
           </div>
         </div>
-        <q-skeleton class="q-mt-md q-mx-lg" type="text" />
+        <q-skeleton class="q-mt-md q-mx-lg" type="text" animation="none" />
         <div class="q-mt-lg text-center">
           <div>
             Sign In to check {{ is_my_profile ? "your" : "complete" }} profile
