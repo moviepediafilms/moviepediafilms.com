@@ -150,9 +150,9 @@
         partners’ consensus.
 
         <br />
-        Winner:- 9000 INR
+        Winner:- 6000 INR
         <br />
-        Runner up:- 6000 INR
+        Runner up:- 4000 INR
         <br />
         The method of calculation is as follows,
         <br />
