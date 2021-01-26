@@ -135,8 +135,7 @@ const actions = {
     [PROFILE_TOGGLE_WATCHLIST_]: ({ commit }, movie) => {
         return new Promise((resolve, reject) => {
             var fn_name = movie.is_watchlisted ? "delete" : "patch"
-            var params = movie.is_watchlisted ? [movie.id] : [{}, movie.id]
-            watchlist_service[fn_name](...params)
+            watchlist_service[fn_name]({}, movie.id)
                 .then((data) => {
                     if (data.success)
                         commit(PROFILE_TOGGLE_WATCHLIST_, movie)
