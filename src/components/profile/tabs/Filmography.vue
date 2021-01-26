@@ -65,6 +65,9 @@ export default {
     this.fetch_filmography();
   },
   computed: {
+    profile_id() {
+      return this.profile.id;
+    },
     is_viewers_profile() {
       return this.profile.id == this.my_profile.id;
     },
@@ -81,6 +84,10 @@ export default {
   watch: {
     count() {
       if (this.count == 0) this.$emit("empty");
+    },
+    profile_id() {
+      this.movies.splice(0, this.movies.length);
+      this.fetch_filmography();
     },
   },
   methods: {
@@ -129,7 +136,7 @@ export default {
         profile_service
           .get(
             { limit: this.page_size, offset: this.movies.length },
-            `${this.profile.id}/filmography`
+            `${this.profile_id}/filmography`
           )
           .then((data) => {
             this.movies.push(...data.results);

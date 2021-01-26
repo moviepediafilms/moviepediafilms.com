@@ -9,11 +9,14 @@
         />
       </q-avatar>
       <h1 class="text-primary">
-        {{ info.name }}
+        {{ info.owner.name }}
       </h1>
-      <h3>
-        <small class="text-grey-4">{{ info.owner.name }} Recommends</small>
-      </h3>
+      <div class="text-grey-4 q-pt-xs">
+        <template v-if="!info.contest"> Recommends </template>
+        <template v-else>
+          Recommends for <span class="text-bold">{{ info.name }}</span>
+        </template>
+      </div>
     </div>
     <div class="col flex items-center justify-between q-mt-md">
       <!-- pages are added to use them from the parent component as contests, to keep the actions on same line -->
