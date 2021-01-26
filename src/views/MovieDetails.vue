@@ -45,12 +45,7 @@
                   v-if="top_movie_genres.length > 0"
                 />
                 <template v-for="(genre, index) in top_movie_genres">
-                  <router-link
-                    class="text-decoration-none text-grey-6"
-                    :key="genre.id"
-                  >
-                    {{ genre.name }}
-                  </router-link>
+                  {{ genre.name }}
                   <template v-if="index < top_movie_genres.length - 1"
                     ><span :key="genre.id + '_'">/</span></template
                   >
@@ -285,13 +280,13 @@
                 />
               </div>
             </div>
-            <div class="text-center text-grey-6 q-mt-md">
+            <div class="text-center text-grey-6 q-mt-md text-bold">
               <template v-if="my_rate_review.rating != null">
                 You rated {{ my_rate_review.rating }} / 10
               </template>
               <template v-else
-                ><q-icon name="mdi-chevron-double-right" /> Slide to rate the
-                film <q-icon name="mdi-chevron-double-right"
+                ><q-icon name="mdi-chevron-triple-right" /> Slide to rate the
+                film <q-icon name="mdi-chevron-triple-right"
               /></template>
             </div>
 
