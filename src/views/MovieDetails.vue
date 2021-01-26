@@ -285,8 +285,8 @@
                 You rated {{ my_rate_review.rating }} / 10
               </template>
               <template v-else
-                ><q-icon name="mdi-chevron-double-right" /> Slide to rate the
-                film <q-icon name="mdi-chevron-double-right"
+                ><q-icon name="mdi-chevron-triple-right" /> Slide to rate the
+                film <q-icon name="mdi-chevron-triple-right"
               /></template>
             </div>
 
