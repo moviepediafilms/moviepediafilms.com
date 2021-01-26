@@ -284,7 +284,7 @@
               <template v-if="my_rate_review.rating != null">
                 You rated {{ my_rate_review.rating }} / 10
               </template>
-              <template v-else>You have not rated the film</template>
+              <template v-else><q-icon name="mdi-chevron-double-right"/> Slide to rate the film <q-icon name="mdi-chevron-double-right"/></template>
             </div>
 
             <div class="row q-mt-lg">
