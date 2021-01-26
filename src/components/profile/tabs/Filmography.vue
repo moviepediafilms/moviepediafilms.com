@@ -86,6 +86,7 @@ export default {
       if (this.count == 0) this.$emit("empty");
     },
     profile_id() {
+      this.movies.splice(0, this.movies.length);
       this.fetch_filmography();
     },
   },
