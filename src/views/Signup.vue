@@ -355,8 +355,7 @@ export default {
             this.loading = false;
             this.$q.notify({
               duration: 5000,
-              message:
-                "You have successfully signed up. An activation link has been sent to your email for verification.",
+              message: "Account successfully created. Login to proceed.",
               multiLine: true,
               icon: "mdi-check",
               color: "green",

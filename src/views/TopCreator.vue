@@ -2,7 +2,10 @@
   <base-layout>
     <div class="q-ma-sm text-center">
       <h1 class="text-primary text-weight-light q-mb-xs">Top Creators</h1>
-
+      <q-img
+        class="q-mt-sm"
+        src="https://res.cloudinary.com/moviepedia/image/upload/v1611423214/Leaderboard/CreatoroftheMonth_Leaderboard.jpeg"
+      />
       <q-card flat class="q-mt-md" v-if="contests.length > 0">
         <q-tabs
           v-model="tab"

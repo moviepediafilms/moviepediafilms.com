@@ -2,13 +2,7 @@
   <base-layout>
     <div class="q-pa-md text-grey-4">
       <div class="col text-center">
-        <div class="text-h5 text-overline">Recommended by</div>
-        <q-avatar size="96px">
-          <img
-            :src="judge.image || '/default_avatar.png'"
-            @error="on_user_img_error"
-          />
-        </q-avatar>
+        <q-img :src="judge.image" @error="on_user_img_error" />
         <div class="text-h1 text-primary q-mt-sm">
           {{ judge.name }}
         </div>
@@ -19,29 +13,11 @@
       </div>
       <div class="row q-mt-md q-col-gutter-md" v-if="movies.length > 0">
         <div
-          class="col-6 col-md-4 col-lg-3"
+          class="col-4 col-md-4 col-lg-3"
           v-for="movie in movies"
           :key="movie.id"
         >
-          <q-card class="movie-card">
-            <movie-image
-              :title="movie.title"
-              :state="movie.state"
-              :poster="movie.poster"
-              :show-state="false"
-              @click="movie_details(movie)"
-              v-ripple
-            />
-            <q-card-section class="q-pt-md">
-              <div class="text-body1">{{ movie.title }}</div>
-              <div class="text-caption text-grey">{{ movie.synopsis }}</div>
-            </q-card-section>
-            <q-card-actions align="right">
-              <q-btn flat @click.prevent="movie_details(movie)" color="primary"
-                >Watch</q-btn
-              >
-            </q-card-actions>
-          </q-card>
+          <movie :movie="movie" :show-my-roles="false" />
         </div>
       </div>
       <empty-state
@@ -55,7 +31,7 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import MovieImage from "@/components/movie/Image";
+import Movie from "@/components/movie/Movie";
 import { profile_service } from "@/services";
 export default {
   name: "judge-recommendations",
@@ -64,7 +40,7 @@ export default {
   },
   components: {
     BaseLayout,
-    MovieImage,
+    Movie,
   },
   data() {
     return {
@@ -88,7 +64,7 @@ export default {
       });
     },
     get_recommendations() {
-      profile_service.get({}, `${this.judge_id}/recommends/`).then((data) => {
+      profile_service.get({}, `${this.judge_id}/recommends`).then((data) => {
         this.movies.push(...data.results);
       });
     },

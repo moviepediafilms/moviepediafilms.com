@@ -11,10 +11,7 @@
           "
         >
           <q-avatar>
-            <img
-              :src="review.author.image || '/default_avatar.png'"
-              @error="on_user_img_error"
-            />
+            <img :src="review.author.image" @error="on_user_img_error" />
           </q-avatar>
         </q-item-section>
         <q-item-section>

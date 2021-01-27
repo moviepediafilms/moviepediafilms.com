@@ -146,7 +146,7 @@
                   <q-item-section avatar top>
                     <q-avatar>
                       <img
-                        :src="director.image || '/default_avatar.png'"
+                        :src="director.image"
                         @error="on_user_img_error"
                       />
                     </q-avatar>
@@ -189,7 +189,7 @@
                   <q-item-section avatar top>
                     <q-avatar>
                       <img
-                        :src="crew.profile.image || '/default_avatar.png'"
+                        :src="crew.profile.image"
                         @error="on_user_img_error"
                       />
                     </q-avatar>

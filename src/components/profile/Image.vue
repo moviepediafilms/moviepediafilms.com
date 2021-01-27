@@ -1,10 +1,7 @@
 <template>
   <div class="row justify-center">
     <q-avatar size="110px" style="margin-left: 8px">
-      <img
-        :src="profile.image || '/default_avatar.png'"
-        @error="on_user_img_error"
-      />
+      <img :src="profile.image" @error="on_user_img_error" />
     </q-avatar>
     <div class="self-end" style="margin-left: -24px" v-if="editable">
       <q-btn
