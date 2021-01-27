@@ -4,10 +4,7 @@
       <div class="col text-center">
         <div class="text-h5 text-overline">Recommended by</div>
         <q-avatar size="96px">
-          <img
-            :src="judge.image || '/default_avatar.png'"
-            @error="on_user_img_error"
-          />
+          <img :src="judge.image" @error="on_user_img_error" />
         </q-avatar>
         <div class="text-h1 text-primary q-mt-sm">
           {{ judge.name }}

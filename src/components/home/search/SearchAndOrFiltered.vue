@@ -23,7 +23,7 @@
                 >
                   <q-icon name="mdi-star" color="dark" />
                 </q-badge>
-                <q-img :src="person.image || '/default_avatar.png'" />
+                <q-img :src="person.image" />
               </q-avatar>
               <div class="q-mt-xs text-caption ellipsis">{{ person.name }}</div>
             </div>

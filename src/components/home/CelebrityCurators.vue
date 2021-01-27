@@ -21,7 +21,7 @@
           v-for="(celeb, index) in celebrities"
           :key="index"
           :width="`${width}px`"
-          :src="celeb.image || '/default_avatar.png'"
+          :src="celeb.image"
           @click="
             $router.push({
               name: 'judge-recommendation',

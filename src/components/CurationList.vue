@@ -3,10 +3,7 @@
   <div>
     <div v-if="header">
       <q-avatar size="72px">
-        <img
-          :src="info.owner.image || '/default_avatar.png'"
-          @error="on_user_img_error"
-        />
+        <img :src="info.owner.image" @error="on_user_img_error" />
       </q-avatar>
       <h1 class="text-primary">
         {{ info.owner.name }}

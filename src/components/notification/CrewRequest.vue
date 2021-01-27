@@ -15,10 +15,7 @@
               })
             "
           >
-            <img
-              :src="user.image || '/default_avatar.png'"
-              @error="on_user_img_error"
-            />
+            <img :src="user.image" @error="on_user_img_error" />
           </q-avatar>
           <h3 class="" style="display: inline-block">
             {{ user.name }}
