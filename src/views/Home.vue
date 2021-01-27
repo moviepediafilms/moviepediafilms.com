@@ -189,6 +189,19 @@
           <mp-genre-movies :mp-genre="mp_genre" :key="`mpgenre_${index}`" />
         </template>
       </div>
+      <q-page-sticky position="bottom-right" :offset="[18, 18]">
+        <q-btn
+          ref="fab"
+          fab
+          icon="mdi-information"
+          color="primary"
+          text-color="dark"
+          padding="12px"
+          :to="{ name: 'welcome' }"
+        >
+          <span class="q-ml-xs">How it works</span>
+        </q-btn>
+      </q-page-sticky>
     </div>
   </base-layout>
 </template>

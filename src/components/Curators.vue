@@ -33,10 +33,7 @@
         </q-item-section>
         <q-item-section avatar>
           <q-avatar>
-            <img
-              :src="viewer.image || '/default_avatar.png'"
-              @error="on_user_img_error"
-            />
+            <img :src="viewer.image" @error="on_user_img_error" />
           </q-avatar>
         </q-item-section>
         <q-item-section class="ellipsis text-left">
@@ -62,10 +59,7 @@
         <q-item-section side> #{{ user.pos }} </q-item-section>
         <q-item-section avatar>
           <q-avatar>
-            <img
-              :src="user.image || '/default_avatar.png'"
-              @error="on_user_img_error"
-            />
+            <img :src="user.image" @error="on_user_img_error" />
           </q-avatar>
         </q-item-section>
         <q-item-section no-wrap class="ellipsis text-left">
