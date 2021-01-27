@@ -16,13 +16,16 @@
         <q-btn
           ref="fab"
           fab
-          icon="mdi-plus"
-          color="primary"
-          text-color="dark"
-          label="Submit Now"
+          round
+          glossy
+          color="dark"
           padding="12px"
-          :to="{ name: 'submit' }"
-        />
+          :to="{ name: 'home' }"
+        >
+          <q-avatar size="42px">
+            <img src="/tile70.png" />
+          </q-avatar>
+        </q-btn>
       </q-page-sticky>
     </div>
   </base-layout>
