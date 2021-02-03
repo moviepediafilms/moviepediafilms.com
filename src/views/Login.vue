@@ -42,7 +42,14 @@
             {{ error_msg }}
           </div>
           <q-btn color="primary" text-color="dark" type="submit">Login</q-btn>
-
+          <div class="text-overline text-caption">OR</div>
+          <q-btn
+            color="white"
+            text-color="blue"
+            icon="mdi-google"
+            label="Sign in with Google"
+            @click="startLogin"
+          />
           <div>
             Don't have an account?
             <b
@@ -65,6 +72,7 @@
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
+import settings from "@/settings";
 import { AUTH_REQUEST } from "@/store/actions";
 export default {
   name: "login-page",
@@ -94,6 +102,30 @@ export default {
     },
   },
   methods: {
+    startLogin() {
+      window.gapi.load("auth2", () => {
+        window.gapi.auth2.authorize(
+          {
+            clientId: settings.GOOGLE_CLIENT_ID,
+            scope:
+              "profile email https://www.googleapis.com/auth/user.phonenumbers.read https://www.googleapis.com/auth/user.gender.read https://www.googleapis.com/auth/user.birthday.read",
+            prompt: "select_account",
+            response_type: "id_token code",
+          },
+          (response) => {
+            console.log(response);
+            if (response.error) {
+              console.log(response.error);
+              return;
+            }
+            this.trigger_login({
+              id_token: response.id_token,
+              code: response.code,
+            });
+          }
+        );
+      });
+    },
     clear_errors() {
       this.login_error.email = "";
       this.login_error.password = "";
@@ -105,6 +137,9 @@ export default {
         username: this.login_data.email.toLowerCase(),
         password: this.login_data.password,
       };
+      this.trigger_login(payload);
+    },
+    trigger_login(payload) {
       this.$store
         .dispatch(AUTH_REQUEST, payload)
         .then(() => {
