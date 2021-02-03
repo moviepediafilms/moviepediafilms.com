@@ -1,6 +1,7 @@
 export default {
     PAGE_SIZE: 20,
     debug: process.env.VUE_APP_DEBUG === "true",
+    GOOGLE_CLIENT_ID: "958441006864-k67eg9rih3ihl2qjn4ua729onbvrvuda.apps.googleusercontent.com",
     data: {
         action_btns: [{ icon: "mdi-bell-outline", to: { name: "notification" }, type: "path", auth: true }]
     },
