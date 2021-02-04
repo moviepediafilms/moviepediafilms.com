@@ -41,13 +41,20 @@
           <div class="text-negative">
             {{ error_msg }}
           </div>
-          <q-btn color="primary" text-color="dark" type="submit">Login</q-btn>
+          <q-btn
+            color="primary"
+            text-color="dark"
+            type="submit"
+            :disable="loading"
+            >Login</q-btn
+          >
           <div class="text-overline text-caption">OR</div>
           <q-btn
-            color="white"
-            text-color="blue"
+            color="blue"
+            :disable="loading"
+            text-color="white"
             icon="mdi-google"
-            label="Sign in with Google"
+            label="Continue with Google"
             @click="startLogin"
           />
           <div>
@@ -86,6 +93,7 @@ export default {
     return {
       isPwd: true,
       error_msg: "",
+      loading: false,
       login_error: {
         email: "",
         password: "",
@@ -103,6 +111,7 @@ export default {
   },
   methods: {
     startLogin() {
+      this.loading = true;
       window.gapi.load("auth2", () => {
         window.gapi.auth2.authorize(
           {
@@ -113,9 +122,11 @@ export default {
             response_type: "id_token code",
           },
           (response) => {
+            this.loading = false;
             console.log(response);
             if (response.error) {
               console.log(response.error);
+              this.error_msg = "An Unexpected error was encountered";
               return;
             }
             this.trigger_login({
@@ -140,14 +151,18 @@ export default {
       this.trigger_login(payload);
     },
     trigger_login(payload) {
+      if (this.loading) return;
+      this.loading = true;
       this.$store
         .dispatch(AUTH_REQUEST, payload)
         .then(() => {
+          this.loading = false;
           if (this.has_history && !this.$route.query.next) {
             this.$router.go(-1);
           } else this.$router.push({ name: this.$route.query.next || "home" });
         })
         .catch((error) => {
+          this.loading = false;
           var got_err_msg = false;
           if (error.response && error.response.data) {
             got_err_msg = this.check_fields_for_error(
