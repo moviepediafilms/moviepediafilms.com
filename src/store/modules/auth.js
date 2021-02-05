@@ -8,7 +8,8 @@ import {
     LIST_REQUEST,
     ROLE_REQUEST,
     LIST_LOGOUT,
-    FOLLOW_LOGOUT
+    FOLLOW_LOGOUT,
+
 } from "@/store/actions";
 import { backend, token_service } from "@/services";
 const state = {
@@ -25,7 +26,10 @@ const actions = {
     [REQUEST_]: ({ commit, dispatch }, payload, ) => {
         return new Promise((resolve, reject) => {
             commit(REQUEST_);
-            token_service.post(payload)
+            var service = undefined
+            if (payload.id_token)
+                service = "google"
+            token_service.post(payload, service)
                 .then(data => {
                     backend.defaults.headers.common['Authorization'] = `Token ${data.token}`
                     commit(SUCCESS_, data.token);

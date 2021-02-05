@@ -35,15 +35,18 @@ Vue.mixin({
         },
         on_celeb_img_error(img) {
             console.log(`error loading image ${img.target.src}`)
-            img.target.src = "/default_poster.jpg";
+            if (!img.target.src.endsWith("default_poster.jpg"))
+                img.target.src = "/default_poster.jpg";
         },
         on_user_img_error(img) {
             console.log(`error loading image ${img.target.src}`)
-            img.target.src = "/default_avatar.png";
+            if (!img.target.src.endsWith("default_avatar_m.png"))
+                img.target.src = "/default_avatar_m.png";
         },
         on_movie_img_error(img) {
             console.log(`error loading image ${img.target.src}`)
-            img.target.src = "/default_poster.jpg";
+            if (!img.target.src.endsWith("default_poster.jpg"))
+                img.target.src = "/default_poster.jpg";
         },
         slugify(content) {
             return slugify(content)

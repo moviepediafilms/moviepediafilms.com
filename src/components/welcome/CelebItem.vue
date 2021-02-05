@@ -35,7 +35,7 @@ export default {
     },
     image: {
       type: String,
-      default: "/default_avatar.png",
+      default: "/default_avatar_m.png",
     },
   },
   mounted() {},
