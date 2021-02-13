@@ -145,10 +145,7 @@
                 <template slot="header">
                   <q-item-section avatar top>
                     <q-avatar>
-                      <img
-                        :src="director.image"
-                        @error="on_user_img_error"
-                      />
+                      <img :src="director.image" @error="on_user_img_error" />
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
@@ -584,6 +581,7 @@
                       "
                       flat
                       text-primary
+                      :loading="loading_recommends[contest.id]"
                       size="sm"
                       @click="recommend_in_contest(contest)"
                     />
@@ -603,6 +601,7 @@
                       icon="mdi-bullhorn"
                       :color="movie.is_recommended ? 'primary' : 'default'"
                       flat
+                      :loading="recommend_loading"
                       text-primary
                       size="sm"
                       @click="recommend_in_personal"
@@ -776,6 +775,7 @@ export default {
         },
       ],
       max_reviews: undefined,
+      loading_recommends: {},
       loading: false,
       loading_reviews: false,
       loading_new_list_request: false,
@@ -1248,12 +1248,15 @@ export default {
       }
     },
     recommend_in_contest(contest) {
+      if (this.loading_recommends[contest.id]) return;
+      this.$set(this.loading_recommends, contest.id, true);
       var action = this.is_recommended_in(contest) ? "delete" : "post";
       contest_service[action](
         { movie: this.movie.id },
         `${contest.id}/recommend`
       )
         .then((data) => {
+          this.loading_recommends[contest.id] = false;
           this.$q.notify({
             icon: "mdi-check",
             message:
@@ -1279,7 +1282,17 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error);
+          this.loading_recommends[contest.id] = false;
+          var error_msg = undefined;
+          if (error.response && error.response.data)
+            error_msg = error.response.data.movie;
+          if (!error_msg) error_msg = this.decode_error_message(error);
+          console.log("fata", error_msg)
+          this.$q.notify({
+            color: "negative",
+            icon: "mdi-alert-circle-outline",
+            message: error_msg,
+          });
         });
     },
     recommend_in_personal() {

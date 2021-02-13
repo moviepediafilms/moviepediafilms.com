@@ -34,7 +34,7 @@ export default {
     },
     icon: {
       type: String,
-      default: "mdi-alert",
+      default: "mdi-alert-circle-outline",
     },
     persistent: {
       type: Boolean,
