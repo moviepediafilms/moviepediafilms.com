@@ -1,12 +1,10 @@
 export default (error) => {
     if (!error)
-        return "Unknown error occured!"
+        return "Unknown error occurred!"
     if (error.response) {
         if (error.response.data) {
             if (error.response.data.detail)
                 return error.response.data.detail;
-            if (error.response.data.non_field_errors)
-                return error.response.data.non_field_errors[0];
             if (error.response.data.non_field_errors)
                 return error.response.data.non_field_errors[0];
             if (error.response.data.errors)
