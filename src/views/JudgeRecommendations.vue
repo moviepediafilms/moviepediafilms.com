@@ -11,28 +11,18 @@
       <div class="q-mt-md text-uppercase text-primary" v-if="movies.length > 0">
         Recommends
       </div>
-      <div class="row q-mt-md q-col-gutter-md" v-if="movies.length > 0">
-        <div
-          class="col-4 col-md-4 col-lg-3"
-          v-for="movie in movies"
-          :key="movie.id"
-        >
-          <movie :movie="movie" :show-my-roles="false" />
-        </div>
-      </div>
-      <empty-state
-        v-else
-        title="Nothing to show here"
-        desc="This celebrity hasn't recommended any film yet."
-        image="/img/empty/17.svg"
-        height="200px"
-      ></empty-state>
+      <recommends
+        :profile="judge"
+        :empty-title="emptyTitle"
+        :empty-desc="emptyDesc"
+        :empty-image="emptyImage"
+      />
     </div>
   </base-layout>
 </template>
 <script>
 import BaseLayout from "@/layouts/Base";
-import Movie from "@/components/movie/Movie";
+import Recommends from "@/components/profile/tabs/Recommends";
 import { profile_service } from "@/services";
 export default {
   name: "judge-recommendations",
@@ -41,10 +31,13 @@ export default {
   },
   components: {
     BaseLayout,
-    Movie,
+    Recommends,
   },
   data() {
     return {
+      emptyTitle: "Nothing to show here",
+      emptyDesc: "This celebrity hasn't recommended any film yet.",
+      emptyImage: "/img/empty/17.svg",
       movies: [],
       judge: {},
     };
