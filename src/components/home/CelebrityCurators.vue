@@ -26,7 +26,7 @@
             $router.push({
               name: 'judge-recommendation',
               params: {
-                id: celeb.profile_id,
+                id: celeb.id,
               },
             })
           "
