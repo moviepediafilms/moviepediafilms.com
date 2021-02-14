@@ -21,6 +21,7 @@
         </div>
       </div>
       <empty-state
+        v-else
         title="Nothing to show here"
         desc="This celebrity hasn't recommended any film yet."
         image="/img/empty/17.svg"
