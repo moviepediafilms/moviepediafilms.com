@@ -4,6 +4,10 @@
       :list_id="selected_recommend_list.id"
       :header="false"
       :options="menu_options"
+      :empty-title="emptyTitle"
+      :empty-desc="emptyDesc"
+      :empty-icon="emptyIcon"
+      :empty-image="emptyImage"
     >
       <q-btn-dropdown
         split
@@ -36,6 +40,22 @@ import CurationList from "@/components/CurationList";
 import { curation_service } from "@/services";
 export default {
   props: {
+    emptyTitle: {
+      type: String,
+      default: "Nothing to show here",
+    },
+    emptyDesc: {
+      type: String,
+      default: "No movies found!",
+    },
+    emptyIcon: {
+      type: String,
+      default: null,
+    },
+    emptyImage: {
+      type: String,
+      default: null,
+    },
     profile: {
       type: Object,
       default() {

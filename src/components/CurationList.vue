@@ -45,6 +45,10 @@
         :showMyRoles="false"
         :options="options"
         @remove="on_remove"
+        :empty-title="emptyTitle"
+        :empty-desc="emptyDesc"
+        :empty-icon="emptyIcon"
+        :empty-image="emptyImage"
       />
     </div>
     <q-dialog v-model="show_share_dialog">
@@ -77,6 +81,22 @@ export default {
     header: {
       type: Boolean,
       default: true,
+    },
+    emptyTitle: {
+      type: String,
+      default: "Nothing to show here",
+    },
+    emptyDesc: {
+      type: String,
+      default: "No movies found!",
+    },
+    emptyIcon: {
+      type: String,
+      default: null,
+    },
+    emptyImage: {
+      type: String,
+      default: null,
     },
   },
   components: {
