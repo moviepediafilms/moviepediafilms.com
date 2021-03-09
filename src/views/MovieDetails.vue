@@ -20,7 +20,7 @@
             </div>
             <div class="row">
               <q-badge
-                v-if="type == 'B'"
+                v-if="type === 'B'"
                 color="grey-5"
                 text-color="dark"
                 class="q-mr-xs"
