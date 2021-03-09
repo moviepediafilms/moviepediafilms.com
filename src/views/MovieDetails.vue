@@ -19,6 +19,13 @@
               {{ movie.title }}
             </div>
             <div class="row">
+              <q-badge
+                v-if="type == 'B'"
+                color="grey-5"
+                text-color="dark"
+                class="q-mr-xs"
+                >Blog</q-badge
+              >
               <q-badge v-if="movie.is_live" color="positive" class="q-mr-xs"
                 >Live</q-badge
               >
@@ -140,7 +147,7 @@
                 </q-btn>
               </q-btn-group>
             </div>
-            <div class="col-12 q-mt-sm">
+            <div class="col-12 q-mt-sm" v-if="type === 'S'">
               <q-expansion-item>
                 <template slot="header">
                   <q-item-section avatar top>
@@ -1287,7 +1294,6 @@ export default {
           if (error.response && error.response.data)
             error_msg = error.response.data.movie;
           if (!error_msg) error_msg = this.decode_error_message(error);
-          console.log("fata", error_msg)
           this.$q.notify({
             color: "negative",
             icon: "mdi-alert-circle-outline",
