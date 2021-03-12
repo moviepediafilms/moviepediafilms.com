@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="q-pb-sm row" v-if="movie.length > 0">
+    <div class="q-pb-sm row" v-if="movies.length > 0">
       <div class="text-lg">Trending on OTTs</div>
     </div>
     <horizontal-movie-list
-      v-if="movie.length > 0"
+      v-if="movies.length > 0"
       :movies="movies"
       :height="height"
       :width="width"

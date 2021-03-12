@@ -23,7 +23,7 @@
                 v-if="movie.type === 'B'"
                 color="grey-5"
                 text-color="dark"
-                class="q-mr-xs"
+                class="q-ma-xs"
                 >Blog</q-badge
               >
               <q-badge v-if="movie.is_live" color="positive" class="q-mr-xs"
