@@ -79,7 +79,7 @@
                   <q-item-section>My Submissions</q-item-section>
                 </q-item>
                 <q-item clickable :to="{ name: 'partner-judges' }">
-                  <q-item-section>Partner Celebrities</q-item-section>
+                  <q-item-section>Celebrity Curators</q-item-section>
                 </q-item>
                 <q-item clickable @click="auth_action">
                   <q-item-section>{{ auth_action_str }}</q-item-section>

@@ -179,6 +179,7 @@
         "
       />
       <div v-else>
+        <trending-ott />
         <new-releases />
         <celebrity-curators />
         <template v-for="(contest, index) in live_contests">
@@ -213,6 +214,8 @@ import NewReleases from "@/components/home/NewReleases";
 import ContestReleases from "@/components/home/ContestReleases";
 import MpGenreMovies from "@/components/home/MpGenreMovies";
 import MostRecommended from "@/components/home/MostRecommended";
+import TrendingOtt from "@/components/home/TrendingOtt";
+
 import SearchAndOrFiltered from "@/components/home/search/SearchAndOrFiltered";
 import { contest_service, mp_genre_service } from "@/services";
 import { mapState } from "vuex";
@@ -226,6 +229,7 @@ export default {
     CelebrityCurators,
     MpGenreMovies,
     MostRecommended,
+    TrendingOtt,
     SearchAndOrFiltered,
   },
   metaInfo: {
