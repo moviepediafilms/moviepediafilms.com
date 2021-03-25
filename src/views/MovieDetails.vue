@@ -147,7 +147,7 @@
                 </q-btn>
               </q-btn-group>
             </div>
-            <div class="col-12 q-mt-sm" v-if="type === 'S'">
+            <div class="col-12 q-mt-sm" v-if="movie.type === 'S'">
               <q-expansion-item>
                 <template slot="header">
                   <q-item-section avatar top>
