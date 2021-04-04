@@ -149,21 +149,6 @@
         based on the percentage match the curator gets with our celebrity
         partners’ consensus. The winners stand a chance to win new exclusive
         giveaways, every month.
-
-        <br />
-        Winner:- 6000 INR
-        <br />
-        Runner up:- 4000 INR
-        <br />
-        The method of calculation is as follows,
-        <br />
-        The last day to edit the recommendation list will be on the 14th day of
-        the following month.
-        <br />
-        For example, the deadline for December month's recommends will be on
-        14th of January. Results based on percentage match will be announced on
-        the 17th day of the following month. Cash rewards to be paid only
-        through a bank account.
       </p>
       <div class="text-h3 q-mt-md text-primary">3.2. Engagement meter</div>
       <p class="text-body1 q-mt-sm">
