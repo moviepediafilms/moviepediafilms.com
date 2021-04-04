@@ -144,10 +144,11 @@
       </div>
       <div class="text-h3 q-mt-md text-primary">3.1. Curator of the Month</div>
       <p class="text-body1 q-mt-sm">
-        In this contest, Curator can recommend up to 20 films that were live in
+        In this contest, Curator can recommend up to 20 films that were LIVE in
         that particular month and the ‘Curator of the Month’ will be adjudged
         based on the percentage match the curator gets with our celebrity
-        partners’ consensus.
+        partners’ consensus. The winners stand a chance to win new exclusive
+        giveaways, every month.
 
         <br />
         Winner:- 6000 INR
