@@ -144,25 +144,11 @@
       </div>
       <div class="text-h3 q-mt-md text-primary">3.1. Curator of the Month</div>
       <p class="text-body1 q-mt-sm">
-        In this contest, Curator can recommend up to 20 films that were live in
+        In this contest, Curator can recommend up to 20 films that were LIVE in
         that particular month and the ‘Curator of the Month’ will be adjudged
         based on the percentage match the curator gets with our celebrity
-        partners’ consensus.
-
-        <br />
-        Winner:- 6000 INR
-        <br />
-        Runner up:- 4000 INR
-        <br />
-        The method of calculation is as follows,
-        <br />
-        The last day to edit the recommendation list will be on the 14th day of
-        the following month.
-        <br />
-        For example, the deadline for December month's recommends will be on
-        14th of January. Results based on percentage match will be announced on
-        the 17th day of the following month. Cash rewards to be paid only
-        through a bank account.
+        partners’ consensus. The winners stand a chance to win new exclusive
+        giveaways, every month.
       </p>
       <div class="text-h3 q-mt-md text-primary">3.2. Engagement meter</div>
       <p class="text-body1 q-mt-sm">

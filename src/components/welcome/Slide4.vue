@@ -37,7 +37,7 @@ export default {
     return {
       items: [
         {
-          title: "₹ 10,000",
+          title: "Win Exclusive Giveaways",
           desc: "Curator of the Month Title",
           icon: "mdi-trophy",
         },
