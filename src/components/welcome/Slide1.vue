@@ -65,18 +65,7 @@
         mode="out-in"
         :duration="200"
       >
-        <q-btn
-          color="primary"
-          rounded
-          text-color="dark"
-          class="text-uppercase q-px-md q-py-xs text-dark mp-btn"
-          :to="{ name: 'submit' }"
-          translate=""
-          ><div class="">
-            <div style="line-height: 1">Submit</div>
-            <div style="line-height: 1" class="text-right q-pr-sm">Film</div>
-          </div>
-        </q-btn>
+        <submit-now />
       </transition>
     </div>
     <play-x3-bar />
@@ -85,10 +74,12 @@
 <script>
 import BarPlus from "@/components/animated/BarPlus";
 import PlayX3Bar from "@/components/animated/PlayX3Bar";
+import SubmitNow from "@/components/SubmitNow";
 export default {
   components: {
     BarPlus,
     PlayX3Bar,
+    SubmitNow,
   },
 
   data() {
