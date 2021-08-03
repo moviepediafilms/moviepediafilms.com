@@ -13,11 +13,11 @@
     >
       <q-item-section>
         <q-item-label>
-          <h5 class="text-primary">
+          <h3 class="text-primary">
             {{ pack.title }}
             <br />
             <small class="text-caption">{{ pack.price }}</small>
-          </h5>
+          </h3>
         </q-item-label>
         <q-item-label class="q-pt-sm">
           <q-item
@@ -77,9 +77,16 @@ export default {
       active_pack_id: 2,
       packs: [
         {
+          id: 3,
+          title: "MDFF - Season2",
+          price: "INR 499",
+          content: [{ text: "Entry in MDFF Season 2", included: true }],
+          active: false,
+        },
+        {
           id: 2,
           title: "Premium Pack",
-          price: "INR 399 + INR 99",
+          price: "INR 499",
           content: [
             { text: "Creator of the Month", included: true },
             { text: "Facebook Marketing", included: true },
@@ -87,20 +94,6 @@ export default {
             { text: "Celebrity Recommendation", included: true },
             { text: "Instagram Promotion", included: true },
             { text: "Moviepedia Feature Review", included: true },
-          ],
-          active: false,
-        },
-        {
-          id: 1,
-          title: "Standard Pack",
-          price: "INR 399",
-          content: [
-            { text: "Creator of the Month", included: true },
-            { text: "Facebook Marketing", included: true },
-            { text: "E-mail Campaigns", included: true },
-            { text: "Celebrity Recommendation", included: false },
-            { text: "Instagram Promotion", included: false },
-            { text: "Moviepedia Feature Review", included: false },
           ],
           active: false,
         },

@@ -128,9 +128,4 @@ export default {
   line-height: 1.1;
   word-spacing: 2px;
 }
-.mp-btn {
-  font-family: "Prompt", "-apple-system", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
-  letter-spacing: 6px;
-}
 </style>
