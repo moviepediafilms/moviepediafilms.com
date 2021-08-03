@@ -150,7 +150,7 @@ export default {
       forward_only: false,
       trigger_submit: 0,
       commit_package: 0,
-      step: 3,
+      step: 1,
       submitted_movie: {},
       loading: false,
       error_msg: "",
