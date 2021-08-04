@@ -19,7 +19,7 @@
         />
         <q-route-tab
           name="mdff"
-          icon="mdi-movie-open-outline mdi-18px"
+          icon="mdi-ticket mdi-18px"
           label="MDFF"
           no-caps
           :to="{ name: 'mdff' }"

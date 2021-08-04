@@ -74,28 +74,19 @@ export default {
       order: {},
       error_msg: "",
       success_msg: "",
-      active_pack_id: 2,
+      active_pack_id: 3,
       packs: [
         {
           id: 3,
           title: "MDFF - Season2",
           price: "INR 499",
-          content: [{ text: "Entry in MDFF Season 2", included: true }],
-          active: false,
-        },
-        {
-          id: 2,
-          title: "Premium Pack",
-          price: "INR 499",
           content: [
-            { text: "Creator of the Month", included: true },
-            { text: "Facebook Marketing", included: true },
-            { text: "E-mail Campaigns", included: true },
-            { text: "Celebrity Recommendation", included: true },
-            { text: "Instagram Promotion", included: true },
-            { text: "Moviepedia Feature Review", included: true },
+            {
+              text: "Moviepedia Annual Digital Film Festival '21",
+              included: true,
+            },
           ],
-          active: false,
+          active: true,
         },
       ],
     };
