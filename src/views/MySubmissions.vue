@@ -6,57 +6,66 @@
         <q-spinner-dots size="48px" />
       </div>
       <div v-else>
-        <div class="row q-col-gutter-md" v-if="submissions.length > 0">
-          <div
-            class="col-12 col-md-6"
-            v-for="movie in submissions"
-            :key="movie.id"
-          >
+        <div class="row q-gutter-md" v-if="submissions.length > 0">
+          <div class="col-12" v-for="movie in submissions" :key="movie.id">
             <div class="row">
-              <q-card class="col q-ma-md">
+              <q-card class="col-3 q-ma-md">
                 <movie-image
-                  class="col-6"
+                  class="col-4"
                   :title="movie.title"
                   :state="movie.state"
                   :show-state="true"
                   :poster="movie.poster"
                 />
               </q-card>
-              <div class="col flex align-middle items-center">
+              <div class="col">
                 <div>
-                  <div class="text-h2 text-primary">
+                  <div class="text-h3 text-primary">
                     {{ movie.title }}
                   </div>
 
-                  <div class="q-mt-sm" v-if="movie.package">
-                    {{ movie.package }}
-                  </div>
-                  <div class="q-mt-sm" v-if="movie.order && movie.order.amount">
-                    INR {{ in_rupees(movie.order.amount) }}
-                  </div>
+                  <div
+                    class="q-mt-lg"
+                    :key="order.id"
+                    v-for="order in movie.orders"
+                  >
+                    <div class="q-mt-xs" v-if="order.package">
+                      <div class="text-h4 text-primary">
+                        {{ package_id_to_obj[order.package].name }}
+                      </div>
+                    </div>
+                    <div class="q-mt-xs" v-if="order.amount">
+                      INR {{ in_rupees(order.amount) }}
+                    </div>
+                    <div class="q-mt-xs">
+                      Status:
+                      <template v-if="order.payment_id"> Paid </template>
+                      <template v-else> Not Paid </template>
+                    </div>
+                    <div class="q-mt-xs" v-if="order.payment_id">
+                      Payment ID:
+                      {{ order.payment_id }}
+                    </div>
 
-                  <div class="q-mt-sm" v-if="movie.order.payment_id">
-                    Payment ID:
-                    {{ movie.order.payment_id }}
+                    <q-btn
+                      size="sm"
+                      label="Pay"
+                      color="primary"
+                      class="q-mt-xs"
+                      text-color="dark"
+                      :to="{ name: 'submit', params: { movie_id: movie.id } }"
+                      v-if="has_active_package(order) && is_not_paid(order)"
+                    />
+                    <q-btn
+                      size="sm"
+                      class="q-mt-md"
+                      label="Select Package"
+                      color="primary"
+                      text-color="dark"
+                      :to="{ name: 'submit', params: { movie_id: movie.id } }"
+                      v-if="!order.order_id"
+                    />
                   </div>
-                  <q-btn
-                    size="sm"
-                    label="Proceed to Payment"
-                    color="primary"
-                    class="q-mt-md"
-                    text-color="dark"
-                    :to="{ name: 'submit', params: { movie_id: movie.id } }"
-                    v-if="movie.order.order_id && !movie.order.payment_id"
-                  />
-                  <q-btn
-                    size="sm"
-                    class="q-mt-md"
-                    label="Select Package"
-                    color="primary"
-                    text-color="dark"
-                    :to="{ name: 'submit', params: { movie_id: movie.id } }"
-                    v-if="!movie.order.order_id"
-                  />
                 </div>
               </div>
             </div>
@@ -75,7 +84,7 @@
 <script>
 import BaseLayout from "@/layouts/Base";
 import MovieImage from "@/components/movie/Image";
-import { profile_service } from "@/services";
+import { profile_service, package_service } from "@/services";
 export default {
   metaInfo: {
     title: "Submissions",
@@ -88,13 +97,35 @@ export default {
     return {
       loading: true,
       submissions: [],
+      packages: [],
     };
   },
-  computed: {},
-  mounted() {
+  computed: {
+    package_id_to_obj() {
+      var map = {};
+      this.packages.forEach((pack) => {
+        map[pack.id] = pack;
+      });
+      return map;
+    },
+  },
+  created() {
+    this.get_packages();
     this.get_submissions();
   },
   methods: {
+    has_active_package(order) {
+      return this.package_id_to_obj[order.package].active;
+    },
+    is_not_paid(order) {
+      return order.order_id && !order.payment_id;
+    },
+    get_packages() {
+      package_service.get().then((data) => {
+        this.packages.splice(0, this.packages.length);
+        this.packages.push(...data.results);
+      });
+    },
     get_submissions() {
       profile_service
         .get({}, `${this.my_profile.id}/submissions`)
