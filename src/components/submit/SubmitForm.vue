@@ -1,6 +1,50 @@
 <template>
   <div>
-    <q-form ref="submit" class="q-gutter-y-md" @submit="on_submit">
+    <div class="row q-gutter-sm q-pb-lg">
+      <div
+        class="col-2"
+        :key="movie.id"
+        v-for="movie in submitted_movies"
+        @click="selected_movie_id = movie.id"
+      >
+        <div
+          class="movie-item q-pa-sm"
+          :class="{ selected: selected_movie_id === movie.id }"
+        >
+          <movie-image
+            :title="movie.title"
+            :state="movie.state"
+            :show-state="true"
+            :poster="movie.poster"
+          />
+        </div>
+      </div>
+      <div
+        class="col-2 movie-item q-pa-sm"
+        :class="{ selected: selected_movie_id == null }"
+        @click="selected_movie_id = null"
+      >
+        <q-img
+          :ratio="9 / 16"
+          spinner-color="primary"
+          spinner-size="24px"
+          transition="fade"
+        >
+          <div
+            class="absolute-full bg-dark column text-light"
+            style="padding: 0px; border: 2px dashed yellow"
+          >
+            <div class="text-h1">Add New +</div>
+          </div>
+        </q-img>
+      </div>
+    </div>
+    <q-form
+      ref="submit"
+      class="q-gutter-y-md"
+      @submit="on_submit"
+      v-show="selected_movie_id == null"
+    >
       <div>
         <q-input
           type="text"
@@ -197,8 +241,9 @@
 import langs from "@/extras/langs";
 import { mapState } from "vuex";
 import VueCropper from "vue-cropperjs";
+import MovieImage from "@/components/movie/Image";
 import "cropperjs/dist/cropper.css";
-import { submission_service } from "@/services";
+import { submission_service, profile_service } from "@/services";
 import { GENRE_REQUEST } from "@/store/actions";
 export default {
   props: {
@@ -215,9 +260,12 @@ export default {
   },
   components: {
     VueCropper,
+    MovieImage,
   },
   data() {
     return {
+      selected_movie_id: null,
+      submitted_movies: [],
       cropping_in_progress: false,
       loading: false,
       error_msg: "",
@@ -273,11 +321,45 @@ export default {
         return URL.createObjectURL(this.original_poster);
       return this.original_poster;
     },
+    selected_movie() {
+      var selected_movie = {};
+      this.submitted_movies.forEach((movie) => {
+        if (movie.id === this.selected_movie_id) selected_movie = movie;
+      });
+      return selected_movie;
+    },
   },
   watch: {
+    genres() {
+      var new_genres = [];
+      this.submit_data.genres.forEach((g) => {
+        this.genres.forEach((genre) => {
+          if (g.id === genre.id) {
+            new_genres.push(genre);
+          }
+        });
+      });
+      this.submit_data.genres.splice(0, this.submit_data.genres.length);
+      this.submit_data.genres.push(...new_genres);
+    },
     triggerSubmit() {
       // called when attempt_submit is changed in parent to trigger submittion attempt here
-      this.on_submit();
+      if (this.selected_movie_id) {
+        this.submit_data.selected_movie_id = this.selected_movie_id;
+        this.$emit(
+          "complete",
+          Object.assign(
+            {
+              id: this.selected_movie_id,
+              original_poster: this.original_poster,
+            },
+            this.submit_data
+          ),
+          this.selected_movie
+        );
+      } else {
+        this.on_submit();
+      }
     },
     poster_crop_dialog(value) {
       if (!value && !this.submit_data.poster) {
@@ -295,12 +377,27 @@ export default {
     },
   },
   mounted() {
+    this.get_submissions();
     this.$store.dispatch(GENRE_REQUEST);
     this.filtered_lang = this.languages;
+    this.selected_movie_id = this.initData.selected_movie_id;
+    delete this.initData["selected_movie_id"];
     Object.assign(this.submit_data, this.initData);
     this.original_poster = this.initData.original_poster;
   },
   methods: {
+    get_submissions() {
+      profile_service
+        .get({}, `${this.my_profile.id}/submissions`)
+        .then((data) => {
+          data.results.forEach((sub) => {
+            if (sub.id !== this.submit_data.id) this.submitted_movies.push(sub);
+          });
+        })
+        .catch((error) => {
+          this.error_msg = this.decode_error_message(error);
+        });
+    },
     map_error_fields(error) {
       var has_errors1 = false;
       var has_errors2 = false;
@@ -438,3 +535,11 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.movie-item {
+  border-radius: 5px;
+}
+.selected {
+  border: 1px solid orange;
+}
+</style> 
