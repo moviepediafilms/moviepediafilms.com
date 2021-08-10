@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="row q-gutter-sm q-pb-lg">
+    <div class="row q-gutter-xs q-pb-lg" v-show="submitted_movies.length > 0">
       <div
-        class="col-2"
+        class="col-4 col-md-3"
         :key="movie.id"
         v-for="movie in submitted_movies"
         @click="selected_movie_id = movie.id"
@@ -14,13 +14,13 @@
           <movie-image
             :title="movie.title"
             :state="movie.state"
-            :show-state="true"
+            :show-state="false"
             :poster="movie.poster"
           />
         </div>
       </div>
       <div
-        class="col-2 movie-item q-pa-sm"
+        class="col-4 col-md-3 movie-item q-pa-sm"
         :class="{ selected: selected_movie_id == null }"
         @click="selected_movie_id = null"
       >
@@ -31,10 +31,17 @@
           transition="fade"
         >
           <div
-            class="absolute-full bg-dark column text-light"
-            style="padding: 0px; border: 2px dashed yellow"
+            class="
+              absolute-full
+              justify-center
+              bg-primary
+              column
+              text-dark
+              new-item
+              row
+            "
           >
-            <div class="text-h1">Add New +</div>
+            <div class="text-body1">Submit New</div>
           </div>
         </q-img>
       </div>
@@ -536,6 +543,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.new-item {
+  padding: 0px;
+}
 .movie-item {
   border-radius: 5px;
 }
