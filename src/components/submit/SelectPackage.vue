@@ -83,19 +83,7 @@ export default {
             },
           ],
           active: true,
-        },
-        {
-          id: 4,
-          title: "MDFF - Season3",
-          price: "INR 120",
-          content: [
-            {
-              text: "Moviepedia Annual Digital Film Festival '22",
-              included: true,
-            },
-          ],
-          active: true,
-        },
+        }
       ],
     };
   },
