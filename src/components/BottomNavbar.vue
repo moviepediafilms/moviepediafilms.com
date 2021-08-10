@@ -9,6 +9,7 @@
           no-caps
           :to="{ name: 'submit' }"
         />
+
         <q-route-tab
           name="top-creator"
           icon="mdi-movie-open-outline mdi-18px"
@@ -17,12 +18,19 @@
           :to="{ name: 'top-creator' }"
         />
         <q-route-tab
+          name="mdff"
+          icon="mdi-ticket mdi-18px"
+          label="MDFF"
+          no-caps
+          :to="{ name: 'mdff' }"
+        />
+        <!-- <q-route-tab
           name="top-curators"
           icon="mdi-bullhorn-outline mdi-18px"
           label="Top Curators"
           no-caps
           :to="{ name: 'top-curator' }"
-        />
+        /> -->
         <q-route-tab
           name="profile"
           icon="mdi-account-outline mdi-18px"

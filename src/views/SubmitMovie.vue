@@ -44,7 +44,7 @@
             :init-data="submit_data_copy"
             :trigger-submit="trigger_submit"
             @loading="on_loading"
-            @complete="on_form_complete"
+            @complete="on_movie_submit_complete"
           />
           <q-stepper-navigation>
             <q-btn
@@ -225,7 +225,7 @@ export default {
     navigate_back() {
       this.step = this.step - 1;
     },
-    on_form_complete(submit_data, movie) {
+    on_movie_submit_complete(submit_data, movie) {
       this.submit_data_copy = submit_data;
       this.submitted_movie = movie;
       this.loading = false;
@@ -236,13 +236,12 @@ export default {
     },
     on_package_select_complete(data) {
       this.order = data;
-
       this.attempt_payment();
     },
     rzp_response_handler(rzp_response) {
+      this.loading = false;
       if (rzp_response.error) {
         this.error_msg = `Payment failed! ${rzp_response.description}`;
-        this.loading = false;
       } else {
         payment_service
           .post(rzp_response)

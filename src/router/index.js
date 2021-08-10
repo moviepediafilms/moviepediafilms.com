@@ -20,7 +20,14 @@ const routes = [
         path: '/',
         name: 'home',
         component: Home
-    }, {
+    },
+    {
+        path: '/mdff',
+        name: 'mdff',
+        component: () =>
+            import ('../views/mdff.vue')
+    },
+    {
         path: '/welcome',
         name: 'welcome',
         component: () =>

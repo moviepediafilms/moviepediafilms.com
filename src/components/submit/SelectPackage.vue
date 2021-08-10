@@ -13,11 +13,11 @@
     >
       <q-item-section>
         <q-item-label>
-          <h5 class="text-primary">
+          <h3 class="text-primary">
             {{ pack.title }}
             <br />
             <small class="text-caption">{{ pack.price }}</small>
-          </h5>
+          </h3>
         </q-item-label>
         <q-item-label class="q-pt-sm">
           <q-item
@@ -51,18 +51,12 @@
   </div>
 </template>
 <script>
-import { submission_service } from "@/services";
+import { order_service } from "@/services";
 export default {
   props: {
     commit: {
       type: Number,
       default: 0,
-    },
-    initOrder: {
-      type: Object,
-      default() {
-        return {};
-      },
     },
     movieId: {
       type: Number,
@@ -71,109 +65,131 @@ export default {
   data() {
     return {
       loading: false,
-      order: {},
+      order: null,
+      orders: [],
       error_msg: "",
       success_msg: "",
-      active_pack_id: 2,
+      active_pack_id: 3,
+      // todo: fetch the packages from DB
       packs: [
         {
-          id: 2,
-          title: "Premium Pack",
-          price: "INR 399 + INR 99",
+          id: 3,
+          title: "MDFF - Season2",
+          price: "INR 499",
           content: [
-            { text: "Creator of the Month", included: true },
-            { text: "Facebook Marketing", included: true },
-            { text: "E-mail Campaigns", included: true },
-            { text: "Celebrity Recommendation", included: true },
-            { text: "Instagram Promotion", included: true },
-            { text: "Moviepedia Feature Review", included: true },
+            {
+              text: "Moviepedia Annual Digital Film Festival '21",
+              included: true,
+            },
           ],
-          active: false,
+          active: true,
         },
         {
-          id: 1,
-          title: "Standard Pack",
-          price: "INR 399",
+          id: 4,
+          title: "MDFF - Season3",
+          price: "INR 120",
           content: [
-            { text: "Creator of the Month", included: true },
-            { text: "Facebook Marketing", included: true },
-            { text: "E-mail Campaigns", included: true },
-            { text: "Celebrity Recommendation", included: false },
-            { text: "Instagram Promotion", included: false },
-            { text: "Moviepedia Feature Review", included: false },
+            {
+              text: "Moviepedia Annual Digital Film Festival '22",
+              included: true,
+            },
           ],
-          active: false,
+          active: true,
         },
       ],
     };
   },
-  computed: {
-    selected_pack() {
-      var selected = null;
-      this.packs.forEach((pack) => {
-        if (pack.id == this.active_pack_id) selected = pack;
-      });
-      return { name: selected.title };
-    },
-  },
+
   watch: {
     commit() {
-      this.select_package();
+      this.submit_selected_package();
     },
     loading() {
       this.$emit("loading", this.loading);
     },
   },
   mounted() {
-    Object.assign(this.order, this.initOrder);
+    // TODO: do loading
+    this.fetch_created_orders();
   },
   methods: {
-    select_package() {
-      this.error_msg = "";
-      if (this.order.order_id) {
-        // this should never happend, the package is already selected and select_package was called
-        this.$emit("complete", this.order);
-        return;
-      }
-      this.loading = true;
-      var form_data = new FormData();
-      form_data.append(
-        "payload",
-        JSON.stringify({
-          package: this.selected_pack,
-        })
-      );
-      submission_service
-        .patch(form_data, this.movieId)
-        .then((movie) => {
-          this.loading = false;
-          this.order = movie.order;
-          this.$emit("complete", this.order);
+    fetch_created_orders() {
+      order_service
+        .get({ state: "C", movies__id: this.movieId })
+        .then((res) => {
+          this.orders.push(...res.results);
+          this.select_order();
         })
         .catch((err) => {
-          this.loading = false;
           console.log(err);
-          this.error_msg = "Package selected failed! Please try again";
         });
     },
-    on_change_active_pack(pack) {
-      if (!this.order.order_id) this.active_pack_id = pack.id;
-      else {
-        this.$q.notify({
-          message:
-            "You cannot change your package now! Please contact support if you are facing issues with payment.",
-          color: "negative",
-          textColor: "white",
-          icon: "mdi-alert-circle-outline",
-          timeout: 5000,
-          actions: [
-            {
-              label: "OK",
-              color: "white",
-            },
-          ],
-        });
+    select_order() {
+      var order_without_package = null;
+      this.order = null;
+      this.orders.forEach((order) => {
+        if (order.package == this.active_pack_id) this.order = order;
+        if (order.package == null) order_without_package = order;
+      });
+      var no_order_for_selected_pack = !this.order;
+      if (no_order_for_selected_pack && order_without_package) {
+        this.order = order_without_package;
       }
+    },
+    submit_selected_package() {
+      this.error_msg = "";
+
+      var order_exists = this.order && this.order.id;
+      var package_selected =
+        order_exists && this.order.package == this.active_pack_id;
+
+      var order_has_package = order_exists && !!this.order.package;
+
+      if (order_exists && package_selected) {
+        //  - order is created and package is selected - no operation needed
+
+        this.$emit("complete", this.order);
+      } else if (!order_exists) {
+        //  - order not even created - create an order with selected package and movie
+        this.loading = true;
+        order_service
+          .post({
+            movie: this.movieId,
+            package: this.active_pack_id,
+          })
+          .then((res) => {
+            this.loading = false;
+            this.$emit("complete", res);
+          })
+          .catch((err) => {
+            this.loading = false;
+            console.log(err);
+            this.error_msg = "Package selected failed! Please try again";
+          });
+      } else if (!order_has_package) {
+        //  - order is without package - patch the order with selected package
+        this.loading = true;
+        order_service
+          .patch(
+            {
+              package: this.active_pack_id,
+            },
+            this.order.id
+          )
+          .then((res) => {
+            this.loading = false;
+            this.$emit("complete", res);
+          })
+          .catch((err) => {
+            this.loading = false;
+            console.log(err);
+            this.error_msg = "Package selected failed! Please try again";
+          });
+      }
+    },
+    on_change_active_pack(pack) {
+      this.active_pack_id = pack.id;
+      this.select_order();
     },
   },
 };
