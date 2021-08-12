@@ -14,9 +14,9 @@
       <q-item-section>
         <q-item-label>
           <h3 class="text-primary">
-            {{ pack.title }}
+            {{ pack.name }}
             <br />
-            <small class="text-caption">{{ pack.price }}</small>
+            <small class="text-caption">INR {{ pack.amount / 100 }}</small>
           </h3>
         </q-item-label>
         <q-item-label class="q-pt-sm">
@@ -51,7 +51,7 @@
   </div>
 </template>
 <script>
-import { order_service } from "@/services";
+import { order_service, package_service } from "@/services";
 export default {
   props: {
     commit: {
@@ -67,27 +67,14 @@ export default {
       loading: false,
       order: null,
       orders: [],
+      packages: [],
       error_msg: "",
       success_msg: "",
       active_pack_id: 3,
-      // todo: fetch the packages from DB
-      packs: [
-        {
-          id: 3,
-          title: "MDFF - Season2",
-          price: "INR 499",
-          content: [
-            {
-              text: "Moviepedia Annual Digital Film Festival '21",
-              included: true,
-            },
-          ],
-          active: true,
-        }
-      ],
+      packs: [],
     };
   },
-
+  computed: {},
   watch: {
     commit() {
       this.submit_selected_package();
@@ -95,12 +82,41 @@ export default {
     loading() {
       this.$emit("loading", this.loading);
     },
+    packages() {
+      this.packs.splice(0, this.packs.length);
+      console.log(this.packages);
+      this.packages.forEach((item) => {
+        item["content"] = this.parse_content(item["description"]);
+        this.packs.push(item);
+      });
+      console.log(this.packs);
+    },
   },
   mounted() {
     // TODO: do loading
     this.fetch_created_orders();
+    this.fetch_active_packages();
   },
   methods: {
+    parse_content(content) {
+      var features = [];
+      if (!content) return features;
+      content.split("\n").forEach((entry) => {
+        var head = entry.substring(0, 1).toLowerCase();
+        var tail = entry.substring(2);
+        var feature = {
+          included: head == "y" ? true : false,
+          text: tail,
+        };
+        features.push(feature);
+      });
+      return features;
+    },
+    fetch_active_packages() {
+      package_service.get({ active: true }).then((data) => {
+        this.packages.push(...data.results);
+      });
+    },
     fetch_created_orders() {
       order_service
         .get({ state: "C", movies__id: this.movieId })
