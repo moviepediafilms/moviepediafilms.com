@@ -1,19 +1,19 @@
 <template>
   <base-layout>
     <div class="row mdff-bg justify-center">
-      <submit-now class="self-center mt-custom" />
+      <select-btn class="self-center mt-custom" />
     </div>
   </base-layout>
 </template>
   
   <script>
 import BaseLayout from "@/layouts/Base";
-import SubmitNow from "@/components/SubmitNow";
+import SelectBtn from "@/components/SelectBtn";
 export default {
   name: "tos-page",
   components: {
     BaseLayout,
-    SubmitNow,
+    SelectBtn,
   },
   metaInfo: {
     title: "MDFF 2",
