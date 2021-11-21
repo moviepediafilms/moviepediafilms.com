@@ -4,11 +4,11 @@
     rounded
     text-color="dark"
     class="text-uppercase q-px-md q-py-xs text-dark mp-btn"
-    :to="{ name: 'partner-judges' }"
+    :to="{ name: 'movies-by-genre', params: { genre: '5' } }"
     translate=""
     ><div class="">
-      <div style="line-height: 1">Moviepedia</div>
-      <div style="line-height: 1" class="text-right q-pr-sm">Select</div>
+      <div class="spaced" style="line-height: 1">Moviepedia</div>
+      <div style="line-height: 1">Select</div>
     </div>
   </q-btn>
 </template>
@@ -23,6 +23,9 @@ export default {
 .mp-btn {
   font-family: "Prompt", "-apple-system", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
+  letter-spacing: 2px;
+}
+.spaced {
   letter-spacing: 6px;
 }
 </style>
