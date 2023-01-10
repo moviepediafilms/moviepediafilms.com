@@ -1,66 +1,67 @@
 {
-    "name": "moviepedia",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "build-dev": "vue-cli-service build --mode dev",
-        "lint": "vue-cli-service lint"
+  "name": "moviepedia",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "build-dev": "vue-cli-service build --mode dev",
+    "lint": "vue-cli-service lint",
+    "gen-api-spec": "npx @openapitools/openapi-generator-cli generate -i openapi.json -g javascript -o ./api"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.9.14",
+    "animate.css": "^4.1.1",
+    "axios": "^0.21.1",
+    "core-js": "^3.8.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "gsap": "^3.6.0",
+    "hammerjs": "^2.0.8",
+    "moment": "^2.29.1",
+    "quasar": "^1.15.1",
+    "vue": "^2.6.12",
+    "vue-cropperjs": "^4.2.0",
+    "vue-google-oauth2": "^1.5.5",
+    "vue-meta": "^2.4.0",
+    "vue-read-more": "^1.1.1",
+    "vue-recaptcha": "^1.3.0",
+    "vue-router": "^3.4.9",
+    "vuelidate": "^0.7.6",
+    "vuex": "^3.6.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.5.11",
+    "@vue/cli-plugin-eslint": "^4.5.11",
+    "@vue/cli-service": "^4.5.11",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-component": "^1.1.1",
+    "babel-plugin-transform-imports": "1.5.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^9.0.3",
+    "vue-cli-plugin-quasar": "~2.0.2",
+    "vue-easy-pie-chart": "^1.0.3",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
     },
-    "dependencies": {
-        "@quasar/extras": "^1.9.14",
-        "animate.css": "^4.1.1",
-        "axios": "^0.21.1",
-        "core-js": "^3.8.3",
-        "dotenv": "^8.2.0",
-        "express": "^4.17.1",
-        "gsap": "^3.6.0",
-        "hammerjs": "^2.0.8",
-        "moment": "^2.29.1",
-        "quasar": "^1.15.1",
-        "vue": "^2.6.12",
-        "vue-cropperjs": "^4.2.0",
-        "vue-google-oauth2": "^1.5.5",
-        "vue-meta": "^2.4.0",
-        "vue-read-more": "^1.1.1",
-        "vue-recaptcha": "^1.3.0",
-        "vue-router": "^3.4.9",
-        "vuelidate": "^0.7.6",
-        "vuex": "^3.6.0"
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
     },
-    "devDependencies": {
-        "@vue/cli-plugin-babel": "^4.5.11",
-        "@vue/cli-plugin-eslint": "^4.5.11",
-        "@vue/cli-service": "^4.5.11",
-        "babel-eslint": "^10.1.0",
-        "babel-plugin-component": "^1.1.1",
-        "babel-plugin-transform-imports": "1.5.0",
-        "eslint": "^6.7.2",
-        "eslint-plugin-vue": "^6.2.2",
-        "node-sass": "^4.14.1",
-        "sass-loader": "^9.0.3",
-        "vue-cli-plugin-quasar": "~2.0.2",
-        "vue-easy-pie-chart": "^1.0.3",
-        "vue-template-compiler": "^2.6.12"
-    },
-    "eslintConfig": {
-        "root": true,
-        "env": {
-            "node": true
-        },
-        "extends": [
-            "plugin:vue/essential",
-            "eslint:recommended"
-        ],
-        "parserOptions": {
-            "parser": "babel-eslint"
-        },
-        "rules": {}
-    },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "not dead"
-    ]
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
