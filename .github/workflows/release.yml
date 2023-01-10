@@ -1,11 +1,11 @@
-name: Deploy On UAT
+name: Deploy On Production
 on:
-  push:
-    branches: [uat]
+  registry_package:
+    types: [published]
   workflow_dispatch:
 jobs:
   deploy:
-    environment: uat
+    environment: prod
     runs-on: ubuntu-latest
     steps:
       - name: Docker pull on server
