@@ -1,15 +1,8 @@
 <template>
   <q-card flat v-ripple :style="cardStyle">
-    <movie-image
-      :menuBtn="menuBtn"
-      :title="movie.title"
-      :state="movie.state"
-      :poster="movie.poster"
-      :show-state="showState"
-      :runtime="movie.runtime"
-      @click="on_movie_select"
-      @showOptions="$emit('showOptions')"
-    />
+    <movie-image :menuBtn="menuBtn" :title="movie.title" :state="movie.state"
+      :poster="movie.poster_thumb || movie.poster" :show-state="showState" :runtime="movie.runtime"
+      @click="on_movie_select" @showOptions="$emit('showOptions')" />
 
     <div class="q-my-sm">
       <div class="flex justify-around items-center">
