@@ -1,0 +1,134 @@
+version: "3"
+
+services:
+  traefik:
+    image: traefik:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certs:/letsencrypt
+    command:
+      - --log.level=${TRAEFIK_LOG_LEVEL:-ERROR}
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --accesslog
+      - --log
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.address=:80
+      # redirect http to https
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.web.http.redirections.entrypoint.permanent=true
+      # let's encrypt certificates
+      - --certificatesresolvers.le.acme.httpchallenge=true
+      - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.le.acme.email=${LETSENCRYPT_EMAIL}
+      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
+    labels:
+      - traefik.enable=true
+      # Global redirection: https (www.) to https
+      - "traefik.http.routers.main.rule=HostRegexp(`{host:(www\\.).+}`)"
+      - "traefik.http.routers.main.entrypoints=websecure"
+      - "traefik.http.routers.main.tls=true"
+      - "traefik.http.routers.main.tls.certresolver=le"
+      - "traefik.http.routers.main.middlewares=trimwww"
+      # middleware=http(s)://(www.) to  https://
+      - traefik.http.middlewares.trimwww.redirectregex.regex=^https?://www.(.*)
+      - traefik.http.middlewares.trimwww.redirectregex.replacement=https://$${1}
+      - traefik.http.middlewares.trimwww.redirectregex.permanent=true
+    restart: always
+
+  proxy:
+    labels:
+      - traefik.enable=${TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.frontend.rule=Host(`${DOMAIN_NAME}`) || Host(`www.${DOMAIN_NAME}`)
+      - traefik.http.routers.frontend.tls.certresolver=le
+    image: ghcr.io/moviepediafilms/proxy:latest
+    volumes:
+      - media:/media:ro
+    depends_on:
+      - server
+      - web
+      - share
+    restart: always
+
+  web:
+    image: ghcr.io/moviepediafilms/frontend:latest
+    volumes:
+      - media:/usr/share/nginx/media:ro
+    restart: always
+
+  server:
+    image: ghcr.io/moviepediafilms/backend:latest
+    labels:
+      - traefik.enable=${TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.backend.rule=Host(`${API_DOMAIN}`)
+      - traefik.http.routers.backend.tls.certresolver=le
+    secrets:
+      - email-sender-cred
+    volumes:
+      - media:/media
+    env_file:
+      - .env
+    restart: always
+
+  share:
+    image: ghcr.io/moviepediafilms/share-interceptor:latest
+    env_file:
+      - .env
+    restart: always
+
+  telegram-bot:
+    image: ghcr.io/moviepediafilms/telegram-bot:latest
+    volumes:
+      - media:/media
+      - downloads:/app/posters
+    env_file:
+      - ./telegram-bot.env
+    restart: always
+
+  worker:
+    image: ghcr.io/moviepediafilms/backend:latest
+    entrypoint: [ "/app/worker.sh" ]
+    env_file:
+      - .env
+    restart: always
+
+  redis:
+    image: redis
+
+  dozzle:
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - dozzle.env
+    labels:
+      - traefik.enable=${TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.dozzle.rule=Host(`logs.moviepediafilms.com`)
+      - traefik.http.routers.dozzle.tls.certresolver=le
+
+#  db:
+#    image: mysql:5.7.38
+#    env_file:
+#      - ./db.env
+#    volumes:
+#      - mysqldata:/var/lib/mysql
+#    labels:
+#      - traefik.enable=${TRAEFIK_ENABLE:-true}
+#      - traefik.http.routers.db.rule=Host(`{DB_DOMAIN}`)
+#      - traefik.http.routers.db.tls.certresolver=le
+#    restart: always
+
+
+volumes:
+  certs:
+  media:
+  downloads:
+
+
+secrets:
+  email-sender-cred:
+    file: email-sender-321805-e81ec2403009.json

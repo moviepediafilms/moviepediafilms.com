@@ -1,0 +1,93 @@
+version: "3.9"
+
+services:
+  proxy:
+    build:
+      context: ../proxy
+    ports:
+      - 8080:8080
+    volumes:
+      - media:/media:ro
+      - static:/static:ro
+    depends_on:
+      - server
+      - web
+      - share
+    restart: always
+
+  web:
+    build:
+      context: ../web
+      target: dev
+    command: [ "npm", "run", "serve" ]
+    env_file:
+      - dev.env
+    volumes:
+      - ../web/app:/app
+      - /app/node_modules
+    restart: "no"
+
+  server:
+    build:
+      context: ../server
+      target: dev
+    command: [ "python", "./manage.py", "runserver", "0.0.0.0:80" ]
+    env_file:
+      - dev.env
+    volumes:
+      - media:/media
+      - static:/static
+      - ../server/src:/app
+      - beats-data:/beats-data
+    restart: "no"
+    depends_on:
+      - db
+
+  share:
+    build:
+      context: ../share
+      target: dev
+    command: [ "flask", "run", "--host=0.0.0.0", "--port=80" ]
+    environment:
+      - FLASK_DEBUG=1
+    env_file:
+      - dev.env
+    restart: always
+    ports:
+      - 8082:80
+    labels:
+      - traefik.enable=false
+
+  worker:
+    build:
+      context: ../server
+      target: dev
+    command: [ "/app/scripts/worker.sh" ]
+    volumes:
+      - ${PWD}/data:/data
+      - ../server/src:/app
+      - beats-data:/beats-data
+    env_file:
+      - dev.env
+    restart: "no"
+
+  telegram-bot:
+    build: ../telegram-bot
+    entrypoint: [ "echo", "dummy telegram bot" ]
+    restart: "no"
+
+  db:
+    image: mysql:5.7.38
+    env_file:
+      - dev.env
+    ports:
+      - 3306:3306
+    volumes:
+      - mysqldata:/var/lib/mysql
+    restart: always
+
+volumes:
+  mysqldata:
+  beats-data:
+  media:
+  static:
