@@ -1,0 +1,5 @@
+*.py[co]
+.env
+.vscode/
+venv/
+.pytest_cache

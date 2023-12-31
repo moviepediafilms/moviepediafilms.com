@@ -1,0 +1,14 @@
+*.py[co]
+*.env*
+static/**
+testdb
+*.log
+coverage.xml
+.coverage
+buglist.yaml
+htmlcov
+client_secret_*.json
+email-sender*.json
+*.sqlite3*
+*.env
+venv/

@@ -1,0 +1,192 @@
+[{
+        "model": "api.role",
+        "pk": 1,
+        "fields": {
+            "name": "Director"
+        }
+    },
+    {
+        "model": "api.role",
+        "pk": 2,
+        "fields": {
+            "name": "Writer"
+        }
+    },
+    {
+        "model": "api.role",
+        "pk": 3,
+        "fields": {
+            "name": "Producer"
+        }
+    },
+    {
+        "model": "api.role",
+        "pk": 4,
+        "fields": {
+            "name": "Editor"
+        }
+    },
+    {
+        "model": "api.role",
+        "pk": 5,
+        "fields": {
+            "name": "DOP"
+        }
+    },
+    {
+        "model": "api.role",
+        "pk": 6,
+        "fields": {
+            "name": "Sound"
+        }
+    },
+    {
+        "model": "api.role",
+        "pk": 7,
+        "fields": {
+            "name": "Music"
+        }
+    },
+    {
+        "model": "api.role",
+        "pk": 8,
+        "fields": {
+            "name": "Actor"
+        }
+    },
+    {
+        "model": "api.package",
+        "pk": 1,
+        "fields": {
+            "name": "standard pack",
+            "amount": 39900.0
+        }
+    },
+    {
+        "model": "api.package",
+        "pk": 2,
+        "fields": {
+            "name": "premium pack",
+            "amount": 49800.0
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 18,
+        "fields": {
+            "name": "psychological thriller"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 1,
+        "fields": {
+            "name": "drama"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 20,
+        "fields": {
+            "name": "science fiction"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 21,
+        "fields": {
+            "name": "animation"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 22,
+        "fields": {
+            "name": "documentary"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 23,
+        "fields": {
+            "name": "noir"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 2,
+        "fields": {
+            "name": "crime"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 31,
+        "fields": {
+            "name": "experimental"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 32,
+        "fields": {
+            "name": "fantasy"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 33,
+        "fields": {
+            "name": "horror"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 34,
+        "fields": {
+            "name": "musical"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 35,
+        "fields": {
+            "name": "mystery"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 36,
+        "fields": {
+            "name": "romance"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 37,
+        "fields": {
+            "name": "silent"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 38,
+        "fields": {
+            "name": "sports"
+        }
+    },
+    {
+        "model": "api.genre",
+        "pk": 3,
+        "fields": {
+            "name": "thriller"
+        }
+    },
+    {
+        "model": "api.contesttype",
+        "pk": 1,
+        "fields": {
+            "name": "Monthly"
+        }
+    }
+]
