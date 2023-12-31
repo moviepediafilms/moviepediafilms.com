@@ -33,7 +33,7 @@ if settings.DEBUG:
         path(
             "openapi/",
             get_schema_view(
-                title="Moviepedia Films", description="API endpoints", version="1.0.0"
+                title="Moviepedia Films", description="Moviepedia internal API endpoints", version="1.0.0"
             ),
             name="openapi-schema",
         ),

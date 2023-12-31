@@ -24,7 +24,6 @@ services:
       - dev.env
     volumes:
       - ../web/app:/app
-      - /app/node_modules
     restart: "no"
 
   server:
@@ -81,7 +80,7 @@ services:
     env_file:
       - dev.env
     ports:
-      - 3306:3306
+      - 3306
     volumes:
       - mysqldata:/var/lib/mysql
     restart: always

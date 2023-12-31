@@ -1,7 +1,5 @@
 module.exports = {
-  devServer: {
-    progress: false,
-  },
+  devServer: {},
   css: {
     loaderOptions: {
       sass: {},

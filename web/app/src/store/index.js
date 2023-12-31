@@ -14,16 +14,16 @@ Vue.use(Vuex);
 const debug = process.env.NODE_ENV !== "production";
 
 export default new Vuex.Store({
-    modules: {
-        profile,
-        auth,
-        list,
-        role,
-        alb,
-        flb,
-        follow,
-        genre,
-        lang
-    },
-    strict: debug
+  modules: {
+    profile,
+    auth,
+    list,
+    role,
+    alb,
+    flb,
+    follow,
+    genre,
+    lang,
+  },
+  strict: debug,
 });
