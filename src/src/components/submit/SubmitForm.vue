@@ -1,37 +1,15 @@
 <template>
   <div>
     <div class="row q-gutter-xs q-pb-lg" v-show="submitted_movies.length > 0">
-      <div
-        class="col-4 col-md-3"
-        :key="movie.id"
-        v-for="movie in submitted_movies"
-        @click="selected_movie_id = movie.id"
-      >
-        <div
-          class="movie-item q-pa-sm"
-          :class="{ selected: selected_movie_id === movie.id }"
-        >
-          <movie-image
-            :title="movie.title"
-            :state="movie.state"
-            :show-state="false"
-            :poster="movie.poster"
-          />
+      <div class="col-4 col-md-3" :key="movie.id" v-for="movie in submitted_movies" @click="selected_movie_id = movie.id">
+        <div class="movie-item q-pa-sm" :class="{ selected: selected_movie_id === movie.id }">
+          <movie-image :title="movie.title" :state="movie.state" :show-state="false" :poster="movie.poster" />
         </div>
       </div>
-      <div
-        class="col-4 col-md-3 movie-item q-pa-sm"
-        :class="{ selected: selected_movie_id == null }"
-        @click="selected_movie_id = null"
-      >
-        <q-img
-          :ratio="9 / 16"
-          spinner-color="primary"
-          spinner-size="24px"
-          transition="fade"
-        >
-          <div
-            class="
+      <div class="col-4 col-md-3 movie-item q-pa-sm" :class="{ selected: selected_movie_id == null }"
+        @click="selected_movie_id = null">
+        <q-img :ratio="9 / 16" spinner-color="primary" spinner-size="24px" transition="fade">
+          <div class="
               absolute-full
               justify-center
               bg-primary
@@ -39,174 +17,87 @@
               text-dark
               new-item
               row
-            "
-          >
+            ">
             <div class="text-body1">Submit New</div>
           </div>
         </q-img>
       </div>
     </div>
-    <q-form
-      ref="submit"
-      class="q-gutter-y-md"
-      @submit="on_submit"
-      v-show="selected_movie_id == null"
-    >
+    <q-form ref="submit" class="q-gutter-y-md" @submit="on_submit" v-show="selected_movie_id == null">
       <div>
-        <q-input
-          type="text"
-          v-model="submit_data.title"
-          label="Film Title"
-          :rules="[
-            (val) => (val && val.length > 0) || 'Please enter film title',
-            (val) =>
-              (val && val.match(/^[\x00-\x7F]*$/)) ||
-              'Please use alpha numeric characters only',
-          ]"
-          :error-message="submit_error.title"
-          :error="!!submit_error.title"
-          filled
-        ></q-input>
+        <q-input type="text" v-model="submit_data.title" label="Film Title" :rules="[
+          (val) => (val && val.length > 0) || 'Please enter film title',
+          (val) =>
+            (val && val.match(/^[\x00-\x7F]*$/)) ||
+            'Please use alpha numeric characters only',
+        ]" :error-message="submit_error.title" :error="!!submit_error.title" filled></q-input>
       </div>
       <div>
-        <q-input
-          type="url"
-          v-model="submit_data.link"
-          :rules="[
-            (val) => (val && val.length > 0) || 'Please provide film link',
-          ]"
-          hint="should be publicly accessible"
-          label="Link"
-          :error-message="submit_error.link"
-          :error="!!submit_error.link"
-          filled
-        ></q-input>
+        <q-input type="url" v-model="submit_data.link" :rules="[
+          (val) => (val && val.length > 0) || 'Please provide film link',
+        ]" hint="should be publicly accessible" label="Link" :error-message="submit_error.link"
+          :error="!!submit_error.link" filled></q-input>
       </div>
       <div>
-        <q-select
-          filled
-          use-chips
-          use-input
-          v-model="submit_data.lang"
-          :options="filtered_lang"
-          @filter="lang_filter_fn"
-          option-label="name"
-          :hint="
-            submit_data.lang
-              ? submit_data.lang.name === 'English'
-                ? ''
-                : 'Subtitles required for film'
-              : ''
-          "
-          label="Language"
-          :rules="[(val) => val || 'Please select the language used in film']"
-          :error-message="submit_error.lang"
-          :error="!!submit_error.lang"
-        />
+        <q-select filled use-chips use-input v-model="submit_data.lang" :options="filtered_lang" @filter="lang_filter_fn"
+          option-label="name" :hint="submit_data.lang
+            ? submit_data.lang.name === 'English'
+              ? ''
+              : 'Subtitles required for film'
+            : ''
+            " label="Language" :rules="[(val) => val || 'Please select the language used in film']"
+          :error-message="submit_error.lang" :error="!!submit_error.lang" />
       </div>
 
       <div>
-        <q-input
-          type="number"
-          :rules="[
-            (val) => (val && val.length > 0) || 'Please enter film runtime',
-            (val) => parseInt(val) > 0 || 'Please enter valid film runtime',
-            (val) => parseInt(val) <= 60 || 'That\'s too long for a short film',
-          ]"
-          v-model="submit_data.runtime"
-          label="Runtime (in minutes)"
-          :error-message="submit_error.runtime"
-          :error="!!submit_error.runtime"
-          filled
-        ></q-input>
+        <q-input type="number" :rules="[
+          (val) => (val && val.length > 0) || 'Please enter film runtime',
+          (val) => parseInt(val) > 0 || 'Please enter valid film runtime',
+          (val) => parseInt(val) <= 60 || 'That\'s too long for a short film',
+        ]" v-model="submit_data.runtime" label="Runtime (in minutes)" :error-message="submit_error.runtime"
+          :error="!!submit_error.runtime" filled></q-input>
       </div>
       <div>
-        <q-file
-          v-model="original_poster"
-          label="Poster"
-          accept=".jpg, image/*"
-          hint="Portrait poster of the film"
-          filled
-          clearable
-          @rejected="poster_rejected"
-          :error-message="submit_error.poster"
-          :error="!!submit_error.poster"
-        ></q-file>
+        <q-file v-model="original_poster" label="Poster" accept=".jpg, image/*" hint="Portrait poster of the film" filled
+          clearable @rejected="poster_rejected" :error-message="submit_error.poster"
+          :error="!!submit_error.poster"></q-file>
       </div>
-      <q-field
-        borderless
-        label="Select Genre"
-        color="white"
-        stack-label
-        v-model="submit_data.genres"
-        :rules="[
-          (val) =>
-            (val && val.length > 0) || 'Please select at-least one genre',
-          (val) => (val && val.length < 4) || 'You can select max of 3',
-        ]"
-        :error-message="submit_error.genres"
-        :error="!!submit_error.genres"
-      >
+      <q-field borderless label="Select Genre" color="white" stack-label v-model="submit_data.genres" :rules="[
+        (val) =>
+          (val && val.length > 0) || 'Please select at-least one genre',
+        (val) => (val && val.length < 4) || 'You can select max of 3',
+      ]" :error-message="submit_error.genres" :error="!!submit_error.genres">
         <div class="q-gutter-xs text-left q-ma-none">
-          <q-checkbox
-            v-model="submit_data.genres"
-            :val="genre"
-            :label="genre.name"
-            v-for="genre in genres"
-            :key="genre.name"
-          />
+          <q-checkbox v-model="submit_data.genres" :val="genre" :label="genre.name" v-for="genre in genres"
+            :key="genre.name" />
         </div>
       </q-field>
       <div>
-        <q-select
-          filled
-          multiple
-          use-chips
-          v-model="submit_data.roles"
-          :options="roles"
-          option-label="name"
-          label="Your role(s) in film"
-          :rules="[(val) => val.length > 0 || 'Please select at least one']"
-          :error-message="submit_error.roles"
-          :error="!!submit_error.roles"
-        />
+        <q-select filled multiple use-chips v-model="submit_data.roles" :options="roles" option-label="name"
+          label="Your role(s) in film" :rules="[(val) => val.length > 0 || 'Please select at least one']"
+          :error-message="submit_error.roles" :error="!!submit_error.roles" />
       </div>
-      <p class="q-mt-xs" v-if="show_director_fields">
+      <!-- extras -->
+      <div>
+        <q-input type="text" v-model="submit_data.extras.college" label="College Name" filled></q-input>
+      </div>
+      <p class="q-mt-lg" v-if="show_director_fields">
         Tell us about the Director of the film!
       </p>
       <div v-if="show_director_fields">
-        <q-input
-          type="text"
-          v-model="submit_data.director.name"
-          label="Name"
-          :rules="[(val) => !!val || 'Please enter director\'s name']"
-          filled
-          :error-message="submit_error.director.name"
-          :error="!!submit_error.director.name"
-        ></q-input>
+        <q-input type="text" v-model="submit_data.director.name" label="Name"
+          :rules="[(val) => !!val || 'Please enter director\'s name']" filled :error-message="submit_error.director.name"
+          :error="!!submit_error.director.name"></q-input>
       </div>
       <div v-if="show_director_fields">
-        <q-input
-          type="email"
-          v-model="submit_data.director.email"
-          :rules="[(val) => !!val || 'Please enter director\'s email']"
-          label="Email"
-          filled
-          :error-message="submit_error.director.email"
-          :error="!!submit_error.director.email"
-        ></q-input>
+        <q-input type="email" v-model="submit_data.director.email"
+          :rules="[(val) => !!val || 'Please enter director\'s email']" label="Email" filled
+          :error-message="submit_error.director.email" :error="!!submit_error.director.email"></q-input>
       </div>
       <div v-if="show_director_fields">
-        <q-input
-          type="tel"
-          v-model="submit_data.director.contact"
-          mask="+## ##########"
-          :rules="[(val) => !!val || 'Please enter director\'s contact number']"
-          label="Mobile"
-          filled
-          :error-message="submit_error.director.contact"
-          :error="!!submit_error.director.contact"
-        ></q-input>
+        <q-input type="tel" v-model="submit_data.director.contact" mask="+## ##########"
+          :rules="[(val) => !!val || 'Please enter director\'s contact number']" label="Mobile" filled
+          :error-message="submit_error.director.contact" :error="!!submit_error.director.contact"></q-input>
       </div>
       <div class="text-negative">
         {{ error_msg }}
@@ -217,28 +108,12 @@
         <q-card-section class="text-center">
           <div class="text-h6 q-mb-lg">Crop Poster</div>
 
-          <vue-cropper
-            ref="cropper"
-            :aspect-ratio="9 / 16"
-            :src="poster_image_url"
-            alt="Film Poster"
-          >
+          <vue-cropper ref="cropper" :aspect-ratio="9 / 16" :src="poster_image_url" alt="Film Poster">
           </vue-cropper>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn
-            flat
-            label="Cancel"
-            v-close-popup
-            :disabled="cropping_in_progress"
-          />
-          <q-btn
-            flat
-            color="primary"
-            label="Done"
-            @click="crop_poster"
-            :loading="cropping_in_progress"
-          />
+          <q-btn flat label="Cancel" v-close-popup :disabled="cropping_in_progress" />
+          <q-btn flat color="primary" label="Done" @click="crop_poster" :loading="cropping_in_progress" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -308,6 +183,9 @@ export default {
           email: "",
           contact: "91",
         },
+        extras: {
+          college: "",
+        }
       },
     };
   },
@@ -546,9 +424,11 @@ export default {
 .new-item {
   padding: 0px;
 }
+
 .movie-item {
   border-radius: 5px;
 }
+
 .selected {
   border: 1px solid orange;
 }
