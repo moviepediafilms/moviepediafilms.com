@@ -1,11 +1,14 @@
 <template>
     <base-layout>
+
         <div class="q-ma-md q-pt-lg">
             <!-- image -->
+            <img class="responsive" src="/img/events/iim-rohtak-2024-alt.png" alt="IIM Rohtak 2024">
 
-            <img class="responsive" src="/img/events/iim-rohtak-2024.png" alt="IIM Rohtak 2024">
-
-            <p>
+            <h1 class="text-primary q-mt-lg">Moviepedia at IIM Rohtak | The Shorts Film Festival 2024 | Submit Your
+                Film
+                Now</h1>
+            <p class="q-mt-lg">
                 Are you an aspiring filmmaker looking to showcase your creativity and talent? IIM Rohtak, in
                 collaboration with Moviepedia, presents an incredible opportunity for all budding
                 filmmakers. Get your film screened and stand a chance to win cash prizes worth 40,000 INR!
@@ -49,7 +52,7 @@
                 team, start filming, and submit your work for a chance to win and get your film screened.
                 Good luck!
                 For more details and to submit your film, visit:
-                <a href="/" class="text-primary text-decoration-none">www.moviepediafilms.com</a>
+                <a href="/submit" class="text-primary text-decoration-none">www.moviepediafilms.com/submit</a>
             </p>
 
         </div>

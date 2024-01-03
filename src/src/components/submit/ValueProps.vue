@@ -48,7 +48,7 @@ export default {
         {
           icon: "mdi-trophy",
           color: "amber",
-          text: "You stand a chance to win cash rewards worth Rs.15,000",
+          text: "You stand a chance to win cash rewards worth Rs.40,000",
         },
         {
           icon: "mdi-bullseye-arrow",
