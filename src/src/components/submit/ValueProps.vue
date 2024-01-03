@@ -16,7 +16,7 @@
     </q-list>
     <div class="text-body1 q-my-sm text-grey-5">
       <div class="text-title text-grey-4">
-        MDFF : {{ rs }} 499 per submission
+        MDFF x IIM : {{ rs }} 499 per submission
       </div>
       <div class="q-mt-sm text-body2 hidden">
         (if this one doesn't get featured, your next film submission is on us)
