@@ -3,7 +3,9 @@
 
         <div class="q-ma-md q-pt-lg">
             <!-- image -->
-            <img class="responsive" src="/img/events/iim-rohtak-2024-alt.png" alt="IIM Rohtak 2024">
+            <a href="/submit">
+                <img class="responsive" src="/img/events/iim-rohtak-2024-alt.png" alt="IIM Rohtak 2024">
+            </a>
 
             <h1 class="text-primary q-mt-lg">Moviepedia at IIM Rohtak | The Shorts Film Festival 2024 | Submit Your
                 Film
