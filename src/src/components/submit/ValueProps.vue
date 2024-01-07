@@ -41,7 +41,7 @@ export default {
         //   text: "Build a consistent audience for your YouTube releases. We drive a traffic of over 160,000 cinephiles to your content.",
         // },
         {
-          icon: "mdi-account-star",
+          icon: "mdi-currency-usd",
           color: "blue",
           text: "You stand a chance to win cash rewards worth Rs.40,000.",
         },
