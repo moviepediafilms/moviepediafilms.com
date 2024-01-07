@@ -91,9 +91,8 @@
         </template>
       </div>
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn ref="fab" fab icon="mdi-movie" color="primary" text-color="dark" padding="12px"
-          :to="{ name: 'event-iim-rohtak-2024' }">
-          <span class="q-ml-xs">Submit Your Film</span>
+        <q-btn ref="fab" fab icon="mdi-movie" color="primary" text-color="dark" padding="12px" :to="{ name: 'submit' }">
+          <span class="q-ml-xs">Submit Now</span>
         </q-btn>
       </q-page-sticky>
     </div>
