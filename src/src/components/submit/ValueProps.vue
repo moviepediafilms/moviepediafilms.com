@@ -16,7 +16,7 @@
     </q-list>
     <div class="text-body1 q-my-sm text-grey-5">
       <div class="text-title text-grey-4">
-        MDFF x IIM : {{ rs }} 499 per submission
+        MDFF x IIM Rohtak : {{ rs }} 499 per submission
       </div>
       <div class="q-mt-sm text-body2 hidden">
         (if this one doesn't get featured, your next film submission is on us)
@@ -33,7 +33,7 @@ export default {
         {
           icon: "mdi-account-group",
           color: "light-green",
-          text: "We provide you the platform to set up your own OTT profile, supporting fundraising to screening of your films.",
+          text: "You stand a chance to get your film screened at IIM Rohtak.",
         },
         // {
         //   icon: "mdi-youtube",
