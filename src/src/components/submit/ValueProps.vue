@@ -33,7 +33,7 @@ export default {
         {
           icon: "mdi-account-group",
           color: "light-green",
-          text: "You stand a chance to get your film screened at IIM Rohtak.",
+          text: "Get your film screened at IIM Rohtak.",
         },
         // {
         //   icon: "mdi-youtube",
@@ -43,17 +43,17 @@ export default {
         {
           icon: "mdi-account-star",
           color: "blue",
-          text: "Your film reaches the network of our ‘Partner Celebs’ and stands a chance to get recommended across our network.",
+          text: "You stand a chance to win cash rewards worth Rs.40,000.",
         },
         {
           icon: "mdi-trophy",
           color: "amber",
-          text: "You stand a chance to win cash rewards worth Rs.40,000",
+          text: "Your film stands a chance to get recommended by our jury of judges from the industry.",
         },
         {
           icon: "mdi-bullseye-arrow",
           color: "deep-purple",
-          text: "We curate your profile as a filmmaker and connect you with the audience. We strive to manage your reputation as a filmmaker.",
+          text: "We curate your profile as a filmmaker and connect you with the audience.",
         },
         // {
         //   icon: "mdi-check-decagram",

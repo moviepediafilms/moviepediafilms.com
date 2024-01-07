@@ -11,68 +11,32 @@
           <q-card-section>
             <div class="row">
               <div class="col-12">
-                <q-select
-                  filled
-                  multiple
-                  use-chips
-                  label="Genre"
-                  emit-value
-                  option-value="val"
-                  v-model="selected_genres"
-                  :options="filters.genre"
-                />
-                <q-select
-                  class="q-mt-md"
-                  filled
-                  multiple
-                  use-chips
-                  label="Language"
-                  option-value="val"
-                  emit-value
-                  v-model="selected_langs"
-                  :options="filters.lang"
-                />
+                <q-select filled multiple use-chips label="Genre" emit-value option-value="val" v-model="selected_genres"
+                  :options="filters.genre" />
+                <q-select class="q-mt-md" filled multiple use-chips label="Language" option-value="val" emit-value
+                  v-model="selected_langs" :options="filters.lang" />
               </div>
             </div>
             <div class="row">
               <div class="col-12" v-if="false">
                 <div class="text-center text-primary">Genre</div>
                 <div class="q-mt-sm row justify-around content-start">
-                  <q-checkbox
-                    v-for="genre in filters.genre"
-                    :key="genre.val"
-                    class="ellipsis"
-                    style="width: 90px"
-                    :val="genre.val"
-                    v-model="selected_genres"
-                    :label="genre.label"
-                  />
+                  <q-checkbox v-for="genre in filters.genre" :key="genre.val" class="ellipsis" style="width: 90px"
+                    :val="genre.val" v-model="selected_genres" :label="genre.label" />
                 </div>
               </div>
               <div class="col-12" v-if="false">
                 <div class="text-center text-primary">Langugage</div>
                 <div class="q-mt-sm row justify-around content-start">
-                  <q-checkbox
-                    :val="lang.val"
-                    class="ellipsis"
-                    style="width: 90px"
-                    v-model="selected_langs"
-                    :label="lang.label"
-                    v-for="lang in filters.lang"
-                    :key="lang.val"
-                  />
+                  <q-checkbox :val="lang.val" class="ellipsis" style="width: 90px" v-model="selected_langs"
+                    :label="lang.label" v-for="lang in filters.lang" :key="lang.val" />
                 </div>
               </div>
               <div class="col-12 q-mt-md">
                 <div class="text-center text-primary">Time</div>
                 <div class="q-mt-sm">
-                  <q-checkbox
-                    :val="time.val"
-                    v-model="selected_time"
-                    :label="time.label"
-                    v-for="time in filters.time"
-                    :key="time.val"
-                  />
+                  <q-checkbox :val="time.val" v-model="selected_time" :label="time.label" v-for="time in filters.time"
+                    :key="time.val" />
                 </div>
               </div>
             </div>
@@ -80,104 +44,41 @@
 
           <q-card-actions align="right">
             <q-btn flat label="Apply" color="primary" v-close-popup />
-            <q-btn
-              flat
-              label="Clear"
-              color="primary"
-              v-close-popup
-              @click.prevent="clear_filters"
-            />
+            <q-btn flat label="Clear" color="primary" v-close-popup @click.prevent="clear_filters" />
           </q-card-actions>
         </q-card>
       </q-dialog>
       <div>
-        <q-input
-          outlined
-          bottom-slots
-          v-model="search_text"
-          label="Search"
-          :dense="true"
-        >
+        <q-input outlined bottom-slots v-model="search_text" label="Search" :dense="true">
           <template v-slot:append>
-            <q-icon
-              v-if="search_text !== ''"
-              name="mdi-close"
-              @click="search_text = ''"
-              class="cursor-pointer"
-            />
+            <q-icon v-if="search_text !== ''" name="mdi-close" @click="search_text = ''" class="cursor-pointer" />
             <q-icon name="mdi-magnify" />
           </template>
         </q-input>
       </div>
-      <div
-        class="q-pb-md truncate-chip-labels"
-        v-if="
-          selected_genres.length +
-            selected_langs.length +
-            selected_time.length >
-          0
-        "
-      >
+      <div class="q-pb-md truncate-chip-labels" v-if="selected_genres.length +
+        selected_langs.length +
+        selected_time.length >
+        0
+        ">
         <small>Active filters</small><br />
 
-        <q-chip
-          size="sm"
-          removable
-          @remove="selected_genres.pop(name)"
-          color="primary"
-          text-color="dark"
-          :label="name"
-          :title="name"
-          v-for="name in selected_genres"
-          :key="'genre_' + name"
-        />
+        <q-chip size="sm" removable @remove="selected_genres.pop(name)" color="primary" text-color="dark" :label="name"
+          :title="name" v-for="name in selected_genres" :key="'genre_' + name" />
 
-        <q-chip
-          size="sm"
-          removable
-          @remove="selected_langs.pop(name)"
-          color="primary"
-          text-color="dark"
-          :label="name"
-          :title="name"
-          v-for="name in selected_langs"
-          :key="'lan_' + name"
-        />
-        <q-chip
-          size="sm"
-          removable
-          @remove="selected_time.pop(name)"
-          color="primary"
-          text-color="dark"
-          :label="name"
-          :title="name"
-          v-for="name in selected_time"
-          :key="'lan_' + name"
-        />
-        <q-chip
-          style="float: right"
-          clickable
-          size="sm"
-          @click="clear_filters"
-          color="negative"
-          class="self-right"
-          text-color="white"
-          label="Clear All"
-          title="Clear All"
-        />
+        <q-chip size="sm" removable @remove="selected_langs.pop(name)" color="primary" text-color="dark" :label="name"
+          :title="name" v-for="name in selected_langs" :key="'lan_' + name" />
+        <q-chip size="sm" removable @remove="selected_time.pop(name)" color="primary" text-color="dark" :label="name"
+          :title="name" v-for="name in selected_time" :key="'lan_' + name" />
+        <q-chip style="float: right" clickable size="sm" @click="clear_filters" color="negative" class="self-right"
+          text-color="white" label="Clear All" title="Clear All" />
       </div>
-      <search-and-or-filtered
-        :search-text="search_text"
-        :langs="selected_langs"
-        :genres="selected_genres"
-        :time="selected_time"
-        v-if="
-          search_text ||
+      <search-and-or-filtered :search-text="search_text" :langs="selected_langs" :genres="selected_genres"
+        :time="selected_time" v-if="search_text ||
           selected_langs.length > 0 ||
           selected_genres.length > 0 ||
           selected_time.length > 0
-        "
-      />
+          " />
       <div v-else>
         <new-releases />
         <celebrity-curators />
@@ -190,16 +91,9 @@
         </template>
       </div>
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn
-          ref="fab"
-          fab
-          icon="mdi-information"
-          color="primary"
-          text-color="dark"
-          padding="12px"
-          :to="{ name: 'welcome' }"
-        >
-          <span class="q-ml-xs">How it works</span>
+        <q-btn ref="fab" fab icon="mdi-movie" color="primary" text-color="dark" padding="12px"
+          :to="{ name: 'event-iim-rohtak-2024' }">
+          <span class="q-ml-xs">Submit Your Film</span>
         </q-btn>
       </q-page-sticky>
     </div>
