@@ -54,7 +54,7 @@
                 All submitted films will undergo digital screening on the platform from January 11th to January 15th, 2024.
                 During this period, the audience can watch, vote, and rate the films. The top creators' list will be
                 accessible on the platform: <a class="text-primary "
-                    href="https://moviepediafilms.com/top-creator">https://moviepediafilms.com/top-creator</a>. Jurors will
+                    href="/top-creator">https://moviepediafilms.com/top-creator</a>. Jurors will
                 also receive the screened films and have the opportunity to recommend/vote for their preferred choices.
             </p>
 
@@ -83,7 +83,7 @@
                 </li>
                 <li>
                     <span class="text-primary">Submission Platform:</span> All entries must be submitted through <a
-                        class="text-primary" href="www.moviepediafilms.com/submit">www.moviepediafilms.com/submit</a>
+                        class="text-primary" href="/submit">www.moviepediafilms.com/submit</a>
                 </li>
             </ul>
             </p>
