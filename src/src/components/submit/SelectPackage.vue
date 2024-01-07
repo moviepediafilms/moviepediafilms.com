@@ -1,16 +1,8 @@
 <template>
   <div class="last-step">
-    <q-item
-      v-for="(pack, index) in packs"
-      :key="pack.id"
-      clickable
-      v-ripple
-      @click="on_change_active_pack(pack)"
-      :class="index > 0 ? 'q-mt-lg' : 'q-mt-md'"
-      class="q-pa-md pack-border"
-      active-class="selected-pack-border"
-      :active="active_pack_id == pack.id"
-    >
+    <q-item v-for="(pack, index) in packs" :key="pack.id" clickable v-ripple @click="on_change_active_pack(pack)"
+      :class="index > 0 ? 'q-mt-lg' : 'q-mt-md'" class="q-pa-md pack-border" active-class="selected-pack-border"
+      :active="active_pack_id == pack.id">
       <q-item-section>
         <q-item-label>
           <h3 class="text-primary">
@@ -20,18 +12,10 @@
           </h3>
         </q-item-label>
         <q-item-label class="q-pt-sm">
-          <q-item
-            dense
-            v-for="(item, idx) in pack.content"
-            :key="idx"
-            class="text-left q-pa-xs text-grey-5"
-          >
+          <q-item dense v-for="(item, idx) in pack.content" :key="idx" class="text-left q-pa-xs text-grey-5">
             <q-item-section side top class="q-pr-sm">
-              <q-icon
-                :color="item.included ? 'green' : 'red'"
-                class="q-mr-xs"
-                :name="item.included ? 'mdi-check' : 'mdi-close'"
-              ></q-icon>
+              <q-icon :color="item.included ? 'green' : 'red'" class="q-mr-xs"
+                :name="item.included ? 'mdi-check' : 'mdi-close'"></q-icon>
             </q-item-section>
             <q-item-section>
               <q-item-label>
@@ -70,7 +54,7 @@ export default {
       packages: [],
       error_msg: "",
       success_msg: "",
-      active_pack_id: 3,
+      active_pack_id: 0,
       packs: [],
     };
   },
@@ -90,6 +74,10 @@ export default {
         this.packs.push(item);
       });
       console.log(this.packs);
+      // select the first package
+      if (this.packs.length > 0) {
+        this.active_pack_id = this.packs[0].id;
+      }
     },
   },
   mounted() {
@@ -168,7 +156,7 @@ export default {
           .catch((err) => {
             this.loading = false;
             console.log(err);
-            this.error_msg = "Package selected failed! Please try again";
+            this.error_msg = "Package selection failed! Please try again";
           });
       } else if (!order_has_package) {
         //  - order is without package - patch the order with selected package
