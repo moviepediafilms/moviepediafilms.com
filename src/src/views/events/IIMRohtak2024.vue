@@ -76,9 +76,6 @@
                     <span class="text-primary">Eligibility:</span> Open to filmmakers of all ages and backgrounds.
                 </li>
                 <li>
-                    <span class="text-primary">Duration:</span> Films should be no longer than 15 minutes.
-                </li>
-                <li>
                     <span class="text-primary">Submission Period:</span> From 5th Jan ‘24 to 10th Jan ‘24
                 </li>
                 <li>
@@ -98,7 +95,7 @@
                     Aamil Keeyan Khan (Writer | Drishyam 2, Bholaa, Runway 34)
                 </li>
                 <li class="q-mt-md text-lg">
-                    Tapan Basu (Director | 1000 Ads)
+                    Tapan Basu (DOP | Kahaani 2, Lust Stories 2)
                 </li>
             </ul>
             </p>
