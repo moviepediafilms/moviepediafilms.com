@@ -41,17 +41,17 @@
 
 
             <h2 class="text-primary">Timelines & Process</h2>
-            <h3 class="text-primary q-mt-lg">1. Submission (5th-11th Jan 2024):</h3>
+            <h3 class="text-primary q-mt-lg">1. Submission (5th-14th Jan 2024 (extended)):</h3>
 
             <p class="q-mt-md">
                 Filmmakers are required to submit their short films for the festival on the digital platform
-                www.moviepediafilms.com between January 5th and January 11th, 2024.
+                www.moviepediafilms.com between January 5th and January 14th, 2024(extended).
             </p>
 
-            <h3 class="text-primary">2. Digital Screening (11th-15th Jan 2024):</h3>
+            <h3 class="text-primary">2. Digital Screening (14th-19th Jan 2024):</h3>
 
             <p class="q-mt-md">
-                All submitted films will undergo digital screening on the platform from January 11th to January 15th, 2024.
+                All submitted films will undergo digital screening on the platform from January 14th to January 19th, 2024.
                 During this period, the audience can watch, vote, and rate the films. The top creators' list will be
                 accessible on the platform: <a class="text-primary "
                     href="/top-creator">https://moviepediafilms.com/top-creator</a>. Jurors will
@@ -76,7 +76,7 @@
                     <span class="text-primary">Eligibility:</span> Open to filmmakers of all ages and backgrounds.
                 </li>
                 <li>
-                    <span class="text-primary">Submission Period:</span> From 5th Jan ‘24 to 10th Jan ‘24
+                    <span class="text-primary">Submission Period:</span> From 5th Jan ‘24 to 14th Jan ‘24 (extended)
                 </li>
                 <li>
                     <span class="text-primary">Submission Platform:</span> All entries must be submitted through <a
@@ -89,14 +89,9 @@
             </h2>
             <p>
             <ul class="q-mt-md">
-                <li class="q-mt-md text-lg text-lighter">
-                    Siddharth Diwan (DOP | Qala, Queen) </li>
-                <li class="q-mt-md text-lg">
-                    Aamil Keeyan Khan (Writer | Drishyam 2, Bholaa, Runway 34)
-                </li>
-                <li class="q-mt-md text-lg">
-                    Tapan Basu (DOP | Kahaani 2, Lust Stories 2)
-                </li>
+                <li class="q-mt-md text-lg text-lighter" v-for="person in jury" :key="person">
+                    {{ person }} </li>
+
             </ul>
             </p>
 
@@ -113,11 +108,21 @@ import BaseLayout from "@/layouts/Base";
 export default {
     metaInfo: {
         title: "IIM Rohtak 2024",
-
     },
     components: {
         BaseLayout
-    }
+    },
+    data() {
+        return {
+            jury: [
+                "Siddharth Diwan (DOP | Qala, Queen)",
+                "Aamil Keeyan Khan (Writer | Drishyam 2, Bholaa, Runway 34)",
+                "Tapan Basu (DOP | Kahaani 2, Lust Stories 2)",
+                "Vipin Sharma (Actor | Guns & Gulaabs, Sirf Ek Banda Kaafi Hai)",
+                "Kalpana Nair (Industry Relations | IMDb)",
+            ]
+        }
+    },
 
 }
 </script>
