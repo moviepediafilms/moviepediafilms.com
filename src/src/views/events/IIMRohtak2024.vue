@@ -41,11 +41,11 @@
 
 
             <h2 class="text-primary">Timelines & Process</h2>
-            <h3 class="text-primary q-mt-lg">1. Submission (5th-14th Jan 2024 (extended)):</h3>
+            <h3 class="text-primary q-mt-lg">1. Submission</h3>
 
             <p class="q-mt-md">
                 Filmmakers are required to submit their short films for the festival on the digital platform
-                www.moviepediafilms.com between January 5th and January 14th, 2024(extended).
+                <a href="/submit">www.moviepediafilms.com</a>
             </p>
 
             <h3 class="text-primary">2. Digital Screening (14th-19th Jan 2024):</h3>
@@ -74,9 +74,6 @@
             <ul>
                 <li>
                     <span class="text-primary">Eligibility:</span> Open to filmmakers of all ages and backgrounds.
-                </li>
-                <li>
-                    <span class="text-primary">Submission Period:</span> From 5th Jan ‘24 to 14th Jan ‘24 (extended)
                 </li>
                 <li>
                     <span class="text-primary">Submission Platform:</span> All entries must be submitted through <a
