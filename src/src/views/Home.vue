@@ -210,7 +210,7 @@ export default {
     },
     fetch_live_contests() {
       contest_service
-        .get({ live: true })
+        .get({ visible_in_home_page: true })
         .then((data) => {
           this.live_contests.push(...data.results);
         })
